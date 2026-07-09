@@ -1,0 +1,960 @@
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, useInView, animate } from "motion/react";
+import { ChevronRight, ArrowRight, CheckCircle, XCircle } from "lucide-react";
+import { openInspection } from "./components/InspectionModal";
+import useEmblaCarousel from "embla-carousel-react";
+import { ImageWithFallback } from "./components/figma/ImageWithFallback";
+import SharedNavBar from "./SharedNavBar";
+import imgFloor01 from "../assets/floor-01.jpeg";
+import imgFloor02 from "../assets/floor-02.jpeg";
+import imgFloor03 from "../assets/floor-03.jpeg";
+import imgFloor04 from "../assets/floor-04.jpeg";
+import imgRevAvatar from "../assets/rev-avatar.png";
+import { Logo } from "./components/Logo";
+import { AnnouncementBar } from "./components/AnnouncementBar";
+
+// ─── Brand Tokens ─────────────────────────────────────────────────────────────
+const B = "#1A52A8";
+const DARK = "#0A0B14";
+const NAVY = "#0B1C4A";
+const CHAR = "#1E2235";
+const SAND = "#C4AB6C";
+const CREAM = "#F7F5EF";
+const MUTED = "#6B6E85";
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  return (
+    <motion.div ref={ref} initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
+function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  useEffect(() => {
+    if (!inView || !ref.current) return;
+    const ctrl = animate(0, to, { duration: 1.8, ease: "easeOut", onUpdate(v) { if (ref.current) ref.current.textContent = Math.round(v).toLocaleString() + suffix; } });
+    return ctrl.stop;
+  }, [inView, to, suffix]);
+  return <span ref={ref}>0{suffix}</span>;
+}
+
+
+
+// ─── 1. HERO (DARK) ───────────────────────────────────────────────────────────
+function HeroSection() {
+  return (
+    <section className="relative w-full overflow-hidden" style={{ minHeight: 560 }}>
+      <ImageWithFallback
+        src={imgFloor04}
+        alt="Our Difference" className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.92) 0%,rgba(10,11,20,0.68) 55%,rgba(10,11,20,0.40) 100%)" }} />
+      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-36">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
+          className="flex items-center gap-2 mb-5">
+          <div className="w-5 h-[2px]" style={{ background: SAND }} />
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Difference</span>
+        </motion.div>
+        <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,64px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px", marginBottom: 24, maxWidth: 760 }}>
+          Why families choose Redeemers Group
+        </motion.h1>
+        <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }}
+          style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.6)", lineHeight: 1.75, maxWidth: 540, marginBottom: 44 }}>
+          From our first call to your final follow-up, here is what sets us apart.
+        </motion.p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex flex-wrap items-center gap-3">
+          <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden px-8 py-4 inline-flex items-center gap-3"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
+            <span className="relative z-10">Schedule Free Inspection</span>
+            <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" />
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
+          </a>
+          <a href="tel:+19015550100"
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 14, color: "rgba(255,255,255,.5)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
+            or call (901) 555-0100
+          </a>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 2. TRUST BAR (CHAR) ─────────────────────────────────────────────────────
+const TRUST_STATS = [
+  { val: "12,000+", label: "Homes Protected" },
+  { val: "A+ BBB", label: "Rated" },
+  { val: "Lifetime", label: "Warranty" },
+  { val: "18+ yrs", label: "In Business" },
+];
+
+function TrustBar() {
+  return (
+    <section style={{ background: CHAR, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
+        {TRUST_STATS.map((s, i) => (
+          <Reveal key={s.label} delay={i * 0.08}>
+            <div className="flex flex-col items-center text-center gap-2">
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,40px)", color: SAND, lineHeight: 1 }}>{s.val}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)", letterSpacing: 1.5, textTransform: "uppercase" }}>{s.label}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── 3. PROCESS STEPS (DARK) ─────────────────────────────────────────────────
+const STEPS = [
+  {
+    n: "01", title: "Schedule a free inspection",
+    desc: "We come to you — no obligation, no pressure, same-week availability.",
+    img: imgFloor04,
+  },
+  {
+    n: "02", title: "Inspection & assessment",
+    desc: "Our specialist walks through the home and identifies the root cause.",
+    img: imgFloor02,
+  },
+  {
+    n: "03", title: "Custom solution proposal",
+    desc: "We present a clear, itemised quote — no hidden costs.",
+    img: imgFloor01,
+  },
+  {
+    n: "04", title: "Installation day",
+    desc: "Certified crew arrives on time and cleans up after the job.",
+    img: imgFloor03,
+  },
+];
+
+function ProcessSection() {
+  return (
+    <section style={{ background: DARK }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-5 h-[2px]" style={{ background: SAND }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>What to expect</span>
+            <div className="w-5 h-[2px]" style={{ background: SAND }} />
+          </div>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+            Your experience, start to finish
+          </h2>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(255,255,255,.55)" }}>Four simple steps — no surprises, no pressure.</p>
+        </Reveal>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+          {STEPS.map((step, i) => (
+            <Reveal key={step.n} delay={i * 0.08}>
+              <div className="group flex flex-col h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+                <div className="relative overflow-hidden" style={{ aspectRatio: "3/2" }}>
+                  <ImageWithFallback src={step.img} alt={step.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.6) 0%,transparent 65%)" }} />
+                  <div className="absolute top-4 left-4 px-2.5 py-1" style={{ background: B }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 12, color: "#fff", letterSpacing: 1 }}>{step.n}</span>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-1 p-6">
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: "#fff", lineHeight: 1.2, marginBottom: 8 }}>{step.title}</h3>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>{step.desc}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={0.3} className="flex justify-center">
+          <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden px-8 py-4 inline-flex items-center gap-3"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
+            <span className="relative z-10">Schedule free inspection</span>
+            <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" />
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
+          </a>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// ─── 4. STORY (DARK) ─────────────────────────────────────────────────────────
+function StorySection() {
+  return (
+    <section style={{ background: DARK }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <Reveal>
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-5 h-[2px]" style={{ background: SAND }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our story</span>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
+              A family business, built on one bad experience
+            </h2>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(255,255,255,.6)", lineHeight: 1.8 }}>
+              <p style={{ marginBottom: 18 }}>
+                Redeemers Group started the way most small businesses do — out of frustration. Our founder had a crawl space problem that three national contractors quoted wrong, fixed halfway, or simply never called back about.
+              </p>
+              <p>
+                So he got certified, hired locally, and built the company he wished existed: one that treats every Memphis homeowner the way you'd want a neighbor treated. Privately owned, community rooted, no franchise overhead passing costs to you.
+              </p>
+            </div>
+            <a href="#" className="group mt-8 inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
+              style={{ border: "1.5px solid rgba(255,255,255,.2)", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
+              Contact Us
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            </a>
+          </Reveal>
+
+          <Reveal delay={0.1} className="flex flex-col gap-6">
+            <div className="relative overflow-hidden" style={{ borderRadius: 2 }}>
+              <ImageWithFallback
+                src={imgFloor03}
+                alt="Redeemers team" className="w-full object-cover" style={{ height: 340 }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.55) 0%,transparent 55%)" }} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { val: 12000, suffix: "+", label: "Satisfied customers" },
+                { raw: "20+ yrs", label: "In business" },
+              ].map((s) => (
+                <div key={s.label} className="flex flex-col items-center justify-center py-8 px-4 text-center"
+                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,3.5vw,48px)", color: SAND, lineHeight: 1, marginBottom: 6 }}>
+                    {s.raw ? s.raw : <Counter to={(s as { val: number; suffix: string }).val} suffix={(s as { val: number; suffix: string }).suffix} />}
+                  </p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.4)", letterSpacing: 0.5 }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 5. PLEDGE (CHAR) ────────────────────────────────────────────────────────
+const NEVER_DO = [
+  { title: "Upsell during the inspection", desc: "Our inspector's job is to diagnose, not to sell. They don't work on commission." },
+  { title: "Quote work you don't need", desc: "If we inspect and find nothing serious, we'll tell you that — and we won't charge for the visit." },
+  { title: "Use scare tactics", desc: "We show you photos and explain what we found. No manufactured urgency, no worst-case-scenario framing." },
+  { title: "Send a different crew than promised", desc: "The team we describe is the team that shows up. No subcontracting your job to an unknown crew." },
+  { title: "Disappear after the job", desc: "Every job ends with a follow-up call. If something isn't right, we come back — no questions asked." },
+];
+
+const ALWAYS_WILL = [
+  { title: "Give you a written quote before any work starts", desc: "Itemised, no hidden fees, no verbal-only pricing." },
+  { title: "Explain what we found in plain language", desc: "No jargon. We show you photos and walk you through every finding before we recommend anything." },
+  { title: "Honor our lifetime warranty — no exceptions", desc: "Transferable. No annual fees. No fine print that voids coverage." },
+  { title: "Respect your time and your home", desc: "We arrive on time, protect your floors and walls, and clean up completely before we leave." },
+];
+
+function PledgeSection() {
+  return (
+    <section style={{ background: CHAR }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="mb-14">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-5 h-[2px]" style={{ background: SAND }} />
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Pledge</span>
+              </div>
+              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", maxWidth: 600 }}>
+                Things we promise we'll never do
+              </h2>
+            </div>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.45)", lineHeight: 1.7, maxWidth: 420 }}>
+              Most contractors have fine print. Ours works the other way — here's what we explicitly commit to not doing.
+            </p>
+          </div>
+        </Reveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <Reveal delay={0.05}>
+            <div className="h-full flex flex-col" style={{ border: "1px solid rgba(196,171,108,.2)", background: "rgba(196,171,108,.04)" }}>
+              <div className="flex items-center gap-3 px-8 py-6" style={{ borderBottom: "1px solid rgba(196,171,108,.12)" }}>
+                <div className="w-8 h-8 flex items-center justify-center shrink-0" style={{ background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.3)" }}>
+                  <XCircle size={16} color={SAND} />
+                </div>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", letterSpacing: "-0.5px" }}>
+                  We will never
+                </h3>
+              </div>
+              <div className="flex flex-col flex-1 px-8 py-6 gap-6">
+                {NEVER_DO.map((item, i) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="w-1 shrink-0 mt-1.5 self-stretch rounded-full" style={{ background: "rgba(196,171,108,.3)", minHeight: 16 }} />
+                    <div>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 3 }}>{item.title}</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", lineHeight: 1.7 }}>{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <div className="h-full flex flex-col" style={{ border: "1px solid rgba(26,82,168,.4)", background: "rgba(26,82,168,.08)" }}>
+              <div className="flex items-center gap-3 px-8 py-6" style={{ borderBottom: "1px solid rgba(26,82,168,.2)" }}>
+                <div className="w-8 h-8 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.3)", border: "1px solid rgba(26,82,168,.5)" }}>
+                  <CheckCircle size={16} color="#7EB8FF" />
+                </div>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", letterSpacing: "-0.5px" }}>
+                  We always will
+                </h3>
+              </div>
+              <div className="flex flex-col flex-1 px-8 py-6 gap-6">
+                {ALWAYS_WILL.map((item, i) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="shrink-0 mt-0.5">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#7EB8FF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    </div>
+                    <div>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 3 }}>{item.title}</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 6. TESTIMONIALS (DARK) — Embla carousel ─────────────────────────────────
+const TESTIMONIALS = [
+  {
+    quote: "Joe was very thorough with explaining everything and even came back a second time to clarify. I called 3 or 4 other companies — while they did quote cheaper prices, I wasn't convinced their solutions were a long-term fix. Redeemers gave me confidence.",
+    name: "Victoria E.", loc: "Memphis, TN", stars: 5,
+    img: imgFloor01, avatar: imgRevAvatar,
+  },
+  {
+    quote: "The crew was excellent communicators and hard workers. Done well within the time given. My garage lintel looks brand new. Would I recommend Redeemers? Absolutely! Very professional company.",
+    name: "Elizabeth N.", loc: "Collierville, TN", stars: 5,
+    img: imgFloor03, avatar: imgRevAvatar,
+  },
+  {
+    quote: "Walking in now, it's straight. I used to slip from side to side. I went into my bedroom — the closet door never closed before. I literally just closed it for the first time. Great job.",
+    name: "Melissa & Russell C.", loc: "Marked Tree, AR", stars: 5,
+    img: imgFloor04, avatar: imgRevAvatar,
+  },
+];
+
+function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [cur, setCur] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", () => setCur(emblaApi.selectedScrollSnap()));
+  }, [emblaApi]);
+
+  return (
+    <section style={{ background: CREAM }} className="py-24 overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
+          <div>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontSize: 11, fontWeight: 600, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>Reviews</p>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
+              What Customers Say About Us
+            </h2>
+            {onNavigate && (
+              <button
+                onClick={() => onNavigate("reviews")}
+                className="group inline-flex items-center gap-1.5 mt-4"
+                style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+              >
+                Read all reviews
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5"><path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+            )}
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => emblaApi?.scrollPrev()}
+              className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
+              style={{ border: `1.5px solid ${CHAR}` }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+            <button onClick={() => emblaApi?.scrollNext()}
+              className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
+              style={{ border: `1.5px solid ${CHAR}` }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+          </div>
+        </Reveal>
+      </div>
+
+      <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
+        <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
+          {TESTIMONIALS.map((t) => (
+            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.07)" }}>
+              <div className="relative" style={{ paddingBottom: "52%" }}>
+                <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
+                  <button className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                    style={{ background: B, border: "none", cursor: "pointer" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
+                  </button>
+                </div>
+              </div>
+              <div className="p-8 flex flex-col flex-1">
+                <div className="flex gap-1 mb-5">
+                  {Array.from({ length: t.stars }).map((_, si) => (
+                    <svg key={si} width="14" height="14" viewBox="0 0 24 24" fill={SAND}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                  ))}
+                </div>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(26,82,168,.15)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#444", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>
+                  {t.quote}
+                </p>
+                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(0,0,0,.07)" }}>
+                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "#eee" }}>
+                    <ImageWithFallback src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>{t.name}</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{t.loc}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-center gap-2 mt-10 px-8">
+        {TESTIMONIALS.map((_, i) => (
+          <button key={i} onClick={() => emblaApi?.scrollTo(i)}
+            className="rounded-full transition-all duration-300"
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)", border: "none", cursor: "pointer", padding: 0 }} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── 7. CASE STUDIES — bento masonry (CREAM / light) ────────────────────────
+
+type CaseCard = {
+  title: string | null;
+  items: string[];
+  img: string;
+  aspect: "16/9" | "1/1" | "fill";
+};
+
+const CASE_LEFT: CaseCard[] = [
+  {
+    title: "Lifetime warranty",
+    items: [
+      "Covers all parts and labour for the life of your home",
+      "Fully transferable when you sell",
+      "No fine print, no annual fees",
+    ],
+    img: imgFloor01,
+    aspect: "16/9",
+  },
+  {
+    title: "Our promise on inspections",
+    items: [
+      "Free, no obligation, ever",
+      "No commissioned sales pressure",
+      "Root-cause diagnosis, not upselling",
+    ],
+    img: imgFloor04,
+    aspect: "1/1",
+  },
+];
+
+const CASE_RIGHT: CaseCard[] = [
+  {
+    title: "Satisfaction guarantee",
+    items: [
+      "If you are not satisfied, we come back — free of charge",
+      "Dedicated post-installation follow-up call",
+    ],
+    img: imgFloor03,
+    aspect: "1/1",
+  },
+  {
+    title: "Moisture & mold control",
+    items: [
+      "Every repair includes a full moisture assessment",
+      "Encapsulation stops future damage at the source",
+      "Mold remediation included when needed",
+    ],
+    img: imgFloor02,
+    aspect: "fill",
+  },
+];
+
+function CaseCard({ card, delay }: { card: CaseCard; delay: number }) {
+  const [hovered, setHovered] = useState(false);
+
+  const containerStyle: React.CSSProperties =
+    card.aspect === "fill"
+      ? { minHeight: 380, border: "1px solid rgba(0,0,0,.09)" }
+      : { aspectRatio: card.aspect, minHeight: 260, border: "1px solid rgba(0,0,0,.09)" };
+
+  return (
+    <Reveal delay={delay}>
+      <div
+        className="relative overflow-hidden w-full cursor-pointer"
+        style={containerStyle}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* Image */}
+        <ImageWithFallback
+          src={card.img}
+          alt={card.title ?? "Project"}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ transition: "transform .7s ease", transform: hovered ? "scale(1.05)" : "scale(1)" } as React.CSSProperties}
+        />
+
+        {/* Permanent bottom gradient */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.12) 60%)" }}
+        />
+
+        {/* Hover overlay darkens upper half */}
+        <motion.div
+          className="absolute inset-0"
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ background: "rgba(10,11,20,.58)" }}
+        />
+
+        {/* SAND chip — top left */}
+        <motion.div
+          className="absolute top-4 left-4 px-3 py-1"
+          style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}
+          initial={{ opacity: 0, x: -8 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: delay + 0.2 }}
+        >
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>
+            Redeemers Group
+          </span>
+        </motion.div>
+
+        {/* Default state: title only, fades out on hover */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 p-7 pointer-events-none"
+          animate={{ opacity: hovered ? 0 : 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.3px" }}>
+            {card.title}
+          </h3>
+        </motion.div>
+
+        {/* Hover state: full content slides up */}
+        <motion.div
+          className="absolute inset-0 flex flex-col justify-end p-7"
+          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 14 }}
+          transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.3px", marginBottom: 12 }}>
+            {card.title}
+          </h3>
+          <ul className="flex flex-col gap-2 mb-5">
+            {card.items.map((item) => (
+              <li key={item} className="flex items-start gap-2.5">
+                <div className="w-1.5 h-1.5 rounded-full shrink-0 mt-[7px]" style={{ background: SAND }} />
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.75)", lineHeight: 1.6 }}>
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={openInspection}
+            className="group/cta inline-flex items-center gap-1.5 w-fit"
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          >
+            Schedule free inspection
+            <ChevronRight size={13} className="transition-transform duration-200 group-hover/cta:translate-x-1" />
+          </button>
+        </motion.div>
+      </div>
+    </Reveal>
+  );
+}
+
+function CaseStudiesSection() {
+  return (
+    <section style={{ background: CREAM }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        {/* Header */}
+        <Reveal className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-[1px] w-6" style={{ background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
+              Case Studies
+            </span>
+            <div className="h-[1px] w-6" style={{ background: B }} />
+          </div>
+          <h2
+            style={{
+              fontFamily: "'Articulat CF',sans-serif",
+              fontWeight: 800,
+              fontSize: "clamp(36px,4.5vw,56px)",
+              color: CHAR,
+              lineHeight: 1.05,
+              letterSpacing: "-1px",
+              marginBottom: 12,
+            }}
+          >
+            In-depth project stories
+          </h2>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED }}>
+            Commitments we put in writing — not just talking points.
+          </p>
+        </Reveal>
+
+        {/* 2-column masonry bento */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Left column */}
+          <div className="flex flex-col gap-12">
+            {CASE_LEFT.map((card, i) => (
+              <CaseCard key={card.title} card={card} delay={i * 0.1} />
+            ))}
+          </div>
+
+          {/* Right column — offset down to create stagger */}
+          <div className="flex flex-col gap-12 lg:mt-16">
+            {CASE_RIGHT.map((card, i) => (
+              <CaseCard key={card.title ?? `img-${i}`} card={card} delay={0.05 + i * 0.1} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 8. NEWS & AWARDS (DARK) ─────────────────────────────────────────────────
+const PROJECT_STORIES = [
+  {
+    title: "East Memphis — 3-bed ranch",
+    desc: "Homeowner noticed soft spots in the floor. Inspection revealed 6 broken joists and active mold. Full SmartJack system + encapsulation. Job complete in 2 days.",
+    img: imgFloor02,
+    tag: "Crawl Space",
+  },
+  {
+    title: "Midtown — duplex rental",
+    desc: "Tenant reported sticking doors and visible wall cracks. Clay soil movement confirmed. 6 push piers installed. Tenants stayed in place during work.",
+    img: imgFloor01,
+    tag: "Foundation",
+  },
+  {
+    title: "Germantown — pool deck",
+    desc: "Pool deck had sunk 3 inches on one side. PolyLevel injection lifted and leveled in 4 hours. No demolition, no mess, same-day use.",
+    img: imgFloor03,
+    tag: "Concrete",
+  },
+];
+
+function ProjectStoriesSection() {
+  return (
+    <section style={{ background: DARK }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-5 h-[2px]" style={{ background: SAND }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>News &amp; Awards</span>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+              News and awards
+            </h2>
+          </div>
+          <button className="group inline-flex items-center gap-2 shrink-0"
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+            See all (436)
+            <ChevronRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+          </button>
+        </Reveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {PROJECT_STORIES.map((card, i) => (
+            <Reveal key={card.title} delay={i * 0.08}>
+              <div className="flex flex-col h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+                <div className="relative overflow-hidden group" style={{ aspectRatio: "3/2" }}>
+                  <ImageWithFallback src={card.img} alt={card.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.5) 0%,transparent 60%)" }} />
+                  <div className="absolute top-4 left-4 px-3 py-1" style={{ background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.35)" }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-1 p-7">
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.2, marginBottom: 10 }}>{card.title}</h3>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.7, flex: 1, marginBottom: 16 }}>{card.desc}</p>
+                  <button className="group inline-flex items-center gap-1.5"
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    Read full story
+                    <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                  </button>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 9. CERTIFICATIONS ───────────────────────────────────────────────────────
+const CERT_CHIPS = [
+  { label: "BBB Accredited",     icon: "★" },
+  { label: "BAS Certified",      icon: "✓" },
+  { label: "NAWSRC Member",      icon: "◆" },
+  { label: "Angi Top Pro",       icon: "★" },
+  { label: "HomeAdvisor Elite",  icon: "✓" },
+];
+
+const CERT_STATS = [
+  { val: "20+", label: "Years certified" },
+  { val: "8",   label: "Certifications held" },
+  { val: "4.9", label: "Google rating" },
+  { val: "5",   label: "Industry affiliations" },
+];
+
+const LOGO_ORGS = [
+  { abbr: "BBB",         name: "Better Business Bureau" },
+  { abbr: "Angi",        name: "Angi Certified" },
+  { abbr: "Google",      name: "Google Guaranteed" },
+  { abbr: "HomeAdvisor", name: "HomeAdvisor" },
+  { abbr: "NAWSRC",      name: "NAWSRC Member" },
+  { abbr: "BAS",         name: "BAS Certified" },
+];
+
+function CertificationsSection() {
+  return (
+    <section style={{ background: DARK }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+
+        {/* Header */}
+        <Reveal className="mb-16">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-[2px] w-8" style={{ background: SAND }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
+              Affiliations &amp; certifications
+            </span>
+          </div>
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+              Credentials that matter
+            </h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.5)", lineHeight: 1.7, maxWidth: 420 }}>
+              We hold industry certifications so you never have to guess about our qualifications.
+            </p>
+          </div>
+        </Reveal>
+
+        {/* Stats row */}
+        <Reveal className="mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.06)" }}>
+            {CERT_STATS.map((s) => (
+              <div key={s.label} className="flex flex-col items-center justify-center py-10 px-6 text-center" style={{ background: CHAR }}>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,52px)", color: SAND, lineHeight: 1, marginBottom: 8 }}>
+                  {s.val}
+                </p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.45)", letterSpacing: 0.5 }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Certifications chips + Affiliations grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+
+          {/* Certification badges */}
+          <Reveal>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
+              Certifications
+            </p>
+            <div className="flex flex-col gap-3">
+              {CERT_CHIPS.map((chip) => (
+                <div key={chip.label} className="flex items-center gap-4 px-5 py-4"
+                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 16, color: SAND }}>{chip.icon}</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", fontWeight: 500 }}>{chip.label}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          {/* Affiliation logos */}
+          <Reveal delay={0.1}>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
+              Industry affiliations
+            </p>
+            <div className="grid grid-cols-3 gap-4">
+              {LOGO_ORGS.map((org) => (
+                <div key={org.abbr} className="flex flex-col items-center justify-center gap-3 py-8 px-4"
+                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+                  <div className="w-12 h-12 flex items-center justify-center"
+                    style={{ background: "rgba(196,171,108,.12)", border: "1px solid rgba(196,171,108,.2)" }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND, letterSpacing: 0.5, textAlign: "center", lineHeight: 1.2 }}>{org.abbr}</span>
+                  </div>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)", textAlign: "center", letterSpacing: 0.3, lineHeight: 1.4 }}>{org.name}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+// ─── 10. CTA (NAVY) ──────────────────────────────────────────────────────────
+function CtaSection() {
+  return (
+    <section className="relative overflow-hidden" style={{ background: NAVY }}>
+      <div className="absolute inset-0 z-0">
+        <ImageWithFallback src={imgFloor03}
+          alt="Start today" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "rgba(11,28,74,.86)" }} />
+        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
+      </div>
+      <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-28 text-center">
+        <Reveal>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="h-[1px] w-8" style={{ background: SAND }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Get started today</span>
+            <div className="h-[1px] w-8" style={{ background: SAND }} />
+          </div>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,72px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", marginBottom: 16 }}>
+            Ready to protect<br />your home?
+          </h2>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.55)", maxWidth: 480, margin: "0 auto 44px" }}>
+            Free inspection · No pressure · Same-week availability
+          </p>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden px-9 py-4 inline-flex items-center gap-3"
+              style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: NAVY }}>
+              <span className="relative z-10">Schedule Free Inspection</span>
+              <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" color={NAVY} />
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
+            </a>
+            <a href="tel:+19015550100"
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(255,255,255,.55)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
+              or call (901) 555-0100
+            </a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// ─── FOOTER ───────────────────────────────────────────────────────────────────
+function Footer({ onBack }: { onBack: () => void }) {
+  const cols = [
+    { h: "Services", ls: ["Crawl Space", "Basement Waterproofing", "Foundation Repair", "Concrete Leveling", "Mold Prevention", "Insulation"] },
+    { h: "Company", ls: ["About Us", "Our Work", "Blog", "Careers", "Financing", "Contact"] },
+    { h: "Service Areas", ls: ["Mississippi", "Tennessee", "Arkansas", "Missouri"] },
+    { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
+  ];
+  return (
+    <footer style={{ background: "#060710" }}>
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
+        <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+          <div className="lg:w-72 shrink-0">
+            <button onClick={onBack} className="h-20 mb-5 block"><Logo light /></button>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.35)", lineHeight: 1.7, marginBottom: 20 }}>The steady, local authority when something foundational is wrong.</p>
+            <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="inline-flex items-center gap-2 px-5 py-3" style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>
+              Free Inspection <ArrowRight size={13} />
+            </a>
+          </div>
+          <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8">
+            {cols.map((col) => (
+              <div key={col.h}>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: "rgba(255,255,255,.9)", letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 16 }}>{col.h}</p>
+                <ul className="flex flex-col gap-2">
+                  {col.ls.map((l) => (
+                    <li key={l}><a href="#" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.35)" }} className="hover:text-white/70 transition-colors">{l}</a></li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8">
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.2)" }}>© 2026 Redeemers Structural Solutions. All rights reserved.</p>
+          <div className="flex gap-5">
+            {["Privacy Policy", "Terms", "Sitemap"].map((l) => (
+              <a key={l} href="#" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.2)" }} className="hover:text-white/40 transition-colors">{l}</a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ─── OurDifferencePage ────────────────────────────────────────────────────────
+export default function OurDifferencePage({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (p: string) => void }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  return (
+    <>
+      <div className="fixed top-0 left-0 right-0 z-[100]">
+        <AnnouncementBar />
+        <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
+      </div>
+
+      <div className="w-full min-h-screen" style={{ background: DARK, paddingTop: 148 }}>
+        {/* Breadcrumb */}
+        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
+            <button onClick={onBack}
+              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
+              className="hover:text-white transition-colors">Home</button>
+            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Our Difference</span>
+          </div>
+        </div>
+
+        {/* DARK → CHAR → DARK → CREAM → DARK → CHAR → CREAM → DARK → CREAM → NAVY */}
+        <HeroSection />
+        <TrustBar />
+        <TestimonialsSection onNavigate={onNavigate} />
+        <ProcessSection />
+        <StorySection />
+        <PledgeSection />
+        <CaseStudiesSection />
+        <ProjectStoriesSection />
+        <CertificationsSection />
+        <CtaSection />
+        <Footer onBack={onBack} />
+      </div>
+    </>
+  );
+}
