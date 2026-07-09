@@ -153,9 +153,10 @@ const ABOUT_TABS = [
   { key: "about" as const,        label: "About",        page: "about" },
   { key: "careers" as const,      label: "Careers",      page: "careers" },
   { key: "service-area" as const, label: "Service Area", page: "service-area" },
+  { key: "contact" as const,      label: "Contact us",   page: "contact" },
 ];
 
-const ABOUT_SECTIONS: Record<"about" | "careers" | "service-area", { label: string; id?: string }[]> = {
+const ABOUT_SECTIONS: Record<"about" | "careers" | "service-area" | "contact", { label: string; id?: string }[]> = {
   "about": [
     { label: "People",      id: "people" },
     { label: "Benefits",    id: "benefits" },
@@ -173,10 +174,15 @@ const ABOUT_SECTIONS: Record<"about" | "careers" | "service-area", { label: stri
     { label: "Service map" },
     { label: "All cities" },
   ],
+  "contact": [
+    { label: "Contact information", id: "info" },
+    { label: "Locations map",       id: "locations" },
+    { label: "Contact form",        id: "form" },
+  ],
 };
 
 function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
-  const [activeTab, setActiveTab] = useState<"about" | "careers" | "service-area">("about");
+  const [activeTab, setActiveTab] = useState<"about" | "careers" | "service-area" | "contact">("about");
 
   return (
     <div
@@ -220,7 +226,7 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
         <div className="flex-1 flex flex-col py-2 px-6" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
           <div className="flex items-center justify-between mb-4">
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
-              {activeTab === "about" ? "About" : activeTab === "careers" ? "Careers" : "Service Area"}
+              {activeTab === "about" ? "About" : activeTab === "careers" ? "Careers" : activeTab === "service-area" ? "Service Area" : "Contact Us"}
             </p>
             <button
               onClick={() => onNavigate(activeTab)}

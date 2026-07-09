@@ -18,6 +18,7 @@ import GuiaEstilosPage from "./GuiaEstilosPage";
 import ServicesLandingPage from "./ServicesLandingPage";
 import ReviewsPage from "./ReviewsPage";
 import JobStoriesPage from "./JobStoriesPage";
+import ContactPage from "./ContactPage";
 import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 
@@ -1549,7 +1550,7 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const initPage = window.location.hash.replace("#", "") || "home";
-  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "guiaestilos">(initPage as any);
+  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
@@ -1618,6 +1619,10 @@ export default function App() {
 
   if (page === "job-stories") {
     return <JobStoriesPage key={pageKey} onBack={() => navigate("resources")} onNavigate={navigate} />;
+  }
+
+  if (page === "contact") {
+    return <ContactPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
   }
 
   if (page === "guiaestilos") {
