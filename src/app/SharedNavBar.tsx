@@ -294,9 +294,9 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 
 // ─── Mega Menu data ────────────────────────────────────────────────────────────
 // Symptom labels shortened to 2-4 words per approved symptom-driven sitemap.
-// Each category carries a color + icon so the menu reads as visual zones, not
-// a plain text list — per client feedback ("necesitamos mostrarlo más
-// visualmente... sigue diciendo que es solo texto").
+// Icon per category for visual scanning; accent color stays on-brand (SAND/B),
+// not a per-category rainbow — client flagged that as off-brand ("no lo veo
+// dentro del lenguaje visual de la página").
 // TODO(content): validate final symptom labels against approved sitemap doc.
 // TODO(routing): every symptom currently routes to "problem-sign-inner" and every
 // category to "service" (only Crawl Space page exists). Wire real routes when
@@ -304,37 +304,31 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 const SERVICE_CATEGORIES = [
   {
     label: "Foundation Repair",
-    color: "#C4AB6C",
     icon: Home,
     signs: ["Cracks in walls", "Sticking doors & windows", "Uneven floors", "Gaps at door frames", "Stair-step brick cracks"],
   },
   {
     label: "Crawl Space Repair",
-    color: "#1A52A8",
     icon: Layers,
     signs: ["Sagging floors", "Musty smell", "High indoor humidity", "Standing water below", "Baseboard separation"],
   },
   {
     label: "Waterproofing",
-    color: "#2E8B9E",
     icon: Droplets,
     signs: ["Wet basement", "Damp walls", "Puddles after rain", "White wall stains", "Condensation on pipes"],
   },
   {
     label: "Concrete Services",
-    color: "#8A7E6B",
     icon: Grid3x3,
     signs: ["Uneven driveway", "Sunken sidewalk", "Pool deck settling", "Trip hazards", "Cracked garage floor"],
   },
   {
     label: "Mold Prevention",
-    color: "#5E8C61",
     icon: Leaf,
     signs: ["Musty odor", "Dark spots on walls", "Indoor allergies", "Peeling paint", "Ceiling stains"],
   },
   {
     label: "Commercial services",
-    color: "#6B5B95",
     icon: Building2,
     signs: ["Structural settlement", "Warehouse floor damage", "Water intrusion", "Loading dock issues"],
   },
@@ -384,8 +378,8 @@ function MegaMenu({
                   onClick={() => onNavigate("service")}
                   className="flex items-center gap-3 w-full px-3 py-2.5 text-left group transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C] focus-visible:-outline-offset-2"
                   style={{
-                    background: isActive ? `${c.color}26` : "transparent",
-                    borderLeft: isActive ? `2px solid ${c.color}` : "2px solid transparent",
+                    background: isActive ? "rgba(26,82,168,.2)" : "transparent",
+                    borderLeft: isActive ? `2px solid ${SAND}` : "2px solid transparent",
                     cursor: "pointer",
                   }}
                 >
@@ -393,10 +387,10 @@ function MegaMenu({
                     className="flex items-center justify-center shrink-0 transition-all duration-150"
                     style={{
                       width: 30, height: 30, borderRadius: 7,
-                      background: isActive ? c.color : `${c.color}20`,
+                      background: isActive ? "rgba(196,171,108,.18)" : "rgba(255,255,255,.05)",
                     }}
                   >
-                    <Icon size={15} color={isActive ? "#0A0B14" : c.color} strokeWidth={2.25} />
+                    <Icon size={15} color={isActive ? SAND : "rgba(255,255,255,.55)"} strokeWidth={2.25} />
                   </span>
                   <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontWeight: isActive ? 600 : 400, fontSize: 14, color: isActive ? "#fff" : "rgba(255,255,255,.6)" }}>
                     {c.label}
@@ -404,7 +398,7 @@ function MegaMenu({
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                     className="shrink-0 transition-opacity"
                     style={{ opacity: isActive ? 1 : 0.35 }}>
-                    <path d="M9 18l6-6-6-6" stroke={isActive ? c.color : "white"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M9 18l6-6-6-6" stroke={isActive ? SAND : "white"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </div>
@@ -427,8 +421,8 @@ function MegaMenu({
         {/* Col 2: Problem signs for active category */}
         <div className="flex-1 flex flex-col py-2 pl-8">
           <div className="flex items-center gap-3 mb-4">
-            <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34, borderRadius: 8, background: cat.color }}>
-              <CatIcon size={17} color="#0A0B14" strokeWidth={2.25} />
+            <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34, borderRadius: 8, background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.3)" }}>
+              <CatIcon size={17} color={SAND} strokeWidth={2.25} />
             </span>
             <button
               onClick={() => onNavigate("service")}
@@ -441,8 +435,8 @@ function MegaMenu({
               </svg>
             </button>
           </div>
-          <div className="mb-4" style={{ height: 2, background: cat.color, opacity: 0.35, borderRadius: 2 }} />
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: cat.color, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10 }}>
+          <div className="mb-4 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
+          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10 }}>
             What are you noticing?
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -450,12 +444,12 @@ function MegaMenu({
               <button
                 key={symptom}
                 onClick={() => onNavigate("problem-sign-inner")}
-                className="group flex items-center justify-between gap-2 px-3 py-3 text-left transition-all duration-150 hover:brightness-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C] focus-visible:-outline-offset-2"
-                style={{ background: `${cat.color}1F`, borderLeft: `2px solid ${cat.color}`, cursor: "pointer", border: "none", borderLeftWidth: 2, borderLeftColor: cat.color, borderLeftStyle: "solid" }}
+                className="group flex items-center justify-between gap-2 px-3 py-3 text-left transition-all duration-150 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C] focus-visible:-outline-offset-2"
+                style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
               >
-                <span className="transition-colors group-hover:text-white" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.8)" }}>{symptom}</span>
+                <span className="transition-colors group-hover:text-white" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>{symptom}</span>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-60 group-hover:opacity-100 transition-all group-hover:translate-x-0.5">
-                  <path d="M9 18l6-6-6-6" stroke={cat.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             ))}
@@ -463,11 +457,11 @@ function MegaMenu({
           <button
             onClick={() => onNavigate("service")}
             className="group inline-flex items-center gap-1.5 mt-5 self-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: cat.color, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
           >
             View all {cat.label}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke={cat.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>
@@ -713,19 +707,19 @@ export default function SharedNavBar({
                               aria-expanded={isOpen}
                               className="w-full py-2.5 pl-3 pr-2 flex items-center gap-3 text-left"
                               style={{
-                                background: isOpen ? `${cat.color}26` : "transparent",
-                                borderLeft: isOpen ? `2px solid ${cat.color}` : "2px solid rgba(255,255,255,.1)",
+                                background: isOpen ? "rgba(26,82,168,.2)" : "transparent",
+                                borderLeft: isOpen ? `2px solid ${SAND}` : "2px solid rgba(255,255,255,.1)",
                                 cursor: "pointer",
                               }}>
-                              <span className="flex items-center justify-center shrink-0" style={{ width: 28, height: 28, borderRadius: 6, background: isOpen ? cat.color : `${cat.color}20` }}>
-                                <Icon size={14} color={isOpen ? "#0A0B14" : cat.color} strokeWidth={2.25} />
+                              <span className="flex items-center justify-center shrink-0" style={{ width: 28, height: 28, borderRadius: 6, background: isOpen ? "rgba(196,171,108,.18)" : "rgba(255,255,255,.05)" }}>
+                                <Icon size={14} color={isOpen ? SAND : "rgba(255,255,255,.55)"} strokeWidth={2.25} />
                               </span>
                               <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: isOpen ? "#fff" : "rgba(255,255,255,.6)", fontWeight: isOpen ? 600 : 400 }}>
                                 {cat.label}
                               </span>
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                                 style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
-                                <path d="M6 9l6 6 6-6" stroke={isOpen ? cat.color : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M6 9l6 6 6-6" stroke={isOpen ? SAND : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                               </svg>
                             </button>
                             {isOpen && (
@@ -735,17 +729,17 @@ export default function SharedNavBar({
                                     key={symptom}
                                     onClick={() => handleNavigate("problem-sign-inner")}
                                     className="py-2.5 px-2.5 flex items-center justify-between gap-1.5 text-left"
-                                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(255,255,255,.8)", background: `${cat.color}1F`, borderLeft: `2px solid ${cat.color}`, border: "none", borderLeftWidth: 2, borderLeftColor: cat.color, borderLeftStyle: "solid", cursor: "pointer" }}>
+                                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(255,255,255,.7)", background: "rgba(255,255,255,.04)", border: "none", cursor: "pointer" }}>
                                     {symptom}
                                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" className="shrink-0">
-                                      <path d="M9 18l6-6-6-6" stroke={cat.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                      <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                   </button>
                                 ))}
                                 <button
                                   onClick={() => handleNavigate("service")}
                                   className="col-span-2 py-2 pl-1 text-left"
-                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: cat.color, background: "none", border: "none", cursor: "pointer" }}>
+                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
                                   View all {cat.label} →
                                 </button>
                               </div>
