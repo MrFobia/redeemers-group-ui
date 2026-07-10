@@ -292,43 +292,36 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 }
 
 // ─── Mega Menu data ────────────────────────────────────────────────────────────
+// Symptom labels shortened to 2-4 words per approved symptom-driven sitemap.
+// TODO(content): validate final symptom labels against approved sitemap doc.
+// TODO(routing): every symptom currently routes to "problem-sign-inner" and every
+// category to "service" (only Crawl Space page exists). Wire real routes when
+// remaining service pages are built.
 const SERVICE_CATEGORIES = [
   {
     label: "Foundation Repair",
-    signs: ["I see wall cracks", "Doors & windows sticking", "Floors are uneven", "Gaps around door frames", "Stair-step cracks in brick"],
-    repairs: ["Push pier systems", "Wall anchors", "Helical piers", "Carbon fiber straps"],
+    signs: ["Cracks in walls", "Sticking doors & windows", "Uneven floors", "Gaps at door frames", "Stair-step brick cracks"],
   },
   {
     label: "Crawl Space Repair",
-    signs: ["Floors are sagging", "Musty smell from below", "High humidity indoors", "Pest entry through floor", "Condensation under house"],
-    repairs: ["SmartJack systems", "Encapsulation", "Moisture barrier", "Crawl space drainage"],
+    signs: ["Sagging floors", "Musty smell", "High indoor humidity", "Standing water below", "Baseboard separation"],
   },
   {
     label: "Waterproofing",
-    signs: ["Water in my basement", "Damp or wet walls", "Condensation on pipes", "Puddles after rain", "Efflorescence (white stains)"],
-    repairs: ["Interior drainage", "Sump pump install", "Wall membrane systems", "Window well drains"],
+    signs: ["Wet basement", "Damp walls", "Puddles after rain", "White wall stains", "Condensation on pipes"],
   },
   {
     label: "Concrete Services",
-    signs: ["Uneven driveway or patio", "Sunken sidewalk slabs", "Pool deck settling", "Trip hazards on walkways", "Garage floor cracks"],
-    repairs: ["PolyLevel foam lifting", "Slab leveling", "Mudjacking", "Joint sealing"],
+    signs: ["Uneven driveway", "Sunken sidewalk", "Pool deck settling", "Trip hazards", "Cracked garage floor"],
   },
   {
     label: "Mold Prevention",
-    signs: ["Musty odor in home", "Visible dark spots on walls", "Allergy symptoms indoors", "Peeling paint or wallpaper", "Stains on ceiling or floor"],
-    repairs: ["Mold remediation", "Moisture source removal", "Prevention treatment", "Air quality systems"],
+    signs: ["Musty odor", "Dark spots on walls", "Indoor allergies", "Peeling paint", "Ceiling stains"],
   },
   {
     label: "Commercial services",
-    signs: ["Structural settlement", "Loading dock issues", "Warehouse floor damage", "Water intrusion in facility", "Foundation movement"],
-    repairs: ["Commercial piers", "Slab stabilization", "Industrial waterproofing", "Structural assessment"],
+    signs: ["Structural settlement", "Warehouse floor damage", "Water intrusion", "Loading dock issues"],
   },
-];
-
-const SUPPORTING_CHIPS = [
-  { label: "FAQs",            page: "resources#faq" },
-  { label: "Project gallery", page: "resources#gallery" },
-  { label: "Cost guide",      page: "resources#cost" },
 ];
 
 // ─── Mega Menu ─────────────────────────────────────────────────────────────────
@@ -341,31 +334,35 @@ function MegaMenu({
   onCategoryHover: (i: number) => void;
   onNavigate: (p: string) => void;
 }) {
+  const cat = SERVICE_CATEGORIES[activeCategory];
   return (
     <div
+      role="menu"
+      aria-label="Services"
       style={{
         background: "rgba(10,11,20,.98)",
         backdropFilter: "blur(24px)",
         borderBottom: "1px solid rgba(255,255,255,.07)",
         boxShadow: "0 24px 60px rgba(0,0,0,.5)",
-        marginTop: 0,
+        maxHeight: "60vh",
+        overflowY: "auto",
       }}
     >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8 flex gap-0">
+      <div className="max-w-[1100px] mx-auto px-8 md:px-14 py-8 flex gap-0">
 
-        {/* Col 1: Service categories */}
-        <div className="w-56 shrink-0 flex flex-col py-2" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
+        {/* Col 1: Service categories rail */}
+        <div className="w-64 shrink-0 flex flex-col py-2" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
           <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10, paddingLeft: 12 }}>
             Services
           </p>
-          {SERVICE_CATEGORIES.map((cat, i) => (
-            <>
-              {i === 5 && <div key="divider" className="my-2 mx-3" style={{ height: 1, background: "rgba(255,255,255,.08)" }} />}
+          {SERVICE_CATEGORIES.map((c, i) => (
+            <div key={c.label}>
+              {i === 5 && <div className="my-2 mx-3" style={{ height: 1, background: "rgba(255,255,255,.08)" }} />}
               <button
-                key={cat.label}
                 onMouseEnter={() => onCategoryHover(i)}
+                onFocus={() => onCategoryHover(i)}
                 onClick={() => onNavigate("service")}
-                className="flex items-center justify-between w-full px-3 py-3 text-left group transition-all duration-150"
+                className="flex items-center justify-between w-full px-3 py-3 text-left group transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C] focus-visible:-outline-offset-2"
                 style={{
                   background: activeCategory === i ? "rgba(26,82,168,.2)" : "transparent",
                   borderLeft: activeCategory === i ? `2px solid ${SAND}` : "2px solid transparent",
@@ -373,108 +370,71 @@ function MegaMenu({
                 }}
               >
                 <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: activeCategory === i ? 600 : 400, fontSize: 14, color: activeCategory === i ? "#fff" : "rgba(255,255,255,.6)" }}>
-                  {cat.label}
+                  {c.label}
                 </span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  className="shrink-0 transition-opacity"
+                  style={{ opacity: activeCategory === i ? 1 : 0.35 }}>
+                  <path d="M9 18l6-6-6-6" stroke={activeCategory === i ? SAND : "white"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-            </>
+            </div>
           ))}
-        </div>
-
-        {/* Col 2: Problem signs — dynamic per active category */}
-        <div className="flex-1 flex flex-col py-2 px-6" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-          <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={() => onNavigate("service")}
-              className="group inline-flex items-center gap-1.5"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-            >
-              {SERVICE_CATEGORIES[activeCategory].label}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+          <div className="mt-3 px-3">
             <button
               onClick={() => onNavigate("services-landing")}
-              className="group inline-flex items-center gap-1"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 400, fontSize: 12, color: "rgba(255,255,255,.4)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+              className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
             >
               All services
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
+        </div>
+
+        {/* Col 2: Problem signs for active category */}
+        <div className="flex-1 flex flex-col py-2 pl-8">
+          <button
+            onClick={() => onNavigate("service")}
+            className="group inline-flex items-center gap-1.5 self-start mb-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          >
+            {cat.label}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
           <div className="mb-4" style={{ height: 1, background: "rgba(255,255,255,.07)" }} />
           <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10 }}>
-            Problem signs
+            What are you noticing?
           </p>
           <div className="flex flex-col gap-1.5">
-            {SERVICE_CATEGORIES[activeCategory].signs.map((symptom) => (
+            {cat.signs.slice(0, 6).map((symptom) => (
               <button
                 key={symptom}
                 onClick={() => onNavigate("problem-sign-inner")}
-                className="group flex items-center justify-between px-3 py-2 text-left transition-all duration-150"
+                className="group flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C] focus-visible:-outline-offset-2"
                 style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
               >
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>{symptom}</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
-                  <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <span className="transition-colors group-hover:text-white" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>{symptom}</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-60 group-hover:opacity-100 transition-all group-hover:translate-x-0.5">
+                  <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             ))}
           </div>
-          <div className="mt-4 mb-1" style={{ height: 1, background: "rgba(255,255,255,.07)" }} />
           <button
-            onClick={() => onNavigate("problem-sign-inner")}
-            className="group inline-flex items-center gap-1.5 mt-3 self-start"
+            onClick={() => onNavigate("service")}
+            className="group inline-flex items-center gap-1.5 mt-5 self-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
             style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
           >
-            Explore more
+            View all {cat.label}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
               <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
-        </div>
-
-        {/* Col 3: Repair types + Supporting — dynamic per active category */}
-        <div className="w-72 shrink-0 flex flex-col py-2 pl-6">
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10 }}>
-            Repair types
-          </p>
-          <div className="flex flex-col gap-2 mb-5">
-            {SERVICE_CATEGORIES[activeCategory].repairs.map((rt) => (
-              <button
-                key={rt}
-                onClick={() => onNavigate("service")}
-                className="group flex items-center justify-between px-4 py-2.5 text-left transition-all duration-150 hover:bg-white/5"
-                style={{ border: "1px solid rgba(255,255,255,.12)", cursor: "pointer", background: "none" }}
-              >
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)" }}>{rt}</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-0 group-hover:opacity-60 transition-opacity">
-                  <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            ))}
-          </div>
-          <div style={{ height: 1, background: "rgba(255,255,255,.08)", marginBottom: 16 }} />
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: "rgba(255,255,255,.4)", letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10 }}>
-            Supporting
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {SUPPORTING_CHIPS.map((chip) => (
-              <button
-                key={chip.label}
-                onClick={() => onNavigate(chip.page)}
-                className="px-3 py-1.5 transition-all hover:bg-white/10"
-                style={{ background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", cursor: "pointer" }}
-              >
-                {chip.label}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>
@@ -497,7 +457,10 @@ export default function SharedNavBar({
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(0);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileCategoryOpen, setMobileCategoryOpen] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const servicesBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
@@ -517,6 +480,21 @@ export default function SharedNavBar({
     };
     document.addEventListener("mousedown", handleOutside);
     return () => document.removeEventListener("mousedown", handleOutside);
+  }, [megaOpen, resourcesOpen, aboutOpen]);
+
+  // Escape closes any open dropdown and restores focus to the Services trigger
+  useEffect(() => {
+    if (!megaOpen && !resourcesOpen && !aboutOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMegaOpen(false);
+        setResourcesOpen(false);
+        setAboutOpen(false);
+        servicesBtnRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
   }, [megaOpen, resourcesOpen, aboutOpen]);
 
   const handleNavigate = (p: string) => {
@@ -557,8 +535,11 @@ export default function SharedNavBar({
                 return (
                   <button
                     key="Services"
-                    onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); }}
-                    className="flex items-center gap-1 transition-colors whitespace-nowrap"
+                    ref={servicesBtnRef}
+                    aria-haspopup="menu"
+                    aria-expanded={megaOpen}
+                    onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); setAboutOpen(false); }}
+                    className="flex items-center gap-1 transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
                       color: megaOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
@@ -666,21 +647,89 @@ export default function SharedNavBar({
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="lg:hidden px-8 pb-6 flex flex-col gap-4" style={{ background: DARK }}>
+          <div className="lg:hidden px-8 pb-6 flex flex-col gap-1" style={{ background: DARK }}>
             {links.map((l) => {
               const pageKey = NAV_PAGE_MAP[l];
+
+              // Services → 2-level accordion: category → symptoms
+              if (l === "Services") {
+                return (
+                  <div key="Services" style={{ borderBottom: "1px solid rgba(255,255,255,.05)" }}>
+                    <button
+                      onClick={() => { setMobileServicesOpen((o) => !o); setMobileCategoryOpen(null); }}
+                      aria-expanded={mobileServicesOpen}
+                      className="w-full py-3 flex items-center justify-between text-left"
+                      style={{ fontFamily: "'Inter',sans-serif", color: mobileServicesOpen ? "#fff" : "rgba(255,255,255,.7)", fontSize: 15, background: "none", border: "none", cursor: "pointer" }}>
+                      Services
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        style={{ transform: mobileServicesOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    {mobileServicesOpen && (
+                      <div className="pb-3 flex flex-col">
+                        {SERVICE_CATEGORIES.map((cat, i) => (
+                          <div key={cat.label}>
+                            <button
+                              onClick={() => setMobileCategoryOpen(mobileCategoryOpen === i ? null : i)}
+                              aria-expanded={mobileCategoryOpen === i}
+                              className="w-full py-2.5 pl-4 pr-2 flex items-center justify-between text-left"
+                              style={{
+                                fontFamily: "'Inter',sans-serif", fontSize: 14,
+                                color: mobileCategoryOpen === i ? "#fff" : "rgba(255,255,255,.6)",
+                                fontWeight: mobileCategoryOpen === i ? 600 : 400,
+                                background: "none", border: "none",
+                                borderLeft: mobileCategoryOpen === i ? `2px solid ${SAND}` : "2px solid rgba(255,255,255,.1)",
+                                cursor: "pointer",
+                              }}>
+                              {cat.label}
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                style={{ transform: mobileCategoryOpen === i ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
+                                <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            </button>
+                            {mobileCategoryOpen === i && (
+                              <div className="flex flex-col pb-2" style={{ borderLeft: `2px solid ${SAND}` }}>
+                                {cat.signs.slice(0, 6).map((symptom) => (
+                                  <button
+                                    key={symptom}
+                                    onClick={() => handleNavigate("problem-sign-inner")}
+                                    className="py-2 pl-8 pr-2 flex items-center justify-between text-left"
+                                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.55)", background: "none", border: "none", cursor: "pointer" }}>
+                                    {symptom}
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                                      <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                  </button>
+                                ))}
+                                <button
+                                  onClick={() => handleNavigate("service")}
+                                  className="py-2 pl-8 text-left"
+                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                                  View all {cat.label} →
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
               return pageKey ? (
                 <button key={l} onClick={() => handleNavigate(pageKey)}
-                  className="py-2 text-left"
+                  className="py-3 text-left"
                   style={{ fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,.7)", fontSize: 15, background: "none", border: "none", borderBottom: "1px solid rgba(255,255,255,.05)", cursor: "pointer" }}>
                   {l}
                 </button>
               ) : (
-                <a key={l} href="#" className="py-2 border-b border-white/5"
+                <a key={l} href="#" className="py-3 border-b border-white/5"
                   style={{ fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,.7)", fontSize: 15 }}>{l}</a>
               );
             })}
-            <button onClick={openInspection} className="mt-2 py-3 text-center font-semibold text-white w-full"
+            <button onClick={openInspection} className="mt-3 py-3 text-center font-semibold text-white w-full"
               style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, border: "none", cursor: "pointer" }}>
               Schedule Free Inspection
             </button>
