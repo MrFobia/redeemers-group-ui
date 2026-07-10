@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { Home, Layers, Droplets, Grid3x3, Leaf, Building2 } from "lucide-react";
 import { Logo } from "./components/Logo";
 import { InspectionModal, openInspection } from "./components/InspectionModal";
+import imgSvcFoundation from "../assets/svc-foundation.jpg";
+import imgSvcCrawlspace from "../assets/svc-crawlspace.jpg";
+import imgSvcWaterproofing from "../assets/svc-waterproofing.jpg";
+import imgSvcConcrete from "../assets/svc-concrete.jpg";
+import imgSvcMold from "../assets/svc-mold.jpg";
 
 // ─── Brand Tokens ──────────────────────────────────────────────────────────────
 const B = "#1A52A8";
@@ -305,31 +311,43 @@ const SERVICE_CATEGORIES = [
   {
     label: "Foundation Repair",
     icon: Home,
+    img: imgSvcFoundation as string,
+    tagline: "Stop the cracks before they spread.",
     signs: ["Cracks in walls", "Sticking doors & windows", "Uneven floors", "Gaps at door frames", "Stair-step brick cracks"],
   },
   {
     label: "Crawl Space Repair",
     icon: Layers,
+    img: imgSvcCrawlspace as string,
+    tagline: "Dry, sealed, and structurally sound below your home.",
     signs: ["Sagging floors", "Musty smell", "High indoor humidity", "Standing water below", "Baseboard separation"],
   },
   {
     label: "Waterproofing",
     icon: Droplets,
+    img: imgSvcWaterproofing as string,
+    tagline: "Keep water out of your basement for good.",
     signs: ["Wet basement", "Damp walls", "Puddles after rain", "White wall stains", "Condensation on pipes"],
   },
   {
     label: "Concrete Services",
     icon: Grid3x3,
+    img: imgSvcConcrete as string,
+    tagline: "Level driveways, walkways, and slabs.",
     signs: ["Uneven driveway", "Sunken sidewalk", "Pool deck settling", "Trip hazards", "Cracked garage floor"],
   },
   {
     label: "Mold Prevention",
     icon: Leaf,
+    img: imgSvcMold as string,
+    tagline: "Find the moisture source, stop mold at the root.",
     signs: ["Musty odor", "Dark spots on walls", "Indoor allergies", "Peeling paint", "Ceiling stains"],
   },
   {
     label: "Commercial services",
     icon: Building2,
+    img: imgSvcFoundation as string,
+    tagline: "Structural repair for commercial properties.",
     signs: ["Structural settlement", "Warehouse floor damage", "Water intrusion", "Loading dock issues"],
   },
 ];
@@ -359,7 +377,7 @@ function MegaMenu({
         overflowY: "auto",
       }}
     >
-      <div className="max-w-[1100px] mx-auto px-8 md:px-14 py-8 flex gap-0">
+      <div className="max-w-[1320px] mx-auto px-8 md:px-14 py-8 flex gap-0">
 
         {/* Col 1: Service categories rail */}
         <div className="w-64 shrink-0 flex flex-col py-2" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
@@ -464,6 +482,36 @@ function MegaMenu({
               <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
+        </div>
+
+        {/* Col 3: Banner — swaps with the hovered/focused category */}
+        <div className="w-72 shrink-0 pl-8 hidden xl:block">
+          <div className="relative w-full h-full min-h-[280px] overflow-hidden" style={{ border: "1px solid rgba(255,255,255,.08)" }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={cat.label}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="absolute inset-0"
+              >
+                <img src={cat.img} alt={cat.label} className="w-full h-full object-cover" />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,20,.1) 0%, rgba(10,11,20,.92) 100%)" }} />
+                <div className="absolute inset-x-0 bottom-0 p-5 flex flex-col gap-3">
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: "#fff", lineHeight: 1.2 }}>{cat.label}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(255,255,255,.7)", lineHeight: 1.5 }}>{cat.tagline}</p>
+                  <button
+                    onClick={openInspection}
+                    className="inline-flex items-center justify-center gap-1.5 py-2.5 mt-1 font-semibold transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                    style={{ background: B, color: "#fff", fontFamily: "'Inter',sans-serif", fontSize: 12.5, fontWeight: 600, letterSpacing: ".3px", border: "none", cursor: "pointer" }}
+                  >
+                    Free Inspection
+                  </button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>
