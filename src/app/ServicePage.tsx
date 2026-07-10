@@ -60,7 +60,7 @@ const SYMPTOMS = [
   { id: "s5", q: "Pest or insect activity", a: "Damp, open crawl spaces invite termites, rodents, and other pests. Encapsulation removes the environment they need to thrive." },
 ];
 
-function SymptomAccordion() {
+function SymptomAccordion({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [open, setOpen] = useState<string>("s1");
   return (
     <AccordionPrimitive.Root type="single" value={open} onValueChange={(v) => setOpen(v || "")}>
@@ -95,7 +95,18 @@ function SymptomAccordion() {
                 borderTop: "none",
                 borderRadius: "0 0 4px 4px",
               }}>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", lineHeight: 1.7 }}>{s.a}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", lineHeight: 1.7, marginBottom: 14 }}>{s.a}</p>
+              <button
+                onClick={() => onNavigate?.("problem-sign-inner")}
+                className="inline-flex items-center gap-1.5 transition-opacity hover:opacity-85"
+                style={{
+                  background: SAND, color: DARK, fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700,
+                  padding: "9px 16px", border: "none", cursor: "pointer",
+                }}
+              >
+                See full solution
+                <ArrowRight size={14} />
+              </button>
             </div>
           </AccordionPrimitive.Content>
         </AccordionPrimitive.Item>
@@ -104,7 +115,7 @@ function SymptomAccordion() {
   );
 }
 
-function HeroSection() {
+function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   return (
     <section
       id="overview"
@@ -141,7 +152,7 @@ function HeroSection() {
           </h1>
 
           {/* Accordion */}
-          <SymptomAccordion />
+          <SymptomAccordion onNavigate={onNavigate} />
 
           {/* Footer link */}
           <p style={{ marginTop: 20, fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>
@@ -767,7 +778,7 @@ export default function ServicePage({ onBack, onNavigate, scrollTo }: { onBack: 
             <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Crawl Space Repair</span>
           </div>
         </div>
-        <HeroSection />
+        <HeroSection onNavigate={onNavigate} />
         <SolutionsSection />
         <div id="signs"><ProblemSignsSection /></div>
         <div id="cost"><CostSection /></div>
