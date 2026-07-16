@@ -868,15 +868,28 @@ function BenefitsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {PERKS.map((perk, i) => (
             <Reveal key={perk.title} delay={i * 0.06}>
-              <div className="flex gap-4 p-6 h-full group transition-all hover:bg-white/[0.02]"
-                style={{ background: DARK, border: "1px solid rgba(255,255,255,.05)" }}>
-                <div className="w-11 h-11 shrink-0 flex items-center justify-center"
-                  style={{ background: "rgba(196,171,108,.08)", border: "1px solid rgba(196,171,108,.2)", color: SAND }}>
+              <div
+                className="relative flex flex-col gap-5 p-7 h-full group overflow-hidden transition-all duration-300"
+                style={{ background: DARK, border: "1px solid rgba(255,255,255,.06)" }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(196,171,108,.4)"; e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 16px 32px rgba(0,0,0,.35)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.06)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+              >
+                {/* Top accent line */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
+                  style={{ background: `linear-gradient(90deg, ${SAND}, transparent)` }} />
+
+                {/* Index number, faint */}
+                <span className="absolute top-5 right-6" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "rgba(255,255,255,.04)", letterSpacing: -1 }}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
+                <div className="relative w-12 h-12 shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-105"
+                  style={{ background: "linear-gradient(135deg, rgba(196,171,108,.16), rgba(196,171,108,.04))", border: "1px solid rgba(196,171,108,.25)", color: SAND }}>
                   {perk.icon}
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 6 }}>{perk.title}</h4>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.45)", lineHeight: 1.65 }}>{perk.desc}</p>
+                  <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 8, letterSpacing: "-0.2px" }}>{perk.title}</h4>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
                 </div>
               </div>
             </Reveal>

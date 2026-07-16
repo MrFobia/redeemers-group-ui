@@ -26,7 +26,7 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-const CATEGORIES = ["All topics", "Foundation Repair", "Waterproofing", "Basement", "Crawl Space", "Concrete", "Cost Guides", "Maintenance"];
+const CATEGORIES = ["All topics", "Foundation", "Waterproofing", "Crawl Space", "Concrete"];
 
 type Article = {
   id: number; cat: string; readTime: string; date: string;
@@ -251,23 +251,14 @@ function FeaturedSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <section className="py-20 lg:py-24" style={{ background: DARK }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="flex items-end justify-between gap-6 mb-12 flex-wrap">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div style={{ width: 8, height: 2, background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Latest</span>
-            </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,52px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px" }}>
-              Hot off the press
-            </h2>
+        <Reveal className="mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <div style={{ width: 8, height: 2, background: SAND }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Latest</span>
           </div>
-          <button className="group inline-flex items-center gap-2 shrink-0"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-            View all articles
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,52px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px" }}>
+            Hot off the press
+          </h2>
         </Reveal>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -321,9 +312,13 @@ function FeaturedSection({ onNavigate }: { onNavigate: (p: string) => void }) {
 }
 
 // ─── 4. BLOG GRID ─────────────────────────────────────────────────────────────
-function BlogGridSection({ onNavigate }: { onNavigate: (p: string) => void }) {
+function BlogGridSection({ activeCategory, onNavigate }: { activeCategory: string; onNavigate: (p: string) => void }) {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
+
+  const filtered = activeCategory === "All topics"
+    ? BLOG_ARTICLES
+    : BLOG_ARTICLES.filter((a) => a.cat === activeCategory);
 
   return (
     <section className="py-20 lg:py-24" style={{ background: "#0D0E1A" }}>
@@ -338,14 +333,20 @@ function BlogGridSection({ onNavigate }: { onNavigate: (p: string) => void }) {
               More from our blog
             </h2>
           </div>
-          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.3)" }}>17 more pieces</span>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.3)" }}>{filtered.length} pieces</span>
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-          {BLOG_ARTICLES.map((a, i) => (
-            <DarkCard key={a.id} article={a} delay={i * 0.06} onNavigate={onNavigate} />
-          ))}
-        </div>
+        {filtered.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+            {filtered.map((a, i) => (
+              <DarkCard key={a.id} article={a} delay={i * 0.06} onNavigate={onNavigate} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center justify-center py-16 mb-12">
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.3)" }}>No articles in this category yet.</p>
+          </div>
+        )}
 
         {/* Pagination */}
         <div className="flex items-center justify-center gap-2">
@@ -557,9 +558,9 @@ export default function NewsBlogPage({ onBack, onNavigate }: { onBack: () => voi
       </div>
       <div style={{ paddingTop: 148 }}>
         <HeroSection onBack={onBack} onNavigate={onNavigate} />
-        <CategoryTabs active={activeCategory} onChange={setActiveCategory} />
         <FeaturedSection onNavigate={onNavigate} />
-        <BlogGridSection onNavigate={onNavigate} />
+        <CategoryTabs active={activeCategory} onChange={setActiveCategory} />
+        <BlogGridSection activeCategory={activeCategory} onNavigate={onNavigate} />
         <ReviewsSection />
         <CtaSection />
         <Footer onBack={onBack} />

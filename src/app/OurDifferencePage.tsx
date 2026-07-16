@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, animate } from "motion/react";
-import { ChevronRight, ArrowRight, CheckCircle, XCircle } from "lucide-react";
+import { ChevronRight, ArrowRight, CheckCircle, XCircle, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import useEmblaCarousel from "embla-carousel-react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import imgFloor01 from "../assets/floor-01.jpeg";
@@ -459,6 +460,8 @@ type CaseCard = {
   items: string[];
   img: string;
   aspect: "16/9" | "1/1" | "fill";
+  gallery: { img: string; caption: string }[];
+  story: string[];
 };
 
 const CASE_LEFT: CaseCard[] = [
@@ -471,6 +474,16 @@ const CASE_LEFT: CaseCard[] = [
     ],
     img: imgFloor01,
     aspect: "16/9",
+    gallery: [
+      { img: imgFloor01, caption: "Foundation repair completed under our lifetime warranty" },
+      { img: imgFloor04, caption: "Final inspection sign-off with the homeowner" },
+      { img: imgFloor03, caption: "Documentation handed over for transfer on resale" },
+    ],
+    story: [
+      "Every job we complete is backed by a lifetime warranty covering all parts and labour — not a limited-year policy with exceptions buried in fine print.",
+      "When a homeowner in this case called us back four years after the original repair with a new, unrelated concern, our crew returned at no cost, diagnosed the issue, and resolved it under the same warranty terms issued at signing.",
+      "Because the warranty is fully transferable, the coverage moved with the house when it sold the following year — one less thing for the buyer and seller to negotiate.",
+    ],
   },
   {
     title: "Our promise on inspections",
@@ -481,6 +494,16 @@ const CASE_LEFT: CaseCard[] = [
     ],
     img: imgFloor04,
     aspect: "1/1",
+    gallery: [
+      { img: imgFloor04, caption: "Initial walkthrough and crawl space assessment" },
+      { img: imgFloor02, caption: "Root-cause diagnosis before any quote is written" },
+      { img: imgFloor01, caption: "Plain-language report delivered same day" },
+    ],
+    story: [
+      "Our inspectors are not paid commission on the repairs they recommend, so every inspection starts and ends with what the home actually needs.",
+      "In this case, the homeowner had already been quoted a full foundation replacement by another company. Our root-cause diagnosis found a single failed downspout was the source of the moisture — a repair a fraction of the size.",
+      "The inspection stayed free and obligation-free throughout, and the written report was handed over the same afternoon, no pressure to sign on the spot.",
+    ],
   },
 ];
 
@@ -493,6 +516,16 @@ const CASE_RIGHT: CaseCard[] = [
     ],
     img: imgFloor03,
     aspect: "1/1",
+    gallery: [
+      { img: imgFloor03, caption: "Installation day — crew on site" },
+      { img: imgFloor01, caption: "Follow-up call two weeks after completion" },
+      { img: imgFloor04, caption: "Return visit to fine-tune final leveling" },
+    ],
+    story: [
+      "Every installation ends with a dedicated follow-up call, not an invoice and a goodbye.",
+      "During that call on this project, the homeowner mentioned a door that still stuck slightly. Under our satisfaction guarantee, the same crew returned within the week, free of charge, and adjusted the leveling until it closed cleanly.",
+      "No new estimate, no new invoice — just the job finished the way it was promised.",
+    ],
   },
   {
     title: "Moisture & mold control",
@@ -503,10 +536,21 @@ const CASE_RIGHT: CaseCard[] = [
     ],
     img: imgFloor02,
     aspect: "fill",
+    gallery: [
+      { img: imgFloor02, caption: "Crawl space before encapsulation" },
+      { img: imgFloor03, caption: "Vapor barrier and drainage matting installed" },
+      { img: imgFloor04, caption: "Mold remediation in the affected joists" },
+      { img: imgFloor01, caption: "Sealed, dry crawl space — job complete" },
+    ],
+    story: [
+      "A full moisture assessment is standard on every job, whether the homeowner asked for it or not.",
+      "In this case, what started as a request to fix a bouncy floor turned up active mold on two joists once we opened the crawl space. We scoped remediation and full encapsulation into the same visit rather than sending a second crew later.",
+      "The result: structural repair, moisture control, and mold remediation closed out in one engagement, with drainage matting added to stop the source of the moisture for good.",
+    ],
   },
 ];
 
-function CaseCard({ card, delay }: { card: CaseCard; delay: number }) {
+function CaseCard({ card, delay, onOpen }: { card: CaseCard; delay: number; onOpen: (card: CaseCard) => void }) {
   const [hovered, setHovered] = useState(false);
 
   const containerStyle: React.CSSProperties =
@@ -521,6 +565,7 @@ function CaseCard({ card, delay }: { card: CaseCard; delay: number }) {
         style={containerStyle}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={() => onOpen(card)}
       >
         {/* Image */}
         <ImageWithFallback
@@ -589,7 +634,7 @@ function CaseCard({ card, delay }: { card: CaseCard; delay: number }) {
             ))}
           </ul>
           <button
-            onClick={openInspection}
+            onClick={(e) => { e.stopPropagation(); openInspection(); }}
             className="group/cta inline-flex items-center gap-1.5 w-fit"
             style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
           >
@@ -602,7 +647,133 @@ function CaseCard({ card, delay }: { card: CaseCard; delay: number }) {
   );
 }
 
+function CaseStudyModal({ card, onOpenChange }: { card: CaseCard | null; onOpenChange: (open: boolean) => void }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [cur, setCur] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    setCur(0);
+    emblaApi.scrollTo(0);
+    emblaApi.on("select", () => setCur(emblaApi.selectedScrollSnap()));
+  }, [emblaApi, card]);
+
+  return (
+    <DialogPrimitive.Root open={!!card} onOpenChange={onOpenChange}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay
+          className="fixed inset-0 z-50"
+          style={{ background: "rgba(10,11,20,.78)" }}
+        />
+        <DialogPrimitive.Content
+          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,980px)] max-h-[92vh] overflow-y-auto"
+          style={{ background: "#fff" }}
+          aria-describedby={undefined}
+        >
+          {card && (
+            <div className="relative">
+              <DialogPrimitive.Close
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}
+              >
+                <X size={18} color="#fff" />
+              </DialogPrimitive.Close>
+
+              {/* Gallery */}
+              <div className="relative overflow-hidden" ref={emblaRef} style={{ background: DARK }}>
+                <div className="flex">
+                  {card.gallery.map((slide, i) => (
+                    <div key={i} className="relative shrink-0 w-full" style={{ aspectRatio: "16/9" }}>
+                      <ImageWithFallback
+                        src={slide.img}
+                        alt={slide.caption}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div
+                        className="absolute bottom-0 left-0 right-0 px-6 py-4"
+                        style={{ background: "linear-gradient(0deg, rgba(10,11,20,.85) 0%, rgba(10,11,20,0) 100%)" }}
+                      >
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.85)" }}>
+                          {slide.caption}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Arrows */}
+                <button
+                  onClick={() => emblaApi?.scrollPrev()}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </button>
+                <button
+                  onClick={() => emblaApi?.scrollNext()}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </button>
+
+                {/* Dots */}
+                <div className="absolute bottom-3 right-4 flex gap-1.5">
+                  {card.gallery.map((_, i) => (
+                    <button key={i} onClick={() => emblaApi?.scrollTo(i)}
+                      className="rounded-full transition-all duration-300"
+                      style={{ width: cur === i ? 18 : 6, height: 6, background: cur === i ? SAND : "rgba(255,255,255,.4)", border: "none", cursor: "pointer", padding: 0 }} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Text content */}
+              <div className="p-8 md:p-10">
+                <DialogPrimitive.Title
+                  style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,3vw,32px)", color: CHAR, letterSpacing: "-0.5px", marginBottom: 20 }}
+                >
+                  {card.title}
+                </DialogPrimitive.Title>
+
+                <div className="flex flex-col gap-4 mb-8">
+                  {card.story.map((p, i) => (
+                    <p key={i} style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#444", lineHeight: 1.75 }}>
+                      {p}
+                    </p>
+                  ))}
+                </div>
+
+                <ul className="flex flex-col gap-2 mb-8">
+                  {card.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <div className="w-1.5 h-1.5 rounded-full shrink-0 mt-[7px]" style={{ background: B }} />
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.6 }}>
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={openInspection}
+                  className="inline-flex items-center gap-2 px-7 py-3.5"
+                  style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}
+                >
+                  Schedule Free Inspection
+                  <ArrowRight size={15} />
+                </button>
+              </div>
+            </div>
+          )}
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
+  );
+}
+
 function CaseStudiesSection() {
+  const [activeCard, setActiveCard] = useState<CaseCard | null>(null);
+
   return (
     <section style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
@@ -638,18 +809,20 @@ function CaseStudiesSection() {
           {/* Left column */}
           <div className="flex flex-col gap-12">
             {CASE_LEFT.map((card, i) => (
-              <CaseCard key={card.title} card={card} delay={i * 0.1} />
+              <CaseCard key={card.title} card={card} delay={i * 0.1} onOpen={setActiveCard} />
             ))}
           </div>
 
           {/* Right column — offset down to create stagger */}
           <div className="flex flex-col gap-12 lg:mt-16">
             {CASE_RIGHT.map((card, i) => (
-              <CaseCard key={card.title ?? `img-${i}`} card={card} delay={0.05 + i * 0.1} />
+              <CaseCard key={card.title ?? `img-${i}`} card={card} delay={0.05 + i * 0.1} onOpen={setActiveCard} />
             ))}
           </div>
         </div>
       </div>
+
+      <CaseStudyModal card={activeCard} onOpenChange={(open) => !open && setActiveCard(null)} />
     </section>
   );
 }
