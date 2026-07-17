@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { openInspection } from "./components/InspectionModal";
 import imgCrawlspace from "../assets/svc-crawlspace.jpg";
+import iconCrawlspace from "../assets/icons/icon-crawlspace.svg";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion, useInView } from "motion/react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
@@ -137,6 +138,11 @@ function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
       {/* Content */}
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-20 lg:py-28">
         <div style={{ maxWidth: 587 }}>
+
+          {/* Service icon */}
+          <div className="flex items-center justify-center mb-8" style={{ width: 64, height: 64, borderRadius: 12, background: "rgba(255,255,255,.95)" }}>
+            <img src={iconCrawlspace} alt="Crawl Space Repair" className="w-10 h-10 object-contain" />
+          </div>
 
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-8">
