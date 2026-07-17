@@ -412,10 +412,10 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
 
                 {/* Default state: icon + label, icon as a white overlay silhouette */}
                 <div className="absolute inset-x-0 bottom-0 p-4 flex items-center gap-2.5 transition-opacity duration-200 group-hover:opacity-0">
-                  <span className="flex items-center justify-center shrink-0" style={{ width: 22, height: 22 }}>
+                  <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34 }}>
                     {c.iconImg
                       ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
-                      : <Icon size={20} color="#fff" strokeWidth={2} />}
+                      : <Icon size={30} color="#fff" strokeWidth={2} />}
                   </span>
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", lineHeight: 1.2 }}>{c.label}</p>
                 </div>
