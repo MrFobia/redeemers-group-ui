@@ -405,7 +405,7 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
                 key={c.label}
                 onClick={() => onNavigate("service")}
                 className="group relative overflow-hidden cursor-pointer"
-                style={{ height: 260, border: "1px solid rgba(255,255,255,.08)" }}
+                style={{ height: 360, border: "1px solid rgba(255,255,255,.08)" }}
               >
                 <img src={c.img} alt={c.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,20,.15) 0%, rgba(10,11,20,.9) 100%)" }} />
