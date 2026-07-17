@@ -369,7 +369,7 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
         overflowY: "auto",
       }}
     >
-      <div className="max-w-[1320px] mx-auto px-8 md:px-14 py-8">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
         <div className="flex items-center justify-between mb-6">
           <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
             Services — what are you noticing?
@@ -386,52 +386,51 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {SERVICE_CATEGORIES.map((c) => {
+        <div className="flex gap-0">
+          {SERVICE_CATEGORIES.map((c, i) => {
             const Icon = c.icon;
             return (
               <div
                 key={c.label}
-                className="flex flex-col p-5"
-                style={{ background: CHAR_NAV, border: "1px solid rgba(255,255,255,.07)" }}
+                className="flex-1 flex flex-col py-2"
+                style={{
+                  paddingLeft: i === 0 ? 0 : 20,
+                  paddingRight: i === SERVICE_CATEGORIES.length - 1 ? 0 : 20,
+                  borderRight: i === SERVICE_CATEGORIES.length - 1 ? "none" : "1px solid rgba(255,255,255,.07)",
+                }}
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="flex items-center justify-center shrink-0" style={{ width: 32, height: 32, borderRadius: 7, background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.3)" }}>
-                    <Icon size={16} color={SAND} strokeWidth={2.25} />
+                <div className="flex items-center gap-2.5 mb-4">
+                  <span className="flex items-center justify-center shrink-0" style={{ width: 28, height: 28, borderRadius: 6, background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.3)" }}>
+                    <Icon size={14} color={SAND} strokeWidth={2.25} />
                   </span>
                   <button
                     onClick={() => onNavigate("service")}
-                    className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                    className="group inline-flex items-center gap-1 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13.5, color: "#fff", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 1.2 }}
                   >
                     {c.label}
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
                   </button>
                 </div>
-                <div className="flex flex-col gap-1.5">
+                <div className="mb-3 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
+                <div className="flex flex-col gap-1">
                   {c.signs.slice(0, 5).map((symptom) => (
                     <button
                       key={symptom}
                       onClick={() => onNavigate("problem-sign-inner")}
-                      className="group flex items-center justify-between gap-2 px-3 py-2.5 text-left transition-all duration-150 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C] focus-visible:-outline-offset-2"
+                      className="group flex items-center gap-1.5 px-2.5 py-2 text-left transition-all duration-150 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C] focus-visible:-outline-offset-2"
                       style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
                     >
-                      <span className="transition-colors group-hover:text-white" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(255,255,255,.65)" }}>{symptom}</span>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-60 group-hover:opacity-100 transition-all group-hover:translate-x-0.5">
-                        <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                      <span className="transition-colors group-hover:text-white" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, lineHeight: 1.3, color: "rgba(255,255,255,.65)" }}>{symptom}</span>
                     </button>
                   ))}
                 </div>
                 <button
                   onClick={() => onNavigate("service")}
-                  className="group inline-flex items-center gap-1.5 mt-4 self-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12.5, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                  className="group inline-flex items-center gap-1 mt-3 self-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
                 >
-                  View all {c.label}
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
+                  View all
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
                     <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
