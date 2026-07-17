@@ -474,6 +474,8 @@ export default function SharedNavBar({
   const [aboutOpen, setAboutOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState<number | null>(null);
+  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
+  const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -745,6 +747,84 @@ export default function SharedNavBar({
                           style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
                           All services →
                         </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // Resources → same one-level accordion pattern as Services:
+              // tap to expand direct-navigate links, no hover dependency.
+              if (l === "Resources") {
+                return (
+                  <div key="Resources" style={{ borderBottom: "1px solid rgba(255,255,255,.05)" }}>
+                    <button
+                      onClick={() => setMobileResourcesOpen((o) => !o)}
+                      aria-expanded={mobileResourcesOpen}
+                      className="w-full py-3 flex items-center justify-between text-left"
+                      style={{ fontFamily: "'Inter',sans-serif", color: mobileResourcesOpen ? "#fff" : "rgba(255,255,255,.7)", fontSize: 15, background: "none", border: "none", cursor: "pointer" }}>
+                      Resources
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        style={{ transform: mobileResourcesOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    {mobileResourcesOpen && (
+                      <div className="pb-3 flex flex-col gap-1">
+                        <button
+                          onClick={() => handleNavigate("news-blog")}
+                          className="w-full py-2.5 pl-3 text-left"
+                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                          News / Blog
+                        </button>
+                        {RESOURCES_SECTIONS.map((sec) => (
+                          <button
+                            key={sec.id}
+                            onClick={() => handleNavigate(`resources#${sec.id}`)}
+                            className="w-full py-2.5 pl-3 text-left"
+                            style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                            {sec.label}
+                          </button>
+                        ))}
+                        <button
+                          onClick={() => handleNavigate("resources")}
+                          className="py-2.5 pl-3 text-left"
+                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                          Go to Resources →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // About → same one-level accordion pattern: the desktop dropdown's
+              // 4 tabs (About/Careers/Service Area/Contact) become direct links.
+              if (l === "About") {
+                return (
+                  <div key="About" style={{ borderBottom: "1px solid rgba(255,255,255,.05)" }}>
+                    <button
+                      onClick={() => setMobileAboutOpen((o) => !o)}
+                      aria-expanded={mobileAboutOpen}
+                      className="w-full py-3 flex items-center justify-between text-left"
+                      style={{ fontFamily: "'Inter',sans-serif", color: mobileAboutOpen ? "#fff" : "rgba(255,255,255,.7)", fontSize: 15, background: "none", border: "none", cursor: "pointer" }}>
+                      About
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        style={{ transform: mobileAboutOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    {mobileAboutOpen && (
+                      <div className="pb-3 flex flex-col gap-1">
+                        {ABOUT_TABS.map((tab) => (
+                          <button
+                            key={tab.key}
+                            onClick={() => handleNavigate(tab.page)}
+                            className="w-full py-2.5 pl-3 text-left"
+                            style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                            {tab.label}
+                          </button>
+                        ))}
                       </div>
                     )}
                   </div>
