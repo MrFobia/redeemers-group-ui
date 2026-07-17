@@ -7,6 +7,10 @@ import imgSvcCrawlspace from "../assets/svc-crawlspace.jpg";
 import imgSvcWaterproofing from "../assets/svc-waterproofing.jpg";
 import imgSvcConcrete from "../assets/svc-concrete.jpg";
 import imgSvcMold from "../assets/svc-mold.jpg";
+import iconFoundation from "../assets/icons/icon-foundation.svg";
+import iconCrawlspace from "../assets/icons/icon-crawlspace.svg";
+import iconWaterproofing from "../assets/icons/icon-waterproofing.svg";
+import iconConcrete from "../assets/icons/icon-concrete.svg";
 
 // ─── Brand Tokens ──────────────────────────────────────────────────────────────
 const B = "#1A52A8";
@@ -310,6 +314,7 @@ const SERVICE_CATEGORIES = [
   {
     label: "Foundation Repair",
     icon: Home,
+    iconImg: iconFoundation as string,
     img: imgSvcFoundation as string,
     tagline: "Stop the cracks before they spread.",
     signs: ["Cracks in walls", "Sticking doors & windows", "Uneven floors", "Gaps at door frames", "Stair-step brick cracks"],
@@ -317,6 +322,7 @@ const SERVICE_CATEGORIES = [
   {
     label: "Crawl Space Repair",
     icon: Layers,
+    iconImg: iconCrawlspace as string,
     img: imgSvcCrawlspace as string,
     tagline: "Dry, sealed, and structurally sound below your home.",
     signs: ["Sagging floors", "Musty smell", "High indoor humidity", "Standing water below", "Baseboard separation"],
@@ -324,6 +330,7 @@ const SERVICE_CATEGORIES = [
   {
     label: "Waterproofing",
     icon: Droplets,
+    iconImg: iconWaterproofing as string,
     img: imgSvcWaterproofing as string,
     tagline: "Keep water out of your basement for good.",
     signs: ["Wet basement", "Damp walls", "Puddles after rain", "White wall stains", "Condensation on pipes"],
@@ -331,30 +338,36 @@ const SERVICE_CATEGORIES = [
   {
     label: "Concrete Services",
     icon: Grid3x3,
+    iconImg: iconConcrete as string,
     img: imgSvcConcrete as string,
     tagline: "Level driveways, walkways, and slabs.",
     signs: ["Uneven driveway", "Sunken sidewalk", "Pool deck settling", "Trip hazards", "Cracked garage floor"],
   },
   {
-    label: "Mold Prevention",
-    icon: Leaf,
-    img: imgSvcMold as string,
-    tagline: "Find the moisture source, stop mold at the root.",
-    signs: ["Musty odor", "Dark spots on walls", "Indoor allergies", "Peeling paint", "Ceiling stains"],
-  },
-  {
-    label: "Commercial services",
+    label: "Commercial Services",
     icon: Building2,
+    iconImg: null as string | null,
     img: imgSvcFoundation as string,
     tagline: "Structural repair for commercial properties.",
     signs: ["Structural settlement", "Warehouse floor damage", "Water intrusion", "Loading dock issues"],
   },
+  {
+    label: "Mold Prevention",
+    icon: Leaf,
+    iconImg: null as string | null,
+    img: imgSvcMold as string,
+    tagline: "Find the moisture source, stop mold at the root.",
+    signs: ["Musty odor", "Dark spots on walls", "Indoor allergies", "Peeling paint", "Ceiling stains"],
+  },
 ];
 
 // ─── Mega Menu ─────────────────────────────────────────────────────────────────
-// All categories render already-expanded with their symptoms visible — client
-// flagged that requiring a hover per category to see signs was extra friction
-// ("no que el usuario tenga que pasar hover a los servicios para poder verlos").
+// Image-forward cards, not a text list — Jonathan: "our consumer doesn't wanna
+// read, they wanna see." Only the 5 protagonist services get a card; problem
+// signs stay hidden until the card itself is hovered (second level, optional),
+// so the menu doesn't overwhelm on open.
+const MEGA_MENU_SERVICES = SERVICE_CATEGORIES.slice(0, 5);
+
 function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <div
@@ -365,14 +378,12 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
         backdropFilter: "blur(24px)",
         borderBottom: "1px solid rgba(255,255,255,.07)",
         boxShadow: "0 24px 60px rgba(0,0,0,.5)",
-        maxHeight: "75vh",
-        overflowY: "auto",
       }}
     >
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
         <div className="flex items-center justify-between mb-6">
           <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
-            Services — what are you noticing?
+            Services
           </p>
           <button
             onClick={() => onNavigate("services-landing")}
@@ -386,54 +397,57 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
           </button>
         </div>
 
-        <div className="flex gap-0">
-          {SERVICE_CATEGORIES.map((c, i) => {
+        <div className="grid grid-cols-5 gap-4">
+          {MEGA_MENU_SERVICES.map((c) => {
             const Icon = c.icon;
             return (
               <div
                 key={c.label}
-                className="flex-1 flex flex-col py-2"
-                style={{
-                  paddingLeft: i === 0 ? 0 : 20,
-                  paddingRight: i === SERVICE_CATEGORIES.length - 1 ? 0 : 20,
-                  borderRight: i === SERVICE_CATEGORIES.length - 1 ? "none" : "1px solid rgba(255,255,255,.07)",
-                }}
+                onClick={() => onNavigate("service")}
+                className="group relative overflow-hidden cursor-pointer"
+                style={{ height: 260, border: "1px solid rgba(255,255,255,.08)" }}
               >
-                <div className="flex items-center gap-2.5 mb-4">
-                  <span className="flex items-center justify-center shrink-0" style={{ width: 28, height: 28, borderRadius: 6, background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.3)" }}>
-                    <Icon size={14} color={SAND} strokeWidth={2.25} />
-                  </span>
-                  <button
-                    onClick={() => onNavigate("service")}
-                    className="group inline-flex items-center gap-1 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13.5, color: "#fff", background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 1.2 }}
-                  >
-                    {c.label}
-                  </button>
+                <img src={c.img} alt={c.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,20,.15) 0%, rgba(10,11,20,.9) 100%)" }} />
+
+                {/* Icon chip */}
+                <div className="absolute top-3 left-3 flex items-center justify-center" style={{ width: 36, height: 36, borderRadius: 8, background: "rgba(255,255,255,.95)" }}>
+                  {c.iconImg ? <img src={c.iconImg} alt="" className="w-6 h-6 object-contain" /> : <Icon size={17} color={B} strokeWidth={2.25} />}
                 </div>
-                <div className="mb-3 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
-                <div className="flex flex-col gap-1">
-                  {c.signs.slice(0, 5).map((symptom) => (
-                    <button
-                      key={symptom}
-                      onClick={() => onNavigate("problem-sign-inner")}
-                      className="group flex items-center gap-1.5 px-2.5 py-2 text-left transition-all duration-150 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C] focus-visible:-outline-offset-2"
-                      style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
-                    >
-                      <span className="transition-colors group-hover:text-white" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, lineHeight: 1.3, color: "rgba(255,255,255,.65)" }}>{symptom}</span>
-                    </button>
-                  ))}
+
+                {/* Default state: label only */}
+                <div className="absolute inset-x-0 bottom-0 p-4 transition-opacity duration-200 group-hover:opacity-0">
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", lineHeight: 1.2 }}>{c.label}</p>
                 </div>
-                <button
-                  onClick={() => onNavigate("service")}
-                  className="group inline-flex items-center gap-1 mt-3 self-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+
+                {/* Hover reveal: problem signs */}
+                <div
+                  className="absolute inset-0 p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  style={{ background: "rgba(10,11,20,.94)" }}
                 >
-                  View all
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 10 }}>{c.label}</p>
+                  <div className="flex flex-col gap-1 mb-3">
+                    {c.signs.slice(0, 4).map((symptom) => (
+                      <button
+                        key={symptom}
+                        onClick={(e) => { e.stopPropagation(); onNavigate("problem-sign-inner"); }}
+                        className="text-left transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, lineHeight: 1.6, color: "rgba(255,255,255,.65)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                      >
+                        {symptom}
+                      </button>
+                    ))}
+                  </div>
+                  <span
+                    className="inline-flex items-center gap-1 self-start"
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}
+                  >
+                    View all
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </div>
               </div>
             );
           })}
@@ -550,7 +564,7 @@ export default function SharedNavBar({
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
                       color: megaOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
                       letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
-                      borderBottom: isActive ? `2px solid ${SAND}` : megaOpen ? `2px solid ${SAND}` : "2px solid transparent",
+                      borderBottom: isActive ? `2px solid ${SAND}` : "2px solid transparent",
                       paddingBottom: 2,
                     }}
                   >
