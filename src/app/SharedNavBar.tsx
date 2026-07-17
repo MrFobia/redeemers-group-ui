@@ -317,7 +317,7 @@ const SERVICE_CATEGORIES = [
     iconImg: iconFoundation as string,
     img: imgSvcFoundation as string,
     tagline: "Stop the cracks before they spread.",
-    signs: ["Cracks in walls", "Sticking doors & windows", "Uneven floors", "Gaps at door frames", "Stair-step brick cracks"],
+    signs: ["Cracks in walls", "Bowing or leaning walls", "Sinking slab"],
   },
   {
     label: "Crawl Space Repair",
@@ -325,7 +325,7 @@ const SERVICE_CATEGORIES = [
     iconImg: iconCrawlspace as string,
     img: imgSvcCrawlspace as string,
     tagline: "Dry, sealed, and structurally sound below your home.",
-    signs: ["Sagging floors", "Musty smell", "High indoor humidity", "Standing water below", "Baseboard separation"],
+    signs: ["Sagging or bouncy floors", "Baseboards separated from floor", "Doors won't close properly"],
   },
   {
     label: "Waterproofing",
@@ -333,7 +333,7 @@ const SERVICE_CATEGORIES = [
     iconImg: iconWaterproofing as string,
     img: imgSvcWaterproofing as string,
     tagline: "Keep water out of your basement for good.",
-    signs: ["Wet basement", "Damp walls", "Puddles after rain", "White wall stains", "Condensation on pipes"],
+    signs: ["Water in basement", "Damp walls or floor", "Musty mold smell"],
   },
   {
     label: "Concrete Services",
@@ -341,7 +341,7 @@ const SERVICE_CATEGORIES = [
     iconImg: iconConcrete as string,
     img: imgSvcConcrete as string,
     tagline: "Level driveways, walkways, and slabs.",
-    signs: ["Uneven driveway", "Sunken sidewalk", "Pool deck settling", "Trip hazards", "Cracked garage floor"],
+    signs: ["Uneven concrete slabs", "Sinking driveway or walkway", "Cracked pool deck"],
   },
   {
     label: "Commercial Services",
@@ -349,7 +349,7 @@ const SERVICE_CATEGORIES = [
     iconImg: null as string | null,
     img: imgSvcFoundation as string,
     tagline: "Structural repair for commercial properties.",
-    signs: ["Structural settlement", "Warehouse floor damage", "Water intrusion", "Loading dock issues"],
+    signs: [] as string[],
   },
   {
     label: "Mold Prevention",
@@ -410,8 +410,9 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
                 <img src={c.img} alt={c.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,20,.15) 0%, rgba(10,11,20,.9) 100%)" }} />
 
-                {/* Default state: icon + label, icon as a white overlay silhouette */}
-                <div className="absolute inset-x-0 bottom-0 p-4 flex items-center gap-2.5 transition-opacity duration-200 group-hover:opacity-0">
+                {/* Default state: icon + label, icon as a white overlay silhouette.
+                    Stays visible on hover when there's no signs panel to replace it (Commercial). */}
+                <div className={`absolute inset-x-0 bottom-0 p-4 flex items-center gap-2.5 transition-opacity duration-200 ${c.signs.length > 0 ? "group-hover:opacity-0" : ""}`}>
                   <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34 }}>
                     {c.iconImg
                       ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
@@ -420,34 +421,36 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", lineHeight: 1.2 }}>{c.label}</p>
                 </div>
 
-                {/* Hover reveal: problem signs */}
-                <div
-                  className="absolute inset-0 p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                  style={{ background: "rgba(10,11,20,.94)" }}
-                >
-                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 10 }}>{c.label}</p>
-                  <div className="flex flex-col gap-1 mb-3">
-                    {c.signs.slice(0, 4).map((symptom) => (
-                      <button
-                        key={symptom}
-                        onClick={(e) => { e.stopPropagation(); onNavigate("problem-sign-inner"); }}
-                        className="text-left transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, lineHeight: 1.6, color: "rgba(255,255,255,.65)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-                      >
-                        {symptom}
-                      </button>
-                    ))}
-                  </div>
-                  <span
-                    className="inline-flex items-center gap-1 self-start"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}
+                {/* Hover reveal: problem signs (Commercial has none — skip the panel) */}
+                {c.signs.length > 0 && (
+                  <div
+                    className="absolute inset-0 p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    style={{ background: "rgba(10,11,20,.94)" }}
                   >
-                    View all
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                </div>
+                    <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 10 }}>{c.label}</p>
+                    <div className="flex flex-col gap-1 mb-3">
+                      {c.signs.slice(0, 4).map((symptom) => (
+                        <button
+                          key={symptom}
+                          onClick={(e) => { e.stopPropagation(); onNavigate("problem-sign-inner"); }}
+                          className="text-left transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, lineHeight: 1.6, color: "rgba(255,255,255,.65)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                        >
+                          {symptom}
+                        </button>
+                      ))}
+                    </div>
+                    <span
+                      className="inline-flex items-center gap-1 self-start"
+                      style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}
+                    >
+                      View all
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                )}
               </div>
             );
           })}
