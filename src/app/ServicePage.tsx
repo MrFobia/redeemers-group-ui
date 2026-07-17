@@ -139,13 +139,11 @@ function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-20 lg:py-28">
         <div style={{ maxWidth: 587 }}>
 
-          {/* Service icon */}
-          <div className="flex items-center justify-center mb-8" style={{ width: 64, height: 64, borderRadius: 12, background: "rgba(255,255,255,.95)" }}>
-            <img src={iconCrawlspace} alt="Crawl Space Repair" className="w-10 h-10 object-contain" />
-          </div>
-
           {/* Eyebrow */}
-          <div className="flex items-center gap-2 mb-8">
+          <div className="flex items-center gap-3 mb-8">
+            <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34 }}>
+              <img src={iconCrawlspace} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+            </span>
             <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}>
               Crawl Space Repair
