@@ -706,7 +706,7 @@ export default function SharedNavBar({
               </button>
             </div>
 
-            <div className="flex-1 px-8 py-5 overflow-x-hidden">
+            <div className="flex-1 flex flex-col px-8 py-5 overflow-x-hidden overflow-y-auto">
               <>
                 {mobilePanel === "root" && (
                   <motion.div
@@ -715,7 +715,7 @@ export default function SharedNavBar({
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -16 }}
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex flex-col"
+                    className="flex flex-col flex-1"
                   >
                     <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 14 }}>
                       Menu
@@ -742,10 +742,15 @@ export default function SharedNavBar({
                         );
                       })}
                     </div>
-                    <button onClick={openInspection} className="mt-6 py-3.5 text-center font-semibold text-white w-full"
-                      style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, border: "none", cursor: "pointer" }}>
-                      Schedule Free Inspection
-                    </button>
+                    <div className="mt-auto pt-6 flex flex-col items-center gap-3">
+                      <a href="tel:+18335841049" style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.6)" }}>
+                        1-833-584-1049
+                      </a>
+                      <button onClick={openInspection} className="py-3.5 text-center font-semibold text-white w-full"
+                        style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, border: "none", cursor: "pointer" }}>
+                        Schedule Free Inspection
+                      </button>
+                    </div>
                   </motion.div>
                 )}
 
