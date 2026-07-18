@@ -460,6 +460,23 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
   );
 }
 
+// ─── Mobile drill-in back header ──────────────────────────────────────────────
+function MobileBackHeader({ title, onBack }: { title: string; onBack: () => void }) {
+  return (
+    <>
+      <button onClick={onBack} className="flex items-center gap-2 py-3 -ml-1" style={{ background: "none", border: "none", cursor: "pointer" }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="rgba(255,255,255,.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: ".5px", textTransform: "uppercase" }}>
+          Back
+        </span>
+      </button>
+      <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 24, color: "#fff", margin: "4px 0 20px" }}>{title}</h3>
+    </>
+  );
+}
+
 // ─── Shared NavBar ─────────────────────────────────────────────────────────────
 export default function SharedNavBar({
   onNavigate,
@@ -475,10 +492,8 @@ export default function SharedNavBar({
   const [megaOpen, setMegaOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about">("root");
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState<number | null>(null);
-  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
-  const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -522,6 +537,8 @@ export default function SharedNavBar({
     setResourcesOpen(false);
     setAboutOpen(false);
     setMobileOpen(false);
+    setMobilePanel("root");
+    setMobileCategoryOpen(null);
     onNavigate(p);
   };
 
@@ -663,7 +680,7 @@ export default function SharedNavBar({
           </div>
 
           {/* Mobile hamburger */}
-          <button className="lg:hidden p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => setMobileOpen((o) => !o)}>
+          <button className="lg:hidden p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); setMobilePanel("root"); setMobileCategoryOpen(null); }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               {mobileOpen
                 ? <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
@@ -672,183 +689,166 @@ export default function SharedNavBar({
           </button>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — full-screen overlay, drill-in to a 2nd screen for
+            anything with a desktop dropdown (Services/Resources/About) instead
+            of an inline accordion. Client: "una esperiencia mucha más mobile". */}
         {mobileOpen && (
-          <div className="lg:hidden px-8 pb-6 flex flex-col gap-1" style={{ background: DARK }}>
-            {links.map((l) => {
-              const pageKey = NAV_PAGE_MAP[l];
+          <div className="lg:hidden fixed top-0 left-0 right-0 z-[250] flex flex-col overflow-y-auto" style={{ background: DARK, height: "100dvh" }}>
+            <div className="flex items-center justify-between px-8 py-3 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+              <button onClick={() => handleNavigate("home")} className="h-14" style={{ background: "none", border: "none", cursor: "pointer" }}>
+                <Logo light />
+              </button>
+              <button onClick={() => { setMobileOpen(false); setMobilePanel("root"); }} className="p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
 
-              // Services → tap opens the 5 protagonist services as compact
-              // icon+name cards (Rosie spec pt.9); tap a service expands an
-              // accordion with its symptom sub-links, no hover required.
-              if (l === "Services") {
-                return (
-                  <div key="Services" style={{ borderBottom: "1px solid rgba(255,255,255,.05)" }}>
-                    <button
-                      onClick={() => { setMobileServicesOpen((o) => !o); setMobileCategoryOpen(null); }}
-                      aria-expanded={mobileServicesOpen}
-                      className="w-full py-3 flex items-center justify-between text-left"
-                      style={{ fontFamily: "'Inter',sans-serif", color: mobileServicesOpen ? "#fff" : "rgba(255,255,255,.7)", fontSize: 15, background: "none", border: "none", cursor: "pointer" }}>
-                      Services
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        style={{ transform: mobileServicesOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </button>
-                    {mobileServicesOpen && (
-                      <div className="pb-3 flex flex-col gap-1.5">
-                        {MEGA_MENU_SERVICES.map((cat, i) => {
-                          const Icon = cat.icon;
-                          const isOpen = mobileCategoryOpen === i;
-                          return (
-                            <div key={cat.label}>
+            <div className="flex-1 px-8 py-5">
+              {mobilePanel === "root" && (
+                <div className="flex flex-col">
+                  {links.map((l) => {
+                    const pageKey = NAV_PAGE_MAP[l];
+                    if (l === "Services" || l === "Resources" || l === "About") {
+                      return (
+                        <button
+                          key={l}
+                          onClick={() => setMobilePanel(l.toLowerCase() as "services" | "resources" | "about")}
+                          className="w-full py-3.5 flex items-center justify-between text-left"
+                          style={{ fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,.85)", fontSize: 16, background: "none", border: "none", borderBottom: "1px solid rgba(255,255,255,.06)", cursor: "pointer" }}>
+                          {l}
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18l6-6-6-6" stroke="rgba(255,255,255,.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </button>
+                      );
+                    }
+                    return pageKey ? (
+                      <button key={l} onClick={() => handleNavigate(pageKey)}
+                        className="w-full py-3.5 text-left"
+                        style={{ fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,.85)", fontSize: 16, background: "none", border: "none", borderBottom: "1px solid rgba(255,255,255,.06)", cursor: "pointer" }}>
+                        {l}
+                      </button>
+                    ) : null;
+                  })}
+                  <button onClick={openInspection} className="mt-6 py-3.5 text-center font-semibold text-white w-full"
+                    style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, border: "none", cursor: "pointer" }}>
+                    Schedule Free Inspection
+                  </button>
+                </div>
+              )}
+
+              {/* Services — drill-in: 5 protagonist services, tap expands its symptom sub-links */}
+              {mobilePanel === "services" && (
+                <div className="flex flex-col">
+                  <MobileBackHeader title="Services" onBack={() => setMobilePanel("root")} />
+                  <div className="flex flex-col gap-2">
+                    {MEGA_MENU_SERVICES.map((cat, i) => {
+                      const Icon = cat.icon;
+                      const isOpen = mobileCategoryOpen === i;
+                      return (
+                        <div key={cat.label}>
+                          <button
+                            onClick={() => setMobileCategoryOpen(isOpen ? null : i)}
+                            aria-expanded={isOpen}
+                            className="w-full py-3 pl-3 pr-2 flex items-center gap-3 text-left"
+                            style={{
+                              background: isOpen ? "rgba(26,82,168,.2)" : "transparent",
+                              borderLeft: isOpen ? `2px solid ${B}` : "2px solid rgba(255,255,255,.1)",
+                              cursor: "pointer",
+                            }}>
+                            <span className="flex items-center justify-center shrink-0" style={{ width: 30, height: 30, borderRadius: 6, background: isOpen ? "rgba(26,82,168,.3)" : "rgba(255,255,255,.05)" }}>
+                              {cat.iconImg ? <img src={cat.iconImg} alt="" className="w-4 h-4 object-contain" /> : <Icon size={15} color={isOpen ? "#fff" : "rgba(255,255,255,.55)"} strokeWidth={2.25} />}
+                            </span>
+                            <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: isOpen ? "#fff" : "rgba(255,255,255,.75)", fontWeight: isOpen ? 600 : 400 }}>
+                              {cat.label}
+                            </span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0"
+                              style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
+                              <path d="M6 9l6 6 6-6" stroke={isOpen ? "#fff" : "rgba(255,255,255,.35)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </button>
+                          {isOpen && (
+                            <div className="pt-2 pb-1 pl-[54px] flex flex-col gap-2">
+                              {cat.signs.slice(0, 5).map((symptom) => (
+                                <button
+                                  key={symptom}
+                                  onClick={() => handleNavigate("problem-sign-inner")}
+                                  className="text-left"
+                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", background: "none", border: "none", cursor: "pointer" }}>
+                                  {symptom}
+                                </button>
+                              ))}
                               <button
-                                onClick={() => setMobileCategoryOpen(isOpen ? null : i)}
-                                aria-expanded={isOpen}
-                                className="w-full py-2.5 pl-3 pr-2 flex items-center gap-3 text-left"
-                                style={{
-                                  background: isOpen ? "rgba(26,82,168,.2)" : "transparent",
-                                  borderLeft: isOpen ? `2px solid ${B}` : "2px solid rgba(255,255,255,.1)",
-                                  cursor: "pointer",
-                                }}>
-                                <span className="flex items-center justify-center shrink-0" style={{ width: 28, height: 28, borderRadius: 6, background: isOpen ? "rgba(26,82,168,.3)" : "rgba(255,255,255,.05)" }}>
-                                  {cat.iconImg ? <img src={cat.iconImg} alt="" className="w-4 h-4 object-contain" /> : <Icon size={14} color={isOpen ? "#fff" : "rgba(255,255,255,.55)"} strokeWidth={2.25} />}
-                                </span>
-                                <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: isOpen ? "#fff" : "rgba(255,255,255,.7)", fontWeight: isOpen ? 600 : 400 }}>
-                                  {cat.label}
-                                </span>
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0"
-                                  style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
-                                  <path d="M6 9l6 6 6-6" stroke={isOpen ? "#fff" : "rgba(255,255,255,.35)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
+                                onClick={() => handleNavigate("service")}
+                                className="text-left"
+                                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                                View {cat.label} →
                               </button>
-                              {isOpen && (
-                                <div className="pt-2 pb-1 pl-[52px] flex flex-col gap-2">
-                                  {cat.signs.slice(0, 5).map((symptom) => (
-                                    <button
-                                      key={symptom}
-                                      onClick={() => handleNavigate("problem-sign-inner")}
-                                      className="text-left"
-                                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", background: "none", border: "none", cursor: "pointer" }}>
-                                      {symptom}
-                                    </button>
-                                  ))}
-                                  <button
-                                    onClick={() => handleNavigate("service")}
-                                    className="text-left"
-                                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                                    View {cat.label} →
-                                  </button>
-                                </div>
-                              )}
                             </div>
-                          );
-                        })}
-                        <button
-                          onClick={() => handleNavigate("services-landing")}
-                          className="py-2.5 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                          All services →
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
-              // Resources → same one-level accordion pattern as Services:
-              // tap to expand direct-navigate links, no hover dependency.
-              if (l === "Resources") {
-                return (
-                  <div key="Resources" style={{ borderBottom: "1px solid rgba(255,255,255,.05)" }}>
+                          )}
+                        </div>
+                      );
+                    })}
                     <button
-                      onClick={() => setMobileResourcesOpen((o) => !o)}
-                      aria-expanded={mobileResourcesOpen}
-                      className="w-full py-3 flex items-center justify-between text-left"
-                      style={{ fontFamily: "'Inter',sans-serif", color: mobileResourcesOpen ? "#fff" : "rgba(255,255,255,.7)", fontSize: 15, background: "none", border: "none", cursor: "pointer" }}>
-                      Resources
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        style={{ transform: mobileResourcesOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                      onClick={() => handleNavigate("services-landing")}
+                      className="py-2.5 pl-3 text-left"
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                      All services →
                     </button>
-                    {mobileResourcesOpen && (
-                      <div className="pb-3 flex flex-col gap-1">
-                        <button
-                          onClick={() => handleNavigate("news-blog")}
-                          className="w-full py-2.5 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                          News / Blog
-                        </button>
-                        {RESOURCES_SECTIONS.map((sec) => (
-                          <button
-                            key={sec.id}
-                            onClick={() => handleNavigate(`resources#${sec.id}`)}
-                            className="w-full py-2.5 pl-3 text-left"
-                            style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                            {sec.label}
-                          </button>
-                        ))}
-                        <button
-                          onClick={() => handleNavigate("resources")}
-                          className="py-2.5 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                          Go to Resources →
-                        </button>
-                      </div>
-                    )}
                   </div>
-                );
-              }
+                </div>
+              )}
 
-              // About → same one-level accordion pattern: the desktop dropdown's
-              // 4 tabs (About/Careers/Service Area/Contact) become direct links.
-              if (l === "About") {
-                return (
-                  <div key="About" style={{ borderBottom: "1px solid rgba(255,255,255,.05)" }}>
+              {/* Resources — drill-in: direct-navigate links */}
+              {mobilePanel === "resources" && (
+                <div className="flex flex-col">
+                  <MobileBackHeader title="Resources" onBack={() => setMobilePanel("root")} />
+                  <div className="flex flex-col gap-1">
                     <button
-                      onClick={() => setMobileAboutOpen((o) => !o)}
-                      aria-expanded={mobileAboutOpen}
-                      className="w-full py-3 flex items-center justify-between text-left"
-                      style={{ fontFamily: "'Inter',sans-serif", color: mobileAboutOpen ? "#fff" : "rgba(255,255,255,.7)", fontSize: 15, background: "none", border: "none", cursor: "pointer" }}>
-                      About
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        style={{ transform: mobileAboutOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                      onClick={() => handleNavigate("news-blog")}
+                      className="w-full py-3 pl-3 text-left"
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                      News / Blog
                     </button>
-                    {mobileAboutOpen && (
-                      <div className="pb-3 flex flex-col gap-1">
-                        {ABOUT_TABS.map((tab) => (
-                          <button
-                            key={tab.key}
-                            onClick={() => handleNavigate(tab.page)}
-                            className="w-full py-2.5 pl-3 text-left"
-                            style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                            {tab.label}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    {RESOURCES_SECTIONS.map((sec) => (
+                      <button
+                        key={sec.id}
+                        onClick={() => handleNavigate(`resources#${sec.id}`)}
+                        className="w-full py-3 pl-3 text-left"
+                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                        {sec.label}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handleNavigate("resources")}
+                      className="py-3 pl-3 text-left"
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                      Go to Resources →
+                    </button>
                   </div>
-                );
-              }
+                </div>
+              )}
 
-              return pageKey ? (
-                <button key={l} onClick={() => handleNavigate(pageKey)}
-                  className="py-3 text-left"
-                  style={{ fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,.7)", fontSize: 15, background: "none", border: "none", borderBottom: "1px solid rgba(255,255,255,.05)", cursor: "pointer" }}>
-                  {l}
-                </button>
-              ) : (
-                <a key={l} href="#" className="py-3 border-b border-white/5"
-                  style={{ fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,.7)", fontSize: 15 }}>{l}</a>
-              );
-            })}
-            <button onClick={openInspection} className="mt-3 py-3 text-center font-semibold text-white w-full"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, border: "none", cursor: "pointer" }}>
-              Schedule Free Inspection
-            </button>
+              {/* About — drill-in: the desktop dropdown's 4 tabs become direct links */}
+              {mobilePanel === "about" && (
+                <div className="flex flex-col">
+                  <MobileBackHeader title="About" onBack={() => setMobilePanel("root")} />
+                  <div className="flex flex-col gap-1">
+                    {ABOUT_TABS.map((tab) => (
+                      <button
+                        key={tab.key}
+                        onClick={() => handleNavigate(tab.page)}
+                        className="w-full py-3 pl-3 text-left"
+                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </nav>
