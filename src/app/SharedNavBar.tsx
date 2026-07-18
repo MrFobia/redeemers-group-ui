@@ -494,7 +494,6 @@ export default function SharedNavBar({
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about">("root");
-  const [mobileCategoryOpen, setMobileCategoryOpen] = useState<number | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -539,7 +538,6 @@ export default function SharedNavBar({
     setAboutOpen(false);
     setMobileOpen(false);
     setMobilePanel("root");
-    setMobileCategoryOpen(null);
     onNavigate(p);
   };
 
@@ -681,7 +679,7 @@ export default function SharedNavBar({
           </div>
 
           {/* Mobile hamburger */}
-          <button className="lg:hidden p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); setMobilePanel("root"); setMobileCategoryOpen(null); }}>
+          <button className="lg:hidden p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); setMobilePanel("root"); }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               {mobileOpen
                 ? <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
@@ -754,7 +752,8 @@ export default function SharedNavBar({
                   </motion.div>
                 )}
 
-                {/* Services — drill-in: 5 protagonist services, tap expands its symptom sub-links */}
+                {/* Services — drill-in: all 5 protagonist services shown already expanded
+                    with their symptom sub-links, no tap-to-expand needed. */}
                 {mobilePanel === "services" && (
                   <motion.div
                     key="services"
@@ -765,63 +764,38 @@ export default function SharedNavBar({
                     className="flex flex-col"
                   >
                     <MobileBackHeader title="Services" onBack={() => setMobilePanel("root")} />
-                    <div className="flex flex-col gap-2">
-                      {MEGA_MENU_SERVICES.map((cat, i) => {
+                    <div className="flex flex-col gap-5">
+                      {MEGA_MENU_SERVICES.map((cat) => {
                         const Icon = cat.icon;
-                        const isOpen = mobileCategoryOpen === i;
                         return (
-                          <div key={cat.label}>
-                            <button
-                              onClick={() => setMobileCategoryOpen(isOpen ? null : i)}
-                              aria-expanded={isOpen}
-                              className="w-full py-3 pl-3 pr-2 flex items-center gap-3 text-left"
-                              style={{
-                                background: isOpen ? "rgba(26,82,168,.2)" : "transparent",
-                                borderLeft: isOpen ? `2px solid ${B}` : "2px solid rgba(255,255,255,.1)",
-                                cursor: "pointer",
-                              }}>
-                              <span className="flex items-center justify-center shrink-0" style={{ width: 26, height: 26 }}>
+                          <div key={cat.label} style={{ borderLeft: "2px solid rgba(255,255,255,.1)" }}>
+                            <div className="pl-3 flex items-center gap-3 mb-2.5">
+                              <span className="flex items-center justify-center shrink-0" style={{ width: 24, height: 24 }}>
                                 {cat.iconImg
                                   ? <img src={cat.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
-                                  : <Icon size={24} color="#fff" strokeWidth={2} />}
+                                  : <Icon size={22} color="#fff" strokeWidth={2} />}
                               </span>
-                              <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: isOpen ? "#fff" : "rgba(255,255,255,.75)", fontWeight: isOpen ? 600 : 400 }}>
+                              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff", fontWeight: 600 }}>
                                 {cat.label}
                               </span>
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="shrink-0"
-                                style={{ transform: isOpen ? "rotate(180deg)" : "none", transition: "transform .2s" }}>
-                                <path d="M6 9l6 6 6-6" stroke={isOpen ? "#fff" : "rgba(255,255,255,.35)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                            </button>
-                            <AnimatePresence initial={false}>
-                              {isOpen && (
-                                <motion.div
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: "auto", opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                                  className="overflow-hidden"
-                                >
-                                  <div className="pt-2 pb-1 pl-[50px] flex flex-col gap-2">
-                                    {cat.signs.slice(0, 5).map((symptom) => (
-                                      <button
-                                        key={symptom}
-                                        onClick={() => handleNavigate("problem-sign-inner")}
-                                        className="text-left"
-                                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", background: "none", border: "none", cursor: "pointer" }}>
-                                        {symptom}
-                                      </button>
-                                    ))}
-                                    <button
-                                      onClick={() => handleNavigate("service")}
-                                      className="text-left"
-                                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                                      View {cat.label} →
-                                    </button>
-                                  </div>
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
+                            </div>
+                            <div className="pl-[50px] flex flex-col gap-2">
+                              {cat.signs.slice(0, 5).map((symptom) => (
+                                <button
+                                  key={symptom}
+                                  onClick={() => handleNavigate("problem-sign-inner")}
+                                  className="text-left"
+                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", background: "none", border: "none", cursor: "pointer" }}>
+                                  {symptom}
+                                </button>
+                              ))}
+                              <button
+                                onClick={() => handleNavigate("service")}
+                                className="text-left"
+                                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                                View {cat.label} →
+                              </button>
+                            </div>
                           </div>
                         );
                       })}
