@@ -552,7 +552,7 @@ export default function SharedNavBar({
       onMouseLeave={() => { setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); }}
     >
       <nav
-        className="w-full transition-all duration-300"
+        className="relative z-[300] w-full transition-all duration-300"
         style={{
           background: isTransparent ? "rgba(10,11,20,0.0)" : "rgba(10,11,20,0.97)",
           backdropFilter: isTransparent ? "none" : "blur(20px)",
