@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 const DARK = "#0A0B14";
 const SAND = "#C4AB6C";
 const MUTED = "#6B6E85";
@@ -22,18 +24,33 @@ export function StickyAnchorBar({
   activeLine,
 }: StickyAnchorBarProps) {
   const lineColor = activeLine ?? activeColor;
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    const activeBtn = tabRefs.current[active];
+    if (!scroller || !activeBtn) return;
+    const scrollerRect = scroller.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+    if (btnRect.left < scrollerRect.left || btnRect.right > scrollerRect.right) {
+      const target = scroller.scrollLeft + (btnRect.left - scrollerRect.left) - (scroller.clientWidth - btnRect.width) / 2;
+      scroller.scrollTo({ left: target, behavior: "smooth" });
+    }
+  }, [active]);
 
   return (
     <div
       className="sticky z-50 w-full"
       style={{ top: 148, background: bg, borderBottom: "1px solid rgba(255,255,255,.06)" }}
     >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 flex justify-start md:justify-center overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+      <div ref={scrollerRef} className="max-w-[1440px] mx-auto px-8 md:px-14 flex justify-start md:justify-center overflow-x-auto" style={{ scrollbarWidth: "none" }}>
         {tabs.map((tab) => {
           const isActive = active === tab.id;
           return (
             <button
               key={tab.id}
+              ref={(el) => { tabRefs.current[tab.id] = el; }}
               onClick={() => onChange(tab.id)}
               className="relative shrink-0 px-5 py-4 transition-colors"
               style={{
