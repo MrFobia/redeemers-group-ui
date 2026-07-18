@@ -28,7 +28,7 @@ export function StickyAnchorBar({
       className="sticky z-50 w-full"
       style={{ top: 148, background: bg, borderBottom: "1px solid rgba(255,255,255,.06)" }}
     >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 flex justify-center overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 flex justify-start md:justify-center overflow-x-auto" style={{ scrollbarWidth: "none" }}>
         {tabs.map((tab) => {
           const isActive = active === tab.id;
           return (

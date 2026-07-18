@@ -774,7 +774,7 @@ export default function ProblemSignInnerPage({ onBack, onNavigate }: { onBack: (
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Problem Signs" />
       </div>
 
-      <div className="w-full min-h-screen" style={{ background: "#0A0B14", paddingTop: 148 }}>
+      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: "#0A0B14" }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2 flex-wrap">

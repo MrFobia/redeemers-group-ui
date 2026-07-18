@@ -402,8 +402,8 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
         )}
       </div>
 
-      {/* paddingTop 196 = 148 (nav) + ~48 (filter bar) */}
-      <div className="w-full min-h-screen" style={{ background: DARK, paddingTop: 196 }}>
+      {/* Header height varies by breakpoint (announcement bar hides < md) */}
+      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: DARK }}>
 
         {/* ── Breadcrumb ── */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>

@@ -842,7 +842,7 @@ export default function ServiceAreaPage({ onBack, onNavigate }: { onBack: () => 
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="About" />
       </div>
-      <div className="w-full min-h-screen" style={{ background: DARK, paddingTop: 148 }}>
+      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
         <HeroSection />
         <MapSection />
         <AllAreasSection />

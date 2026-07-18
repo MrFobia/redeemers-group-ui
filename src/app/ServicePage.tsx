@@ -767,7 +767,7 @@ export default function ServicePage({ onBack, onNavigate, scrollTo }: { onBack: 
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Services" />
         <StickyAnchorBar tabs={SERVICE_TABS} active={activeTab} onChange={scrollToSection} />
       </div>
-      <div className="w-full min-h-screen" style={{ background: "#0A0B14", paddingTop: 196 }}>
+      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: "#0A0B14" }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

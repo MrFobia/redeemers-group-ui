@@ -694,7 +694,7 @@ export default function BlogInnerPage({
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="Resources" />
       </div>
-      <div style={{ paddingTop: 148 }}>
+      <div className="pt-[81px] md:pt-[148px]">
         <HeroSection onBack={onBack} onNavigate={onNavigate} />
         <ArticleBody />
         <RelatedPostsSection />

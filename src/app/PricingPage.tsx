@@ -480,7 +480,7 @@ export default function PricingPage({ onBack, onNavigate }: { onBack: () => void
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Pricing" />
         <StickyAnchorBar tabs={PRICING_TABS} active={activeTab} onChange={scrollTo} />
       </div>
-      <div className="w-full min-h-screen" style={{ background: DARK, paddingTop: 196 }}>
+      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: DARK }}>
         <HeroSection />
         <BuyerSellerSection />
         <CostByServiceSection />

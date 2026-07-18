@@ -226,7 +226,7 @@ function HeroSection({ onBack, onNavigate }: { onBack: () => void; onNavigate: (
 // ─── 2. CATEGORY TABS ────────────────────────────────────────────────────────
 function CategoryTabs({ active, onChange }: { active: string; onChange: (c: string) => void }) {
   return (
-    <div className="sticky z-40 overflow-x-auto" style={{ top: 148, background: DARK, borderBottom: "1px solid rgba(255,255,255,.07)" }}>
+    <div className="sticky z-40 overflow-x-auto top-[81px] md:top-[148px]" style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.07)" }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 flex items-center gap-2 py-3" style={{ scrollbarWidth: "none" }}>
         {CATEGORIES.map((cat) => (
           <button key={cat} onClick={() => onChange(cat)}
@@ -556,7 +556,7 @@ export default function NewsBlogPage({ onBack, onNavigate }: { onBack: () => voi
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="Resources" />
       </div>
-      <div style={{ paddingTop: 148 }}>
+      <div className="pt-[81px] md:pt-[148px]">
         <HeroSection onBack={onBack} onNavigate={onNavigate} />
         <FeaturedSection onNavigate={onNavigate} />
         <CategoryTabs active={activeCategory} onChange={setActiveCategory} />

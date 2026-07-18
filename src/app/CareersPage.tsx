@@ -1088,7 +1088,7 @@ export default function CareersPage({
         <SharedNavBar onNavigate={onNavigate} active="About" />
         <StickyAnchorBar tabs={PAGE_TABS} active={activeTab} onChange={scrollToSection} />
       </div>
-      <div style={{ paddingTop: 196 }}>
+      <div className="pt-[136px] md:pt-[196px]">
         <HeroSection />
         <CultureSection />
         <EmployeeQuotesSection />
