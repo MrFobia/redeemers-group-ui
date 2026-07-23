@@ -18,18 +18,23 @@ export type County = {
   cities: string[];
 };
 
+export type LatLng = [number, number];
+
 export type StateInfo = {
   abbr: StateAbbr;
   name: string;
   tagline: string;
-  /** Simplified geographic outline, projected into the shared 1010×910 viewBox. */
-  path: string;
-  /** Label anchor inside the shape. */
-  labelX: number;
-  labelY: number;
+  /** Simplified state outline in [lat, lng] — drawn as a Leaflet polygon over OSM tiles. */
+  polygon: LatLng[];
+  /** Where the map flies to when this state is selected. */
+  center: LatLng;
+  zoom: number;
+  /** Headline metro areas — every one of these exists in COUNTIES below. */
+  metros: string[];
+  services: string[];
 };
 
-export type CityMarker = { name: string; state: StateAbbr; x: number; y: number };
+export type CityMarker = { name: string; state: StateAbbr; pos: LatLng };
 
 // ─── States ───────────────────────────────────────────────────────────────────
 export const STATES: StateInfo[] = [
@@ -37,29 +42,37 @@ export const STATES: StateInfo[] = [
     abbr: "TN",
     name: "Tennessee",
     tagline: "Home base. Memphis metro and West Tennessee, top to bottom.",
-    path: "M444,352 L546,352 L996,343 L993,369 L901,404 L838,438 L810,464 L808,481 L387,481 L398,447 L415,412 L430,378 Z",
-    labelX: 700, labelY: 415,
+    polygon: [[36.50,-89.49], [36.50,-88.05], [36.61,-81.66], [36.30,-81.70], [35.90,-83.01], [35.50,-83.90], [35.20,-84.30], [35.00,-84.33], [35.00,-90.30], [35.40,-90.15], [35.80,-89.91], [36.20,-89.69]],
+    center: [35.65, -89.20], zoom: 7,
+    metros: ["Memphis metro", "Jackson area", "Dyersburg", "Covington"],
+    services: ["Foundation repair", "Crawl space repair", "Waterproofing", "Concrete repair"],
   },
   {
     abbr: "AR",
     name: "Arkansas",
-    tagline: "Jonesboro, Little Rock and the Delta counties across the river.",
-    path: "M83,352 L398,352 L398,395 L430,395 L394,438 L387,481 L366,524 L345,567 L331,610 L324,653 L124,653 L124,606 L94,606 Z",
-    labelX: 210, labelY: 490,
+    tagline: "Serving Little Rock, Jonesboro, and surrounding communities.",
+    polygon: [[36.50,-94.62], [36.50,-90.15], [36.00,-90.15], [36.00,-89.69], [35.50,-90.20], [35.00,-90.30], [34.50,-90.60], [34.00,-90.90], [33.50,-91.10], [33.00,-91.20], [33.00,-94.04], [33.55,-94.04], [33.55,-94.47]],
+    center: [34.90, -92.20], zoom: 7,
+    metros: ["Little Rock metro", "Jonesboro", "Conway", "West Memphis"],
+    services: ["Foundation repair", "Crawl space repair", "Concrete repair"],
   },
   {
     abbr: "MS",
     name: "Mississippi",
     tagline: "DeSoto County south through the Delta and into the Golden Triangle.",
-    path: "M387,481 L535,481 L535,567 L521,653 L521,739 L521,825 L518,851 L458,894 L437,894 L430,825 L296,825 L303,782 L324,739 L331,696 L324,653 L331,610 L345,567 L366,524 Z",
-    labelX: 425, labelY: 690,
+    polygon: [[35.00,-90.30], [35.00,-88.20], [34.00,-88.20], [33.00,-88.40], [32.00,-88.40], [31.00,-88.40], [30.69,-88.44], [30.19,-89.30], [30.19,-89.59], [31.00,-89.69], [31.00,-91.60], [31.50,-91.50], [32.00,-91.20], [32.50,-91.10], [33.00,-91.20], [33.50,-91.10], [34.00,-90.90], [34.50,-90.60]],
+    center: [33.60, -89.60], zoom: 7,
+    metros: ["Southaven / DeSoto", "Oxford", "Tupelo", "Columbus"],
+    services: ["Crawl space repair", "Waterproofing", "Mold prevention"],
   },
   {
     abbr: "MO",
     name: "Missouri",
     tagline: "The Bootheel — Dunklin and Pemiscot counties.",
-    path: "M2,3 L289,3 L310,17 L331,77 L394,146 L415,223 L451,309 L444,352 L437,378 L430,395 L398,395 L398,352 L83,352 L83,137 L63,129 L35,52 Z",
-    labelX: 210, labelY: 190,
+    polygon: [[40.57,-95.77], [40.57,-91.70], [40.40,-91.40], [39.70,-91.10], [38.90,-90.20], [38.00,-89.91], [37.00,-89.40], [36.50,-89.49], [36.20,-89.59], [36.00,-89.69], [36.00,-90.15], [36.50,-90.15], [36.50,-94.62], [39.01,-94.62], [39.10,-94.91], [39.99,-95.30]],
+    center: [36.20, -89.90], zoom: 9,
+    metros: ["Kennett", "Caruthersville", "Hayti", "Steele"],
+    services: ["Foundation repair", "Crawl space repair"],
   },
 ];
 
@@ -69,16 +82,21 @@ export const STATE_NAME: Record<StateAbbr, string> = {
 
 // ─── Anchor cities plotted on the map ─────────────────────────────────────────
 export const CITY_MARKERS: CityMarker[] = [
-  { name: "Memphis",         state: "TN", x: 405, y: 468 },
-  { name: "Jackson",         state: "TN", x: 492, y: 429 },
-  { name: "Jonesboro",       state: "AR", x: 359, y: 409 },
-  { name: "Little Rock",     state: "AR", x: 247, y: 503 },
-  { name: "Southaven",       state: "MS", x: 408, y: 486 },
-  { name: "Oxford",          state: "MS", x: 442, y: 535 },
-  { name: "Tupelo",          state: "MS", x: 500, y: 545 },
-  { name: "Columbus",        state: "MS", x: 519, y: 610 },
-  { name: "Kennett",         state: "MO", x: 404, y: 375 },
-  { name: "Caruthersville",  state: "MO", x: 420, y: 372 },
+  { name: "Memphis",         state: "TN", pos: [35.15, -90.05] },
+  { name: "Jackson",         state: "TN", pos: [35.61, -88.81] },
+  { name: "Dyersburg",       state: "TN", pos: [36.03, -89.39] },
+  { name: "Covington",       state: "TN", pos: [35.56, -89.65] },
+  { name: "Jonesboro",       state: "AR", pos: [35.84, -90.70] },
+  { name: "Little Rock",     state: "AR", pos: [34.75, -92.29] },
+  { name: "Conway",          state: "AR", pos: [35.09, -92.44] },
+  { name: "West Memphis",    state: "AR", pos: [35.15, -90.18] },
+  { name: "Southaven",       state: "MS", pos: [34.99, -90.01] },
+  { name: "Oxford",          state: "MS", pos: [34.37, -89.52] },
+  { name: "Tupelo",          state: "MS", pos: [34.26, -88.70] },
+  { name: "Columbus",        state: "MS", pos: [33.50, -88.43] },
+  { name: "Kennett",         state: "MO", pos: [36.24, -90.06] },
+  { name: "Caruthersville",  state: "MO", pos: [36.19, -89.66] },
+  { name: "Hayti",           state: "MO", pos: [36.23, -89.75] },
 ];
 
 // ─── Cities with their own landing page (were linked on the legacy site) ──────
@@ -270,6 +288,7 @@ export type LocalProof = {
   citySlug: string;
   city: string;
   state: StateAbbr;
+  zip: string;
   title: string;
   body: string;
   meta: string;
@@ -278,73 +297,73 @@ export type LocalProof = {
 
 export const LOCAL_PROOF: LocalProof[] = [
   {
-    kind: "job-story", citySlug: "memphis-tn", city: "Memphis", state: "TN",
+    kind: "job-story", citySlug: "memphis-tn", zip: "38104", city: "Memphis", state: "TN",
     title: "6 broken joists, 2-day turnaround", service: "Crawl Space",
     body: "Homeowner noticed soft spots in the floor. Inspection revealed 6 broken joists and active mold. Full SmartJack system plus encapsulation.",
     meta: "March 2026 · 2 days",
   },
   {
-    kind: "review", citySlug: "collierville-tn", city: "Collierville", state: "TN",
+    kind: "review", citySlug: "collierville-tn", zip: "38017", city: "Collierville", state: "TN",
     title: "Elizabeth N.", service: "Foundation",
     body: "The crew were excellent communicators and hard workers. Done well within the time given. My garage lintel looks brand new.",
     meta: "5 stars · Verified customer",
   },
   {
-    kind: "case-study", citySlug: "germantown-tn", city: "Germantown", state: "TN",
+    kind: "case-study", citySlug: "germantown-tn", zip: "38139", city: "Germantown", state: "TN",
     title: "Pool deck lifted in 4 hours", service: "Concrete",
     body: "Pool deck had sunk 3 inches on one side. PolyLevel injection lifted and leveled it the same morning — no demolition, no mess.",
     meta: "2025 · Same-day completion",
   },
   {
-    kind: "job-story", citySlug: "jonesboro-ar", city: "Jonesboro", state: "AR",
+    kind: "job-story", citySlug: "jonesboro-ar", zip: "72401", city: "Jonesboro", state: "AR",
     title: "6 push piers driven to bedrock", service: "Foundation",
     body: "Clay soil movement confirmed after three contractors disagreed on the cause. Foundation stabilized with a lifetime transferable warranty.",
     meta: "February 2026 · 1 day",
   },
   {
-    kind: "review", citySlug: "marked-tree-ar", city: "Marked Tree", state: "AR",
+    kind: "review", citySlug: "marked-tree-ar", zip: "72365", city: "Marked Tree", state: "AR",
     title: "Melissa & Russell C.", service: "Crawl Space",
     body: "Walking in now, it's straight. I went into my bedroom — the closet door never closed before. I literally just closed it for the first time.",
     meta: "5 stars · Verified customer",
   },
   {
-    kind: "case-study", citySlug: "little-rock-ar", city: "Little Rock", state: "AR",
+    kind: "case-study", citySlug: "little-rock-ar", zip: "72201", city: "Little Rock", state: "AR",
     title: "Driveway void filled, surface restored", service: "Concrete",
     body: "A 3-inch void under the driveway slab had been growing for five years. Foam-leveled in half a day for less than the homeowner expected.",
     meta: "2024 · 4 hours",
   },
   {
-    kind: "job-story", citySlug: "southaven-ms", city: "Southaven", state: "MS",
+    kind: "job-story", citySlug: "southaven-ms", zip: "38671", city: "Southaven", state: "MS",
     title: "Encapsulation cut energy bills 18%", service: "Crawl Space",
     body: "Vapor barrier, drainage matting, dehumidifier and foam-sealed rim joists. The musty smell was gone within the week.",
     meta: "November 2025 · 2 days",
   },
   {
-    kind: "review", citySlug: "olive-branch-ms", city: "Olive Branch", state: "MS",
+    kind: "review", citySlug: "olive-branch-ms", zip: "38654", city: "Olive Branch", state: "MS",
     title: "Diana P.", service: "Waterproofing",
     body: "The inspector found water intrusion I didn't even know I had. Fixed it before it became a major problem. Grateful for the thoroughness.",
     meta: "5 stars · Verified customer",
   },
   {
-    kind: "case-study", citySlug: "oxford-ms", city: "Oxford", state: "MS",
+    kind: "case-study", citySlug: "oxford-ms", zip: "38655", city: "Oxford", state: "MS",
     title: "150-year-old home, full encapsulation", service: "Crawl Space",
     body: "Moisture was buckling antique hardwood floors. CleanSpace barrier, SmartSump pump and a SaniDry dehumidifier protected the investment.",
     meta: "2025 · 3 days",
   },
   {
-    kind: "job-story", citySlug: "kennett-mo", city: "Kennett", state: "MO",
+    kind: "job-story", citySlug: "kennett-mo", zip: "63857", city: "Kennett", state: "MO",
     title: "Wall anchors, no excavation", service: "Foundation",
     body: "A bowing basement wall stabilized with a wall anchor system. No yard excavation required and the crew finished in a single day.",
     meta: "June 2025 · 1 day",
   },
   {
-    kind: "review", citySlug: "caruthersville-mo", city: "Caruthersville", state: "MO",
+    kind: "review", citySlug: "caruthersville-mo", zip: "63830", city: "Caruthersville", state: "MO",
     title: "Carol & James W.", service: "Foundation",
     body: "We were terrified about the cost. The free inspection made everything clear and the price was fair. Should have called sooner.",
     meta: "5 stars · Verified customer",
   },
   {
-    kind: "case-study", citySlug: "hayti-mo", city: "Hayti", state: "MO",
+    kind: "case-study", citySlug: "hayti-mo", zip: "63851", city: "Hayti", state: "MO",
     title: "Bootheel crawl space dried out", service: "Waterproofing",
     body: "Seasonal flooding kept re-wetting the crawl space. Interior drainage plus a battery-backed sump has kept it dry through every storm since.",
     meta: "2024 · 2 days",
