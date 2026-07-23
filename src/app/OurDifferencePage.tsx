@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, useInView, animate } from "motion/react";
+import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import { ChevronRight, ArrowRight, CheckCircle, XCircle, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import useEmblaCarousel from "embla-carousel-react";
@@ -916,14 +916,184 @@ const CERT_STATS = [
   { val: "5",   label: "Industry affiliations" },
 ];
 
-const LOGO_ORGS = [
-  { abbr: "BBB",         name: "Better Business Bureau" },
-  { abbr: "Angi",        name: "Angi Certified" },
-  { abbr: "Google",      name: "Google Guaranteed" },
-  { abbr: "HomeAdvisor", name: "HomeAdvisor" },
-  { abbr: "NAWSRC",      name: "NAWSRC Member" },
-  { abbr: "BAS",         name: "BAS Certified" },
+// ─── Awards (sourced from redeemersgroup.com/about-us/awards.html) ──────────
+type Award = { title: string; org: string; year: string; img?: string; date?: string };
+
+const AWARDS: Award[] = [
+  { title: "Memphis Business Journal Small Business Awards", org: "Memphis Business Journal", year: "2026", date: "June 2, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6a202bc8c9060_small-business-awards.jpeg" },
+  { title: "Top Work Places, Top 3 Small Business", org: "Top Work Places", year: "2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/699c9437bfd18_image-12.jpg" },
+  { title: "2025 Best Evergreen Company", org: "Industry Recognition", year: "2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/69bc31ecc2ddc_image-8.jpg" },
+  { title: "Commercial Appeal Top Workplaces 2024", org: "Commercial Appeal", year: "2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/67a652585c968_img8180.jpg" },
+  { title: "#24 Foundation Dealer in the Supportworks Network", org: "Supportworks", year: "2025" },
+  { title: "#20 Concrete Dealer in the Supportworks Network", org: "Supportworks", year: "2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/680120502bd76_rgtop30concrete.png" },
+  { title: "Memphis Business Journal Best Places to Work", org: "Memphis Business Journal", year: "2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/699c9470a6058_image-13.jpg" },
+  { title: "Best Place To Work 2024", org: "Industry Recognition", year: "2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb00bad945f_redeemers-12.jpg" },
+  { title: "#47 Total Basement Systems Sales", org: "Contractor Nation", year: "2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb01d70bdfa_cn-47-sales.png" },
+  { title: "#18 for Total CleanSpace™ Sales", org: "Contractor Nation", year: "2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb019619b80_cn-18-sales.png" },
+  { title: "Contractor Nation Platinum Appointment Center Award", org: "Contractor Nation", year: "2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb01464e979_cc-platinum.png" },
+  { title: "Supportworks 2022 Most Improved by % Increase in Foundation Sales", org: "Supportworks", year: "2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/643f073826f24_img2862.jpeg" },
 ];
+
+const AWARD_YEARS = ["All", ...Array.from(new Set(AWARDS.map((a) => a.year))).sort((a, b) => Number(b) - Number(a))];
+
+function AwardCard({ award, onClick, clickable }: { award: Award; onClick: () => void; clickable: boolean }) {
+  return (
+    <div
+      onClick={onClick}
+      className="shrink-0 flex flex-col gap-3"
+      style={{ width: 190, cursor: clickable ? "pointer" : "default" }}
+    >
+      <div className="relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: "1/1", background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+        {award.img ? (
+          <ImageWithFallback src={award.img} alt={award.title} className="w-full h-full object-contain p-4" />
+        ) : (
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND, letterSpacing: 0.5, textAlign: "center", padding: 12, lineHeight: 1.3 }}>
+            {award.org}
+          </span>
+        )}
+        <div className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}>
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: SAND, letterSpacing: 1 }}>{award.year}</span>
+        </div>
+      </div>
+      <div>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: "#fff", lineHeight: 1.4, marginBottom: 2 }}>
+          {award.title.length > 48 ? award.title.slice(0, 48) + "…" : award.title}
+        </p>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)" }}>{award.org}</p>
+      </div>
+    </div>
+  );
+}
+
+function AwardModal({ award, onClose }: { award: Award | null; onClose: () => void }) {
+  useEffect(() => {
+    if (!award) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", handler); document.body.style.overflow = ""; };
+  }, [award, onClose]);
+
+  if (!award) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
+      style={{ background: "rgba(0,0,0,.88)", backdropFilter: "blur(10px)" }}
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full max-w-[960px] flex flex-col lg:flex-row overflow-hidden"
+        style={{ background: CHAR, height: "min(85vh, 580px)" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Left — award image */}
+        <div className="lg:w-[52%] shrink-0 relative flex items-center justify-center" style={{ background: DARK }}>
+          {award.img ? (
+            <ImageWithFallback src={award.img} alt={award.title} className="absolute inset-0 w-full h-full object-contain p-10" />
+          ) : (
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: SAND, textAlign: "center", padding: 40 }}>{award.org}</span>
+          )}
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-4">
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#fff", letterSpacing: 2.5, textTransform: "uppercase", background: B, padding: "3px 8px" }}>{award.year}</span>
+          </div>
+        </div>
+
+        {/* Right — award content */}
+        <div className="flex-1 flex flex-col overflow-y-auto" style={{ borderLeft: "1px solid rgba(255,255,255,.07)" }}>
+          <div className="flex justify-end px-7 pt-6 pb-3 shrink-0">
+            <button onClick={onClose} className="w-8 h-8 flex items-center justify-center hover:bg-white/10 transition-colors" style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+              <X size={14} color="rgba(255,255,255,.7)" />
+            </button>
+          </div>
+
+          <div className="flex flex-col flex-1 px-7 pb-7">
+            <div className="flex items-center gap-3 mb-5">
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.3)" }}>{award.date ?? award.year}</span>
+            </div>
+
+            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 6 }}>
+              {award.title}
+            </h3>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: SAND, marginBottom: 20 }}>{award.org}</p>
+
+            <div className="mb-5 p-4" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.25)" }}>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Recognition</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>
+                Redeemers Group was recognized with the {award.title}, awarded by {award.org} in {award.year}. This is one of 88 industry awards and affiliations the company has earned since 2008.
+              </p>
+            </div>
+
+            <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "auto 0 20px" }} />
+
+            <button onClick={() => { onClose(); openInspection(); }}
+              className="inline-flex items-center gap-2 px-6 py-3 hover:opacity-90 transition-opacity w-full justify-center"
+              style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "#fff", border: "none", cursor: "pointer", letterSpacing: 0.3 }}>
+              Get Your Free Inspection <ArrowRight size={14} />
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function AwardsCarousel() {
+  const [yearFilter, setYearFilter] = useState("All");
+  const [openAward, setOpenAward] = useState<Award | null>(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", containScroll: "trimSnaps" });
+
+  const filtered = yearFilter === "All" ? AWARDS : AWARDS.filter((a) => a.year === yearFilter);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.reInit();
+    emblaApi.scrollTo(0);
+  }, [filtered, emblaApi]);
+
+  return (
+    <>
+      <div className="flex items-center gap-2 flex-wrap mb-5">
+        {AWARD_YEARS.map((y) => (
+          <button key={y} onClick={() => setYearFilter(y)} className="px-3 py-1.5 transition-all"
+            style={{
+              fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 500,
+              background: yearFilter === y ? SAND : "transparent",
+              color: yearFilter === y ? DARK : "rgba(255,255,255,.55)",
+              border: `1.5px solid ${yearFilter === y ? SAND : "rgba(255,255,255,.15)"}`,
+              cursor: "pointer",
+            }}>
+            {y}
+          </button>
+        ))}
+      </div>
+
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex gap-4">
+          {filtered.map((award) => {
+            const isFirst = award === AWARDS[0];
+            return (
+              <AwardCard
+                key={award.title}
+                award={award}
+                clickable={isFirst}
+                onClick={() => { if (isFirst) setOpenAward(award); }}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {openAward && <AwardModal award={openAward} onClose={() => setOpenAward(null)} />}
+      </AnimatePresence>
+    </>
+  );
+}
 
 function CertificationsSection() {
   return (
@@ -981,23 +1151,12 @@ function CertificationsSection() {
             </div>
           </Reveal>
 
-          {/* Affiliation logos */}
+          {/* Industry affiliations — awards slider */}
           <Reveal delay={0.1}>
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
               Industry affiliations
             </p>
-            <div className="grid grid-cols-3 gap-4">
-              {LOGO_ORGS.map((org) => (
-                <div key={org.abbr} className="flex flex-col items-center justify-center gap-3 py-8 px-4"
-                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
-                  <div className="w-12 h-12 flex items-center justify-center"
-                    style={{ background: "rgba(196,171,108,.12)", border: "1px solid rgba(196,171,108,.2)" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND, letterSpacing: 0.5, textAlign: "center", lineHeight: 1.2 }}>{org.abbr}</span>
-                  </div>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)", textAlign: "center", letterSpacing: 0.3, lineHeight: 1.4 }}>{org.name}</span>
-                </div>
-              ))}
-            </div>
+            <AwardsCarousel />
           </Reveal>
         </div>
 
