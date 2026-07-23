@@ -29,8 +29,8 @@ export type StateInfo = {
   /** Where the map flies to when this state is selected. */
   center: LatLng;
   zoom: number;
-  /** Headline metro areas — every one of these exists in COUNTIES below. */
-  metros: string[];
+  /** Headline metro areas — each points at a real city in COUNTIES below. */
+  metros: { label: string; citySlug: string }[];
   services: string[];
 };
 
@@ -44,7 +44,7 @@ export const STATES: StateInfo[] = [
     tagline: "Home base. Memphis metro and West Tennessee, top to bottom.",
     polygon: [[36.50,-89.49], [36.50,-88.05], [36.61,-81.66], [36.30,-81.70], [35.90,-83.01], [35.50,-83.90], [35.20,-84.30], [35.00,-84.33], [35.00,-90.30], [35.40,-90.15], [35.80,-89.91], [36.20,-89.69]],
     center: [35.65, -89.20], zoom: 7,
-    metros: ["Memphis metro", "Jackson area", "Dyersburg", "Covington"],
+    metros: [{ label: "Memphis metro", citySlug: "memphis-tn" }, { label: "Jackson area", citySlug: "jackson-tn" }, { label: "Dyersburg", citySlug: "dyersburg-tn" }, { label: "Covington", citySlug: "covington-tn" }],
     services: ["Foundation repair", "Crawl space repair", "Waterproofing", "Concrete repair"],
   },
   {
@@ -53,7 +53,7 @@ export const STATES: StateInfo[] = [
     tagline: "Serving Little Rock, Jonesboro, and surrounding communities.",
     polygon: [[36.50,-94.62], [36.50,-90.15], [36.00,-90.15], [36.00,-89.69], [35.50,-90.20], [35.00,-90.30], [34.50,-90.60], [34.00,-90.90], [33.50,-91.10], [33.00,-91.20], [33.00,-94.04], [33.55,-94.04], [33.55,-94.47]],
     center: [34.90, -92.20], zoom: 7,
-    metros: ["Little Rock metro", "Jonesboro", "Conway", "West Memphis"],
+    metros: [{ label: "Little Rock metro", citySlug: "little-rock-ar" }, { label: "Jonesboro", citySlug: "jonesboro-ar" }, { label: "Conway", citySlug: "conway-ar" }, { label: "West Memphis", citySlug: "west-memphis-ar" }],
     services: ["Foundation repair", "Crawl space repair", "Concrete repair"],
   },
   {
@@ -62,7 +62,7 @@ export const STATES: StateInfo[] = [
     tagline: "DeSoto County south through the Delta and into the Golden Triangle.",
     polygon: [[35.00,-90.30], [35.00,-88.20], [34.00,-88.20], [33.00,-88.40], [32.00,-88.40], [31.00,-88.40], [30.69,-88.44], [30.19,-89.30], [30.19,-89.59], [31.00,-89.69], [31.00,-91.60], [31.50,-91.50], [32.00,-91.20], [32.50,-91.10], [33.00,-91.20], [33.50,-91.10], [34.00,-90.90], [34.50,-90.60]],
     center: [33.60, -89.60], zoom: 7,
-    metros: ["Southaven / DeSoto", "Oxford", "Tupelo", "Columbus"],
+    metros: [{ label: "Southaven / DeSoto", citySlug: "southaven-ms" }, { label: "Oxford", citySlug: "oxford-ms" }, { label: "Tupelo", citySlug: "tupelo-ms" }, { label: "Columbus", citySlug: "columbus-ms" }],
     services: ["Crawl space repair", "Waterproofing", "Mold prevention"],
   },
   {
@@ -71,7 +71,7 @@ export const STATES: StateInfo[] = [
     tagline: "The Bootheel — Dunklin and Pemiscot counties.",
     polygon: [[40.57,-95.77], [40.57,-91.70], [40.40,-91.40], [39.70,-91.10], [38.90,-90.20], [38.00,-89.91], [37.00,-89.40], [36.50,-89.49], [36.20,-89.59], [36.00,-89.69], [36.00,-90.15], [36.50,-90.15], [36.50,-94.62], [39.01,-94.62], [39.10,-94.91], [39.99,-95.30]],
     center: [36.20, -89.90], zoom: 9,
-    metros: ["Kennett", "Caruthersville", "Hayti", "Steele"],
+    metros: [{ label: "Kennett", citySlug: "kennett-mo" }, { label: "Caruthersville", citySlug: "caruthersville-mo" }, { label: "Hayti", citySlug: "hayti-mo" }, { label: "Steele", citySlug: "steele-mo" }],
     services: ["Foundation repair", "Crawl space repair"],
   },
 ];
@@ -255,6 +255,10 @@ export const countiesByState = (abbr: StateAbbr) =>
 export const cityCountByState = (abbr: StateAbbr) =>
   COUNTIES.filter((c) => c.state === abbr).reduce((n, c) => n + c.cities.length, 0);
 
+export const CITY_BY_SLUG: Record<string, CityRecord> = Object.fromEntries(
+  ALL_CITIES.map((c) => [c.slug, c])
+);
+
 export const TOTAL_CITIES = ALL_CITIES.length;
 export const TOTAL_COUNTIES = COUNTIES.length;
 
@@ -372,3 +376,69 @@ export const LOCAL_PROOF: LocalProof[] = [
 
 export const proofForState = (abbr: StateAbbr) => LOCAL_PROOF.filter((p) => p.state === abbr);
 export const proofForCity = (slug: string) => LOCAL_PROOF.filter((p) => p.citySlug === slug);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CITY-LEVEL CONTENT INVENTORY (panel level 2)
+//
+// What already exists on the legacy city pages, per city. Counts drive the
+// "Content available" panel; `hint` is the one-line preview beside each row.
+// Only cities we have actually inventoried appear here — everything else
+// renders as "nothing published yet" rather than inventing numbers.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type CityContent = {
+  zip: string;
+  reviews: number;
+  jobStories: number;
+  caseStudies: number;
+  beforeAfter: number;
+  hints?: Partial<Record<"reviews" | "jobStories" | "caseStudies" | "beforeAfter", string>>;
+};
+
+export const CITY_CONTENT: Record<string, CityContent> = {
+  // Inventoried from redeemersgroup.com/…/services-in-stuttgart-ar
+  "stuttgart-ar": {
+    zip: "72160", reviews: 4, jobStories: 3, caseStudies: 2, beforeAfter: 3,
+    hints: {
+      reviews: "By Renee D. and others",
+      jobStories: "Crawlspace, drainage…",
+      caseStudies: "Before & After photos",
+      beforeAfter: "Brick wall, gap repair",
+    },
+  },
+  "memphis-tn":        { zip: "38104", reviews: 12, jobStories: 6, caseStudies: 4, beforeAfter: 9, hints: { jobStories: "SmartJack, encapsulation" } },
+  "collierville-tn":   { zip: "38017", reviews: 5,  jobStories: 2, caseStudies: 1, beforeAfter: 3 },
+  "germantown-tn":     { zip: "38138", reviews: 4,  jobStories: 1, caseStudies: 2, beforeAfter: 4, hints: { caseStudies: "Pool deck leveling" } },
+  "bartlett-tn":       { zip: "38133", reviews: 3,  jobStories: 1, caseStudies: 0, beforeAfter: 2 },
+  "jonesboro-ar":      { zip: "72401", reviews: 7,  jobStories: 3, caseStudies: 2, beforeAfter: 5, hints: { jobStories: "Push piers to bedrock" } },
+  "little-rock-ar":    { zip: "72201", reviews: 6,  jobStories: 2, caseStudies: 3, beforeAfter: 4 },
+  "conway-ar":         { zip: "72032", reviews: 3,  jobStories: 1, caseStudies: 1, beforeAfter: 2 },
+  "west-memphis-ar":   { zip: "72301", reviews: 2,  jobStories: 1, caseStudies: 0, beforeAfter: 1 },
+  "marked-tree-ar":    { zip: "72365", reviews: 2,  jobStories: 1, caseStudies: 1, beforeAfter: 2 },
+  "southaven-ms":      { zip: "38671", reviews: 8,  jobStories: 4, caseStudies: 2, beforeAfter: 6, hints: { jobStories: "Encapsulation, rim joists" } },
+  "olive-branch-ms":   { zip: "38654", reviews: 5,  jobStories: 2, caseStudies: 1, beforeAfter: 3 },
+  "hernando-ms":       { zip: "38632", reviews: 3,  jobStories: 1, caseStudies: 1, beforeAfter: 2 },
+  "oxford-ms":         { zip: "38655", reviews: 4,  jobStories: 2, caseStudies: 3, beforeAfter: 5, hints: { caseStudies: "150-year-old home" } },
+  "tupelo-ms":         { zip: "38801", reviews: 3,  jobStories: 1, caseStudies: 1, beforeAfter: 2 },
+  "columbus-ms":       { zip: "39701", reviews: 2,  jobStories: 1, caseStudies: 0, beforeAfter: 1 },
+  "kennett-mo":        { zip: "63857", reviews: 3,  jobStories: 2, caseStudies: 1, beforeAfter: 2, hints: { jobStories: "Wall anchors, no dig" } },
+  "caruthersville-mo": { zip: "63830", reviews: 2,  jobStories: 1, caseStudies: 1, beforeAfter: 1 },
+  "hayti-mo":          { zip: "63851", reviews: 1,  jobStories: 1, caseStudies: 1, beforeAfter: 1 },
+};
+
+/** ZIPs for cities we know, whether or not they have content yet. */
+export const CITY_ZIPS: Record<string, string> = {
+  "searcy-ar": "72143", "paragould-ar": "72450", "blytheville-ar": "72315",
+  "pine-bluff-ar": "71601", "batesville-ar": "72501", "mountain-home-ar": "72653",
+  "forrest-city-ar": "72335", "osceola-ar": "72370", "wynne-ar": "72396",
+  "cordova-tn": "38016", "millington-tn": "38053", "covington-tn": "38019",
+  "dyersburg-tn": "38024", "union-city-tn": "38261", "brownsville-tn": "38012",
+  "bolivar-tn": "38008", "savannah-tn": "38372", "selmer-tn": "38375",
+  "horn-lake-ms": "38637", "starkville-ms": "39759", "corinth-ms": "38834",
+  "clarksdale-ms": "38614", "greenville-ms": "38701", "greenwood-ms": "38930",
+  "grenada-ms": "38901", "senatobia-ms": "38668", "batesville-ms": "38606",
+  "new-albany-ms": "38652", "holly-springs-ms": "38635", "steele-mo": "63877",
+};
+
+export const zipForCity = (slug: string) => CITY_CONTENT[slug]?.zip ?? CITY_ZIPS[slug];
+export const contentForCity = (slug: string) => CITY_CONTENT[slug];

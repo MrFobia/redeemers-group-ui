@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { Search, MapPin, ChevronDown, ChevronRight, X, ArrowRight } from "lucide-react";
 import { openInspection } from "./InspectionModal";
 import { ServiceAreaMap } from "./ServiceAreaMap";
+import { CityPanel } from "./CityPanel";
 import {
-  STATES, STATE_NAME, TOTAL_CITIES, TOTAL_COUNTIES,
-  countiesByState, cityCountByState, searchAreas, proofForState,
+  STATES, STATE_NAME, TOTAL_CITIES, TOTAL_COUNTIES, CITY_BY_SLUG,
+  countiesByState, cityCountByState, searchAreas, proofForState, slugify,
   type StateAbbr, type CityRecord, type ProofKind,
 } from "../data/serviceAreas";
 
@@ -23,7 +24,7 @@ const PROOF_TABS: { kind: ProofKind; label: string }[] = [
 
 export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
   const [activeState, setActiveState] = useState<StateAbbr>("TN");
-  const [activeMetro, setActiveMetro] = useState(0);
+  const [activeCity, setActiveCity] = useState<CityRecord | null>(null);
   const [proofTab, setProofTab] = useState<ProofKind>("job-story");
   const [openCounty, setOpenCounty] = useState<string | null>(null);
   const [highlightCity, setHighlightCity] = useState<string | null>(null);
@@ -77,15 +78,27 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
 
   const selectState = (abbr: StateAbbr) => {
     setActiveState(abbr);
-    setActiveMetro(0);
+    setActiveCity(null);
     setProofTab("job-story");
     setOpenCounty(null);
+  };
+
+  /** Open panel level 2 for a city. */
+  const openCity = (city: CityRecord) => {
+    if (city.state !== activeState) setActiveState(city.state);
+    setActiveCity(city);
+  };
+
+  const openCityBySlug = (slug: string) => {
+    const city = CITY_BY_SLUG[slug];
+    if (city) openCity(city);
   };
 
   const selectCity = (city: CityRecord) => {
     const countyKey = `${city.state}-${city.county}`;
     pendingScroll.current = countyKey;
-    if (city.state !== activeState) { setActiveState(city.state); setActiveMetro(0); }
+    if (city.state !== activeState) setActiveState(city.state);
+    setActiveCity(city);
     setOpenCounty(countyKey);
     setHighlightCity(`${countyKey}-${city.name}`);
     setQuery("");
@@ -192,7 +205,42 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
         </div>
 
         {/* ── Map + state panel ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-px" style={{ background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.07)" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[150px_1fr_380px] gap-px" style={{ background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.07)" }}>
+
+          {/* State rail */}
+          <div className="flex lg:flex-col overflow-x-auto" style={{ background: CHAR }}>
+            <p className="hidden lg:block shrink-0" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3, textTransform: "uppercase", padding: "20px 18px 12px" }}>
+              Select state
+            </p>
+            {STATES.map((s, i) => {
+              const on = s.abbr === activeState;
+              return (
+                <button
+                  key={s.abbr}
+                  onClick={() => selectState(s.abbr)}
+                  className="relative text-left transition-all shrink-0"
+                  style={{
+                    padding: "16px 18px",
+                    cursor: "pointer",
+                    background: on ? "rgba(196,171,108,.08)" : "transparent",
+                    borderLeft: on ? `3px solid ${SAND}` : "3px solid transparent",
+                    borderBottom: i < STATES.length - 1 ? "1px solid rgba(255,255,255,.05)" : "none",
+                    minWidth: 110,
+                  }}
+                >
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: on ? 800 : 500, fontSize: 20, color: on ? "#fff" : "rgba(255,255,255,.32)", display: "block", lineHeight: 1, transition: "color .2s" }}>
+                    {s.abbr}
+                  </span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: on ? SAND : "rgba(255,255,255,.25)", display: "block", marginTop: 4, transition: "color .2s" }}>
+                    {s.name}
+                  </span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(255,255,255,.2)", display: "block", marginTop: 2 }}>
+                    {cityCountByState(s.abbr)} cities
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
           <div style={{ background: CHAR }}>
             <ServiceAreaMap activeState={activeState} onSelectState={selectState} />
@@ -201,13 +249,16 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
           {/* State panel — keyed remount, no AnimatePresence (mode="wait" with
               siblings can wedge the exiting node in place) */}
           <motion.div
-            key={activeState}
+            key={activeCity ? activeCity.slug : activeState}
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col overflow-y-auto"
             style={{ background: DARK, maxHeight: 520 }}
           >
+            {activeCity ? (
+              <CityPanel city={activeCity} onBack={() => setActiveCity(null)} />
+            ) : (
             <div className="px-7 py-7">
               {/* Header */}
               <div className="flex items-baseline gap-3 mb-2">
@@ -238,21 +289,21 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                 Metro areas
               </p>
               <div className="flex flex-col gap-1.5 mb-6">
-                {state.metros.map((metro, i) => (
+                {state.metros.map((metro) => (
                   <button
-                    key={metro}
-                    onClick={() => setActiveMetro(i)}
-                    className="group flex items-center justify-between text-left px-3.5 py-2.5 transition-all"
+                    key={metro.citySlug}
+                    onClick={() => openCityBySlug(metro.citySlug)}
+                    className="group flex items-center justify-between text-left px-3.5 py-2.5 transition-all hover:border-white/25"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontSize: 14,
-                      color: activeMetro === i ? "#fff" : "rgba(255,255,255,.6)",
-                      background: activeMetro === i ? "rgba(196,171,108,.08)" : "rgba(255,255,255,.03)",
-                      border: `1px solid ${activeMetro === i ? SAND : "rgba(255,255,255,.06)"}`,
+                      color: "rgba(255,255,255,.72)",
+                      background: "rgba(255,255,255,.03)",
+                      border: "1px solid rgba(255,255,255,.06)",
                       cursor: "pointer",
                     }}
                   >
-                    {metro}
-                    <ChevronRight size={13} color={SAND} className={activeMetro === i ? "opacity-100" : "opacity-0 group-hover:opacity-60 transition-opacity"} />
+                    {metro.label}
+                    <ChevronRight size={13} color={SAND} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 ))}
               </div>
@@ -337,6 +388,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                 </div>
               </div>
             </div>
+            )}
           </motion.div>
         </div>
 
@@ -388,19 +440,21 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                           {county.cities.map((city) => {
                             const isHit = highlightCity === `${county.state}-${county.name}-${city}`;
                             return (
-                              <span
+                              <button
                                 key={city}
-                                className="inline-flex items-center px-2.5 py-1 transition-all"
+                                onClick={() => openCityBySlug(slugify(`${city}-${county.state}`))}
+                                className="inline-flex items-center px-2.5 py-1 transition-all hover:border-white/30"
                                 style={{
                                   fontFamily: "'Inter',sans-serif", fontSize: 12.5,
                                   color: isHit ? DARK : "rgba(255,255,255,.6)",
                                   background: isHit ? SAND : "rgba(255,255,255,.05)",
                                   border: `1px solid ${isHit ? SAND : "rgba(255,255,255,.07)"}`,
                                   fontWeight: isHit ? 700 : 400,
+                                  cursor: "pointer",
                                 }}
                               >
                                 {city}
-                              </span>
+                              </button>
                             );
                           })}
                         </div>
