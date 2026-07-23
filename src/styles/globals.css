@@ -30,3 +30,5 @@
   padding: 2px 7px;
 }
 .leaflet-tooltip::before { display: none; }
+/* Leaflet already gives interactive paths a pointer cursor; just soften hover. */
+.leaflet-interactive:hover { opacity: .8; }

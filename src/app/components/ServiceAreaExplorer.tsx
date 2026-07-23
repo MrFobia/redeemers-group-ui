@@ -4,9 +4,11 @@ import { Search, MapPin, ChevronDown, ChevronRight, X, ArrowRight } from "lucide
 import { openInspection } from "./InspectionModal";
 import { ServiceAreaMap } from "./ServiceAreaMap";
 import { CityPanel } from "./CityPanel";
+import { LocalContentModal } from "./LocalContentModal";
+import { contentForCityItems, type ContentItem, type ContentKind } from "../data/localContent";
 import {
   STATES, STATE_NAME, TOTAL_CITIES, TOTAL_COUNTIES, CITY_BY_SLUG,
-  countiesByState, cityCountByState, searchAreas, proofForState, slugify,
+  countiesByState, cityCountByState, searchAreas, proofForState, slugify, coordsForCity,
   type StateAbbr, type CityRecord, type ProofKind,
 } from "../data/serviceAreas";
 
@@ -25,6 +27,8 @@ const PROOF_TABS: { kind: ProofKind; label: string }[] = [
 export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
   const [activeState, setActiveState] = useState<StateAbbr>("TN");
   const [activeCity, setActiveCity] = useState<CityRecord | null>(null);
+  const [kindFilter, setKindFilter] = useState<ContentKind | null>(null);
+  const [openItem, setOpenItem] = useState<ContentItem | null>(null);
   const [proofTab, setProofTab] = useState<ProofKind>("job-story");
   const [openCounty, setOpenCounty] = useState<string | null>(null);
   const [highlightCity, setHighlightCity] = useState<string | null>(null);
@@ -39,6 +43,14 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
   const proof = useMemo(() => proofForState(activeState), [activeState]);
   const state = STATES.find((s) => s.abbr === activeState)!;
   const tabProof = proof.filter((p) => p.kind === proofTab);
+
+  // City drill-in: expand the counts into individual items and pin each one.
+  const cityItems = useMemo(
+    () => (activeCity ? contentForCityItems(activeCity.slug) : []),
+    [activeCity]
+  );
+  const pins = kindFilter ? cityItems.filter((i) => i.kind === kindFilter) : cityItems;
+  const cityPos = activeCity ? coordsForCity(activeCity.slug) : undefined;
 
   // Close the search dropdown on outside click
   useEffect(() => {
@@ -79,6 +91,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
   const selectState = (abbr: StateAbbr) => {
     setActiveState(abbr);
     setActiveCity(null);
+    setKindFilter(null);
     setProofTab("job-story");
     setOpenCounty(null);
   };
@@ -87,6 +100,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
   const openCity = (city: CityRecord) => {
     if (city.state !== activeState) setActiveState(city.state);
     setActiveCity(city);
+    setKindFilter(null);
   };
 
   const openCityBySlug = (slug: string) => {
@@ -99,6 +113,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
     pendingScroll.current = countyKey;
     if (city.state !== activeState) setActiveState(city.state);
     setActiveCity(city);
+    setKindFilter(null);
     setOpenCounty(countyKey);
     setHighlightCity(`${countyKey}-${city.name}`);
     setQuery("");
@@ -243,7 +258,13 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
           </div>
 
           <div style={{ background: CHAR }}>
-            <ServiceAreaMap activeState={activeState} onSelectState={selectState} />
+            <ServiceAreaMap
+              activeState={activeState}
+              onSelectState={selectState}
+              cityPos={cityPos}
+              contentPins={pins}
+              onPinClick={setOpenItem}
+            />
           </div>
 
           {/* State panel — keyed remount, no AnimatePresence (mode="wait" with
@@ -257,7 +278,14 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
             style={{ background: DARK, maxHeight: 520 }}
           >
             {activeCity ? (
-              <CityPanel city={activeCity} onBack={() => setActiveCity(null)} />
+              <CityPanel
+                city={activeCity}
+                items={cityItems}
+                kindFilter={kindFilter}
+                onFilter={setKindFilter}
+                onOpenItem={setOpenItem}
+                onBack={() => { setActiveCity(null); setKindFilter(null); }}
+              />
             ) : (
             <div className="px-7 py-7">
               {/* Header */}
@@ -481,6 +509,10 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {openItem && <LocalContentModal item={openItem} onClose={() => setOpenItem(null)} />}
+      </AnimatePresence>
     </section>
   );
 }

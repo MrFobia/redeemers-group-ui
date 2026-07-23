@@ -391,39 +391,39 @@ export type CityContent = {
   reviews: number;
   jobStories: number;
   caseStudies: number;
-  beforeAfter: number;
-  hints?: Partial<Record<"reviews" | "jobStories" | "caseStudies" | "beforeAfter", string>>;
+  projectGallery: number;
+  hints?: Partial<Record<"reviews" | "jobStories" | "caseStudies" | "projectGallery", string>>;
 };
 
 export const CITY_CONTENT: Record<string, CityContent> = {
   // Inventoried from redeemersgroup.com/…/services-in-stuttgart-ar
   "stuttgart-ar": {
-    zip: "72160", reviews: 4, jobStories: 3, caseStudies: 2, beforeAfter: 3,
+    zip: "72160", reviews: 4, jobStories: 3, caseStudies: 2, projectGallery: 3,
     hints: {
       reviews: "By Renee D. and others",
       jobStories: "Crawlspace, drainage…",
-      caseStudies: "Before & After photos",
-      beforeAfter: "Brick wall, gap repair",
+      caseStudies: "Remodel discovery",
+      projectGallery: "Brick wall, gap repair",
     },
   },
-  "memphis-tn":        { zip: "38104", reviews: 12, jobStories: 6, caseStudies: 4, beforeAfter: 9, hints: { jobStories: "SmartJack, encapsulation" } },
-  "collierville-tn":   { zip: "38017", reviews: 5,  jobStories: 2, caseStudies: 1, beforeAfter: 3 },
-  "germantown-tn":     { zip: "38138", reviews: 4,  jobStories: 1, caseStudies: 2, beforeAfter: 4, hints: { caseStudies: "Pool deck leveling" } },
-  "bartlett-tn":       { zip: "38133", reviews: 3,  jobStories: 1, caseStudies: 0, beforeAfter: 2 },
-  "jonesboro-ar":      { zip: "72401", reviews: 7,  jobStories: 3, caseStudies: 2, beforeAfter: 5, hints: { jobStories: "Push piers to bedrock" } },
-  "little-rock-ar":    { zip: "72201", reviews: 6,  jobStories: 2, caseStudies: 3, beforeAfter: 4 },
-  "conway-ar":         { zip: "72032", reviews: 3,  jobStories: 1, caseStudies: 1, beforeAfter: 2 },
-  "west-memphis-ar":   { zip: "72301", reviews: 2,  jobStories: 1, caseStudies: 0, beforeAfter: 1 },
-  "marked-tree-ar":    { zip: "72365", reviews: 2,  jobStories: 1, caseStudies: 1, beforeAfter: 2 },
-  "southaven-ms":      { zip: "38671", reviews: 8,  jobStories: 4, caseStudies: 2, beforeAfter: 6, hints: { jobStories: "Encapsulation, rim joists" } },
-  "olive-branch-ms":   { zip: "38654", reviews: 5,  jobStories: 2, caseStudies: 1, beforeAfter: 3 },
-  "hernando-ms":       { zip: "38632", reviews: 3,  jobStories: 1, caseStudies: 1, beforeAfter: 2 },
-  "oxford-ms":         { zip: "38655", reviews: 4,  jobStories: 2, caseStudies: 3, beforeAfter: 5, hints: { caseStudies: "150-year-old home" } },
-  "tupelo-ms":         { zip: "38801", reviews: 3,  jobStories: 1, caseStudies: 1, beforeAfter: 2 },
-  "columbus-ms":       { zip: "39701", reviews: 2,  jobStories: 1, caseStudies: 0, beforeAfter: 1 },
-  "kennett-mo":        { zip: "63857", reviews: 3,  jobStories: 2, caseStudies: 1, beforeAfter: 2, hints: { jobStories: "Wall anchors, no dig" } },
-  "caruthersville-mo": { zip: "63830", reviews: 2,  jobStories: 1, caseStudies: 1, beforeAfter: 1 },
-  "hayti-mo":          { zip: "63851", reviews: 1,  jobStories: 1, caseStudies: 1, beforeAfter: 1 },
+  "memphis-tn":        { zip: "38104", reviews: 12, jobStories: 6, caseStudies: 4, projectGallery: 9, hints: { jobStories: "SmartJack, encapsulation" } },
+  "collierville-tn":   { zip: "38017", reviews: 5,  jobStories: 2, caseStudies: 1, projectGallery: 3 },
+  "germantown-tn":     { zip: "38138", reviews: 4,  jobStories: 1, caseStudies: 2, projectGallery: 4, hints: { caseStudies: "Pool deck leveling" } },
+  "bartlett-tn":       { zip: "38133", reviews: 3,  jobStories: 1, caseStudies: 0, projectGallery: 2 },
+  "jonesboro-ar":      { zip: "72401", reviews: 7,  jobStories: 3, caseStudies: 2, projectGallery: 5, hints: { jobStories: "Push piers to bedrock" } },
+  "little-rock-ar":    { zip: "72201", reviews: 6,  jobStories: 2, caseStudies: 3, projectGallery: 4 },
+  "conway-ar":         { zip: "72032", reviews: 3,  jobStories: 1, caseStudies: 1, projectGallery: 2 },
+  "west-memphis-ar":   { zip: "72301", reviews: 2,  jobStories: 1, caseStudies: 0, projectGallery: 1 },
+  "marked-tree-ar":    { zip: "72365", reviews: 2,  jobStories: 1, caseStudies: 1, projectGallery: 2 },
+  "southaven-ms":      { zip: "38671", reviews: 8,  jobStories: 4, caseStudies: 2, projectGallery: 6, hints: { jobStories: "Encapsulation, rim joists" } },
+  "olive-branch-ms":   { zip: "38654", reviews: 5,  jobStories: 2, caseStudies: 1, projectGallery: 3 },
+  "hernando-ms":       { zip: "38632", reviews: 3,  jobStories: 1, caseStudies: 1, projectGallery: 2 },
+  "oxford-ms":         { zip: "38655", reviews: 4,  jobStories: 2, caseStudies: 3, projectGallery: 5, hints: { caseStudies: "150-year-old home" } },
+  "tupelo-ms":         { zip: "38801", reviews: 3,  jobStories: 1, caseStudies: 1, projectGallery: 2 },
+  "columbus-ms":       { zip: "39701", reviews: 2,  jobStories: 1, caseStudies: 0, projectGallery: 1 },
+  "kennett-mo":        { zip: "63857", reviews: 3,  jobStories: 2, caseStudies: 1, projectGallery: 2, hints: { jobStories: "Wall anchors, no dig" } },
+  "caruthersville-mo": { zip: "63830", reviews: 2,  jobStories: 1, caseStudies: 1, projectGallery: 1 },
+  "hayti-mo":          { zip: "63851", reviews: 1,  jobStories: 1, caseStudies: 1, projectGallery: 1 },
 };
 
 /** ZIPs for cities we know, whether or not they have content yet. */
@@ -439,6 +439,32 @@ export const CITY_ZIPS: Record<string, string> = {
   "grenada-ms": "38901", "senatobia-ms": "38668", "batesville-ms": "38606",
   "new-albany-ms": "38652", "holly-springs-ms": "38635", "steele-mo": "63877",
 };
+
+
+/** Coordinates for every city that has content — used to drop map pins. */
+export const CITY_COORDS: Record<string, LatLng> = {
+  "stuttgart-ar":      [34.50, -91.55],
+  "memphis-tn":        [35.15, -90.05],
+  "collierville-tn":   [35.04, -89.66],
+  "germantown-tn":     [35.09, -89.81],
+  "bartlett-tn":       [35.20, -89.87],
+  "jonesboro-ar":      [35.84, -90.70],
+  "little-rock-ar":    [34.75, -92.29],
+  "conway-ar":         [35.09, -92.44],
+  "west-memphis-ar":   [35.15, -90.18],
+  "marked-tree-ar":    [35.53, -90.42],
+  "southaven-ms":      [34.99, -90.01],
+  "olive-branch-ms":   [34.96, -89.83],
+  "hernando-ms":       [34.82, -89.99],
+  "oxford-ms":         [34.37, -89.52],
+  "tupelo-ms":         [34.26, -88.70],
+  "columbus-ms":       [33.50, -88.43],
+  "kennett-mo":        [36.24, -90.06],
+  "caruthersville-mo": [36.19, -89.66],
+  "hayti-mo":          [36.23, -89.75],
+};
+
+export const coordsForCity = (slug: string) => CITY_COORDS[slug];
 
 export const zipForCity = (slug: string) => CITY_CONTENT[slug]?.zip ?? CITY_ZIPS[slug];
 export const contentForCity = (slug: string) => CITY_CONTENT[slug];

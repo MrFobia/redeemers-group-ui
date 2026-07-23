@@ -1,29 +1,43 @@
 import { useEffect } from "react";
 import { MapContainer, TileLayer, Polygon, CircleMarker, Tooltip, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { STATES, CITY_MARKERS, type StateAbbr } from "../data/serviceAreas";
+import { STATES, CITY_MARKERS, type StateAbbr, type LatLng } from "../data/serviceAreas";
+import { KIND_META, type ContentItem } from "../data/localContent";
 
 const B = "#1A52A8";
 const SAND = "#C4AB6C";
 
-/** Pans/zooms the map whenever the selected state changes. */
-function FlyToState({ abbr }: { abbr: StateAbbr }) {
+/** Pans/zooms the map to the selected state, or to a city when one is open. */
+function FlyTo({ abbr, cityPos }: { abbr: StateAbbr; cityPos?: LatLng }) {
   const map = useMap();
   useEffect(() => {
+    if (cityPos) {
+      map.flyTo(cityPos, 12, { duration: 0.9 });
+      return;
+    }
     const s = STATES.find((x) => x.abbr === abbr);
     if (s) map.flyTo(s.center, s.zoom, { duration: 0.9 });
-  }, [abbr, map]);
+  }, [abbr, cityPos?.[0], cityPos?.[1], map]);
   return null;
 }
 
 export function ServiceAreaMap({
   activeState,
   onSelectState,
+  cityPos,
+  contentPins = [],
+  onPinClick,
 }: {
   activeState: StateAbbr;
   onSelectState: (abbr: StateAbbr) => void;
+  /** When set, the map zooms to this city instead of the whole state. */
+  cityPos?: LatLng;
+  /** One pin per published piece of content in the open city. */
+  contentPins?: ContentItem[];
+  onPinClick?: (item: ContentItem) => void;
 }) {
-  const markers = CITY_MARKERS.filter((m) => m.state === activeState);
+  const anchors = CITY_MARKERS.filter((m) => m.state === activeState);
+  const inCityView = !!cityPos;
 
   return (
     <div className="relative w-full" style={{ height: 520 }}>
@@ -42,7 +56,7 @@ export function ServiceAreaMap({
           maxZoom={19}
         />
 
-        <FlyToState abbr={activeState} />
+        <FlyTo abbr={activeState} cityPos={cityPos} />
 
         {STATES.map((s) => {
           const isActive = s.abbr === activeState;
@@ -55,7 +69,7 @@ export function ServiceAreaMap({
                 color: isActive ? SAND : "rgba(255,255,255,.35)",
                 weight: isActive ? 3 : 1.5,
                 fillColor: isActive ? B : "#ffffff",
-                fillOpacity: isActive ? 0.35 : 0.07,
+                fillOpacity: isActive ? (inCityView ? 0.12 : 0.35) : 0.07,
               }}
             >
               <Tooltip sticky>{s.name}</Tooltip>
@@ -63,7 +77,8 @@ export function ServiceAreaMap({
           );
         })}
 
-        {markers.map((m) => (
+        {/* State-level anchor cities — hidden once we drill into one city */}
+        {!inCityView && anchors.map((m) => (
           <CircleMarker
             key={m.name}
             center={m.pos}
@@ -75,6 +90,29 @@ export function ServiceAreaMap({
             </Tooltip>
           </CircleMarker>
         ))}
+
+        {/* City-level content pins — one per published item, click opens the modal */}
+        {contentPins.map((item) => {
+          const accent = KIND_META[item.kind].accent;
+          return (
+            <CircleMarker
+              key={item.id}
+              center={item.pos}
+              radius={9}
+              eventHandlers={{ click: () => onPinClick?.(item) }}
+              pathOptions={{
+                color: "#0A0B14", weight: 2,
+                fillColor: accent, fillOpacity: 1,
+              }}
+            >
+              <Tooltip direction="top" offset={[0, -8]} opacity={1}>
+                <span style={{ color: accent, fontWeight: 700 }}>{KIND_META[item.kind].label}</span>
+                <br />
+                {item.title}
+              </Tooltip>
+            </CircleMarker>
+          );
+        })}
       </MapContainer>
     </div>
   );
