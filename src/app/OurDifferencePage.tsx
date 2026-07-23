@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
-import { ChevronRight, ArrowRight, CheckCircle, XCircle, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, ArrowRight, CheckCircle, XCircle, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import useEmblaCarousel from "embla-carousel-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -1057,19 +1057,33 @@ function AwardsCarousel() {
 
   return (
     <>
-      <div className="flex items-center gap-2 flex-wrap mb-5">
-        {AWARD_YEARS.map((y) => (
-          <button key={y} onClick={() => setYearFilter(y)} className="px-3 py-1.5 transition-all"
-            style={{
-              fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 500,
-              background: yearFilter === y ? SAND : "transparent",
-              color: yearFilter === y ? DARK : "rgba(255,255,255,.55)",
-              border: `1.5px solid ${yearFilter === y ? SAND : "rgba(255,255,255,.15)"}`,
-              cursor: "pointer",
-            }}>
-            {y}
+      <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
+          {AWARD_YEARS.map((y) => (
+            <button key={y} onClick={() => setYearFilter(y)} className="px-3 py-1.5 transition-all"
+              style={{
+                fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 500,
+                background: yearFilter === y ? SAND : "transparent",
+                color: yearFilter === y ? DARK : "rgba(255,255,255,.55)",
+                border: `1.5px solid ${yearFilter === y ? SAND : "rgba(255,255,255,.15)"}`,
+                cursor: "pointer",
+              }}>
+              {y}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2 shrink-0">
+          <button onClick={() => emblaApi?.scrollPrev()} aria-label="Previous awards"
+            className="w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
+            style={{ border: "1.5px solid rgba(255,255,255,.15)", background: "none", cursor: "pointer" }}>
+            <ChevronLeft size={15} color="rgba(255,255,255,.7)" />
           </button>
-        ))}
+          <button onClick={() => emblaApi?.scrollNext()} aria-label="Next awards"
+            className="w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
+            style={{ border: "1.5px solid rgba(255,255,255,.15)", background: "none", cursor: "pointer" }}>
+            <ChevronRight size={15} color="rgba(255,255,255,.7)" />
+          </button>
+        </div>
       </div>
 
       <div className="overflow-hidden" ref={emblaRef}>
