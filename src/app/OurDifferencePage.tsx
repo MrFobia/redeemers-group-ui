@@ -13,6 +13,7 @@ import imgFloor04 from "../assets/floor-04.jpeg";
 import imgRevAvatar from "../assets/rev-avatar.png";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { StickyAnchorBar } from "./components/StickyAnchorBar";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 const B = "#1A52A8";
@@ -49,6 +50,16 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 }
 
 
+
+const NAV_TABS = [
+  { id: "reviews", label: "Reviews" },
+  { id: "process", label: "Our Process" },
+  { id: "story", label: "Our Story" },
+  { id: "pledge", label: "Our Pledge" },
+  { id: "case-studies", label: "Case Studies" },
+  { id: "news-awards", label: "News & Awards" },
+  { id: "certifications", label: "Certifications" },
+];
 
 // ─── 1. HERO (DARK) ───────────────────────────────────────────────────────────
 function HeroSection() {
@@ -142,7 +153,7 @@ const STEPS = [
 
 function ProcessSection() {
   return (
-    <section style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="process" style={{ background: DARK }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -193,7 +204,7 @@ function ProcessSection() {
 // ─── 4. STORY (DARK) ─────────────────────────────────────────────────────────
 function StorySection() {
   return (
-    <section style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="story" style={{ background: DARK }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <Reveal>
@@ -266,7 +277,7 @@ const ALWAYS_WILL = [
 
 function PledgeSection() {
   return (
-    <section style={{ background: CHAR }} className="py-20 lg:py-28">
+    <section id="pledge" style={{ background: CHAR }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="mb-14">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
@@ -370,7 +381,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
   }, [emblaApi]);
 
   return (
-    <section style={{ background: CREAM }} className="py-24 overflow-hidden">
+    <section id="reviews" style={{ background: CREAM }} className="py-24 overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
           <div>
@@ -775,7 +786,7 @@ function CaseStudiesSection() {
   const [activeCard, setActiveCard] = useState<CaseCard | null>(null);
 
   return (
-    <section style={{ background: CREAM }} className="py-20 lg:py-28">
+    <section id="case-studies" style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         {/* Header */}
         <Reveal className="text-center mb-16">
@@ -851,7 +862,7 @@ const PROJECT_STORIES = [
 
 function ProjectStoriesSection() {
   return (
-    <section style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="news-awards" style={{ background: DARK }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
@@ -1111,7 +1122,7 @@ function AwardsCarousel() {
 
 function CertificationsSection() {
   return (
-    <section style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="certifications" style={{ background: DARK }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Header */}
@@ -1267,16 +1278,43 @@ function Footer({ onBack }: { onBack: () => void }) {
 
 // ─── OurDifferencePage ────────────────────────────────────────────────────────
 export default function OurDifferencePage({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (p: string) => void }) {
+  const [activeTab, setActiveTab] = useState(NAV_TABS[0].id);
+
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  const scrollToSection = (id: string) => {
+    setActiveTab(id);
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = 145;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    const sections = NAV_TABS.map((t) => document.getElementById(t.id)).filter(Boolean) as HTMLElement[];
+    const handler = () => {
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (window.scrollY + 160 >= sections[i].offsetTop) {
+          setActiveTab(NAV_TABS[i].id);
+          break;
+        }
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
 
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
+        <StickyAnchorBar tabs={NAV_TABS} active={activeTab} onChange={scrollToSection} />
       </div>
 
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
+      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: DARK }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
