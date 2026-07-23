@@ -561,6 +561,91 @@ const CASE_RIGHT: CaseCard[] = [
   },
 ];
 
+const CASE_LEFT_MORE: CaseCard[] = [
+  {
+    title: "Same-day emergency response",
+    items: [
+      "Priority scheduling for active water intrusion or structural risk",
+      "On-site within 24 hours in most service areas",
+      "Temporary stabilization if full repair needs to be scheduled",
+    ],
+    img: imgFloor02,
+    aspect: "16/9",
+    gallery: [
+      { img: imgFloor02, caption: "Active water intrusion at time of call" },
+      { img: imgFloor03, caption: "Crew on-site within 24 hours" },
+      { img: imgFloor01, caption: "Temporary stabilization while parts were ordered" },
+    ],
+    story: [
+      "A burst supply line had flooded the crawl space overnight, and the homeowner was worried about mold setting in before anyone could get out to look at it.",
+      "Our on-call crew was on-site the next morning, extracted standing water, and installed temporary drying equipment while the full encapsulation was scheduled for later that week.",
+      "No mold took hold, and the permanent fix went in on the originally quoted timeline.",
+    ],
+  },
+  {
+    title: "Transparent, itemized pricing",
+    items: [
+      "Every quote broken down by line item, not a lump sum",
+      "Financing options presented before any work begins",
+      "Price shown in writing never changes once signed",
+    ],
+    img: imgFloor01,
+    aspect: "1/1",
+    gallery: [
+      { img: imgFloor01, caption: "Itemized quote reviewed with the homeowner" },
+      { img: imgFloor04, caption: "Financing options explained upfront" },
+      { img: imgFloor02, caption: "Signed quote — price locked in" },
+    ],
+    story: [
+      "The homeowner had been burned before by a contractor whose final invoice didn't match the verbal estimate.",
+      "We walked through an itemized, written quote line by line before any work started, including financing options so there were no surprises about cost or terms.",
+      "The final invoice matched the signed quote exactly — no change orders, no added fees.",
+    ],
+  },
+];
+
+const CASE_RIGHT_MORE: CaseCard[] = [
+  {
+    title: "Locally owned, not a franchise",
+    items: [
+      "Family-owned and operated since day one",
+      "Decisions made locally, not by a corporate office",
+      "Profits reinvested in local crews and equipment",
+    ],
+    img: imgFloor04,
+    aspect: "1/1",
+    gallery: [
+      { img: imgFloor04, caption: "Local crew on a Memphis-area job site" },
+      { img: imgFloor01, caption: "Owner reviewing a project in person" },
+    ],
+    story: [
+      "Being locally owned means the person who answers a complaint is the same person who can actually fix it — no corporate call center in another state.",
+      "When a homeowner had a scheduling conflict during a multi-day job, ownership personally rearranged the crew's schedule to work around it.",
+      "That kind of flexibility is only possible because every decision is made locally.",
+    ],
+  },
+  {
+    title: "Certified & insured crews",
+    items: [
+      "Every technician trained and certified in our repair methods",
+      "Fully licensed and insured on every job",
+      "Background-checked before ever entering a home",
+    ],
+    img: imgFloor03,
+    aspect: "16/9",
+    gallery: [
+      { img: imgFloor03, caption: "Certified technician on a foundation job" },
+      { img: imgFloor02, caption: "Crew briefing before work begins" },
+      { img: imgFloor01, caption: "Job completed to certification standard" },
+    ],
+    story: [
+      "A homeowner asked to see proof of insurance and certification before letting a crew into a home with young children — a fair and common request.",
+      "We provided documentation on the spot, and the assigned technician's certification covered the exact repair method used on the job.",
+      "Every crew member on every job carries that same documentation, not just the one sent out to answer questions.",
+    ],
+  },
+];
+
 function CaseCard({ card, delay, onOpen }: { card: CaseCard; delay: number; onOpen: (card: CaseCard) => void }) {
   const [hovered, setHovered] = useState(false);
 
@@ -784,6 +869,10 @@ function CaseStudyModal({ card, onOpenChange }: { card: CaseCard | null; onOpenC
 
 function CaseStudiesSection() {
   const [activeCard, setActiveCard] = useState<CaseCard | null>(null);
+  const [showMore, setShowMore] = useState(false);
+
+  const leftCards = showMore ? [...CASE_LEFT, ...CASE_LEFT_MORE] : CASE_LEFT;
+  const rightCards = showMore ? [...CASE_RIGHT, ...CASE_RIGHT_MORE] : CASE_RIGHT;
 
   return (
     <section id="case-studies" style={{ background: CREAM }} className="py-20 lg:py-28">
@@ -819,18 +908,31 @@ function CaseStudiesSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left column */}
           <div className="flex flex-col gap-12">
-            {CASE_LEFT.map((card, i) => (
-              <CaseCard key={card.title} card={card} delay={i * 0.1} onOpen={setActiveCard} />
+            {leftCards.map((card, i) => (
+              <CaseCard key={card.title} card={card} delay={(i % 2) * 0.1} onOpen={setActiveCard} />
             ))}
           </div>
 
           {/* Right column — offset down to create stagger */}
           <div className="flex flex-col gap-12 lg:mt-16">
-            {CASE_RIGHT.map((card, i) => (
-              <CaseCard key={card.title ?? `img-${i}`} card={card} delay={0.05 + i * 0.1} onOpen={setActiveCard} />
+            {rightCards.map((card, i) => (
+              <CaseCard key={card.title ?? `img-${i}`} card={card} delay={0.05 + (i % 2) * 0.1} onOpen={setActiveCard} />
             ))}
           </div>
         </div>
+
+        {!showMore && (
+          <Reveal delay={0.15} className="flex justify-center mt-14">
+            <button
+              onClick={() => setShowMore(true)}
+              className="group inline-flex items-center gap-2 px-7 py-3.5 transition-colors hover:bg-black/[0.03]"
+              style={{ border: `1.5px solid ${B}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", cursor: "pointer" }}
+            >
+              View more
+              <ChevronRight size={15} className="transition-transform group-hover:translate-x-1" />
+            </button>
+          </Reveal>
+        )}
       </div>
 
       <CaseStudyModal card={activeCard} onOpenChange={(open) => !open && setActiveCard(null)} />
