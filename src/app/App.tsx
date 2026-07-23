@@ -19,6 +19,7 @@ import ServicesLandingPage from "./ServicesLandingPage";
 import ReviewsPage from "./ReviewsPage";
 import JobStoriesPage from "./JobStoriesPage";
 import ContactPage from "./ContactPage";
+import NotFoundPage from "./NotFoundPage";
 import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 
@@ -1635,6 +1636,16 @@ export default function App() {
         <GuiaEstilosPage />
       </div>
     );
+  }
+
+  const KNOWN_PAGES = [
+    "home", "service", "services-landing", "problem-signs", "problem-sign-inner",
+    "our-difference", "resources", "pricing", "news-blog", "blog-inner", "about",
+    "careers", "service-area", "reviews", "job-stories", "contact", "guiaestilos",
+  ];
+
+  if (!KNOWN_PAGES.includes(page)) {
+    return <NotFoundPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
 
   return (
