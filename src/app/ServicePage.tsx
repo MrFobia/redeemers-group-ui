@@ -43,8 +43,11 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
 // ─── Breadcrumb + Section Tabs ────────────────────────────────────────────────
+// The first tab must not repeat the service name — client QA flagged the
+// service name appearing 3x above the fold (breadcrumb, this tab, hero
+// eyebrow), reading as 3 separate menus and pushing real content down.
 const SERVICE_TABS = [
-  { id: "overview", label: "Crawl Space Repair" },
+  { id: "overview", label: "Overview" },
   { id: "signs", label: "Problem Signs" },
   { id: "cost", label: "Cost Guide" },
   { id: "gallery", label: "Project Gallery" },

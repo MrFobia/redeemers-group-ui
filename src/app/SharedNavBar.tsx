@@ -302,6 +302,73 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   );
 }
 
+// ─── Our Difference Dropdown ──────────────────────────────────────────────────
+// Client QA call (Jul 24): "Our difference" has 9 items on the sitemap, too
+// many for a horizontal sub-nav, and their explicit preference is "a vertical
+// list view when you hover over the main navigation." Exact 9 labels/order
+// from the sitemap — keep in sync with OurDifferencePage.tsx's NAV_TABS.
+const OUR_DIFFERENCE_SECTIONS = [
+  { label: "Testimonials", id: "reviews" },
+  { label: "What to expect", id: "process" },
+  { label: "The Evergreen difference", id: "story" },
+  { label: "Our pledge", id: "pledge" },
+  { label: "News & awards", id: "news-awards" },
+  { label: "Featured projects / case stories", id: "case-studies" },
+  { label: "Referral program", id: "referral" },
+  { label: "Love Well Initiative", id: "love-well" },
+  { label: "Affiliations & certifications", id: "certifications" },
+];
+
+function OurDifferenceDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
+  return (
+    <div
+      role="menu"
+      aria-label="Our Difference"
+      style={{
+        background: "rgba(10,11,20,.98)",
+        backdropFilter: "blur(24px)",
+        borderBottom: "1px solid rgba(255,255,255,.07)",
+        boxShadow: "0 24px 60px rgba(0,0,0,.5)",
+      }}
+    >
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
+        <div className="flex items-center justify-between mb-4">
+          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
+            Our Difference
+          </p>
+          <button
+            onClick={() => onNavigate("our-difference")}
+            className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          >
+            Go to the page
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div className="mb-4 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
+        {/* Single vertical list, 3 columns wide so 9 items don't require scrolling the menu itself */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-1">
+          {OUR_DIFFERENCE_SECTIONS.map((sec) => (
+            <button
+              key={sec.id}
+              onClick={() => onNavigate(`our-difference#${sec.id}`)}
+              className="group flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+              style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
+            >
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)" }}>{sec.label}</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
+                <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Mega Menu data ────────────────────────────────────────────────────────────
 // Symptom labels shortened to 2-4 words per approved symptom-driven sitemap.
 // Icon per category for visual scanning; accent color stays on-brand (SAND/B),
@@ -313,7 +380,7 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 // remaining service pages are built.
 const SERVICE_CATEGORIES = [
   {
-    label: "Foundation Repair",
+    label: "Structural Repair",
     icon: Home,
     iconImg: iconFoundation as string,
     img: imgSvcFoundation as string,
@@ -363,13 +430,19 @@ const SERVICE_CATEGORIES = [
 ];
 
 // ─── Mega Menu ─────────────────────────────────────────────────────────────────
-// Image-forward cards, not a text list — Jonathan: "our consumer doesn't wanna
-// read, they wanna see." Only the 5 protagonist services get a card; problem
-// signs stay hidden until the card itself is hovered (second level, optional),
-// so the menu doesn't overwhelm on open.
+// Client QA call (Jul 24) rejected the image-card version explicitly: "I have
+// not seen a version where if I hover over services, there is a list coming
+// off of the menu... those choices would be the launching point." The ask was
+// a simple vertical list you can click immediately — modeled on a competitor
+// (Baird) they pointed to — not cards that need a second hover to reveal
+// anything. The list is now the primary surface; the photo panel is a
+// secondary preview that follows the hovered row, not a prerequisite to act.
 const MEGA_MENU_SERVICES = SERVICE_CATEGORIES.slice(0, 5);
 
 function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
+  const [hovered, setHovered] = useState(0);
+  const active = MEGA_MENU_SERVICES[hovered];
+
   return (
     <div
       role="menu"
@@ -381,81 +454,84 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
         boxShadow: "0 24px 60px rgba(0,0,0,.5)",
       }}
     >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
-            Services
-          </p>
-          <button
-            onClick={() => onNavigate("services-landing")}
-            className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
-          >
-            All services
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8 flex gap-0">
 
-        <div className="grid grid-cols-5 gap-4">
-          {MEGA_MENU_SERVICES.map((c) => {
-            const Icon = c.icon;
-            return (
-              <div
-                key={c.label}
-                onClick={() => onNavigate("service")}
-                className="group relative overflow-hidden cursor-pointer"
-                style={{ height: 360, border: "1px solid rgba(255,255,255,.08)" }}
-              >
-                <img src={c.img} alt={c.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,20,.15) 0%, rgba(10,11,20,.9) 100%)" }} />
-
-                {/* Default state: icon + label, icon as a white overlay silhouette.
-                    Stays visible on hover when there's no signs panel to replace it (Commercial). */}
-                <div className={`absolute inset-x-0 bottom-0 p-4 flex items-center gap-2.5 transition-opacity duration-200 ${c.signs.length > 0 ? "group-hover:opacity-0" : ""}`}>
-                  <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34 }}>
+        {/* Col 1 — the click-first list. Every category is one click away, no hover required to reveal it. */}
+        <div className="w-80 shrink-0 flex flex-col" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
+          <div className="flex items-center justify-between mb-4 pr-6">
+            <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
+              Services
+            </p>
+            <button
+              onClick={() => onNavigate("services-landing")}
+              className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            >
+              All
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+          <div className="flex flex-col gap-1 pr-6">
+            {MEGA_MENU_SERVICES.map((c, i) => {
+              const Icon = c.icon;
+              const isActive = i === hovered;
+              return (
+                <button
+                  key={c.label}
+                  onMouseEnter={() => setHovered(i)}
+                  onClick={() => onNavigate("service")}
+                  className="group flex items-center gap-3 w-full px-3 py-3 text-left transition-all duration-150"
+                  style={{
+                    background: isActive ? "rgba(26,82,168,.2)" : "transparent",
+                    borderLeft: isActive ? `2px solid ${B}` : "2px solid transparent",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span className="flex items-center justify-center shrink-0" style={{ width: 26, height: 26 }}>
                     {c.iconImg
-                      ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
-                      : <Icon size={30} color="#fff" strokeWidth={2} />}
+                      ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)", opacity: isActive ? 1 : 0.7 }} />
+                      : <Icon size={22} color="#fff" strokeWidth={2} style={{ opacity: isActive ? 1 : 0.7 }} />}
                   </span>
-                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", lineHeight: 1.2 }}>{c.label}</p>
-                </div>
-
-                {/* Hover reveal: problem signs (Commercial has none — skip the panel) */}
-                {c.signs.length > 0 && (
-                  <div
-                    className="absolute inset-0 p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    style={{ background: "rgba(10,11,20,.94)" }}
-                  >
-                    <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 10 }}>{c.label}</p>
-                    <div className="flex flex-col gap-1 mb-3">
-                      {c.signs.slice(0, 4).map((symptom) => (
-                        <button
-                          key={symptom}
-                          onClick={(e) => { e.stopPropagation(); onNavigate("problem-sign-inner"); }}
-                          className="text-left transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, lineHeight: 1.6, color: "rgba(255,255,255,.65)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-                        >
-                          {symptom}
-                        </button>
-                      ))}
-                    </div>
-                    <span
-                      className="inline-flex items-center gap-1 self-start"
-                      style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}
-                    >
-                      View all
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: isActive ? 600 : 400, fontSize: 14, color: isActive ? "#fff" : "rgba(255,255,255,.7)", flex: 1 }}>
+                    {c.label}
+                  </span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 transition-opacity" style={{ opacity: isActive ? 1 : 0 }}>
+                    <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              );
+            })}
+          </div>
         </div>
+
+        {/* Col 2 — photo preview of the hovered category, secondary to the list, not required to act on it */}
+        <div className="flex-1 pl-8 flex flex-col">
+          <div className="relative overflow-hidden flex-1" style={{ minHeight: 280, border: "1px solid rgba(255,255,255,.08)" }}>
+            <img src={active.img} alt={active.label} className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.25) 55%, transparent 100%)" }} />
+            <div className="absolute inset-x-0 bottom-0 p-7">
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", marginBottom: 8 }}>{active.label}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.65)", marginBottom: active.signs.length ? 16 : 0, maxWidth: 420 }}>{active.tagline}</p>
+              {active.signs.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {active.signs.map((symptom) => (
+                    <button
+                      key={symptom}
+                      onClick={() => onNavigate("problem-sign-inner")}
+                      className="transition-colors hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.75)", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.15)", padding: "5px 11px", cursor: "pointer" }}
+                    >
+                      {symptom}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
@@ -493,7 +569,8 @@ export default function SharedNavBar({
   const [megaOpen, setMegaOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
-  const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about">("root");
+  const [ourDiffOpen, setOurDiffOpen] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about" | "our-difference">("root");
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -505,43 +582,46 @@ export default function SharedNavBar({
 
   // Close dropdowns when clicking outside
   useEffect(() => {
-    if (!megaOpen && !resourcesOpen && !aboutOpen) return;
+    if (!megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen) return;
     const handleOutside = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setMegaOpen(false);
         setResourcesOpen(false);
         setAboutOpen(false);
+        setOurDiffOpen(false);
       }
     };
     document.addEventListener("mousedown", handleOutside);
     return () => document.removeEventListener("mousedown", handleOutside);
-  }, [megaOpen, resourcesOpen, aboutOpen]);
+  }, [megaOpen, resourcesOpen, aboutOpen, ourDiffOpen]);
 
   // Escape closes any open dropdown and restores focus to the Services trigger
   useEffect(() => {
-    if (!megaOpen && !resourcesOpen && !aboutOpen) return;
+    if (!megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen) return;
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMegaOpen(false);
         setResourcesOpen(false);
         setAboutOpen(false);
+        setOurDiffOpen(false);
         servicesBtnRef.current?.focus();
       }
     };
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [megaOpen, resourcesOpen, aboutOpen]);
+  }, [megaOpen, resourcesOpen, aboutOpen, ourDiffOpen]);
 
   const handleNavigate = (p: string) => {
     setMegaOpen(false);
     setResourcesOpen(false);
     setAboutOpen(false);
+    setOurDiffOpen(false);
     setMobileOpen(false);
     setMobilePanel("root");
     onNavigate(p);
   };
 
-  const isTransparent = transparent && !scrolled && !megaOpen && !resourcesOpen && !aboutOpen && !mobileOpen;
+  const isTransparent = transparent && !scrolled && !megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen && !mobileOpen;
 
   const links = ["Services", "Problem Signs", "Our Difference", "Resources", "Pricing", "About"];
 
@@ -549,7 +629,7 @@ export default function SharedNavBar({
     <div
       ref={navRef}
       className="relative"
-      onMouseLeave={() => { setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); }}
+      onMouseLeave={() => { setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
     >
       <nav
         className="relative z-[300] w-full transition-all duration-300"
@@ -578,8 +658,8 @@ export default function SharedNavBar({
                     ref={servicesBtnRef}
                     aria-haspopup="menu"
                     aria-expanded={megaOpen}
-                    onMouseEnter={() => { setMegaOpen(true); setResourcesOpen(false); setAboutOpen(false); }}
-                    onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); setAboutOpen(false); }}
+                    onMouseEnter={() => { setMegaOpen(true); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                    onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -602,8 +682,8 @@ export default function SharedNavBar({
                 return (
                   <button
                     key="Resources"
-                    onMouseEnter={() => { setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); }}
-                    onClick={() => { setResourcesOpen((prev) => !prev); setMegaOpen(false); setAboutOpen(false); }}
+                    onMouseEnter={() => { setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                    onClick={() => { setResourcesOpen((prev) => !prev); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -622,12 +702,36 @@ export default function SharedNavBar({
                 );
               }
 
+              if (l === "Our Difference") {
+                return (
+                  <button
+                    key="Our Difference"
+                    onMouseEnter={() => { setOurDiffOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); }}
+                    onClick={() => { setOurDiffOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); }}
+                    className="flex items-center gap-1 transition-colors whitespace-nowrap"
+                    style={{
+                      fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
+                      color: ourDiffOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
+                      letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
+                      borderBottom: isActive ? `2px solid ${SAND}` : ourDiffOpen ? `2px solid ${SAND}` : "2px solid transparent",
+                      paddingBottom: 2,
+                    }}
+                  >
+                    Our Difference
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                      style={{ transform: ourDiffOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                );
+              }
+
               if (l === "About") {
                 return (
                   <button
                     key="About"
-                    onMouseEnter={() => { setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); }}
-                    onClick={() => { setAboutOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); }}
+                    onMouseEnter={() => { setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); }}
+                    onClick={() => { setAboutOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -721,11 +825,14 @@ export default function SharedNavBar({
                     <div className="flex flex-col gap-2">
                       {links.map((l) => {
                         const pageKey = NAV_PAGE_MAP[l];
-                        const hasDrill = l === "Services" || l === "Resources" || l === "About";
+                        const drillPanel: Record<string, "services" | "resources" | "about" | "our-difference"> = {
+                          "Services": "services", "Resources": "resources", "About": "about", "Our Difference": "our-difference",
+                        };
+                        const hasDrill = l in drillPanel;
                         return (
                           <button
                             key={l}
-                            onClick={() => hasDrill ? setMobilePanel(l.toLowerCase() as "services" | "resources" | "about") : pageKey && handleNavigate(pageKey)}
+                            onClick={() => hasDrill ? setMobilePanel(drillPanel[l]) : pageKey && handleNavigate(pageKey)}
                             className="w-full flex items-center justify-between text-left transition-colors hover:bg-white/[.07]"
                             style={{
                               fontFamily: "'Inter',sans-serif", color: "rgba(255,255,255,.85)", fontSize: 16,
@@ -870,6 +977,30 @@ export default function SharedNavBar({
                     </div>
                   </motion.div>
                 )}
+
+                {mobilePanel === "our-difference" && (
+                  <motion.div
+                    key="our-difference"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 16 }}
+                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col"
+                  >
+                    <MobileBackHeader title="Our Difference" onBack={() => setMobilePanel("root")} />
+                    <div className="flex flex-col gap-1">
+                      {OUR_DIFFERENCE_SECTIONS.map((sec) => (
+                        <button
+                          key={sec.id}
+                          onClick={() => handleNavigate(`our-difference#${sec.id}`)}
+                          className="w-full py-3 pl-3 text-left"
+                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                          {sec.label}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
               </>
             </div>
           </div>
@@ -887,6 +1018,13 @@ export default function SharedNavBar({
       {resourcesOpen && (
         <div className="absolute left-0 w-full z-[200]">
           <ResourcesDropdown onNavigate={handleNavigate} />
+        </div>
+      )}
+
+      {/* Our Difference dropdown */}
+      {ourDiffOpen && (
+        <div className="absolute left-0 w-full z-[200]">
+          <OurDifferenceDropdown onNavigate={handleNavigate} />
         </div>
       )}
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
-import { ChevronRight, ChevronLeft, ArrowRight, CheckCircle, XCircle, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, ArrowRight, CheckCircle, XCircle, X, Gift, Heart } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import useEmblaCarousel from "embla-carousel-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -51,14 +51,18 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 
 
 
+// Exact 9 items + order from the approved Figma sitemap (Our Difference
+// branch) — do not rename or reorder without updating the sitemap first.
 const NAV_TABS = [
-  { id: "reviews", label: "Reviews" },
-  { id: "process", label: "Our Process" },
-  { id: "story", label: "Our Story" },
-  { id: "pledge", label: "Our Pledge" },
-  { id: "case-studies", label: "Case Studies" },
-  { id: "news-awards", label: "News & Awards" },
-  { id: "certifications", label: "Certifications" },
+  { id: "reviews", label: "Testimonials" },
+  { id: "process", label: "What to expect" },
+  { id: "story", label: "The Evergreen difference" },
+  { id: "pledge", label: "Our pledge" },
+  { id: "news-awards", label: "News & awards" },
+  { id: "case-studies", label: "Featured projects / case stories" },
+  { id: "referral", label: "Referral program" },
+  { id: "love-well", label: "Love Well Initiative" },
+  { id: "certifications", label: "Affiliations & certifications" },
 ];
 
 // ─── 1. HERO (DARK) ───────────────────────────────────────────────────────────
@@ -210,7 +214,7 @@ function StorySection() {
           <Reveal>
             <div className="flex items-center gap-2 mb-5">
               <div className="w-5 h-[2px]" style={{ background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our story</span>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>The Evergreen difference</span>
             </div>
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
               A family business, built on one bad experience
@@ -882,7 +886,7 @@ function CaseStudiesSection() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="h-[1px] w-6" style={{ background: B }} />
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
-              Case Studies
+              Featured projects / case stories
             </span>
             <div className="h-[1px] w-6" style={{ background: B }} />
           </div>
@@ -1292,6 +1296,106 @@ function CertificationsSection() {
   );
 }
 
+// ─── REFERRAL PROGRAM (CREAM) ────────────────────────────────────────────────
+// Added to match the approved sitemap — was missing from the built page entirely.
+const REFERRAL_STEPS = [
+  { n: "01", title: "Send their name", desc: "Give us a friend, family member, or neighbor who mentioned a crack, a damp basement, or an uneven floor." },
+  { n: "02", title: "We inspect, free", desc: "No cost, no obligation. If we don't find a real structural issue, we tell them that." },
+  { n: "03", title: "You both get rewarded", desc: "The moment they book a repair with us, a $100 credit lands on your account and theirs." },
+];
+
+function ReferralProgramSection() {
+  return (
+    <section id="referral" style={{ background: CREAM }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-14 lg:gap-20 items-center">
+          <Reveal>
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-5 h-[2px]" style={{ background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Referral program</span>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 20, maxWidth: 480 }}>
+              Know someone with a cracked wall or a wet crawl space?
+            </h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, lineHeight: 1.75, maxWidth: 460, marginBottom: 32 }}>
+              Send them our way. If they book a repair, you both get a $100 credit — no limit on how many neighbors you refer.
+            </p>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-11 h-11 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.08)", border: "1.5px dashed rgba(26,82,168,.35)" }}>
+                <Gift size={20} color={B} />
+              </div>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR }}>$100 for you. $100 for them.</p>
+            </div>
+            <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-opacity hover:opacity-90"
+              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>
+              Call to refer a neighbor
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            </a>
+          </Reveal>
+
+          <Reveal delay={0.1} className="flex flex-col gap-3">
+            {REFERRAL_STEPS.map((step) => (
+              <div key={step.n} className="flex items-start gap-5 px-7 py-6" style={{ background: "#fff", border: "1.5px solid rgba(11,28,74,.14)" }}>
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 13, color: SAND, letterSpacing: 1.5, paddingTop: 2 }}>{step.n}</span>
+                <div>
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 17, color: CHAR, marginBottom: 6 }}>{step.title}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.65 }}>{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── LOVE WELL INITIATIVE (DARK) ─────────────────────────────────────────────
+// Added to match the approved sitemap — was missing from the built page entirely.
+function LoveWellInitiativeSection() {
+  return (
+    <section id="love-well" style={{ background: DARK }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <Reveal className="order-2 lg:order-1">
+            <div className="relative overflow-hidden" style={{ borderRadius: 2 }}>
+              <ImageWithFallback src={imgFloor02} alt="Love Well Initiative" className="w-full object-cover" style={{ height: 380 }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.55) 0%,transparent 55%)" }} />
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.1} className="order-1 lg:order-2">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-9 h-9 flex items-center justify-center shrink-0" style={{ background: "rgba(196,171,108,.12)", border: "1.5px dashed rgba(196,171,108,.5)" }}>
+                <Heart size={16} color={SAND} />
+              </div>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Love Well Initiative</span>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 20, maxWidth: 500 }}>
+              Giving back to the neighborhoods we serve
+            </h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.6)", lineHeight: 1.8, maxWidth: 480, marginBottom: 28 }}>
+              A structural problem doesn't wait for a family to be able to afford it. Through the Love Well Initiative, we set aside discounted and, in some cases, free repairs for qualifying families in underserved Memphis-area neighborhoods.
+            </p>
+            <div className="grid grid-cols-2 gap-3 mb-8 max-w-md">
+              {["Discounted repairs", "Qualifying families", "Underserved neighborhoods", "Community-first"].map((tag) => (
+                <div key={tag} className="px-4 py-3" style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)" }}>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)", fontWeight: 500 }}>{tag}</span>
+                </div>
+              ))}
+            </div>
+            <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
+              style={{ border: "1.5px solid rgba(255,255,255,.2)", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
+              See if you qualify
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            </a>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── 10. CTA (NAVY) ──────────────────────────────────────────────────────────
 function CtaSection() {
   return (
@@ -1379,10 +1483,23 @@ function Footer({ onBack }: { onBack: () => void }) {
 }
 
 // ─── OurDifferencePage ────────────────────────────────────────────────────────
-export default function OurDifferencePage({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (p: string) => void }) {
-  const [activeTab, setActiveTab] = useState(NAV_TABS[0].id);
+export default function OurDifferencePage({ onBack, onNavigate, scrollTo: initialSection }: { onBack: () => void; onNavigate?: (p: string) => void; scrollTo?: string }) {
+  const [activeTab, setActiveTab] = useState(initialSection ?? NAV_TABS[0].id);
 
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+  useEffect(() => {
+    if (initialSection) {
+      const t = setTimeout(() => {
+        const el = document.getElementById(initialSection);
+        if (el) {
+          const offset = 145;
+          const top = el.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }, 120);
+      return () => clearTimeout(t);
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   const scrollToSection = (id: string) => {
     setActiveTab(id);
@@ -1428,15 +1545,20 @@ export default function OurDifferencePage({ onBack, onNavigate }: { onBack: () =
           </div>
         </div>
 
-        {/* DARK → CHAR → DARK → CREAM → DARK → CHAR → CREAM → DARK → CREAM → NAVY */}
+        {/* Order matches the approved sitemap: Testimonials, What to expect,
+            Evergreen difference, Our pledge, News & awards, Featured projects/
+            case stories, Referral program, Love Well Initiative, Affiliations
+            & certifications. */}
         <HeroSection />
         <TrustBar />
         <TestimonialsSection onNavigate={onNavigate} />
         <ProcessSection />
         <StorySection />
         <PledgeSection />
-        <CaseStudiesSection />
         <ProjectStoriesSection />
+        <CaseStudiesSection />
+        <ReferralProgramSection />
+        <LoveWellInitiativeSection />
         <CertificationsSection />
         <CtaSection />
         <Footer onBack={onBack} />

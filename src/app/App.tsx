@@ -1583,7 +1583,7 @@ export default function App() {
   }
 
   if (page === "our-difference") {
-    return <OurDifferencePage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
+    return <OurDifferencePage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
   }
 
   if (page === "resources") {
