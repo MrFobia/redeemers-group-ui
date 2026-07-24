@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Home, Layers, Droplets, Grid3x3, Leaf, Building2 } from "lucide-react";
+import { Home, Layers, Droplets, Grid3x3, Building2 } from "lucide-react";
 import { Logo } from "./components/Logo";
 import { InspectionModal, openInspection } from "./components/InspectionModal";
 import imgSvcFoundation from "../assets/svc-foundation.jpg";
 import imgSvcCrawlspace from "../assets/svc-crawlspace.jpg";
 import imgSvcWaterproofing from "../assets/svc-waterproofing.jpg";
 import imgSvcConcrete from "../assets/svc-concrete.jpg";
-import imgSvcMold from "../assets/svc-mold.jpg";
 import iconFoundation from "../assets/icons/icon-foundation.svg";
 import iconCrawlspace from "../assets/icons/icon-crawlspace.svg";
 import iconWaterproofing from "../assets/icons/icon-waterproofing.svg";
@@ -303,22 +302,35 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 }
 
 // ─── Mega Menu data ────────────────────────────────────────────────────────────
-// Symptom labels shortened to 2-4 words per approved symptom-driven sitemap.
+// The 5 services of the approved sitemap, and under each one exactly the
+// sub-choices Rosie wrote for the main header ("In main header: Services sub
+// choices under services: ..."). What used to be revealed here was a list of
+// problem signs; the client asked to see where each service can take them
+// *before* committing to a click, so the reveal now shows the service's own
+// pages, with "Problem Signs" as the first of them.
 // Icon per category for visual scanning; accent color stays on-brand (SAND/B),
 // not a per-category rainbow — client flagged that as off-brand ("no lo veo
 // dentro del lenguaje visual de la página").
-// TODO(content): validate final symptom labels against approved sitemap doc.
-// TODO(routing): every symptom currently routes to "problem-sign-inner" and every
-// category to "service" (only Crawl Space page exists). Wire real routes when
-// remaining service pages are built.
+// TODO(routing): sub-links currently resolve to the single generic "service"
+// page (only Crawl Space exists) plus its anchors. Wire the real per-service
+// routes as those pages get built.
 const SERVICE_CATEGORIES = [
   {
-    label: "Foundation Repair",
+    label: "Structural Repair",
     icon: Home,
     iconImg: iconFoundation as string,
     img: imgSvcFoundation as string,
     tagline: "Stop the cracks before they spread.",
-    signs: ["Cracks in walls", "Bowing or leaning walls", "Sinking slab"],
+    links: [
+      { label: "Problem Signs", page: "problem-signs" },
+      { label: "Slab Repair", page: "service" },
+      { label: "Crawlspace / Joist Repair", page: "service" },
+      { label: "Lintel Repair", page: "service" },
+      { label: "Wall Stabilization", page: "service" },
+      { label: "Cost Guides", page: "service#cost" },
+      { label: "Project Gallery", page: "service#gallery" },
+      { label: "FAQ", page: "service#faq" },
+    ],
   },
   {
     label: "Crawl Space Repair",
@@ -326,7 +338,16 @@ const SERVICE_CATEGORIES = [
     iconImg: iconCrawlspace as string,
     img: imgSvcCrawlspace as string,
     tagline: "Dry, sealed, and structurally sound below your home.",
-    signs: ["Sagging or bouncy floors", "Baseboards separated from floor", "Doors won't close properly"],
+    links: [
+      { label: "Problem Signs", page: "problem-signs" },
+      { label: "Floor Joist Replacement", page: "service" },
+      { label: "Floor Joist Repair / Stabilization", page: "service" },
+      { label: "Encapsulation Systems", page: "service" },
+      { label: "Moisture & Mold Prevention", page: "service" },
+      { label: "Cost Guides", page: "service#cost" },
+      { label: "Project Gallery", page: "service#gallery" },
+      { label: "FAQ", page: "service#faq" },
+    ],
   },
   {
     label: "Waterproofing",
@@ -334,7 +355,14 @@ const SERVICE_CATEGORIES = [
     iconImg: iconWaterproofing as string,
     img: imgSvcWaterproofing as string,
     tagline: "Keep water out of your basement for good.",
-    signs: ["Water in basement", "Damp walls or floor", "Musty mold smell"],
+    links: [
+      { label: "Problem Signs", page: "problem-signs" },
+      { label: "Interior Solutions", page: "service" },
+      { label: "Exterior Solutions", page: "service" },
+      { label: "Cost Guides", page: "service#cost" },
+      { label: "Project Gallery", page: "service#gallery" },
+      { label: "FAQ", page: "service#faq" },
+    ],
   },
   {
     label: "Concrete Services",
@@ -342,7 +370,16 @@ const SERVICE_CATEGORIES = [
     iconImg: iconConcrete as string,
     img: imgSvcConcrete as string,
     tagline: "Level driveways, walkways, and slabs.",
-    signs: ["Uneven concrete slabs", "Sinking driveway or walkway", "Cracked pool deck"],
+    links: [
+      { label: "Problem Signs", page: "problem-signs" },
+      { label: "Lifting & Leveling", page: "service" },
+      { label: "Crack & Joint Repair", page: "service" },
+      { label: "Concrete Protection Systems", page: "service" },
+      { label: "Decorative Finishing & Resurfacing", page: "service" },
+      { label: "Cost Guides", page: "service#cost" },
+      { label: "Project Gallery", page: "service#gallery" },
+      { label: "FAQ", page: "service#faq" },
+    ],
   },
   {
     label: "Commercial Services",
@@ -350,24 +387,23 @@ const SERVICE_CATEGORIES = [
     iconImg: null as string | null,
     img: imgSvcFoundation as string,
     tagline: "Structural repair for commercial properties.",
-    signs: [] as string[],
-  },
-  {
-    label: "Mold Prevention",
-    icon: Leaf,
-    iconImg: null as string | null,
-    img: imgSvcMold as string,
-    tagline: "Find the moisture source, stop mold at the root.",
-    signs: ["Musty odor", "Dark spots on walls", "Indoor allergies", "Peeling paint", "Ceiling stains"],
+    links: [
+      { label: "Overview", page: "service" },
+      { label: "Structural Repair", page: "service" },
+      { label: "Concrete Repair", page: "service" },
+      { label: "Waterproofing", page: "service" },
+      { label: "Commercial Project Gallery", page: "service#gallery" },
+      { label: "Request Bid", page: "contact" },
+    ],
   },
 ];
 
 // ─── Mega Menu ─────────────────────────────────────────────────────────────────
 // Image-forward cards, not a text list — Jonathan: "our consumer doesn't wanna
-// read, they wanna see." Only the 5 protagonist services get a card; problem
-// signs stay hidden until the card itself is hovered (second level, optional),
-// so the menu doesn't overwhelm on open.
-const MEGA_MENU_SERVICES = SERVICE_CATEGORIES.slice(0, 5);
+// read, they wanna see." The 5 protagonist services each get a card; their
+// sub-pages stay hidden until the card itself is hovered (second level), so the
+// menu doesn't overwhelm on open but still answers "where can this take me?".
+const MEGA_MENU_SERVICES = SERVICE_CATEGORIES;
 
 function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
@@ -411,9 +447,8 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
                 <img src={c.img} alt={c.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,20,.15) 0%, rgba(10,11,20,.9) 100%)" }} />
 
-                {/* Default state: icon + label, icon as a white overlay silhouette.
-                    Stays visible on hover when there's no signs panel to replace it (Commercial). */}
-                <div className={`absolute inset-x-0 bottom-0 p-4 flex items-center gap-2.5 transition-opacity duration-200 ${c.signs.length > 0 ? "group-hover:opacity-0" : ""}`}>
+                {/* Default state: icon + label, icon as a white overlay silhouette. */}
+                <div className="absolute inset-x-0 bottom-0 p-4 flex items-center gap-2.5 transition-opacity duration-200 group-hover:opacity-0">
                   <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34 }}>
                     {c.iconImg
                       ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
@@ -422,36 +457,35 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", lineHeight: 1.2 }}>{c.label}</p>
                 </div>
 
-                {/* Hover reveal: problem signs (Commercial has none — skip the panel) */}
-                {c.signs.length > 0 && (
-                  <div
-                    className="absolute inset-0 p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    style={{ background: "rgba(10,11,20,.94)" }}
-                  >
-                    <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 10 }}>{c.label}</p>
-                    <div className="flex flex-col gap-1 mb-3">
-                      {c.signs.slice(0, 4).map((symptom) => (
-                        <button
-                          key={symptom}
-                          onClick={(e) => { e.stopPropagation(); onNavigate("problem-sign-inner"); }}
-                          className="text-left transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, lineHeight: 1.6, color: "rgba(255,255,255,.65)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-                        >
-                          {symptom}
-                        </button>
-                      ))}
-                    </div>
-                    <span
-                      className="inline-flex items-center gap-1 self-start"
-                      style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}
-                    >
-                      View all
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
+                {/* Hover reveal: this service's own pages, per Rosie's header spec */}
+                <div
+                  className="absolute inset-0 p-4 flex flex-col opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  style={{ background: "rgba(10,11,20,.95)" }}
+                >
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 10 }}>{c.label}</p>
+                  <div className="flex flex-col gap-0.5">
+                    {c.links.map((link) => (
+                      <button
+                        key={link.label}
+                        onClick={(e) => { e.stopPropagation(); onNavigate(link.page); }}
+                        className="text-left py-[3px] transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, lineHeight: 1.45, color: "rgba(255,255,255,.68)", background: "none", border: "none", cursor: "pointer", padding: "3px 0" }}
+                      >
+                        {link.label}
+                      </button>
+                    ))}
                   </div>
-                )}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onNavigate("service"); }}
+                    className="group/all inline-flex items-center gap-1 self-start mt-auto pt-3"
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                  >
+                    View {c.label}
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover/all:translate-x-0.5">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -780,13 +814,13 @@ export default function SharedNavBar({
                               </span>
                             </div>
                             <div className="pl-[50px] flex flex-col gap-2">
-                              {cat.signs.slice(0, 5).map((symptom) => (
+                              {cat.links.map((link) => (
                                 <button
-                                  key={symptom}
-                                  onClick={() => handleNavigate("problem-sign-inner")}
+                                  key={link.label}
+                                  onClick={() => handleNavigate(link.page)}
                                   className="text-left"
                                   style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", background: "none", border: "none", cursor: "pointer" }}>
-                                  {symptom}
+                                  {link.label}
                                 </button>
                               ))}
                               <button

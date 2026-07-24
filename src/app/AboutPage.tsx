@@ -313,7 +313,9 @@ function TeamMemberModal({ member, onClose }: { member: TeamMember; onClose: () 
 // ─── 1. HERO ──────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden py-24 lg:py-36" style={{ background: DARK }}>
+    // Compact hero: content below has to be reachable without scrolling on a
+    // standard laptop, not just on a large desktop.
+    <section className="relative overflow-hidden py-10 lg:py-14" style={{ background: DARK }}>
       {/* Subtle grid texture */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px)", backgroundSize: "80px 80px" }} />
