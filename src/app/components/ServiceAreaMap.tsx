@@ -58,7 +58,11 @@ export function ServiceAreaMap({
 
         <FlyTo abbr={activeState} cityPos={cityPos} />
 
-        {STATES.map((s) => {
+        {/* State outlines only make sense at state-level zoom — their coarse
+            vertex count turns into giant blocky arcs once we fly into a city,
+            so we skip rendering them entirely in city view instead of just
+            fading them. */}
+        {!inCityView && STATES.map((s) => {
           const isActive = s.abbr === activeState;
           return (
             <Polygon
@@ -69,7 +73,7 @@ export function ServiceAreaMap({
                 color: isActive ? SAND : "rgba(255,255,255,.35)",
                 weight: isActive ? 3 : 1.5,
                 fillColor: isActive ? B : "#ffffff",
-                fillOpacity: isActive ? (inCityView ? 0.12 : 0.35) : 0.07,
+                fillOpacity: isActive ? 0.35 : 0.07,
               }}
             >
               <Tooltip sticky>{s.name}</Tooltip>
