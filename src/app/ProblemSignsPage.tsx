@@ -185,14 +185,16 @@ function HeroSection() {
   };
 
   return (
-    <section className="relative w-full overflow-hidden">
-      <ImageWithFallback
-        src="https://images.unsplash.com/photo-1541205646242-30258c7485b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
-        alt="Problem Signs"
-        className="absolute inset-0 w-full h-full object-cover"
+    <section className="relative w-full overflow-hidden" style={{ background: DARK }}>
+      {/* No stock photo behind the copy — a photo-over-text hero was the exact
+          complaint ("I see a pretty sunset, I don't know where I am"). Each
+          category tile below carries its own real photo instead, at full
+          contrast against a solid card. */}
+      <BlueprintGrid opacity={0.05} />
+      <div
+        className="absolute pointer-events-none"
+        style={{ top: -120, right: -120, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(26,82,168,.25) 0%, transparent 70%)" }}
       />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.88) 0%,rgba(10,11,20,0.60) 55%,rgba(10,11,20,0.35) 100%)" }} />
-      <BlueprintGrid opacity={0.06} />
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-12 pb-14 lg:pt-16 lg:pb-16">
         <motion.p
           initial={{ opacity: 0, y: 16 }}
@@ -228,31 +230,57 @@ function HeroSection() {
           Pick what you're seeing — we'll show you exactly what it means and how to fix it.
         </motion.p>
 
-        {/* Actionable above the fold: tap a category, jump straight to it. No scroll required to know what to do. */}
+        {/* Actionable above the fold: tap a category, jump straight to it. No scroll required to know what to do.
+            Each tile carries its own real photo — high-contrast solid card body underneath, not text-over-photo. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-3"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4"
         >
-          {CATEGORIES.map((cat) => (
+          {CATEGORIES.map((cat, i) => (
             <a
               key={cat.id}
               href={`#ps-${cat.id}`}
               onClick={jumpTo(cat.id)}
-              className="group relative flex flex-col gap-3 px-5 py-4 transition-colors duration-200"
-              style={{ background: "rgba(255,255,255,.06)", border: "1.5px solid rgba(255,255,255,.16)" }}
+              className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1"
+              style={{ background: CHAR, border: "1.5px solid rgba(255,255,255,.1)" }}
             >
-              <CornerMarks color="rgba(196,171,108,.5)" size={9} />
-              <div className="flex items-center justify-center w-10 h-10 shrink-0" style={{ background: "rgba(196,171,108,.12)", border: "1.5px dashed rgba(196,171,108,.5)" }}>
-                {cat.icon}
+              <CornerMarks color="rgba(196,171,108,.55)" size={9} />
+
+              {/* Photo block — real, high-contrast, no text laid over it */}
+              <div className="relative w-full overflow-hidden" style={{ height: 96 }}>
+                <ImageWithFallback
+                  src={cat.img}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(30,34,53,.95) 0%, rgba(30,34,53,.15) 100%)" }} />
+                <span
+                  className="absolute top-2 left-2"
+                  style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND, letterSpacing: 1.5 }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div
+                  className="absolute bottom-2 left-2 flex items-center justify-center w-8 h-8 shrink-0"
+                  style={{ background: "rgba(10,11,20,.85)", border: "1.5px solid rgba(196,171,108,.5)" }}
+                >
+                  <span className="flex items-center justify-center scale-75" style={{ filter: "brightness(0) invert(1)" }}>
+                    {cat.icon}
+                  </span>
+                </div>
               </div>
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", lineHeight: 1.2 }}>
-                {cat.title}
-              </span>
-              <span className="flex items-center gap-1.5 transition-transform duration-200 group-hover:translate-x-1" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}>
-                See signs <ArrowRight size={11} />
-              </span>
+
+              {/* Solid card body — full contrast, no photo behind text */}
+              <div className="flex flex-col gap-2 px-4 pt-3 pb-4">
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", lineHeight: 1.2 }}>
+                  {cat.title}
+                </span>
+                <span className="flex items-center gap-1.5 transition-transform duration-200 group-hover:translate-x-1" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}>
+                  See signs <ArrowRight size={11} />
+                </span>
+              </div>
             </a>
           ))}
         </motion.div>
