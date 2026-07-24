@@ -32,3 +32,50 @@
 .leaflet-tooltip::before { display: none; }
 /* Leaflet already gives interactive paths a pointer cursor; just soften hover. */
 .leaflet-interactive:hover { opacity: .8; }
+
+/* ─── Site scrollbar — brand dark track, sand thumb ──────────────────────────
+   Firefox uses `scrollbar-color`/`scrollbar-width`; everything WebKit-based
+   (Chrome, Safari, Edge) uses the ::-webkit-scrollbar pseudo-elements. */
+html {
+  scrollbar-color: #C4AB6C rgba(255, 255, 255, 0.06);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0B14;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #C4AB6C 0%, #a68f56 100%);
+  border-radius: 999px;
+  border: 3px solid #0A0B14;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #d6bd7d 0%, #C4AB6C 100%);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner {
+  background: #0A0B14;
+}
+
+/* Any inner scroll container that should read as "secondary" (modals, lists) —
+   thinner, no border, so it doesn't compete with the main page scrollbar. */
+.rg-scroll-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.rg-scroll-thin::-webkit-scrollbar-thumb {
+  border: none;
+  border-radius: 999px;
+  background: rgba(196, 171, 108, 0.5);
+}
+.rg-scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(196, 171, 108, 0.75);
+}
+.rg-scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}

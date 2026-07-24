@@ -274,7 +274,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col overflow-y-auto"
+            className="flex flex-col overflow-y-auto rg-scroll-thin"
             style={{ background: DARK, maxHeight: 520 }}
           >
             {activeCity ? (
@@ -429,7 +429,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
             </span>
           </div>
 
-          <div ref={countyListRef} className="overflow-y-auto" style={{ maxHeight: 420, border: "1px solid rgba(255,255,255,.07)", background: CHAR }}>
+          <div ref={countyListRef} className="overflow-y-auto rg-scroll-thin" style={{ maxHeight: 420, border: "1px solid rgba(255,255,255,.07)", background: CHAR }}>
             {counties.map((county) => {
               const key = `${county.state}-${county.name}`;
               const isOpen = openCounty === key;

@@ -79,7 +79,7 @@ export function LocalContentModal({ item, onClose }: { item: ContentItem; onClos
   );
 
   const Body = (
-    <div className="flex flex-col flex-1 px-7 pb-7 pt-6 overflow-y-auto">
+    <div className="flex flex-col flex-1 px-7 pb-7 pt-6 overflow-y-auto rg-scroll-thin">
       <div className="flex items-center gap-2 mb-4">
         <MapPin size={12} color="rgba(255,255,255,.35)" />
         <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)" }}>
@@ -162,7 +162,7 @@ export function LocalContentModal({ item, onClose }: { item: ContentItem; onClos
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-        className={`relative w-full overflow-hidden ${stacked ? "max-w-[880px] max-h-[92vh] overflow-y-auto" : "max-w-[940px] flex flex-col lg:flex-row"}`}
+        className={`relative w-full overflow-hidden ${stacked ? "max-w-[880px] max-h-[92vh] overflow-y-auto rg-scroll-thin" : "max-w-[940px] flex flex-col lg:flex-row"}`}
         style={{ background: CHAR, ...(stacked ? {} : { height: "min(85vh, 560px)" }) }}
         onClick={(e) => e.stopPropagation()}
       >

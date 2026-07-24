@@ -762,7 +762,7 @@ function CaseStudyModal({ card, onOpenChange }: { card: CaseCard | null; onOpenC
           style={{ background: "rgba(10,11,20,.78)" }}
         />
         <DialogPrimitive.Content
-          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,980px)] max-h-[92vh] overflow-y-auto"
+          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,980px)] max-h-[92vh] overflow-y-auto rg-scroll-thin"
           style={{ background: "#fff" }}
           aria-describedby={undefined}
         >
@@ -1117,7 +1117,7 @@ function AwardModal({ award, onClose }: { award: Award | null; onClose: () => vo
         </div>
 
         {/* Right — award content */}
-        <div className="flex-1 flex flex-col overflow-y-auto" style={{ borderLeft: "1px solid rgba(255,255,255,.07)" }}>
+        <div className="flex-1 flex flex-col overflow-y-auto rg-scroll-thin" style={{ borderLeft: "1px solid rgba(255,255,255,.07)" }}>
           <div className="flex justify-end px-7 pt-6 pb-3 shrink-0">
             <button onClick={onClose} className="w-8 h-8 flex items-center justify-center hover:bg-white/10 transition-colors" style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
               <X size={14} color="rgba(255,255,255,.7)" />

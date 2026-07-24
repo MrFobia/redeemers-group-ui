@@ -118,7 +118,7 @@ function StoryModal({ story, onClose, onPrev, onNext }: {
         </div>
 
         {/* Right — story content */}
-        <div className="flex-1 flex flex-col overflow-y-auto" style={{ borderLeft: "1px solid rgba(255,255,255,.07)" }}>
+        <div className="flex-1 flex flex-col overflow-y-auto rg-scroll-thin" style={{ borderLeft: "1px solid rgba(255,255,255,.07)" }}>
           {/* Close */}
           <div className="flex justify-end px-7 pt-6 pb-3 shrink-0">
             <button onClick={onClose} className="w-8 h-8 flex items-center justify-center hover:bg-white/10 transition-colors" style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
