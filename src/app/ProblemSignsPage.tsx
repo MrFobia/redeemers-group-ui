@@ -16,6 +16,45 @@ const SAND = "#C4AB6C";
 const CREAM = "#F7F5EF";
 const MUTED = "#6B6E85";
 
+// ─── Blueprint corner marks ───────────────────────────────────────────────────
+// Camera-viewfinder-style corner brackets used across the "Blueprint industrial"
+// system to make cards read as technical/structural rather than generic SaaS.
+function CornerMarks({ color = SAND, size = 14 }: { color?: string; size?: number }) {
+  const arm = size;
+  const stroke = 1.5;
+  const corners = [
+    { top: -1, left: -1, borderTop: stroke, borderLeft: stroke },
+    { top: -1, right: -1, borderTop: stroke, borderRight: stroke },
+    { bottom: -1, left: -1, borderBottom: stroke, borderLeft: stroke },
+    { bottom: -1, right: -1, borderBottom: stroke, borderRight: stroke },
+  ];
+  return (
+    <>
+      {corners.map((c, i) => (
+        <span
+          key={i}
+          className="absolute pointer-events-none"
+          style={{ width: arm, height: arm, borderColor: color, ...c }}
+        />
+      ))}
+    </>
+  );
+}
+
+// Subtle blueprint grid — faint crosshatch used behind hero/section imagery.
+function BlueprintGrid({ opacity = 0.05, color = "255,255,255" }: { opacity?: number; color?: string }) {
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        opacity,
+        backgroundImage: `linear-gradient(rgba(${color},1) 1px, transparent 1px), linear-gradient(90deg, rgba(${color},1) 1px, transparent 1px)`,
+        backgroundSize: "40px 40px",
+      }}
+    />
+  );
+}
+
 // ─── Scroll-reveal wrapper ────────────────────────────────────────────────────
 function Reveal({
   children,
@@ -51,6 +90,7 @@ const CATEGORIES = [
     filter: "Crawl Space",
     title: "Crawl Space",
     page: "service",
+    img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -71,6 +111,7 @@ const CATEGORIES = [
     filter: "Basement",
     title: "Basement & Waterproofing",
     page: "service",
+    img: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -90,6 +131,7 @@ const CATEGORIES = [
     filter: "Foundation",
     title: "Foundation & Structural",
     page: "service",
+    img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <rect x="2" y="19" width="20" height="2" rx="1" stroke={B} strokeWidth="2" />
@@ -110,6 +152,7 @@ const CATEGORIES = [
     filter: "Concrete",
     title: "Concrete & Leveling",
     page: "service",
+    img: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <path d="M3 12h18M3 6h18M3 18h18" stroke={B} strokeWidth="2" strokeLinecap="round" />
@@ -130,6 +173,7 @@ const CATEGORIES = [
     filter: "All",
     title: "Mold & Air Quality",
     page: "service",
+    img: "https://images.unsplash.com/photo-1585421514738-01798e348b17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <path d="M17.7 7.7a7.5 7.5 0 1 1-10.5 10.7" stroke={B} strokeWidth="2" strokeLinecap="round" />
@@ -150,6 +194,7 @@ const CATEGORIES = [
     filter: "Commercial",
     title: "Commercial Properties",
     page: "service",
+    img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <rect x="2" y="7" width="20" height="15" rx="1" stroke={B} strokeWidth="2" />
@@ -181,14 +226,7 @@ function HeroSection() {
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.88) 0%,rgba(10,11,20,0.60) 55%,rgba(10,11,20,0.35) 100%)" }} />
-      {/* Grain overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-          backgroundSize: "256px",
-        }}
-      />
+      <BlueprintGrid opacity={0.06} />
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-32">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -243,23 +281,55 @@ function HeroSection() {
 }
 
 // ─── Category Card ────────────────────────────────────────────────────────────
-function CategoryCard({ cat, delay = 0, onSignClick, onNavigate }: { cat: typeof CATEGORIES[0]; delay?: number; onSignClick?: () => void; onNavigate?: (p: string) => void }) {
+function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat: typeof CATEGORIES[0]; index: number; delay?: number; onSignClick?: () => void; onNavigate?: (p: string) => void }) {
   const [hovered, setHovered] = useState<string | null>(null);
+  const [cardHover, setCardHover] = useState(false);
+  const num = String(index + 1).padStart(2, "0");
 
   return (
     <Reveal delay={delay}>
       <div
-        className="flex flex-col h-full"
-        style={{ background: "#fff", border: "1px solid rgba(0,0,0,.09)" }}
+        className="group/card relative flex flex-col h-full transition-transform duration-300"
+        style={{ background: "#fff", border: `1.5px solid ${cardHover ? B : "rgba(11,28,74,.14)"}` }}
+        onMouseEnter={() => setCardHover(true)}
+        onMouseLeave={() => setCardHover(false)}
       >
-        {/* Card Header */}
+        <CornerMarks color={cardHover ? SAND : "rgba(11,28,74,.3)"} />
+
+        {/* Diagonal sand accent stripe */}
         <div
-          className="flex items-center gap-4 px-8 py-6"
-          style={{ borderBottom: "1px solid rgba(0,0,0,.06)" }}
+          className="absolute top-0 right-0 overflow-hidden pointer-events-none"
+          style={{ width: 64, height: 64 }}
         >
           <div
-            className="flex items-center justify-center w-12 h-12 shrink-0"
-            style={{ background: "rgba(26,82,168,.07)", border: "1px solid rgba(26,82,168,.14)" }}
+            className="absolute transition-colors duration-300"
+            style={{
+              top: 10, right: -34, width: 96, height: 14,
+              background: cardHover ? SAND : "rgba(11,28,74,.1)",
+              transform: "rotate(45deg)",
+            }}
+          />
+        </div>
+
+        {/* Card Header */}
+        <div
+          className="relative flex items-center gap-4 px-7 pt-7 pb-5"
+          style={{ borderBottom: "1px dashed rgba(11,28,74,.16)" }}
+        >
+          <span
+            style={{
+              fontFamily: "'Articulat CF',sans-serif",
+              fontWeight: 800,
+              fontSize: 12,
+              color: SAND,
+              letterSpacing: 2,
+            }}
+          >
+            {num}
+          </span>
+          <div
+            className="flex items-center justify-center w-12 h-12 shrink-0 transition-colors duration-300"
+            style={{ background: "rgba(26,82,168,.06)", border: `1.5px dashed ${cardHover ? B : "rgba(26,82,168,.3)"}` }}
           >
             {cat.icon}
           </div>
@@ -267,10 +337,11 @@ function CategoryCard({ cat, delay = 0, onSignClick, onNavigate }: { cat: typeof
             style={{
               fontFamily: "'Articulat CF',sans-serif",
               fontWeight: 800,
-              fontSize: 26,
+              fontSize: 23,
               color: CHAR,
               lineHeight: 1.1,
               letterSpacing: "-0.5px",
+              textTransform: "uppercase",
             }}
           >
             {cat.title}
@@ -278,30 +349,36 @@ function CategoryCard({ cat, delay = 0, onSignClick, onNavigate }: { cat: typeof
         </div>
 
         {/* Symptoms list */}
-        <div className="flex flex-col px-6 py-5 gap-2 flex-1">
-          {cat.symptoms.map((symptom) => (
+        <div className="relative flex flex-col px-7 py-5 gap-0.5 flex-1">
+          {cat.symptoms.map((symptom, si) => (
             <button
               key={symptom}
               onClick={onSignClick}
-              className="group flex items-center justify-between w-full px-4 py-3 text-left transition-all duration-200"
+              className="group flex items-center justify-between w-full py-2.5 text-left transition-all duration-200"
               style={{
-                background: hovered === symptom ? `rgba(26,82,168,.07)` : "rgba(0,0,0,.025)",
-                borderRadius: 4,
-                borderLeft: hovered === symptom ? `3px solid ${B}` : "3px solid transparent",
+                borderBottom: si < cat.symptoms.length - 1 ? "1px dashed rgba(11,28,74,.1)" : "none",
               }}
               onMouseEnter={() => setHovered(symptom)}
               onMouseLeave={() => setHovered(null)}
             >
-              <span
-                style={{
-                  fontFamily: "'Inter',sans-serif",
-                  fontSize: 14,
-                  color: hovered === symptom ? CHAR : "#444",
-                  fontWeight: hovered === symptom ? 500 : 400,
-                  lineHeight: 1.5,
-                }}
-              >
-                {symptom}
+              <span className="flex items-center gap-2.5">
+                <span
+                  className="transition-colors duration-200"
+                  style={{ fontSize: 11, color: hovered === symptom ? SAND : "rgba(11,28,74,.3)" }}
+                >
+                  ▸
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'Inter',sans-serif",
+                    fontSize: 14,
+                    color: hovered === symptom ? CHAR : "#444",
+                    fontWeight: hovered === symptom ? 500 : 400,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {symptom}
+                </span>
               </span>
               <ChevronRight
                 size={15}
@@ -312,17 +389,30 @@ function CategoryCard({ cat, delay = 0, onSignClick, onNavigate }: { cat: typeof
           ))}
         </div>
 
-        {/* Card Footer CTA */}
-        <div className="px-8 py-5" style={{ borderTop: "1px solid rgba(0,0,0,.06)" }}>
-          <button
-            onClick={() => onNavigate ? onNavigate(cat.page) : onSignClick?.()}
-            className="group inline-flex items-center gap-2 transition-opacity hover:opacity-80"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}
-          >
-            See all {cat.title.split(" ")[0]} solutions
-            <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-          </button>
-        </div>
+        {/* Photo-strip footer CTA */}
+        <button
+          onClick={() => onNavigate ? onNavigate(cat.page) : onSignClick?.()}
+          className="group relative w-full overflow-hidden text-left"
+          style={{ height: 84, borderTop: `1.5px solid ${cardHover ? B : "rgba(11,28,74,.14)"}` }}
+        >
+          <ImageWithFallback
+            src={cat.img}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0" style={{ background: cardHover ? "rgba(11,28,74,.72)" : "rgba(10,11,20,.6)" }} />
+          <div className="relative h-full flex items-center justify-between px-7">
+            <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>
+              See all {cat.title.split(" ")[0]} solutions
+            </span>
+            <span
+              className="flex items-center justify-center w-8 h-8 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+              style={{ background: SAND }}
+            >
+              <ArrowRight size={14} color={NAVY} />
+            </span>
+          </div>
+        </button>
       </div>
     </Reveal>
   );
@@ -366,32 +456,37 @@ function BrowseSection({ onSignClick, onNavigate }: { onSignClick?: () => void; 
           </p>
         </Reveal>
 
-        {/* Filter Pills */}
+        {/* Filter Tabs */}
         <Reveal delay={0.05} className="flex items-center gap-2 flex-wrap mb-12 justify-center">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
-              className="transition-all duration-200 px-5 py-2"
-              style={{
-                fontFamily: "'Inter',sans-serif",
-                fontWeight: activeFilter === f ? 600 : 400,
-                fontSize: 14,
-                color: activeFilter === f ? "#fff" : CHAR,
-                background: activeFilter === f ? CHAR : "transparent",
-                border: `1.5px solid ${activeFilter === f ? CHAR : "rgba(0,0,0,.18)"}`,
-                letterSpacing: ".2px",
-              }}
-            >
-              {f}
-            </button>
-          ))}
+          {FILTERS.map((f) => {
+            const active = activeFilter === f;
+            return (
+              <button
+                key={f}
+                onClick={() => setActiveFilter(f)}
+                className="relative transition-all duration-200 px-5 py-2.5"
+                style={{
+                  fontFamily: "'Articulat CF',sans-serif",
+                  fontWeight: 700,
+                  fontSize: 12,
+                  letterSpacing: 1.5,
+                  textTransform: "uppercase",
+                  color: active ? "#fff" : CHAR,
+                  background: active ? NAVY : "transparent",
+                  border: `1.5px solid ${active ? NAVY : "rgba(11,28,74,.2)"}`,
+                }}
+              >
+                {active && <CornerMarks color={SAND} size={7} />}
+                {f}
+              </button>
+            );
+          })}
         </Reveal>
 
         {/* Category Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((cat, i) => (
-            <CategoryCard key={cat.id} cat={cat} delay={i * 0.06} onSignClick={onSignClick} onNavigate={onNavigate} />
+            <CategoryCard key={cat.id} cat={cat} index={CATEGORIES.findIndex((c) => c.id === cat.id)} delay={i * 0.06} onSignClick={onSignClick} onNavigate={onNavigate} />
           ))}
         </div>
 
@@ -424,11 +519,11 @@ function DiagnosticBanner() {
           style={{ borderTop: "1px solid rgba(255,255,255,.07)", borderBottom: "1px solid rgba(255,255,255,.07)", divideColor: "rgba(255,255,255,.07)" }}>
           {items.map((item, i) => (
             <Reveal key={item.q} delay={i * 0.08}>
-              <div className="px-8 py-10 flex flex-col gap-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-1 h-1 rounded-full" style={{ background: SAND }} />
-                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff" }}>{item.q}</p>
-                </div>
+              <div className="relative px-8 py-10 flex flex-col gap-3">
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND, letterSpacing: 2 }}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff" }}>{item.q}</p>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>{item.a}</p>
               </div>
             </Reveal>
