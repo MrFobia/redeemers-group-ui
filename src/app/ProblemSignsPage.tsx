@@ -439,34 +439,12 @@ function BrowseSection({ onSignClick, onNavigate }: { onSignClick?: () => void; 
   return (
     <section style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        {/* Section header */}
-        <Reveal className="text-center mb-16">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="h-[1px] w-6" style={{ background: B }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
-              Problem Signs
-            </span>
-            <div className="h-[1px] w-6" style={{ background: B }} />
-          </div>
-          <h2
-            style={{
-              fontFamily: "'Articulat CF',sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(36px,4vw,56px)",
-              color: CHAR,
-              lineHeight: 1.05,
-              letterSpacing: "-1px",
-              marginBottom: 16,
-            }}
-          >
-            Browse by category
-          </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED, maxWidth: 520, margin: "0 auto" }}>
-            Each symptom links directly to the relevant service page
-          </p>
-        </Reveal>
-
-        {/* Filter Tabs */}
+        {/* No repeated "Browse by category" intro here — the hero already
+            states the page's purpose and shows these same 4 categories as
+            actionable tiles. Repeating title+icon+photo again immediately
+            below was flagged as content duplication; this section now goes
+            straight to the filter + the full detail cards (which carry the
+            per-symptom lists the hero tiles don't). */}
         <Reveal delay={0.05} className="flex items-center gap-2 flex-wrap mb-12 justify-center">
           {FILTERS.map((f) => {
             const active = activeFilter === f;
@@ -677,8 +655,16 @@ function Footer({ onBack }: { onBack: () => void }) {
 }
 
 // ─── ProblemSignsPage ─────────────────────────────────────────────────────────
-export default function ProblemSignsPage({ onBack, onSignClick, onNavigate }: { onBack: () => void; onSignClick?: () => void; onNavigate?: (p: string) => void }) {
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+export default function ProblemSignsPage({ onBack, onSignClick, onNavigate, scrollTo: initialSection }: { onBack: () => void; onSignClick?: () => void; onNavigate?: (p: string) => void; scrollTo?: string }) {
+  useEffect(() => {
+    if (initialSection) {
+      const t = setTimeout(() => {
+        document.getElementById(initialSection)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+      return () => clearTimeout(t);
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

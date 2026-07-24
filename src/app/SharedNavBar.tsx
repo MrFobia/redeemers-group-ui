@@ -369,6 +369,74 @@ function OurDifferenceDropdown({ onNavigate }: { onNavigate: (p: string) => void
   );
 }
 
+// ─── Problem Signs Dropdown ───────────────────────────────────────────────────
+// "Problem Signs" had no dropdown at all — a plain nav link with no preview,
+// unlike every other top-level section. Exact 4 categories/order from the
+// approved sitemap — keep in sync with ProblemSignsPage.tsx's CATEGORIES.
+const PROBLEM_SIGNS_CATEGORIES = [
+  { label: "Structural Repair",   id: "structural",    icon: Home,     iconImg: iconFoundation as string },
+  { label: "Crawl Space Repair",  id: "crawl",          icon: Layers,   iconImg: iconCrawlspace as string },
+  { label: "Waterproofing",       id: "waterproofing",  icon: Droplets, iconImg: iconWaterproofing as string },
+  { label: "Concrete",            id: "concrete",       icon: Grid3x3,  iconImg: iconConcrete as string },
+];
+
+function ProblemSignsDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
+  return (
+    <div
+      role="menu"
+      aria-label="Problem Signs"
+      style={{
+        background: "rgba(10,11,20,.98)",
+        backdropFilter: "blur(24px)",
+        borderBottom: "1px solid rgba(255,255,255,.07)",
+        boxShadow: "0 24px 60px rgba(0,0,0,.5)",
+      }}
+    >
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
+        <div className="flex items-center justify-between mb-4">
+          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
+            Problem Signs
+          </p>
+          <button
+            onClick={() => onNavigate("problem-signs")}
+            className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          >
+            All problem signs
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div className="mb-4 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {PROBLEM_SIGNS_CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => onNavigate(`problem-signs#ps-${cat.id}`)}
+                className="group flex items-center gap-3 px-3 py-3 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
+              >
+                <span className="flex items-center justify-center shrink-0" style={{ width: 24, height: 24 }}>
+                  {cat.iconImg
+                    ? <img src={cat.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)", opacity: .8 }} />
+                    : <Icon size={20} color="#fff" strokeWidth={2} style={{ opacity: .8 }} />}
+                </span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.75)", flex: 1 }}>{cat.label}</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
+                  <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Mega Menu data ────────────────────────────────────────────────────────────
 // Symptom labels shortened to 2-4 words per approved symptom-driven sitemap.
 // Icon per category for visual scanning; accent color stays on-brand (SAND/B),
@@ -570,7 +638,8 @@ export default function SharedNavBar({
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [ourDiffOpen, setOurDiffOpen] = useState(false);
-  const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about" | "our-difference">("root");
+  const [signsOpen, setSignsOpen] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about" | "our-difference" | "problem-signs">("root");
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -582,46 +651,49 @@ export default function SharedNavBar({
 
   // Close dropdowns when clicking outside
   useEffect(() => {
-    if (!megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen) return;
+    if (!megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen && !signsOpen) return;
     const handleOutside = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setMegaOpen(false);
         setResourcesOpen(false);
         setAboutOpen(false);
         setOurDiffOpen(false);
+        setSignsOpen(false);
       }
     };
     document.addEventListener("mousedown", handleOutside);
     return () => document.removeEventListener("mousedown", handleOutside);
-  }, [megaOpen, resourcesOpen, aboutOpen, ourDiffOpen]);
+  }, [megaOpen, resourcesOpen, aboutOpen, ourDiffOpen, signsOpen]);
 
   // Escape closes any open dropdown and restores focus to the Services trigger
   useEffect(() => {
-    if (!megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen) return;
+    if (!megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen && !signsOpen) return;
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMegaOpen(false);
         setResourcesOpen(false);
         setAboutOpen(false);
         setOurDiffOpen(false);
+        setSignsOpen(false);
         servicesBtnRef.current?.focus();
       }
     };
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [megaOpen, resourcesOpen, aboutOpen, ourDiffOpen]);
+  }, [megaOpen, resourcesOpen, aboutOpen, ourDiffOpen, signsOpen]);
 
   const handleNavigate = (p: string) => {
     setMegaOpen(false);
     setResourcesOpen(false);
     setAboutOpen(false);
     setOurDiffOpen(false);
+    setSignsOpen(false);
     setMobileOpen(false);
     setMobilePanel("root");
     onNavigate(p);
   };
 
-  const isTransparent = transparent && !scrolled && !megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen && !mobileOpen;
+  const isTransparent = transparent && !scrolled && !megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen && !signsOpen && !mobileOpen;
 
   const links = ["Services", "Problem Signs", "Our Difference", "Resources", "Pricing", "About"];
 
@@ -629,7 +701,7 @@ export default function SharedNavBar({
     <div
       ref={navRef}
       className="relative"
-      onMouseLeave={() => { setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+      onMouseLeave={() => { setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
     >
       <nav
         className="relative z-[300] w-full transition-all duration-300"
@@ -658,8 +730,8 @@ export default function SharedNavBar({
                     ref={servicesBtnRef}
                     aria-haspopup="menu"
                     aria-expanded={megaOpen}
-                    onMouseEnter={() => { setMegaOpen(true); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
-                    onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                    onMouseEnter={() => { setMegaOpen(true); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                    onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -682,8 +754,8 @@ export default function SharedNavBar({
                 return (
                   <button
                     key="Resources"
-                    onMouseEnter={() => { setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
-                    onClick={() => { setResourcesOpen((prev) => !prev); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                    onMouseEnter={() => { setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                    onClick={() => { setResourcesOpen((prev) => !prev); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -702,12 +774,36 @@ export default function SharedNavBar({
                 );
               }
 
+              if (l === "Problem Signs") {
+                return (
+                  <button
+                    key="Problem Signs"
+                    onMouseEnter={() => { setSignsOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                    onClick={() => { setSignsOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                    className="flex items-center gap-1 transition-colors whitespace-nowrap"
+                    style={{
+                      fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
+                      color: signsOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
+                      letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
+                      borderBottom: isActive ? `2px solid ${SAND}` : signsOpen ? `2px solid ${SAND}` : "2px solid transparent",
+                      paddingBottom: 2,
+                    }}
+                  >
+                    Problem Signs
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                      style={{ transform: signsOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                );
+              }
+
               if (l === "Our Difference") {
                 return (
                   <button
                     key="Our Difference"
-                    onMouseEnter={() => { setOurDiffOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); }}
-                    onClick={() => { setOurDiffOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); }}
+                    onMouseEnter={() => { setOurDiffOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
+                    onClick={() => { setOurDiffOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -730,8 +826,8 @@ export default function SharedNavBar({
                 return (
                   <button
                     key="About"
-                    onMouseEnter={() => { setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); }}
-                    onClick={() => { setAboutOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); }}
+                    onMouseEnter={() => { setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                    onClick={() => { setAboutOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -825,8 +921,8 @@ export default function SharedNavBar({
                     <div className="flex flex-col gap-2">
                       {links.map((l) => {
                         const pageKey = NAV_PAGE_MAP[l];
-                        const drillPanel: Record<string, "services" | "resources" | "about" | "our-difference"> = {
-                          "Services": "services", "Resources": "resources", "About": "about", "Our Difference": "our-difference",
+                        const drillPanel: Record<string, "services" | "resources" | "about" | "our-difference" | "problem-signs"> = {
+                          "Services": "services", "Resources": "resources", "About": "about", "Our Difference": "our-difference", "Problem Signs": "problem-signs",
                         };
                         const hasDrill = l in drillPanel;
                         return (
@@ -1001,6 +1097,30 @@ export default function SharedNavBar({
                     </div>
                   </motion.div>
                 )}
+
+                {mobilePanel === "problem-signs" && (
+                  <motion.div
+                    key="problem-signs"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 16 }}
+                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col"
+                  >
+                    <MobileBackHeader title="Problem Signs" onBack={() => setMobilePanel("root")} />
+                    <div className="flex flex-col gap-1">
+                      {PROBLEM_SIGNS_CATEGORIES.map((cat) => (
+                        <button
+                          key={cat.id}
+                          onClick={() => handleNavigate(`problem-signs#ps-${cat.id}`)}
+                          className="w-full py-3 pl-3 text-left"
+                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                          {cat.label}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
               </>
             </div>
           </div>
@@ -1025,6 +1145,13 @@ export default function SharedNavBar({
       {ourDiffOpen && (
         <div className="absolute left-0 w-full z-[200]">
           <OurDifferenceDropdown onNavigate={handleNavigate} />
+        </div>
+      )}
+
+      {/* Problem Signs dropdown */}
+      {signsOpen && (
+        <div className="absolute left-0 w-full z-[200]">
+          <ProblemSignsDropdown onNavigate={handleNavigate} />
         </div>
       )}
 

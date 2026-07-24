@@ -1575,7 +1575,7 @@ export default function App() {
   }
 
   if (page === "problem-signs") {
-    return <ProblemSignsPage key={pageKey} onBack={() => navigate("home")} onSignClick={() => navigate("problem-sign-inner")} onNavigate={navigate} />;
+    return <ProblemSignsPage key={pageKey} onBack={() => navigate("home")} onSignClick={() => navigate("problem-sign-inner")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
   }
 
   if (page === "problem-sign-inner") {
