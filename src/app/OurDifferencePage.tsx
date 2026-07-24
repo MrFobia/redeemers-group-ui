@@ -13,7 +13,8 @@ import imgFloor04 from "../assets/floor-04.jpeg";
 import imgRevAvatar from "../assets/rev-avatar.png";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
-import { StickyAnchorBar } from "./components/StickyAnchorBar";
+import { SectionRail } from "./components/SectionRail";
+import { Breadcrumbs } from "./components/Breadcrumbs";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 const B = "#1A52A8";
@@ -51,40 +52,43 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
 
 
 
+// The 9 sub-sections of "Our Difference" in the approved sitemap, in its order
+// and with its literal wording. Two were missing entirely (Referral program,
+// Love Well Initiative) and the rest were renamed along the way — the client
+// checks these labels against the sitemap, so they must match it exactly.
 const NAV_TABS = [
-  { id: "reviews", label: "Reviews" },
-  { id: "process", label: "Our Process" },
-  { id: "story", label: "Our Story" },
-  { id: "pledge", label: "Our Pledge" },
-  { id: "case-studies", label: "Case Studies" },
-  { id: "news-awards", label: "News & Awards" },
-  { id: "certifications", label: "Certifications" },
+  { id: "reviews", label: "Testimonials" },
+  { id: "process", label: "What to expect" },
+  { id: "story", label: "The Evergreen difference" },
+  { id: "pledge", label: "Our pledge" },
+  { id: "case-studies", label: "Featured projects / case stories" },
+  { id: "news-awards", label: "News & awards" },
+  { id: "referral", label: "Referral program" },
+  { id: "love-well", label: "Love Well Initiative" },
+  { id: "certifications", label: "Affiliations & certifications" },
 ];
 
 // ─── 1. HERO (DARK) ───────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: 560 }}>
+    // Height comes from the content only. The 560px floor plus py-36 used to
+    // leave a 13" laptop looking at a photo and nothing else.
+    <section className="relative w-full overflow-hidden">
       <ImageWithFallback
         src={imgFloor04}
         alt="Our Difference" className="absolute inset-0 w-full h-full object-cover" />
       <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.92) 0%,rgba(10,11,20,0.68) 55%,rgba(10,11,20,0.40) 100%)" }} />
       <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-36">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex items-center gap-2 mb-5">
-          <div className="w-5 h-[2px]" style={{ background: SAND }} />
-          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Difference</span>
-        </motion.div>
-        <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,64px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px", marginBottom: 24, maxWidth: 760 }}>
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-10 lg:py-14">
+        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.4vw,46px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 10, maxWidth: 760 }}>
           Why families choose Redeemers Group
         </motion.h1>
-        <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }}
-          style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.6)", lineHeight: 1.75, maxWidth: 540, marginBottom: 44 }}>
+        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.15 }}
+          style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.65)", lineHeight: 1.6, maxWidth: 540, marginBottom: 20 }}>
           From our first call to your final follow-up, here is what sets us apart.
         </motion.p>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}
+        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.25 }}
           className="flex flex-wrap items-center gap-3">
           <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden px-8 py-4 inline-flex items-center gap-3"
             style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
@@ -1222,6 +1226,110 @@ function AwardsCarousel() {
   );
 }
 
+// ─── Referral program ─────────────────────────────────────────────────────────
+// Sitemap sub-section that had no page section at all.
+// TODO(content): replace the reward amount and the steps with the client's real
+// referral terms from the content matrix.
+function ReferralSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
+  const steps = [
+    { n: "01", title: "Tell us who to call", body: "Send us your neighbor, friend, or family member's name — a phone call or the form is enough." },
+    { n: "02", title: "We inspect for free", body: "They get the same free inspection and the same lifetime-warrantied repair you did." },
+    { n: "03", title: "You both get rewarded", body: "When their job is completed, we send your thank-you reward. No limit on referrals." },
+  ];
+
+  return (
+    <section id="referral" style={{ background: CREAM }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-[2px] w-8" style={{ background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
+              Referral program
+            </span>
+          </div>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.4vw,46px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12, maxWidth: 620 }}>
+            The best compliment is your neighbor's phone number.
+          </h2>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, lineHeight: 1.7, maxWidth: 560 }}>
+            Most of our work comes from homeowners who told someone else about us. We say thank you every time.
+          </p>
+        </Reveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+          {steps.map((s, i) => (
+            <Reveal key={s.n} delay={i * 0.07}>
+              <div className="h-full flex flex-col p-7" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.08)" }}>
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: "rgba(26,82,168,.22)", lineHeight: 1, marginBottom: 14 }}>{s.n}</span>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, marginBottom: 8 }}>{s.title}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.7 }}>{s.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={0.1}>
+          <button
+            onClick={() => onNavigate?.("contact")}
+            className="px-7 py-4 font-semibold text-white transition-opacity hover:opacity-85"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, letterSpacing: ".4px", border: "none", cursor: "pointer" }}
+          >
+            Refer someone now
+          </button>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// ─── Love Well Initiative ─────────────────────────────────────────────────────
+// Sitemap sub-section that had no page section at all. Also linked from the
+// footer, so the anchor id has to stay "love-well".
+// TODO(content): swap the copy and the photo for the client's real Love Well
+// material once it lands in the content matrix.
+function LoveWellSection() {
+  return (
+    <section id="love-well" style={{ background: CHAR }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-[2px] w-8" style={{ background: SAND }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
+                Love Well Initiative
+              </span>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.4vw,46px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
+              Repairing homes is only part of the job.
+            </h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.6)", lineHeight: 1.8, marginBottom: 20 }}>
+              Through the Love Well Initiative we donate repairs, time, and materials to families in the Mid-South who
+              need structural work they can't afford. Every completed job funds part of the next one.
+            </p>
+            <ul className="flex flex-col gap-3" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+              {["Donated repairs for families in need", "Local partnerships across TN, MS, AR & MO", "Funded by every job we complete"].map((line) => (
+                <li key={line} className="flex items-start gap-3">
+                  <span className="shrink-0 mt-2 rounded-full" style={{ width: 5, height: 5, background: SAND }} />
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", lineHeight: 1.6 }}>{line}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="relative overflow-hidden" style={{ aspectRatio: "4 / 3", border: "1px solid rgba(255,255,255,.1)" }}>
+              <ImageWithFallback
+                src="https://images.unsplash.com/photo-1593113630400-ea4288922497?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200"
+                alt="Love Well Initiative"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CertificationsSection() {
   return (
     <section id="certifications" style={{ background: DARK }} className="py-20 lg:py-28">
@@ -1413,20 +1521,22 @@ export default function OurDifferencePage({ onBack, onNavigate }: { onBack: () =
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
-        <StickyAnchorBar tabs={NAV_TABS} active={activeTab} onChange={scrollToSection} />
       </div>
 
-      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: DARK }}>
-        {/* Breadcrumb */}
+      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
+        {/* Breadcrumb — the only local orientation element besides the section rail */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Our Difference</span>
+          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3">
+            <Breadcrumbs
+              items={[{ label: "Home", page: "home" }, { label: "Our Difference" }]}
+              onNavigate={onNavigate ?? (() => onBack())}
+            />
           </div>
         </div>
+
+        {/* 9 sub-sections don't fit a horizontal bar — vertical rail on desktop,
+            one collapsed sticky row below that. */}
+        <SectionRail items={NAV_TABS} active={activeTab} onChange={scrollToSection} top={148} />
 
         {/* DARK → CHAR → DARK → CREAM → DARK → CHAR → CREAM → DARK → CREAM → NAVY */}
         <HeroSection />
@@ -1437,6 +1547,8 @@ export default function OurDifferencePage({ onBack, onNavigate }: { onBack: () =
         <PledgeSection />
         <CaseStudiesSection />
         <ProjectStoriesSection />
+        <ReferralSection onNavigate={onNavigate} />
+        <LoveWellSection />
         <CertificationsSection />
         <CtaSection />
         <Footer onBack={onBack} />

@@ -9,6 +9,7 @@ import { ChevronDown, ChevronRight, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { StickyAnchorBar } from "./components/StickyAnchorBar";
+import { Breadcrumbs } from "./components/Breadcrumbs";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { ProjectGallery } from "./components/ProjectGallery";
@@ -43,8 +44,11 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
 // ─── Breadcrumb + Section Tabs ────────────────────────────────────────────────
+// First tab used to repeat the page name ("Crawl Space Repair"), which put the
+// title three times in the same viewport — anchor bar, breadcrumb and H1 — and
+// read as three stacked menus. The anchor bar names sections, not the page.
 const SERVICE_TABS = [
-  { id: "overview", label: "Crawl Space Repair" },
+  { id: "overview", label: "Overview" },
   { id: "signs", label: "Problem Signs" },
   { id: "cost", label: "Cost Guide" },
   { id: "gallery", label: "Project Gallery" },
@@ -53,12 +57,14 @@ const SERVICE_TABS = [
 
 
 // ─── Hero: Problem Signs Section ──────────────────────────────────────────────
+// Exactly the three Crawl Space Repair problem signs of the approved sitemap,
+// with its literal wording. The list used to carry five invented ones (energy
+// bills, pests, mold smell) — mold smell belongs to Waterproofing in the
+// sitemap, and the other two aren't problem signs there at all.
 const SYMPTOMS = [
-  { id: "s1", q: "My floors are sagging or bouncy", a: "This typically indicates deteriorating floor joists or support beams in the crawl space. Our SmartJack systems can restore structural integrity and eliminate the bounce permanently." },
-  { id: "s2", q: "Moisture or standing water", a: "Excess moisture leads to mold, rot, and pest infestations. We install full encapsulation systems with drainage matting and sump pumps to permanently resolve the moisture source." },
-  { id: "s3", q: "I smell mold or mildew", a: "Musty odors signal active mold growth — often in the crawl space. We remediate existing mold and install vapor barriers to prevent recurrence." },
-  { id: "s4", q: "High energy bills or drafts", a: "An uninsulated or unencapsulated crawl space bleeds energy. Our crawl space insulation and air sealing solutions can reduce bills significantly." },
-  { id: "s5", q: "Pest or insect activity", a: "Damp, open crawl spaces invite termites, rodents, and other pests. Encapsulation removes the environment they need to thrive." },
+  { id: "s1", q: "My floors are sagging, bouncy, or buckling.", a: "This typically indicates deteriorating floor joists or support beams in the crawl space. Our SmartJack systems can restore structural integrity and eliminate the bounce permanently." },
+  { id: "s2", q: "The baseboards have separated from the floor.", a: "When the crawl space supports settle, the floor drops away from the walls and the baseboards pull apart. Stabilising and re-supporting the floor system closes the gap for good." },
+  { id: "s3", q: "My doors won't close properly", a: "Doors that stick or swing open on their own usually mean the floor above the crawl space is no longer level. We lift and re-support the structure so the frames sit square again." },
 ];
 
 function SymptomAccordion({ onNavigate }: { onNavigate?: (p: string) => void }) {
@@ -118,10 +124,12 @@ function SymptomAccordion({ onNavigate }: { onNavigate?: (p: string) => void }) 
 
 function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   return (
+    // No minHeight and tight padding: on a 13" laptop the symptom accordion and
+    // the CTA have to be reachable without scrolling. The old 680px floor pushed
+    // both under the fold on every screen but a large desktop.
     <section
       id="overview"
       className="relative w-full overflow-hidden"
-      style={{ minHeight: 680 }}
     >
       {/* Background image */}
       <img
@@ -136,24 +144,32 @@ function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
       />
 
       {/* Content */}
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-20 lg:py-28">
-        <div style={{ maxWidth: 587 }}>
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-10 lg:py-14">
+        <div style={{ maxWidth: 620 }}>
 
-          {/* Eyebrow */}
-          <div className="flex items-center gap-3 mb-8">
-            <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34 }}>
+          {/* H1 — the page's single title instance, so the visitor knows at a
+              glance that the click landed where they meant it to. */}
+          <div className="flex items-center gap-3 mb-3">
+            <span className="flex items-center justify-center shrink-0" style={{ width: 32, height: 32 }}>
               <img src={iconCrawlspace} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
             </span>
-            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}>
+            <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.4vw,46px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
               Crawl Space Repair
-            </span>
+            </h1>
           </div>
 
-          {/* H1 */}
-          <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(38px,4.5vw,68px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 32 }}>
-            Is your home showing<br />these signs?
-          </h1>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-7">
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>
+              Is your home showing these signs?
+            </p>
+            <button
+              onClick={openInspection}
+              className="shrink-0 px-6 py-3.5 font-semibold text-white transition-opacity hover:opacity-85"
+              style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, letterSpacing: ".4px", border: "none", cursor: "pointer" }}
+            >
+              Schedule Free Inspection
+            </button>
+          </div>
 
           {/* Accordion */}
           <SymptomAccordion onNavigate={onNavigate} />
@@ -161,7 +177,12 @@ function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
           {/* Footer link */}
           <p style={{ marginTop: 20, fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>
             {"Can't find your symptom? "}
-            <a href="#" style={{ color: "#fff", fontWeight: 600 }}>View all problem signs →</a>
+            <button
+              onClick={() => onNavigate?.("problem-signs#crawl-space")}
+              style={{ color: "#fff", fontWeight: 600, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "'Inter',sans-serif", fontSize: 13 }}
+            >
+              View all problem signs →
+            </button>
           </p>
         </div>
       </div>
@@ -770,16 +791,15 @@ export default function ServicePage({ onBack, onNavigate, scrollTo }: { onBack: 
       <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: "#0A0B14" }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <button onClick={() => onNavigate?.("services-landing")}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Services</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Crawl Space Repair</span>
+          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3">
+            <Breadcrumbs
+              items={[
+                { label: "Home", page: "home" },
+                { label: "Services", page: "services-landing" },
+                { label: "Crawl Space Repair" },
+              ]}
+              onNavigate={onNavigate ?? (() => onBack())}
+            />
           </div>
         </div>
         <HeroSection onNavigate={onNavigate} />

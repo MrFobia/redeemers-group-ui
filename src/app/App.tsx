@@ -1550,17 +1550,21 @@ function Footer() {
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
-  const initPage = window.location.hash.replace("#", "") || "home";
+  // The hash carries "page" or "page#anchor" — split both here and in navigate,
+  // otherwise a pasted or reloaded "#problem-signs#waterproofing" is read as one
+  // unknown page name and falls through to the 404.
+  const [initPage, initAnchor] = (window.location.hash.replace("#", "") || "home").split("#");
   const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
-  const [scrollTarget, setScrollTarget] = useState<string | null>(null);
+  const [scrollTarget, setScrollTarget] = useState<string | null>(initAnchor ?? null);
 
   const navigate = (p: string) => {
     const [pageName, anchor] = p.split("#");
     window.scrollTo(0, 0);
-    window.location.hash = pageName === "home" ? "" : pageName;
+    // Keep the anchor in the URL so the deep link stays shareable.
+    window.location.hash = pageName === "home" ? "" : p;
     setPage(pageName as typeof page);
     setScrollTarget(anchor ?? null);
     setPageKey((k) => k + 1);
@@ -1575,7 +1579,9 @@ export default function App() {
   }
 
   if (page === "problem-signs") {
-    return <ProblemSignsPage key={pageKey} onBack={() => navigate("home")} onSignClick={() => navigate("problem-sign-inner")} onNavigate={navigate} />;
+    // "problem-signs#waterproofing" opens the explorer already on that category,
+    // so arriving from a service shows that service's signs.
+    return <ProblemSignsPage key={pageKey} onBack={() => navigate("home")} onSignClick={() => navigate("problem-sign-inner")} onNavigate={navigate} initialCategory={scrollTarget ?? undefined} />;
   }
 
   if (page === "problem-sign-inner") {

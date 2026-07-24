@@ -4,6 +4,7 @@ import { ChevronRight, ArrowRight } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
+import { Breadcrumbs } from "./components/Breadcrumbs";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 
@@ -45,50 +46,17 @@ function Reveal({
 // ─── Top Bar ──────────────────────────────────────────────────────────────────
 
 // ─── Symptom Categories Data ──────────────────────────────────────────────────
+// Exactly the 4 categories of the approved sitemap (Sitemap Redeemers Group —
+// 23 April), with its literal wording. Mold and Commercial are NOT problem-sign
+// categories there: mold lives inside Waterproofing ("Mold & mildew smell") and
+// Commercial is a service, not a symptom. Do not add a 5th category without
+// updating the sitemap first.
+// TODO(content): replace the placeholder `img` of each symptom with the client's
+// own photo of that specific symptom.
 const CATEGORIES = [
   {
-    id: "crawl",
-    filter: "Crawl Space",
-    title: "Crawl Space",
-    page: "service",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M9 22V12h6v10" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    symptoms: [
-      "My floors are sagging or bouncy",
-      "I smell mold or mildew",
-      "High humidity or condensation",
-      "Pest or insect activity below",
-      "Moisture or standing water",
-      "Soft or weak floors underfoot",
-    ],
-  },
-  {
-    id: "basement",
-    filter: "Basement",
-    title: "Basement & Waterproofing",
-    page: "service",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    symptoms: [
-      "Water in my basement",
-      "Damp or wet walls",
-      "Puddles after rain",
-      "Efflorescence (white stains)",
-      "Condensation on pipes",
-      "Musty odor in basement",
-    ],
-  },
-  {
-    id: "foundation",
-    filter: "Foundation",
-    title: "Foundation & Structural",
+    id: "structural",
+    title: "Structural Repair",
     page: "service",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
@@ -97,18 +65,52 @@ const CATEGORIES = [
       </svg>
     ),
     symptoms: [
-      "Cracks in walls or floors",
-      "Doors that stick or won't close",
-      "Gaps between walls and ceilings",
-      "Bowing or leaning walls",
-      "Uneven or sloping floors",
-      "Visible pier or beam rot",
+      { label: "Uneven, sloping, or bouncy floors", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Cracks in exterior or interior walls", img: "https://images.unsplash.com/photo-1517581177682-a085bb7ffb15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Bowing or leaning walls", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Doors or windows that stick", img: "https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Separating or tilting chimney", img: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Cracks above garage door", img: "https://images.unsplash.com/photo-1558036117-15d82a90b9b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Sinking Slab", img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+    ],
+  },
+  {
+    id: "crawl-space",
+    title: "Crawl Space Repair",
+    page: "service",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9 22V12h6v10" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    symptoms: [
+      { label: "My floors are sagging, bouncy, or buckling.", img: "https://images.unsplash.com/photo-1503174971373-b1f69850bded?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "The baseboards have separated from the floor.", img: "https://images.unsplash.com/photo-1595514535415-dae8580c416c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "My doors won't close properly", img: "https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+    ],
+  },
+  {
+    id: "waterproofing",
+    title: "Waterproofing",
+    page: "service",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    symptoms: [
+      { label: "Water getting in to basement or other.", img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Water pooling around house.", img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Damp walls or floor", img: "https://images.unsplash.com/photo-1523575166462-af02fa789cbd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Mold & mildew smell", img: "https://images.unsplash.com/photo-1595514535415-dae8580c416c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "White residue on basement walls", img: "https://images.unsplash.com/photo-1517581177682-a085bb7ffb15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Standing water in crawlspace", img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
     ],
   },
   {
     id: "concrete",
-    filter: "Concrete",
-    title: "Concrete & Leveling",
+    title: "Concrete",
     page: "service",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
@@ -117,293 +119,188 @@ const CATEGORIES = [
       </svg>
     ),
     symptoms: [
-      "Uneven driveway or sidewalk",
-      "Sinking or sunken slabs",
-      "Trip hazards on walkways",
-      "Pool deck settling",
-      "Cracked garage floor",
-      "Steps pulling away from house",
-    ],
-  },
-  {
-    id: "mold",
-    filter: "All",
-    title: "Mold & Air Quality",
-    page: "service",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M17.7 7.7a7.5 7.5 0 1 1-10.5 10.7" stroke={B} strokeWidth="2" strokeLinecap="round" />
-        <path d="M9 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3" stroke={B} strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
-    symptoms: [
-      "Musty or earthy smell indoors",
-      "Allergy or asthma flare-ups",
-      "Visible mold growth on walls",
-      "Dark spots on walls or ceiling",
-      "Poor indoor air quality",
-      "Condensation on windows",
-    ],
-  },
-  {
-    id: "commercial",
-    filter: "Commercial",
-    title: "Commercial Properties",
-    page: "service",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <rect x="2" y="7" width="20" height="15" rx="1" stroke={B} strokeWidth="2" />
-        <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke={B} strokeWidth="2" />
-        <line x1="12" y1="12" x2="12" y2="16" stroke={B} strokeWidth="2" strokeLinecap="round" />
-        <line x1="10" y1="14" x2="14" y2="14" stroke={B} strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
-    symptoms: [
-      "Structural wall cracks in building",
-      "Floor settling in commercial space",
-      "Water intrusion in warehouse",
-      "Foundation movement or shifting",
-      "Concrete damage on property",
-      "Building envelope issues",
+      { label: "Uneven concrete slabs", img: "https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Sinking driveway, walkway, patio", img: "https://images.unsplash.com/photo-1558036117-15d82a90b9b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Cracked or sinking pool deck", img: "https://images.unsplash.com/photo-1572331165267-854da2b10ccc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Sinking slab foundation", img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Void under slab", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
+      { label: "Ugly concrete", img: "https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200" },
     ],
   },
 ];
 
-const FILTERS = ["All", "Crawl Space", "Basement", "Foundation", "Concrete", "Commercial"];
+type Category = typeof CATEGORIES[number];
 
 // ─── Hero Section ─────────────────────────────────────────────────────────────
+// Deliberately short: on a 13" laptop the symptom explorer below has to be
+// visible without scrolling. The stats row that used to live here was removed —
+// it repeats the homepage and was pushing the actionable content under the fold.
 function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: 480 }}>
+    <section className="relative w-full overflow-hidden">
       <ImageWithFallback
         src="https://images.unsplash.com/photo-1541205646242-30258c7485b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
         alt="Problem Signs"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.88) 0%,rgba(10,11,20,0.60) 55%,rgba(10,11,20,0.35) 100%)" }} />
-      {/* Grain overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-          backgroundSize: "256px",
-        }}
-      />
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-32">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 20 }}
-        >
-          Diagnosis Guide
-        </motion.p>
+      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.90) 0%,rgba(10,11,20,0.68) 55%,rgba(10,11,20,0.45) 100%)" }} />
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-8 pb-10 lg:pt-10 lg:pb-12">
         <motion.h1
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           style={{
             fontFamily: "'Articulat CF',sans-serif",
             fontWeight: 800,
-            fontSize: "clamp(36px,5vw,64px)",
+            fontSize: "clamp(30px,3.4vw,46px)",
             color: "#fff",
-            lineHeight: 1.0,
+            lineHeight: 1.05,
             letterSpacing: "-1px",
-            marginBottom: 24,
+            margin: "10px 0 12px",
             maxWidth: 720,
           }}
         >
-          What's going on<br />with your home?
+          What's going on with your home?
         </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.45 }}
-          style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.65)", lineHeight: 1.7, maxWidth: 520, marginBottom: 36 }}
-        >
-          Find your symptom below. We'll tell you exactly what it means — and how to fix it permanently.
-        </motion.p>
-        {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.65 }}
-          className="flex items-center gap-8 flex-wrap"
-        >
-          {[["12,000+", "Homes repaired"], ["18+", "Years experience"], ["4.9★", "Google rating"]].map(([val, label]) => (
-            <div key={label} className="flex items-center gap-3">
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: SAND }}>{val}</span>
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)", letterSpacing: 1, textTransform: "uppercase" }}>{label}</span>
-            </div>
-          ))}
-        </motion.div>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.7)", lineHeight: 1.6, maxWidth: 460 }}>
+            Pick the sign you're seeing. We'll show you what it means and how we fix it.
+          </p>
+          <button
+            onClick={openInspection}
+            className="shrink-0 px-6 py-3.5 font-semibold text-white transition-opacity hover:opacity-85"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, letterSpacing: ".4px", border: "none", cursor: "pointer" }}
+          >
+            Schedule Free Inspection
+          </button>
+        </div>
       </div>
     </section>
   );
 }
 
-// ─── Category Card ────────────────────────────────────────────────────────────
-function CategoryCard({ cat, delay = 0, onSignClick, onNavigate }: { cat: typeof CATEGORIES[0]; delay?: number; onSignClick?: () => void; onNavigate?: (p: string) => void }) {
-  const [hovered, setHovered] = useState<string | null>(null);
+// ─── Symptom Explorer ─────────────────────────────────────────────────────────
+// Option A of the client's two mockups, the one they leaned to: the symptom list
+// on the left, one representative photo on the right that swaps as you hover a
+// symptom ("I want to see the picture of the crack in the wall that looks like
+// the crack in the wall I have"). Scoped to one category at a time so arriving
+// from Services > Waterproofing shows waterproofing signs and nothing else.
+function SymptomExplorer({
+  initialCategory,
+  onSignClick,
+  onNavigate,
+}: {
+  initialCategory?: string;
+  onSignClick?: () => void;
+  onNavigate?: (p: string) => void;
+}) {
+  const startIndex = Math.max(0, CATEGORIES.findIndex((c) => c.id === initialCategory));
+  const [activeCat, setActiveCat] = useState<Category>(CATEGORIES[startIndex]);
+  const [activeSymptom, setActiveSymptom] = useState(CATEGORIES[startIndex].symptoms[0]);
+
+  const selectCategory = (cat: Category) => {
+    setActiveCat(cat);
+    setActiveSymptom(cat.symptoms[0]);
+  };
 
   return (
-    <Reveal delay={delay}>
-      <div
-        className="flex flex-col h-full"
-        style={{ background: "#fff", border: "1px solid rgba(0,0,0,.09)" }}
-      >
-        {/* Card Header */}
-        <div
-          className="flex items-center gap-4 px-8 py-6"
-          style={{ borderBottom: "1px solid rgba(0,0,0,.06)" }}
-        >
-          <div
-            className="flex items-center justify-center w-12 h-12 shrink-0"
-            style={{ background: "rgba(26,82,168,.07)", border: "1px solid rgba(26,82,168,.14)" }}
-          >
-            {cat.icon}
-          </div>
-          <h3
-            style={{
-              fontFamily: "'Articulat CF',sans-serif",
-              fontWeight: 800,
-              fontSize: 26,
-              color: CHAR,
-              lineHeight: 1.1,
-              letterSpacing: "-0.5px",
-            }}
-          >
-            {cat.title}
-          </h3>
-        </div>
-
-        {/* Symptoms list */}
-        <div className="flex flex-col px-6 py-5 gap-2 flex-1">
-          {cat.symptoms.map((symptom) => (
-            <button
-              key={symptom}
-              onClick={onSignClick}
-              className="group flex items-center justify-between w-full px-4 py-3 text-left transition-all duration-200"
-              style={{
-                background: hovered === symptom ? `rgba(26,82,168,.07)` : "rgba(0,0,0,.025)",
-                borderRadius: 4,
-                borderLeft: hovered === symptom ? `3px solid ${B}` : "3px solid transparent",
-              }}
-              onMouseEnter={() => setHovered(symptom)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <span
+    <section style={{ background: CREAM }} className="py-10 lg:py-14">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        {/* Category selector — the 4 categories of the approved sitemap */}
+        <div className="flex items-stretch gap-2 flex-wrap mb-8">
+          {CATEGORIES.map((cat) => {
+            const isActive = cat.id === activeCat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => selectCategory(cat)}
+                className="flex items-center gap-2.5 px-5 py-3 transition-all duration-200"
                 style={{
-                  fontFamily: "'Inter',sans-serif",
-                  fontSize: 14,
-                  color: hovered === symptom ? CHAR : "#444",
-                  fontWeight: hovered === symptom ? 500 : 400,
-                  lineHeight: 1.5,
+                  background: isActive ? CHAR : "#fff",
+                  border: `1.5px solid ${isActive ? CHAR : "rgba(0,0,0,.14)"}`,
+                  cursor: "pointer",
                 }}
               >
-                {symptom}
-              </span>
-              <ChevronRight
-                size={15}
-                className="shrink-0 ml-3 transition-transform duration-200 group-hover:translate-x-0.5"
-                color={hovered === symptom ? B : MUTED}
-              />
-            </button>
-          ))}
+                <span className="shrink-0 flex items-center" style={{ width: 20, height: 20, filter: isActive ? "brightness(0) invert(1)" : "none" }}>
+                  {cat.icon}
+                </span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: isActive ? 600 : 400, fontSize: 14, color: isActive ? "#fff" : CHAR }}>
+                  {cat.title}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Card Footer CTA */}
-        <div className="px-8 py-5" style={{ borderTop: "1px solid rgba(0,0,0,.06)" }}>
-          <button
-            onClick={() => onNavigate ? onNavigate(cat.page) : onSignClick?.()}
-            className="group inline-flex items-center gap-2 transition-opacity hover:opacity-80"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}
-          >
-            See all {cat.title.split(" ")[0]} solutions
-            <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-          </button>
-        </div>
-      </div>
-    </Reveal>
-  );
-}
+        {/* Left: symptom list · Right: photo of the hovered symptom */}
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] gap-6 items-start">
+          <div className="flex flex-col gap-1.5">
+            {activeCat.symptoms.map((symptom) => {
+              const isActive = symptom.label === activeSymptom.label;
+              return (
+                <button
+                  key={symptom.label}
+                  onClick={onSignClick}
+                  onMouseEnter={() => setActiveSymptom(symptom)}
+                  onFocus={() => setActiveSymptom(symptom)}
+                  className="group flex items-center justify-between w-full px-5 py-4 text-left transition-all duration-200"
+                  style={{
+                    background: isActive ? "#fff" : "rgba(255,255,255,.55)",
+                    border: "1px solid rgba(0,0,0,.07)",
+                    borderLeft: isActive ? `3px solid ${B}` : "3px solid transparent",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, lineHeight: 1.45, color: isActive ? CHAR : "#444", fontWeight: isActive ? 600 : 400 }}>
+                    {symptom.label}
+                  </span>
+                  <ChevronRight size={16} className="shrink-0 ml-3 transition-transform duration-200 group-hover:translate-x-0.5" color={isActive ? B : MUTED} />
+                </button>
+              );
+            })}
 
-// ─── Browse Section ───────────────────────────────────────────────────────────
-function BrowseSection({ onSignClick, onNavigate }: { onSignClick?: () => void; onNavigate?: (p: string) => void }) {
-  const [activeFilter, setActiveFilter] = useState("All");
-
-  const filtered = activeFilter === "All"
-    ? CATEGORIES
-    : CATEGORIES.filter((c) => c.filter === activeFilter || c.filter === "All");
-
-  return (
-    <section style={{ background: CREAM }} className="py-20 lg:py-28">
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        {/* Section header */}
-        <Reveal className="text-center mb-16">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="h-[1px] w-6" style={{ background: B }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
-              Problem Signs
-            </span>
-            <div className="h-[1px] w-6" style={{ background: B }} />
-          </div>
-          <h2
-            style={{
-              fontFamily: "'Articulat CF',sans-serif",
-              fontWeight: 800,
-              fontSize: "clamp(36px,4vw,56px)",
-              color: CHAR,
-              lineHeight: 1.05,
-              letterSpacing: "-1px",
-              marginBottom: 16,
-            }}
-          >
-            Browse by category
-          </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED, maxWidth: 520, margin: "0 auto" }}>
-            Each symptom links directly to the relevant service page
-          </p>
-        </Reveal>
-
-        {/* Filter Pills */}
-        <Reveal delay={0.05} className="flex items-center gap-2 flex-wrap mb-12 justify-center">
-          {FILTERS.map((f) => (
             <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
-              className="transition-all duration-200 px-5 py-2"
-              style={{
-                fontFamily: "'Inter',sans-serif",
-                fontWeight: activeFilter === f ? 600 : 400,
-                fontSize: 14,
-                color: activeFilter === f ? "#fff" : CHAR,
-                background: activeFilter === f ? CHAR : "transparent",
-                border: `1.5px solid ${activeFilter === f ? CHAR : "rgba(0,0,0,.18)"}`,
-                letterSpacing: ".2px",
-              }}
+              onClick={() => (onNavigate ? onNavigate(activeCat.page) : onSignClick?.())}
+              className="group inline-flex items-center gap-2 mt-3 self-start transition-opacity hover:opacity-80"
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}
             >
-              {f}
+              See all {activeCat.title} solutions
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </button>
-          ))}
-        </Reveal>
+          </div>
 
-        {/* Category Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((cat, i) => (
-            <CategoryCard key={cat.id} cat={cat} delay={i * 0.06} onSignClick={onSignClick} onNavigate={onNavigate} />
-          ))}
+          {/* Photo panel — sticky so it stays beside the list while scanning */}
+          <div className="relative overflow-hidden lg:sticky lg:top-[172px]" style={{ border: "1px solid rgba(0,0,0,.07)", aspectRatio: "4 / 3" }}>
+            <ImageWithFallback
+              key={activeSymptom.img}
+              src={activeSymptom.img}
+              alt={activeSymptom.label}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-x-0 bottom-0" style={{ background: "linear-gradient(180deg,rgba(10,11,20,0) 0%,rgba(10,11,20,.88) 100%)", paddingTop: 80 }}>
+              <div className="px-6 pb-5">
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: "clamp(18px,2vw,24px)", color: "#fff", lineHeight: 1.15 }}>
+                  {activeSymptom.label}
+                </p>
+                <button
+                  onClick={onSignClick}
+                  className="group inline-flex items-center gap-2 mt-2.5"
+                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                >
+                  See what this means
+                  <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Can't find it */}
-        <Reveal delay={0.1} className="mt-12 text-center">
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED }}>
-            {"Can't find your symptom? "}
-            <a href="tel:+18335841049" style={{ color: B, fontWeight: 600 }}>
-              Call us at 1-833-584-1049 →
-            </a>
-          </p>
-        </Reveal>
+        <p className="mt-8" style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED }}>
+          {"Can't find your symptom? "}
+          <a href="tel:+18335841049" style={{ color: B, fontWeight: 600 }}>
+            Call us at 1-833-584-1049 →
+          </a>
+        </p>
       </div>
     </section>
   );
@@ -572,7 +469,20 @@ function Footer({ onBack }: { onBack: () => void }) {
 }
 
 // ─── ProblemSignsPage ─────────────────────────────────────────────────────────
-export default function ProblemSignsPage({ onBack, onSignClick, onNavigate }: { onBack: () => void; onSignClick?: () => void; onNavigate?: (p: string) => void }) {
+export default function ProblemSignsPage({
+  onBack,
+  onSignClick,
+  onNavigate,
+  // Set when the visitor arrives from a specific service, so the explorer opens
+  // on that service's signs instead of the first category — the client flagged
+  // that the two entry paths used to land on different-looking pages.
+  initialCategory,
+}: {
+  onBack: () => void;
+  onSignClick?: () => void;
+  onNavigate?: (p: string) => void;
+  initialCategory?: string;
+}) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
@@ -585,23 +495,16 @@ export default function ProblemSignsPage({ onBack, onSignClick, onNavigate }: { 
       <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: "#0A0B14" }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button
-              onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors"
-            >
-              Home
-            </button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>
-              Problem Signs
-            </span>
+          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3">
+            <Breadcrumbs
+              items={[{ label: "Home", page: "home" }, { label: "Problem Signs" }]}
+              onNavigate={onNavigate ?? (() => onBack())}
+            />
           </div>
         </div>
 
         <HeroSection />
-        <BrowseSection onSignClick={onSignClick} onNavigate={onNavigate} />
+        <SymptomExplorer initialCategory={initialCategory} onSignClick={onSignClick} onNavigate={onNavigate} />
         <DiagnosticBanner />
         <CtaSection />
         <Footer onBack={onBack} />
