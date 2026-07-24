@@ -197,7 +197,19 @@ function Footer({ onBack }: { onBack: () => void }) {
 }
 
 // ─── ServiceAreaPage ──────────────────────────────────────────────────────────
-export default function ServiceAreaPage({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (p: string) => void }) {
+const STATE_ABBRS = ["TN", "MS", "AR", "MO"] as const;
+
+export default function ServiceAreaPage({
+  onBack,
+  onNavigate,
+  // "service-area#MS" opens the explorer on Mississippi.
+  initialState,
+}: {
+  onBack: () => void;
+  onNavigate?: (p: string) => void;
+  initialState?: string;
+}) {
+  const state = STATE_ABBRS.find((s) => s === initialState?.toUpperCase());
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
@@ -207,7 +219,7 @@ export default function ServiceAreaPage({ onBack, onNavigate }: { onBack: () => 
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="About" />
       </div>
       <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
-        <ServiceAreaExplorer id="coverage" />
+        <ServiceAreaExplorer id="coverage" initialState={state} />
         <BenefitCardsSection />
         <CtaSection />
         <Footer onBack={onBack} />

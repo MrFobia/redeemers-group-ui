@@ -34,13 +34,21 @@ export const NAV_PAGE_MAP: Record<string, string> = {
 const CHAR_NAV = "#1E2235";
 const MUTED_NAV = "#6B6E85";
 
+// The children the approved sitemap hangs off "Resources", in its order and
+// with its wording. What was here before was a different list: it was missing
+// Homeowner education and Downloadable resources, and it surfaced "Buyer &
+// Seller guides", which the sitemap files under Pricing, not Resources.
+// TODO(content): Homeowner education has no section of its own on the page yet,
+// so it points at the downloads block it currently shares.
 const RESOURCES_SECTIONS = [
-  { label: "Project gallery",    id: "gallery" },
-  { label: "Cost guide",         id: "cost" },
-  { label: "Buyer & Seller guides", id: "buyer-seller" },
-  { label: "Job stories",        id: "job-stories" },
-  { label: "FAQs",               id: "faq" },
-  { label: "Reviews",            id: "reviews" },
+  { label: "Project gallery",         page: "resources#gallery" },
+  { label: "Homeowner education",     page: "resources#resources" },
+  { label: "Downloadable resources",  page: "resources#resources", nested: true },
+  { label: "Pricing & Cost Guides",   page: "pricing" },
+  { label: "Job stories",             page: "job-stories" },
+  { label: "FAQs",                    page: "resources#faq" },
+  { label: "Reviews & testimonials",  page: "resources#reviews" },
+  { label: "News",                    page: "news-blog" },
 ];
 
 const FEATURED_RESOURCES = [
@@ -52,9 +60,11 @@ type ResourcesDropdownProps = {
   onNavigate: (p: string) => void;
 };
 
+// Single list, no tab column. The old "Resources / News · Blog" tabs only
+// swapped the panel heading — both showed the same links — which read as a
+// navigation level that wasn't one. News is a Resources child in the sitemap,
+// so it is simply one of the links now.
 function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
-  const [activeTab, setActiveTab] = useState<"resources" | "news">("resources");
-
   return (
     <div
       style={{
@@ -66,38 +76,11 @@ function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
     >
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8 flex gap-0">
 
-        {/* Col 1 — tabs */}
-        <div className="w-52 shrink-0 flex flex-col py-2" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10, paddingLeft: 12 }}>
-            Browse
-          </p>
-          {[{ key: "resources" as const, label: "Resources" }, { key: "news" as const, label: "News / Blog" }].map((tab) => (
-            <button
-              key={tab.key}
-              onMouseEnter={() => setActiveTab(tab.key)}
-              onClick={() => { onNavigate(tab.key === "resources" ? "resources" : "news-blog"); }}
-              className="flex items-center justify-between w-full px-3 py-3 text-left group transition-all duration-150"
-              style={{
-                background: activeTab === tab.key ? "rgba(26,82,168,.2)" : "transparent",
-                borderLeft: activeTab === tab.key ? `2px solid ${B}` : "2px solid transparent",
-                cursor: "pointer",
-              }}
-            >
-              <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: activeTab === tab.key ? 600 : 400, fontSize: 14, color: activeTab === tab.key ? "#fff" : "rgba(255,255,255,.6)" }}>
-                {tab.label}
-              </span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          ))}
-        </div>
-
-        {/* Col 2 — section links */}
-        <div className="flex-1 flex flex-col py-2 px-6" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
+        {/* Col 1 — section links */}
+        <div className="flex-1 flex flex-col py-2 pr-6" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
           <div className="flex items-center justify-between mb-4">
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
-              {activeTab === "resources" ? "Resources" : "News & Blog"}
+              Resources
             </p>
             <button
               onClick={() => onNavigate("resources")}
@@ -114,10 +97,10 @@ function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
           <div className="flex flex-col gap-1">
             {RESOURCES_SECTIONS.map((sec) => (
               <button
-                key={sec.id}
-                onClick={() => onNavigate(`resources#${sec.id}`)}
+                key={sec.label}
+                onClick={() => onNavigate(sec.page)}
                 className="group flex items-center justify-between px-3 py-2 text-left transition-all duration-150"
-                style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
+                style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none", marginLeft: sec.nested ? 16 : 0 }}
               >
                 <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>{sec.label}</span>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
@@ -166,28 +149,38 @@ const ABOUT_TABS = [
   { key: "contact" as const,      label: "Contact us",   page: "contact" },
 ];
 
-const ABOUT_SECTIONS: Record<"about" | "careers" | "service-area" | "contact", { label: string; id?: string }[]> = {
+// Each tab lists exactly the children the approved sitemap gives that node, in
+// its order and with its wording. The previous lists were invented: "People",
+// "Initiatives" and "Benefits" under About (Benefits belongs to Careers and the
+// Love Well Initiative to Our Difference), generic Careers labels, and three
+// made-up Service Area entries where the sitemap names the four states. "Free
+// inspection" was missing from About entirely.
+const ABOUT_SECTIONS: Record<"about" | "careers" | "service-area" | "contact", { label: string; page: string; inspection?: boolean }[]> = {
   "about": [
-    { label: "People",      id: "people" },
-    { label: "Benefits",    id: "benefits" },
-    { label: "Initiatives", id: "initiatives" },
-    { label: "Contact us",  id: "contact" },
+    { label: "Meet the Team",           page: "about#people" },
+    { label: "Areas served (overview)",  page: "service-area" },
+    { label: "Contact",                  page: "contact" },
+    // Rosie: the free-inspection CTA is not Phase 2 — it has to let them submit
+    // their information, which is what the inspection modal does.
+    { label: "Free inspection",          page: "contact#form", inspection: true },
+    { label: "Careers",                  page: "careers" },
   ],
   "careers": [
-    { label: "Open positions" },
-    { label: "Benefits & culture" },
-    { label: "How we hire" },
-    { label: "Apply now" },
+    { label: "Life is short",       page: "careers#culture" },
+    { label: "Our Hiring Process",  page: "careers#hiring-process" },
+    { label: "List open positions", page: "careers#open-positions" },
+    { label: "Benefits",            page: "careers#benefits" },
   ],
   "service-area": [
-    { label: "Check my area" },
-    { label: "Service map" },
-    { label: "All cities" },
+    { label: "Tennessee",   page: "service-area#TN" },
+    { label: "Mississippi", page: "service-area#MS" },
+    { label: "Arkansas",    page: "service-area#AR" },
+    { label: "Missouri",    page: "service-area#MO" },
   ],
   "contact": [
-    { label: "Contact information", id: "info" },
-    { label: "Locations map",       id: "locations" },
-    { label: "Contact form",        id: "form" },
+    { label: "Contact information", page: "contact#info" },
+    { label: "Locations map",       page: "contact#locations" },
+    { label: "Contact form",        page: "contact#form" },
   ],
 };
 
@@ -254,7 +247,7 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
             {ABOUT_SECTIONS[activeTab].map((sec) => (
               <button
                 key={sec.label}
-                onClick={() => onNavigate(sec.id ? `${activeTab}#${sec.id}` : activeTab)}
+                onClick={() => (sec.inspection ? openInspection() : onNavigate(sec.page))}
                 className="group flex items-center justify-between px-3 py-2 text-left transition-all duration-150"
                 style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
               >
@@ -855,18 +848,14 @@ export default function SharedNavBar({
                   >
                     <MobileBackHeader title="Resources" onBack={() => setMobilePanel("root")} />
                     <div className="flex flex-col gap-1">
-                      <button
-                        onClick={() => handleNavigate("news-blog")}
-                        className="w-full py-3 pl-3 text-left"
-                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                        News / Blog
-                      </button>
+                      {/* News is one of the sitemap's Resources children, so it
+                          lives in the list below rather than as a loose extra. */}
                       {RESOURCES_SECTIONS.map((sec) => (
                         <button
-                          key={sec.id}
-                          onClick={() => handleNavigate(`resources#${sec.id}`)}
-                          className="w-full py-3 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                          key={sec.label}
+                          onClick={() => handleNavigate(sec.page)}
+                          className="w-full py-3 text-left"
+                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer", paddingLeft: sec.nested ? 28 : 12 }}>
                           {sec.label}
                         </button>
                       ))}
@@ -880,7 +869,10 @@ export default function SharedNavBar({
                   </motion.div>
                 )}
 
-                {/* About — drill-in: the desktop dropdown's 4 tabs become direct links */}
+                {/* About — drill-in: each of the desktop tabs with its own
+                    sub-links already expanded, same as the Services panel. The
+                    tabs alone used to be all mobile got, so the sitemap's
+                    sub-sections were unreachable without loading a page first. */}
                 {mobilePanel === "about" && (
                   <motion.div
                     key="about"
@@ -891,15 +883,27 @@ export default function SharedNavBar({
                     className="flex flex-col"
                   >
                     <MobileBackHeader title="About" onBack={() => setMobilePanel("root")} />
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-5">
                       {ABOUT_TABS.map((tab) => (
-                        <button
-                          key={tab.key}
-                          onClick={() => handleNavigate(tab.page)}
-                          className="w-full py-3 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                          {tab.label}
-                        </button>
+                        <div key={tab.key} style={{ borderLeft: "2px solid rgba(255,255,255,.1)" }}>
+                          <button
+                            onClick={() => handleNavigate(tab.page)}
+                            className="w-full pl-3 mb-2 text-left"
+                            style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, fontWeight: 600, color: "#fff", background: "none", border: "none", cursor: "pointer" }}>
+                            {tab.label}
+                          </button>
+                          <div className="pl-6 flex flex-col gap-2">
+                            {ABOUT_SECTIONS[tab.key].map((sec) => (
+                              <button
+                                key={sec.label}
+                                onClick={() => (sec.inspection ? handleNavigate("contact#form") : handleNavigate(sec.page))}
+                                className="text-left"
+                                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", background: "none", border: "none", cursor: "pointer" }}>
+                                {sec.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </motion.div>

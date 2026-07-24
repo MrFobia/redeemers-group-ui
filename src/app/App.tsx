@@ -1617,7 +1617,7 @@ export default function App() {
   }
 
   if (page === "service-area") {
-    return <ServiceAreaPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
+    return <ServiceAreaPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} initialState={scrollTarget ?? undefined} />;
   }
 
   if (page === "reviews") {

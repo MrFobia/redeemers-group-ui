@@ -24,8 +24,16 @@ const PROOF_TABS: { kind: ProofKind; label: string }[] = [
   { kind: "review", label: "Reviews" },
 ];
 
-export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
-  const [activeState, setActiveState] = useState<StateAbbr>("TN");
+export function ServiceAreaExplorer({
+  id = "explorer",
+  // Lets "About > Areas served > Mississippi" open the explorer already on that
+  // state instead of always starting on Tennessee.
+  initialState = "TN",
+}: {
+  id?: string;
+  initialState?: StateAbbr;
+}) {
+  const [activeState, setActiveState] = useState<StateAbbr>(initialState);
   const [activeCity, setActiveCity] = useState<CityRecord | null>(null);
   const [kindFilter, setKindFilter] = useState<ContentKind | null>(null);
   const [openItem, setOpenItem] = useState<ContentItem | null>(null);
