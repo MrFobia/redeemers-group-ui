@@ -32,9 +32,6 @@ export const NAV_PAGE_MAP: Record<string, string> = {
 
 
 // ─── Resources Dropdown ───────────────────────────────────────────────────────
-const CHAR_NAV = "#1E2235";
-const MUTED_NAV = "#6B6E85";
-
 const RESOURCES_SECTIONS = [
   { label: "Project gallery",    id: "gallery" },
   { label: "Cost guide",         id: "cost" },
@@ -44,20 +41,27 @@ const RESOURCES_SECTIONS = [
   { label: "Reviews",            id: "reviews" },
 ];
 
-const FEATURED_RESOURCES = [
-  { tag: "PDF", pages: "2 pages", title: "Symptom Checklist" },
-  { tag: "PDF", pages: "8 pages", title: "Buyer & Seller Guide" },
+// NewsBlogPage has no anchor ids (client-side topic filter, not deep-linkable
+// sections) — these route to the page itself, same as Careers/Service Area below.
+const NEWS_SECTIONS = [
+  { label: "Latest articles" },
+  { label: "Foundation" },
+  { label: "Waterproofing" },
+  { label: "Crawl Space" },
 ];
 
-type ResourcesDropdownProps = {
-  onNavigate: (p: string) => void;
-};
-
-function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
-  const [activeTab, setActiveTab] = useState<"resources" | "news">("resources");
-
+// ─── Shared dropdown building blocks ──────────────────────────────────────────
+// One visual system for every nav dropdown. Two shapes on top of the same
+// shell: a 2-col "hub" (rail + preview, for nav items covering several
+// destination pages — Services/Resources/About) and a flat grid (for nav
+// items that are anchors on one page — Our Difference/Problem Signs).
+function DropdownShell({
+  eyebrow, onGoToPage, goToLabel = "Go to the page", children,
+}: { eyebrow: string; onGoToPage: () => void; goToLabel?: string; children: React.ReactNode }) {
   return (
     <div
+      role="menu"
+      aria-label={eyebrow}
       style={{
         background: "rgba(10,11,20,.98)",
         backdropFilter: "blur(24px)",
@@ -65,97 +69,120 @@ function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
         boxShadow: "0 24px 60px rgba(0,0,0,.5)",
       }}
     >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8 flex gap-0">
-
-        {/* Col 1 — tabs */}
-        <div className="w-52 shrink-0 flex flex-col py-2" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10, paddingLeft: 12 }}>
-            Browse
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
+        <div className="flex items-center justify-between mb-4">
+          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
+            {eyebrow}
           </p>
-          {[{ key: "resources" as const, label: "Resources" }, { key: "news" as const, label: "News / Blog" }].map((tab) => (
-            <button
-              key={tab.key}
-              onMouseEnter={() => setActiveTab(tab.key)}
-              onClick={() => { onNavigate(tab.key === "resources" ? "resources" : "news-blog"); }}
-              className="flex items-center justify-between w-full px-3 py-3 text-left group transition-all duration-150"
-              style={{
-                background: activeTab === tab.key ? "rgba(26,82,168,.2)" : "transparent",
-                borderLeft: activeTab === tab.key ? `2px solid ${B}` : "2px solid transparent",
-                cursor: "pointer",
-              }}
-            >
-              <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: activeTab === tab.key ? 600 : 400, fontSize: 14, color: activeTab === tab.key ? "#fff" : "rgba(255,255,255,.6)" }}>
-                {tab.label}
-              </span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          ))}
+          <button
+            onClick={onGoToPage}
+            className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          >
+            {goToLabel}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
-
-        {/* Col 2 — section links */}
-        <div className="flex-1 flex flex-col py-2 px-6" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-          <div className="flex items-center justify-between mb-4">
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
-              {activeTab === "resources" ? "Resources" : "News & Blog"}
-            </p>
-            <button
-              onClick={() => onNavigate("resources")}
-              className="group inline-flex items-center gap-1.5"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-            >
-              Go to the page
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-          <div className="mb-4 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
-          <div className="flex flex-col gap-1">
-            {RESOURCES_SECTIONS.map((sec) => (
-              <button
-                key={sec.id}
-                onClick={() => onNavigate(`resources#${sec.id}`)}
-                className="group flex items-center justify-between px-3 py-2 text-left transition-all duration-150"
-                style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
-              >
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>{sec.label}</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
-                  <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Col 3 — featured resources */}
-        <div className="w-72 shrink-0 flex flex-col py-2 pl-6">
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 12 }}>
-            Featured resources
-          </p>
-          <div className="flex flex-col gap-3">
-            {FEATURED_RESOURCES.map((r) => (
-              <div key={r.title} className="flex flex-col p-5" style={{ background: CHAR_NAV, border: "1px solid rgba(255,255,255,.07)" }}>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="px-2 py-0.5" style={{ background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.25)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 1.5, textTransform: "uppercase" }}>{r.tag}</span>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.35)", fontWeight: 500 }}>{r.pages}</span>
-                </div>
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", lineHeight: 1.2, marginBottom: 12 }}>{r.title}</p>
-                <button className="group inline-flex items-center gap-1.5"
-                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                  Download
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                    <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
+        <div className="mb-6 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
+        <div className="flex gap-0">{children}</div>
       </div>
     </div>
+  );
+}
+
+// Left-rail item — selects/navigates a destination (Services category, Resources/About tab)
+function DropdownRailItem({
+  label, active, icon: Icon, iconImg, onMouseEnter, onClick,
+}: { label: string; active: boolean; icon?: React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>; iconImg?: string; onMouseEnter?: () => void; onClick: () => void }) {
+  return (
+    <button
+      onMouseEnter={onMouseEnter}
+      onClick={onClick}
+      className="group flex items-center gap-3 w-full px-3 py-3 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+      style={{
+        background: active ? "rgba(26,82,168,.2)" : "transparent",
+        borderLeft: active ? `2px solid ${B}` : "2px solid transparent",
+        cursor: "pointer",
+      }}
+    >
+      {(Icon || iconImg) && (
+        <span className="flex items-center justify-center shrink-0" style={{ width: 22, height: 22 }}>
+          {iconImg
+            ? <img src={iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)", opacity: active ? 1 : 0.7 }} />
+            : Icon ? <Icon size={20} color="#fff" strokeWidth={2} /> : null}
+        </span>
+      )}
+      <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: active ? 600 : 400, fontSize: 14, color: active ? "#fff" : "rgba(255,255,255,.6)", flex: 1 }}>
+        {label}
+      </span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 transition-opacity" style={{ opacity: active ? 1 : 0 }}>
+        <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  );
+}
+
+// Plain destination link — used in the preview panel and in flat-grid dropdowns
+function DropdownLinkItem({
+  label, onClick, icon: Icon, iconImg,
+}: { label: string; onClick: () => void; icon?: React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>; iconImg?: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className="group flex items-center gap-3 px-3 py-2.5 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+      style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
+    >
+      {(Icon || iconImg) && (
+        <span className="flex items-center justify-center shrink-0" style={{ width: 20, height: 20 }}>
+          {iconImg
+            ? <img src={iconImg} alt="" className="w-full h-full object-contain transition-opacity" style={{ filter: "brightness(0) invert(1)", opacity: .7 }} />
+            : Icon ? <Icon size={18} color="rgba(255,255,255,.7)" strokeWidth={2} /> : null}
+        </span>
+      )}
+      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)", flex: 1 }}>{label}</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
+        <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  );
+}
+
+type ResourcesDropdownProps = {
+  onNavigate: (p: string) => void;
+};
+
+// Shared dropdown shell: same header row, same divider, same rail width
+// (w-64) and same list-item voice across Services/Resources/About/Our
+// Difference/Problem Signs — client QA: "parece que estuviéramos usando 3
+// layouts distintos, no hay consistencia." One 2-col "hub" template (rail +
+// preview) for nav items covering multiple destination pages, one flat-grid
+// template for nav items that are anchors on a single page. See DropdownShell.
+function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
+  const [activeTab, setActiveTab] = useState<"resources" | "news">("resources");
+  const tabs = [{ key: "resources" as const, label: "Resources" }, { key: "news" as const, label: "News / Blog" }];
+
+  return (
+    <DropdownShell eyebrow="Resources" onGoToPage={() => onNavigate("resources")}>
+      <div className="w-64 shrink-0 flex flex-col gap-1" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
+        {tabs.map((tab) => (
+          <DropdownRailItem
+            key={tab.key}
+            label={tab.label}
+            active={activeTab === tab.key}
+            onMouseEnter={() => setActiveTab(tab.key)}
+            onClick={() => onNavigate(tab.key === "resources" ? "resources" : "news-blog")}
+          />
+        ))}
+      </div>
+      <div className="flex-1 pl-8 flex flex-col gap-1">
+        {(activeTab === "resources" ? RESOURCES_SECTIONS : NEWS_SECTIONS).map((sec: { label: string; id?: string }) => {
+          const page = activeTab === "resources" ? "resources" : "news-blog";
+          return <DropdownLinkItem key={sec.label} label={sec.label} onClick={() => onNavigate(sec.id ? `${page}#${sec.id}` : page)} />;
+        })}
+      </div>
+    </DropdownShell>
   );
 }
 
@@ -196,109 +223,24 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   const [activeTab, setActiveTab] = useState<"about" | "careers" | "service-area" | "contact">("about");
 
   return (
-    <div
-      style={{
-        background: "rgba(10,11,20,.98)",
-        backdropFilter: "blur(24px)",
-        borderBottom: "1px solid rgba(255,255,255,.07)",
-        boxShadow: "0 24px 60px rgba(0,0,0,.5)",
-      }}
-    >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8 flex gap-0">
-
-        {/* Col 1 — tabs */}
-        <div className="w-52 shrink-0 flex flex-col py-2" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 10, paddingLeft: 12 }}>
-            Browse
-          </p>
-          {ABOUT_TABS.map((tab) => (
-            <button
-              key={tab.key}
-              onMouseEnter={() => setActiveTab(tab.key)}
-              onClick={() => onNavigate(tab.page)}
-              className="flex items-center justify-between w-full px-3 py-3 text-left group transition-all duration-150"
-              style={{
-                background: activeTab === tab.key ? "rgba(26,82,168,.2)" : "transparent",
-                borderLeft: activeTab === tab.key ? `2px solid ${B}` : "2px solid transparent",
-                cursor: "pointer",
-              }}
-            >
-              <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: activeTab === tab.key ? 600 : 400, fontSize: 14, color: activeTab === tab.key ? "#fff" : "rgba(255,255,255,.6)" }}>
-                {tab.label}
-              </span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          ))}
-        </div>
-
-        {/* Col 2 — section links */}
-        <div className="flex-1 flex flex-col py-2 px-6" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-          <div className="flex items-center justify-between mb-4">
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
-              {activeTab === "about" ? "About" : activeTab === "careers" ? "Careers" : activeTab === "service-area" ? "Service Area" : "Contact Us"}
-            </p>
-            <button
-              onClick={() => onNavigate(activeTab)}
-              className="group inline-flex items-center gap-1.5"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-            >
-              Go to the page
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-          <div className="mb-4 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
-          <div className="flex flex-col gap-1">
-            {ABOUT_SECTIONS[activeTab].map((sec) => (
-              <button
-                key={sec.label}
-                onClick={() => onNavigate(sec.id ? `${activeTab}#${sec.id}` : activeTab)}
-                className="group flex items-center justify-between px-3 py-2 text-left transition-all duration-150"
-                style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
-              >
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>{sec.label}</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
-                  <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Col 3 — highlight */}
-        <div className="w-72 shrink-0 flex flex-col py-2 pl-6 min-w-0">
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 12 }}>
-            Quick links
-          </p>
-          <div className="flex flex-col gap-3">
-            {[
-              { label: "Check my service area", desc: "Enter your ZIP to see local teams, reviews, and services.", page: "service-area" },
-              { label: "Meet our team", desc: "The people behind every repair — local experts you can trust.", page: "about" },
-            ].map((card) => (
-              <button
-                key={card.label}
-                onClick={() => onNavigate(card.page)}
-                className="group flex flex-col p-5 text-left transition-all hover:bg-white/5"
-                style={{ background: CHAR_NAV, border: "1px solid rgba(255,255,255,.07)", cursor: "pointer" }}
-              >
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", lineHeight: 1.2, marginBottom: 8 }}>{card.label}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.45)", lineHeight: 1.6, marginBottom: 12 }}>{card.desc}</p>
-                <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}>
-                  Go
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                    <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
+    <DropdownShell eyebrow="About" onGoToPage={() => onNavigate(activeTab)}>
+      <div className="w-64 shrink-0 flex flex-col gap-1" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
+        {ABOUT_TABS.map((tab) => (
+          <DropdownRailItem
+            key={tab.key}
+            label={tab.label}
+            active={activeTab === tab.key}
+            onMouseEnter={() => setActiveTab(tab.key)}
+            onClick={() => onNavigate(tab.page)}
+          />
+        ))}
       </div>
-    </div>
+      <div className="flex-1 pl-8 flex flex-col gap-1">
+        {ABOUT_SECTIONS[activeTab].map((sec) => (
+          <DropdownLinkItem key={sec.label} label={sec.label} onClick={() => onNavigate(sec.id ? `${activeTab}#${sec.id}` : activeTab)} />
+        ))}
+      </div>
+    </DropdownShell>
   );
 }
 
@@ -321,51 +263,14 @@ const OUR_DIFFERENCE_SECTIONS = [
 
 function OurDifferenceDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <div
-      role="menu"
-      aria-label="Our Difference"
-      style={{
-        background: "rgba(10,11,20,.98)",
-        backdropFilter: "blur(24px)",
-        borderBottom: "1px solid rgba(255,255,255,.07)",
-        boxShadow: "0 24px 60px rgba(0,0,0,.5)",
-      }}
-    >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
-            Our Difference
-          </p>
-          <button
-            onClick={() => onNavigate("our-difference")}
-            className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
-          >
-            Go to the page
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-        <div className="mb-4 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
-        {/* Single vertical list, 3 columns wide so 9 items don't require scrolling the menu itself */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-1">
-          {OUR_DIFFERENCE_SECTIONS.map((sec) => (
-            <button
-              key={sec.id}
-              onClick={() => onNavigate(`our-difference#${sec.id}`)}
-              className="group flex items-center justify-between px-3 py-2.5 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-              style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
-            >
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)" }}>{sec.label}</span>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
-                <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          ))}
-        </div>
+    <DropdownShell eyebrow="Our Difference" onGoToPage={() => onNavigate("our-difference")}>
+      {/* Flat grid, 3 columns wide so 9 items don't require scrolling the menu itself */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-1 w-full">
+        {OUR_DIFFERENCE_SECTIONS.map((sec) => (
+          <DropdownLinkItem key={sec.id} label={sec.label} onClick={() => onNavigate(`our-difference#${sec.id}`)} />
+        ))}
       </div>
-    </div>
+    </DropdownShell>
   );
 }
 
@@ -382,58 +287,19 @@ const PROBLEM_SIGNS_CATEGORIES = [
 
 function ProblemSignsDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <div
-      role="menu"
-      aria-label="Problem Signs"
-      style={{
-        background: "rgba(10,11,20,.98)",
-        backdropFilter: "blur(24px)",
-        borderBottom: "1px solid rgba(255,255,255,.07)",
-        boxShadow: "0 24px 60px rgba(0,0,0,.5)",
-      }}
-    >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
-            Problem Signs
-          </p>
-          <button
-            onClick={() => onNavigate("problem-signs")}
-            className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
-          >
-            All problem signs
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-        <div className="mb-4 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {PROBLEM_SIGNS_CATEGORIES.map((cat) => {
-            const Icon = cat.icon;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => onNavigate(`problem-signs#ps-${cat.id}`)}
-                className="group flex items-center gap-3 px-3 py-3 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
-              >
-                <span className="flex items-center justify-center shrink-0" style={{ width: 24, height: 24 }}>
-                  {cat.iconImg
-                    ? <img src={cat.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)", opacity: .8 }} />
-                    : <Icon size={20} color="#fff" strokeWidth={2} style={{ opacity: .8 }} />}
-                </span>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.75)", flex: 1 }}>{cat.label}</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
-                  <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            );
-          })}
-        </div>
+    <DropdownShell eyebrow="Problem Signs" onGoToPage={() => onNavigate("problem-signs")}>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-1 w-full">
+        {PROBLEM_SIGNS_CATEGORIES.map((cat) => (
+          <DropdownLinkItem
+            key={cat.id}
+            label={cat.label}
+            icon={cat.icon}
+            iconImg={cat.iconImg}
+            onClick={() => onNavigate(`problem-signs#ps-${cat.id}`)}
+          />
+        ))}
       </div>
-    </div>
+    </DropdownShell>
   );
 }
 
@@ -512,96 +378,48 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
   const active = MEGA_MENU_SERVICES[hovered];
 
   return (
-    <div
-      role="menu"
-      aria-label="Services"
-      style={{
-        background: "rgba(10,11,20,.98)",
-        backdropFilter: "blur(24px)",
-        borderBottom: "1px solid rgba(255,255,255,.07)",
-        boxShadow: "0 24px 60px rgba(0,0,0,.5)",
-      }}
-    >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8 flex gap-0">
-
-        {/* Col 1 — the click-first list. Every category is one click away, no hover required to reveal it. */}
-        <div className="w-80 shrink-0 flex flex-col" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-          <div className="flex items-center justify-between mb-4 pr-6">
-            <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
-              Services
-            </p>
-            <button
-              onClick={() => onNavigate("services-landing")}
-              className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
-            >
-              All
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-          <div className="flex flex-col gap-1 pr-6">
-            {MEGA_MENU_SERVICES.map((c, i) => {
-              const Icon = c.icon;
-              const isActive = i === hovered;
-              return (
-                <button
-                  key={c.label}
-                  onMouseEnter={() => setHovered(i)}
-                  onClick={() => onNavigate("service")}
-                  className="group flex items-center gap-3 w-full px-3 py-3 text-left transition-all duration-150"
-                  style={{
-                    background: isActive ? "rgba(26,82,168,.2)" : "transparent",
-                    borderLeft: isActive ? `2px solid ${B}` : "2px solid transparent",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span className="flex items-center justify-center shrink-0" style={{ width: 26, height: 26 }}>
-                    {c.iconImg
-                      ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)", opacity: isActive ? 1 : 0.7 }} />
-                      : <Icon size={22} color="#fff" strokeWidth={2} style={{ opacity: isActive ? 1 : 0.7 }} />}
-                  </span>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: isActive ? 600 : 400, fontSize: 14, color: isActive ? "#fff" : "rgba(255,255,255,.7)", flex: 1 }}>
-                    {c.label}
-                  </span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 transition-opacity" style={{ opacity: isActive ? 1 : 0 }}>
-                    <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Col 2 — photo preview of the hovered category, secondary to the list, not required to act on it */}
-        <div className="flex-1 pl-8 flex flex-col">
-          <div className="relative overflow-hidden flex-1" style={{ minHeight: 280, border: "1px solid rgba(255,255,255,.08)" }}>
-            <img src={active.img} alt={active.label} className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.25) 55%, transparent 100%)" }} />
-            <div className="absolute inset-x-0 bottom-0 p-7">
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", marginBottom: 8 }}>{active.label}</p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.65)", marginBottom: active.signs.length ? 16 : 0, maxWidth: 420 }}>{active.tagline}</p>
-              {active.signs.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {active.signs.map((symptom) => (
-                    <button
-                      key={symptom}
-                      onClick={() => onNavigate("problem-sign-inner")}
-                      className="transition-colors hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.75)", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.15)", padding: "5px 11px", cursor: "pointer" }}
-                    >
-                      {symptom}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
+    <DropdownShell eyebrow="Services" onGoToPage={() => onNavigate("services-landing")}>
+      {/* Col 1 — the click-first list. Every category is one click away, no hover required to reveal it. */}
+      <div className="w-64 shrink-0 flex flex-col gap-1" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
+        {MEGA_MENU_SERVICES.map((c, i) => (
+          <DropdownRailItem
+            key={c.label}
+            label={c.label}
+            active={i === hovered}
+            icon={c.icon}
+            iconImg={c.iconImg ?? undefined}
+            onMouseEnter={() => setHovered(i)}
+            onClick={() => onNavigate("service")}
+          />
+        ))}
       </div>
-    </div>
+
+      {/* Col 2 — photo preview of the hovered category, secondary to the list, not required to act on it */}
+      <div className="flex-1 pl-8 flex flex-col">
+        <div className="relative overflow-hidden flex-1" style={{ minHeight: 280, border: "1px solid rgba(255,255,255,.08)" }}>
+          <img src={active.img} alt={active.label} className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.25) 55%, transparent 100%)" }} />
+          <div className="absolute inset-x-0 bottom-0 p-7">
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", marginBottom: 8 }}>{active.label}</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.65)", marginBottom: active.signs.length ? 16 : 0, maxWidth: 420 }}>{active.tagline}</p>
+            {active.signs.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {active.signs.map((symptom) => (
+                  <button
+                    key={symptom}
+                    onClick={() => onNavigate("problem-sign-inner")}
+                    className="transition-colors hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.75)", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.15)", padding: "5px 11px", cursor: "pointer" }}
+                  >
+                    {symptom}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </DropdownShell>
   );
 }
 
