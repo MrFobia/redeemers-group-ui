@@ -178,7 +178,7 @@ function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
           <p style={{ marginTop: 20, fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>
             {"Can't find your symptom? "}
             <button
-              onClick={() => onNavigate?.("problem-signs")}
+              onClick={() => onNavigate?.("problem-signs#crawl-space")}
               style={{ color: "#fff", fontWeight: 600, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "'Inter',sans-serif", fontSize: 13 }}
             >
               View all problem signs →

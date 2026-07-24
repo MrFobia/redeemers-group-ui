@@ -322,7 +322,7 @@ const SERVICE_CATEGORIES = [
     img: imgSvcFoundation as string,
     tagline: "Stop the cracks before they spread.",
     links: [
-      { label: "Problem Signs", page: "problem-signs" },
+      { label: "Problem Signs", page: "problem-signs#structural" },
       { label: "Slab Repair", page: "service" },
       { label: "Crawlspace / Joist Repair", page: "service" },
       { label: "Lintel Repair", page: "service" },
@@ -339,7 +339,7 @@ const SERVICE_CATEGORIES = [
     img: imgSvcCrawlspace as string,
     tagline: "Dry, sealed, and structurally sound below your home.",
     links: [
-      { label: "Problem Signs", page: "problem-signs" },
+      { label: "Problem Signs", page: "problem-signs#crawl-space" },
       { label: "Floor Joist Replacement", page: "service" },
       { label: "Floor Joist Repair / Stabilization", page: "service" },
       { label: "Encapsulation Systems", page: "service" },
@@ -356,7 +356,7 @@ const SERVICE_CATEGORIES = [
     img: imgSvcWaterproofing as string,
     tagline: "Keep water out of your basement for good.",
     links: [
-      { label: "Problem Signs", page: "problem-signs" },
+      { label: "Problem Signs", page: "problem-signs#waterproofing" },
       { label: "Interior Solutions", page: "service" },
       { label: "Exterior Solutions", page: "service" },
       { label: "Cost Guides", page: "service#cost" },
@@ -371,7 +371,7 @@ const SERVICE_CATEGORIES = [
     img: imgSvcConcrete as string,
     tagline: "Level driveways, walkways, and slabs.",
     links: [
-      { label: "Problem Signs", page: "problem-signs" },
+      { label: "Problem Signs", page: "problem-signs#concrete" },
       { label: "Lifting & Leveling", page: "service" },
       { label: "Crack & Joint Repair", page: "service" },
       { label: "Concrete Protection Systems", page: "service" },
