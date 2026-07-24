@@ -124,26 +124,25 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
     <section id={id} style={{ background: DARK }} className="py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
-        {/* ── Header + search ── */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <span style={{ display: "block", width: 28, height: 2, background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
-                Coverage
-              </span>
-            </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
-              Find your city
-            </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.45)", lineHeight: 1.7, maxWidth: 520 }}>
-              {TOTAL_CITIES} cities across {TOTAL_COUNTIES} counties in four states. Search yours, or pick a state on the map.
-            </p>
+        {/* ── Hero + centered search ── */}
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <span style={{ display: "block", width: 28, height: 2, background: SAND }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
+              Service areas
+            </span>
+            <span style={{ display: "block", width: 28, height: 2, background: SAND }} />
           </div>
+          <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(42px,5.5vw,80px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px", marginBottom: 20 }}>
+            We're in your neighborhood
+          </h1>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.5)", lineHeight: 1.7, maxWidth: 560, margin: "0 auto 40px" }}>
+            Local experts across Tennessee, Mississippi, Arkansas, and Missouri. Search your city, county, or ZIP to instantly see your local team, reviews, and available services.
+          </p>
 
-          <div ref={searchRef} className="relative shrink-0 w-full lg:w-[380px]">
+          <div ref={searchRef} className="relative shrink-0 max-w-lg mx-auto text-left">
             <div className="flex items-stretch">
-              <div className="flex items-center px-4" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.12)", borderRight: "none" }}>
+              <div className="flex items-center px-4" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.14)", borderRight: "none" }}>
                 <Search size={16} color={SAND} />
               </div>
               <input
@@ -153,16 +152,16 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                 onFocus={() => setSearchOpen(true)}
                 placeholder="Search your city, county or ZIP code…"
                 style={{
-                  fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff",
-                  background: CHAR, border: "1px solid rgba(255,255,255,.12)",
-                  padding: "14px 16px", flex: 1, outline: "none",
+                  fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#fff",
+                  background: CHAR, border: "1px solid rgba(255,255,255,.14)",
+                  padding: "15px 16px", flex: 1, outline: "none",
                 }}
               />
               {query && (
                 <button
                   onClick={() => { setQuery(""); setSearchOpen(false); }}
                   className="flex items-center px-3 hover:bg-white/5 transition-colors"
-                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.12)", borderLeft: "none", cursor: "pointer" }}
+                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.14)", borderLeft: "none", cursor: "pointer" }}
                 >
                   <X size={14} color="rgba(255,255,255,.5)" />
                 </button>
@@ -217,6 +216,10 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
               )}
             </AnimatePresence>
           </div>
+
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.3)", marginTop: 14 }}>
+            {TOTAL_CITIES} cities across {TOTAL_COUNTIES} counties in four states. Or pick a state on the map below.
+          </p>
         </div>
 
         {/* ── Map + state panel ── */}
