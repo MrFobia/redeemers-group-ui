@@ -84,52 +84,14 @@ function Reveal({
 // ─── Top Bar ──────────────────────────────────────────────────────────────────
 
 // ─── Symptom Categories Data ──────────────────────────────────────────────────
+// Sourced verbatim from the approved Figma sitemap (Problem Signs branch) —
+// exactly 4 categories, exact names and symptom wording. Do not add/remove
+// categories or reword symptoms without updating the sitemap first.
 const CATEGORIES = [
   {
-    id: "crawl",
-    filter: "Crawl Space",
-    title: "Crawl Space",
-    page: "service",
-    img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M9 22V12h6v10" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    symptoms: [
-      "My floors are sagging or bouncy",
-      "I smell mold or mildew",
-      "High humidity or condensation",
-      "Pest or insect activity below",
-      "Moisture or standing water",
-      "Soft or weak floors underfoot",
-    ],
-  },
-  {
-    id: "basement",
-    filter: "Basement",
-    title: "Basement & Waterproofing",
-    page: "service",
-    img: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    symptoms: [
-      "Water in my basement",
-      "Damp or wet walls",
-      "Puddles after rain",
-      "Efflorescence (white stains)",
-      "Condensation on pipes",
-      "Musty odor in basement",
-    ],
-  },
-  {
-    id: "foundation",
-    filter: "Foundation",
-    title: "Foundation & Structural",
+    id: "structural",
+    filter: "Structural Repair",
+    title: "Structural Repair",
     page: "service",
     img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
     icon: (
@@ -139,18 +101,57 @@ const CATEGORIES = [
       </svg>
     ),
     symptoms: [
-      "Cracks in walls or floors",
-      "Doors that stick or won't close",
-      "Gaps between walls and ceilings",
+      "Uneven, sloping, or bouncy floors",
+      "Cracks in exterior or interior walls",
       "Bowing or leaning walls",
-      "Uneven or sloping floors",
-      "Visible pier or beam rot",
+      "Doors or windows that stick",
+      "Separating or tilting chimney",
+      "Cracks above garage door",
+      "Sinking Slab",
+    ],
+  },
+  {
+    id: "crawl",
+    filter: "Crawl Space Repair",
+    title: "Crawl Space Repair",
+    page: "service",
+    img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9 22V12h6v10" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    symptoms: [
+      "My floors are sagging, bouncy, or buckling.",
+      "The baseboards have separated from the floor.",
+      "My doors won't close properly",
+    ],
+  },
+  {
+    id: "waterproofing",
+    filter: "Waterproofing",
+    title: "Waterproofing",
+    page: "service",
+    img: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    symptoms: [
+      "Water getting in to basement or other.",
+      "Water pooling around house.",
+      "Damp walls or floor",
+      "Mold & mildew smell",
+      "White residue on basement walls",
+      "Standing water in crawlspace",
     ],
   },
   {
     id: "concrete",
     filter: "Concrete",
-    title: "Concrete & Leveling",
+    title: "Concrete",
     page: "service",
     img: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
     icon: (
@@ -160,66 +161,31 @@ const CATEGORIES = [
       </svg>
     ),
     symptoms: [
-      "Uneven driveway or sidewalk",
-      "Sinking or sunken slabs",
-      "Trip hazards on walkways",
-      "Pool deck settling",
-      "Cracked garage floor",
-      "Steps pulling away from house",
-    ],
-  },
-  {
-    id: "mold",
-    filter: "All",
-    title: "Mold & Air Quality",
-    page: "service",
-    img: "https://images.unsplash.com/photo-1585421514738-01798e348b17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M17.7 7.7a7.5 7.5 0 1 1-10.5 10.7" stroke={B} strokeWidth="2" strokeLinecap="round" />
-        <path d="M9 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3" stroke={B} strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
-    symptoms: [
-      "Musty or earthy smell indoors",
-      "Allergy or asthma flare-ups",
-      "Visible mold growth on walls",
-      "Dark spots on walls or ceiling",
-      "Poor indoor air quality",
-      "Condensation on windows",
-    ],
-  },
-  {
-    id: "commercial",
-    filter: "Commercial",
-    title: "Commercial Properties",
-    page: "service",
-    img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <rect x="2" y="7" width="20" height="15" rx="1" stroke={B} strokeWidth="2" />
-        <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke={B} strokeWidth="2" />
-        <line x1="12" y1="12" x2="12" y2="16" stroke={B} strokeWidth="2" strokeLinecap="round" />
-        <line x1="10" y1="14" x2="14" y2="14" stroke={B} strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
-    symptoms: [
-      "Structural wall cracks in building",
-      "Floor settling in commercial space",
-      "Water intrusion in warehouse",
-      "Foundation movement or shifting",
-      "Concrete damage on property",
-      "Building envelope issues",
+      "Uneven concrete slabs",
+      "Sinking driveway, walkway, patio",
+      "Cracked or sinking pool deck",
+      "Sinking slab foundation",
+      "Void under slab",
+      "Ugly concrete",
     ],
   },
 ];
 
-const FILTERS = ["All", "Crawl Space", "Basement", "Foundation", "Concrete", "Commercial"];
+const FILTERS = ["All", ...CATEGORIES.map((c) => c.filter)];
 
 // ─── Hero Section ─────────────────────────────────────────────────────────────
+// Above-the-fold must be actionable, not just a photo + headline: client
+// feedback was explicit that landing on this page with nothing to click reads
+// as "I don't know where I am". These 4 tiles jump straight to the matching
+// category card further down — no scroll required to take a first action.
 function HeroSection() {
+  const jumpTo = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    document.getElementById(`ps-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: 480 }}>
+    <section className="relative w-full overflow-hidden">
       <ImageWithFallback
         src="https://images.unsplash.com/photo-1541205646242-30258c7485b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
         alt="Problem Signs"
@@ -227,52 +193,67 @@ function HeroSection() {
       />
       <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.88) 0%,rgba(10,11,20,0.60) 55%,rgba(10,11,20,0.35) 100%)" }} />
       <BlueprintGrid opacity={0.06} />
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-32">
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-12 pb-14 lg:pt-16 lg:pb-16">
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 20 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 14 }}
         >
           Diagnosis Guide
         </motion.p>
         <motion.h1
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           style={{
             fontFamily: "'Articulat CF',sans-serif",
             fontWeight: 800,
-            fontSize: "clamp(36px,5vw,64px)",
+            fontSize: "clamp(30px,4.2vw,50px)",
             color: "#fff",
-            lineHeight: 1.0,
+            lineHeight: 1.05,
             letterSpacing: "-1px",
-            marginBottom: 24,
+            marginBottom: 14,
             maxWidth: 720,
           }}
         >
-          What's going on<br />with your home?
+          What's going on with your home?
         </motion.h1>
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.45 }}
-          style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.65)", lineHeight: 1.7, maxWidth: 520, marginBottom: 36 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.65)", lineHeight: 1.6, maxWidth: 520, marginBottom: 28 }}
         >
-          Find your symptom below. We'll tell you exactly what it means — and how to fix it permanently.
+          Pick what you're seeing — we'll show you exactly what it means and how to fix it.
         </motion.p>
-        {/* Stats row */}
+
+        {/* Actionable above the fold: tap a category, jump straight to it. No scroll required to know what to do. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.65 }}
-          className="flex items-center gap-8 flex-wrap"
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-3"
         >
-          {[["12,000+", "Homes repaired"], ["18+", "Years experience"], ["4.9★", "Google rating"]].map(([val, label]) => (
-            <div key={label} className="flex items-center gap-3">
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: SAND }}>{val}</span>
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)", letterSpacing: 1, textTransform: "uppercase" }}>{label}</span>
-            </div>
+          {CATEGORIES.map((cat) => (
+            <a
+              key={cat.id}
+              href={`#ps-${cat.id}`}
+              onClick={jumpTo(cat.id)}
+              className="group relative flex flex-col gap-3 px-5 py-4 transition-colors duration-200"
+              style={{ background: "rgba(255,255,255,.06)", border: "1.5px solid rgba(255,255,255,.16)" }}
+            >
+              <CornerMarks color="rgba(196,171,108,.5)" size={9} />
+              <div className="flex items-center justify-center w-10 h-10 shrink-0" style={{ background: "rgba(196,171,108,.12)", border: "1.5px dashed rgba(196,171,108,.5)" }}>
+                {cat.icon}
+              </div>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", lineHeight: 1.2 }}>
+                {cat.title}
+              </span>
+              <span className="flex items-center gap-1.5 transition-transform duration-200 group-hover:translate-x-1" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}>
+                See signs <ArrowRight size={11} />
+              </span>
+            </a>
           ))}
         </motion.div>
       </div>
@@ -289,8 +270,9 @@ function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat:
   return (
     <Reveal delay={delay}>
       <div
+        id={`ps-${cat.id}`}
         className="group/card relative flex flex-col h-full transition-transform duration-300"
-        style={{ background: "#fff", border: `1.5px solid ${cardHover ? B : "rgba(11,28,74,.14)"}` }}
+        style={{ background: "#fff", border: `1.5px solid ${cardHover ? B : "rgba(11,28,74,.14)"}`, scrollMarginTop: 160 }}
         onMouseEnter={() => setCardHover(true)}
         onMouseLeave={() => setCardHover(false)}
       >
@@ -403,7 +385,7 @@ function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat:
           <div className="absolute inset-0" style={{ background: cardHover ? "rgba(11,28,74,.72)" : "rgba(10,11,20,.6)" }} />
           <div className="relative h-full flex items-center justify-between px-7">
             <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>
-              See all {cat.title.split(" ")[0]} solutions
+              See {cat.title} solutions
             </span>
             <span
               className="flex items-center justify-center w-8 h-8 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
