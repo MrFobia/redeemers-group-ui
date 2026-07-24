@@ -266,6 +266,24 @@ export const TOTAL_COUNTIES = COUNTIES.length;
 export function searchAreas(query: string, limit = 8): CityRecord[] {
   const q = query.trim().toLowerCase();
   if (q.length < 2) return [];
+
+  // Numeric query: match against known ZIP codes first (only the cities we've
+  // inventoried carry a ZIP today — see CITY_CONTENT / CITY_ZIPS below).
+  if (/^\d+$/.test(q)) {
+    const bySlug = new Map<string, string>();
+    for (const [slug, c] of Object.entries(CITY_CONTENT)) bySlug.set(slug, c.zip);
+    for (const [slug, zip] of Object.entries(CITY_ZIPS)) if (!bySlug.has(slug)) bySlug.set(slug, zip);
+    const hits: CityRecord[] = [];
+    for (const [slug, zip] of bySlug) {
+      if (zip.startsWith(q)) {
+        const city = CITY_BY_SLUG[slug];
+        if (city) hits.push(city);
+      }
+      if (hits.length >= limit) break;
+    }
+    if (hits.length > 0) return hits;
+  }
+
   const starts: CityRecord[] = [];
   const contains: CityRecord[] = [];
   for (const c of ALL_CITIES) {

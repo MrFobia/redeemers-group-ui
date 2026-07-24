@@ -151,7 +151,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                 value={query}
                 onChange={(e) => { setQuery(e.target.value); setSearchOpen(true); }}
                 onFocus={() => setSearchOpen(true)}
-                placeholder="Search your city or county…"
+                placeholder="Search your city, county or ZIP code…"
                 style={{
                   fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff",
                   background: CHAR, border: "1px solid rgba(255,255,255,.12)",
