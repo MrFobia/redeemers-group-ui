@@ -4,7 +4,7 @@ import { motion, useInView } from "motion/react";
 import { ChevronRight, ArrowRight, FileText, Download, MapPin } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
-import { StickyAnchorBar } from "./components/StickyAnchorBar";
+import { FloatingSideNav } from "./components/FloatingSideNav";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 
@@ -478,9 +478,12 @@ export default function PricingPage({ onBack, onNavigate }: { onBack: () => void
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Pricing" />
-        <StickyAnchorBar tabs={PRICING_TABS} active={activeTab} onChange={scrollTo} />
       </div>
-      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: DARK }}>
+      {/* Client QA: Pricing has no main-nav dropdown to cover these anchors,
+          so it follows the client's approved alternative — a floating rail
+          instead of a fixed horizontal bar. */}
+      <FloatingSideNav tabs={PRICING_TABS} active={activeTab} onChange={scrollTo} />
+      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
         <HeroSection />
         <BuyerSellerSection />
         <CostByServiceSection />

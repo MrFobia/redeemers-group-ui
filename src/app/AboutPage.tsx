@@ -5,7 +5,6 @@ import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import useEmblaCarousel from "embla-carousel-react";
-import { StickyAnchorBar } from "./components/StickyAnchorBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 
@@ -880,14 +879,6 @@ function Footer({ onBack }: { onBack: () => void }) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function AboutPage({ onBack, onNavigate, scrollTo: initialSection }: { onBack: () => void; onNavigate: (p: string) => void; scrollTo?: string }) {
-  const [activeTab, setActiveTab] = useState(initialSection ?? "people");
-
-  const scrollToSection = (id: string) => {
-    setActiveTab(id);
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   // Scroll to initial section if coming from nav link
   useEffect(() => {
     if (initialSection) {
@@ -899,30 +890,17 @@ export default function AboutPage({ onBack, onNavigate, scrollTo: initialSection
     }
   }, []);
 
-  // Update active tab on scroll
-  useEffect(() => {
-    const handler = () => {
-      for (let i = PAGE_TABS.length - 1; i >= 0; i--) {
-        const el = document.getElementById(PAGE_TABS[i].id);
-        if (el && el.getBoundingClientRect().top <= 200) {
-          setActiveTab(PAGE_TABS[i].id);
-          return;
-        }
-      }
-      setActiveTab("people");
-    };
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
-
   return (
     <div className="w-full min-h-screen" style={{ background: DARK }}>
+      {/* Client QA: the About hover dropdown already lists these exact 4
+          anchors (People/Benefits/Initiatives/Contact us), so this page
+          keeps only the global menu + breadcrumb-equivalent hero, not a 3rd
+          fixed section bar. */}
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="About" />
-        <StickyAnchorBar tabs={PAGE_TABS} active={activeTab} onChange={scrollToSection} />
       </div>
-      <div className="pt-[136px] md:pt-[196px]">
+      <div className="pt-[81px] md:pt-[148px]">
         <HeroSection />
         <PeopleSection />
         <BenefitsSection />

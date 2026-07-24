@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
-import { StickyAnchorBar } from "./components/StickyAnchorBar";
+import { FloatingSideNav } from "./components/FloatingSideNav";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { Logo } from "./components/Logo";
 import { openInspection } from "./components/InspectionModal";
@@ -1086,9 +1086,12 @@ export default function CareersPage({
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="About" />
-        <StickyAnchorBar tabs={PAGE_TABS} active={activeTab} onChange={scrollToSection} />
       </div>
-      <div className="pt-[136px] md:pt-[196px]">
+      {/* Client QA: the About dropdown's Careers entry doesn't carry matching
+          anchor ids, so this page follows the client's other approved option
+          — a floating rail that follows scroll instead of a fixed bar. */}
+      <FloatingSideNav tabs={PAGE_TABS} active={activeTab} onChange={scrollToSection} />
+      <div className="pt-[81px] md:pt-[148px]">
         <HeroSection />
         <CultureSection />
         <EmployeeQuotesSection />

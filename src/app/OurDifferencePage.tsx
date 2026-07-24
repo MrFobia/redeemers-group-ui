@@ -13,7 +13,6 @@ import imgFloor04 from "../assets/floor-04.jpeg";
 import imgRevAvatar from "../assets/rev-avatar.png";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
-import { StickyAnchorBar } from "./components/StickyAnchorBar";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 const B = "#1A52A8";
@@ -1484,8 +1483,6 @@ function Footer({ onBack }: { onBack: () => void }) {
 
 // ─── OurDifferencePage ────────────────────────────────────────────────────────
 export default function OurDifferencePage({ onBack, onNavigate, scrollTo: initialSection }: { onBack: () => void; onNavigate?: (p: string) => void; scrollTo?: string }) {
-  const [activeTab, setActiveTab] = useState(initialSection ?? NAV_TABS[0].id);
-
   useEffect(() => {
     if (initialSection) {
       const t = setTimeout(() => {
@@ -1501,39 +1498,20 @@ export default function OurDifferencePage({ onBack, onNavigate, scrollTo: initia
     window.scrollTo(0, 0);
   }, []);
 
-  const scrollToSection = (id: string) => {
-    setActiveTab(id);
-    const el = document.getElementById(id);
-    if (el) {
-      const offset = 145;
-      const top = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  };
-
-  useEffect(() => {
-    const sections = NAV_TABS.map((t) => document.getElementById(t.id)).filter(Boolean) as HTMLElement[];
-    const handler = () => {
-      for (let i = sections.length - 1; i >= 0; i--) {
-        if (window.scrollY + 160 >= sections[i].offsetTop) {
-          setActiveTab(NAV_TABS[i].id);
-          break;
-        }
-      }
-    };
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
 
   return (
     <>
+      {/* Client QA: a fixed horizontal section bar here read as a 3rd
+          competing nav layer (global menu + this bar + breadcrumb). The
+          "Our Difference" hover dropdown already surfaces all 9 anchors
+          before the user commits to a click, so this page keeps only the
+          global menu + breadcrumb for local orientation. */}
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
-        <StickyAnchorBar tabs={NAV_TABS} active={activeTab} onChange={scrollToSection} />
       </div>
 
-      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: DARK }}>
+      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

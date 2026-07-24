@@ -8,7 +8,7 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown, ChevronRight, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
-import { StickyAnchorBar } from "./components/StickyAnchorBar";
+import { FloatingSideNav } from "./components/FloatingSideNav";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { ProjectGallery } from "./components/ProjectGallery";
@@ -768,9 +768,13 @@ export default function ServicePage({ onBack, onNavigate, scrollTo }: { onBack: 
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Services" />
-        <StickyAnchorBar tabs={SERVICE_TABS} active={activeTab} onChange={scrollToSection} />
       </div>
-      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: "#0A0B14" }}>
+      {/* Client QA: replaces the fixed horizontal section bar (a 3rd competing
+          nav layer). This page has no main-nav dropdown that already covers
+          its internal anchors, so per the client's alternative it becomes a
+          floating rail that follows the scroll instead of stacking under the header. */}
+      <FloatingSideNav tabs={SERVICE_TABS} active={activeTab} onChange={scrollToSection} />
+      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: "#0A0B14" }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
