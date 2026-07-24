@@ -40,7 +40,10 @@ export function ServiceAreaMap({
   const inCityView = !!cityPos;
 
   return (
-    <div className="relative w-full" style={{ height: 520 }}>
+    // isolation: isolate contains Leaflet's internal z-index stack (panes go up
+    // to 1000, above the site's fixed header at z-100) so it can never bleed
+    // above the nav/megamenu regardless of DOM order.
+    <div className="relative w-full" style={{ height: 520, isolation: "isolate" }}>
       <MapContainer
         center={[35.65, -89.2]}
         zoom={6}
