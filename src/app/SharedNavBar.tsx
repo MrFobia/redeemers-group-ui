@@ -89,12 +89,20 @@ function SimpleDropdown({ children, width = 260 }: { children: React.ReactNode; 
 }
 
 function SimpleDropdownItem({ label, onClick }: { label: string; onClick: () => void }) {
+  const [hover, setHover] = useState(false);
   return (
     <button
       role="menuitem"
       onClick={onClick}
-      className="w-full text-left px-4 py-2.5 transition-colors hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(255,255,255,.75)", background: "none", border: "none", cursor: "pointer" }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      className="w-full text-left px-4 py-2.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+      style={{
+        fontFamily: "'Inter',sans-serif", fontSize: 13.5,
+        color: hover ? "#fff" : "rgba(255,255,255,.75)",
+        background: hover ? "rgba(255,255,255,.06)" : "none",
+        border: "none", cursor: "pointer",
+      }}
     >
       {label}
     </button>
