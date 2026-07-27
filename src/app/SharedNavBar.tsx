@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Home, Layers, Droplets, Grid3x3, Leaf, Building2 } from "lucide-react";
+import { Home, Layers, Droplets, Grid3x3, Leaf, Building2, ChevronRight } from "lucide-react";
 import { Logo } from "./components/Logo";
 import { InspectionModal, openInspection } from "./components/InspectionModal";
 import imgSvcFoundation from "../assets/svc-foundation.jpg";
@@ -58,81 +58,7 @@ const NEWS_SECTIONS = [
   { label: "Crawl Space" },
 ];
 
-// ─── Shared dropdown building blocks ──────────────────────────────────────────
-// One visual system for every nav dropdown. Two shapes on top of the same
-// shell: a 2-col "hub" (rail + preview, for nav items covering several
-// destination pages — Services/Resources/About) and a flat grid (for nav
-// items that are anchors on one page — Our Difference/Problem Signs).
-function DropdownShell({
-  eyebrow, onGoToPage, goToLabel = "Go to the page", children,
-}: { eyebrow: string; onGoToPage: () => void; goToLabel?: string; children: React.ReactNode }) {
-  return (
-    <div
-      role="menu"
-      aria-label={eyebrow}
-      style={{
-        background: "rgba(10,11,20,.98)",
-        backdropFilter: "blur(24px)",
-        borderBottom: "1px solid rgba(255,255,255,.07)",
-        boxShadow: "0 24px 60px rgba(0,0,0,.5)",
-      }}
-    >
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <p style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
-            {eyebrow}
-          </p>
-          <button
-            onClick={onGoToPage}
-            className="group inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
-          >
-            {goToLabel}
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-        <div className="mb-6 h-px" style={{ background: "rgba(255,255,255,.07)" }} />
-        <div className="flex gap-0">{children}</div>
-      </div>
-    </div>
-  );
-}
-
-// Left-rail item — selects/navigates a destination (Services category, Resources/About tab)
-function DropdownRailItem({
-  label, active, icon: Icon, iconImg, onMouseEnter, onClick,
-}: { label: string; active: boolean; icon?: React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>; iconImg?: string; onMouseEnter?: () => void; onClick: () => void }) {
-  return (
-    <button
-      onMouseEnter={onMouseEnter}
-      onClick={onClick}
-      className="group flex items-center gap-3 w-full px-3 py-3 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-      style={{
-        background: active ? "rgba(26,82,168,.2)" : "transparent",
-        borderLeft: active ? `2px solid ${B}` : "2px solid transparent",
-        cursor: "pointer",
-      }}
-    >
-      {(Icon || iconImg) && (
-        <span className="flex items-center justify-center shrink-0" style={{ width: 22, height: 22 }}>
-          {iconImg
-            ? <img src={iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)", opacity: active ? 1 : 0.7 }} />
-            : Icon ? <Icon size={20} color="#fff" strokeWidth={2} /> : null}
-        </span>
-      )}
-      <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: active ? 600 : 400, fontSize: 14, color: active ? "#fff" : "rgba(255,255,255,.6)", flex: 1 }}>
-        {label}
-      </span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 transition-opacity" style={{ opacity: active ? 1 : 0 }}>
-        <path d="M9 18l6-6-6-6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </button>
-  );
-}
-
-// ─── Simple (non-mega) dropdown ───────────────────────────────────────────────
+// ─── Simple dropdown (used by every top-level nav item now) ───────────────────
 // Our Difference / Resources / About are link lists, not visual destinations —
 // a full-width mega panel for a list of text links reads as noise next to the
 // Services/Problem Signs image menus. These get a compact panel anchored under
@@ -141,10 +67,10 @@ function SimpleDropdown({ children, width = 260 }: { children: React.ReactNode; 
   return (
     <motion.div
       role="menu"
-      initial={{ opacity: 0, y: -6 }}
+      initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -6 }}
-      transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+      exit={{ opacity: 0, y: -4 }}
+      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       style={{ width }}
     >
       <div
@@ -183,6 +109,47 @@ function SimpleDropdownLabel({ label }: { label: string }) {
     >
       {label}
     </p>
+  );
+}
+
+// Row with a nested flyout submenu (opens to the right on hover), same voice
+// as SimpleDropdownItem — used where a category has its own sub-list
+// (Services > symptoms, Problem Signs > symptoms) instead of a photo preview.
+function FlyoutItem({ label, onClick, children }: { label: string; onClick?: () => void; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <button
+        role="menuitem"
+        onClick={onClick}
+        className="w-full flex items-center justify-between gap-3 text-left px-4 py-2.5 transition-colors hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+        style={{
+          fontFamily: "'Inter',sans-serif", fontWeight: open ? 600 : 400, fontSize: 13.5,
+          color: open ? "#fff" : "rgba(255,255,255,.75)",
+          background: open ? "rgba(255,255,255,.05)" : "none",
+          border: "none", cursor: onClick ? "pointer" : "default",
+        }}
+      >
+        {label}
+        <ChevronRight size={13} color={open ? SAND : "rgba(255,255,255,.35)"} className="shrink-0" />
+      </button>
+      {open && (
+        <div className="absolute top-0 left-full" style={{ paddingLeft: 4 }}>
+          <div
+            className="flex flex-col py-2"
+            style={{
+              width: 280,
+              background: "rgba(10,11,20,.98)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,.08)",
+              boxShadow: "0 24px 60px rgba(0,0,0,.5)",
+            }}
+          >
+            {children}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -259,12 +226,10 @@ function OurDifferenceDropdown({ onNavigate }: { onNavigate: (p: string) => void
 }
 
 // ─── Problem Signs Dropdown ───────────────────────────────────────────────────
-// "Problem Signs" had no dropdown at all — a plain nav link with no preview,
-// unlike every other top-level section. Exact 4 categories/order from the
-// approved sitemap — keep in sync with ProblemSignsPage.tsx's CATEGORIES.
-// Image cards, not a text grid: the symptom categories are what a homeowner
-// recognizes at a glance ("our consumer doesn't wanna read, they wanna see"),
-// same visual language as the Services mega menu.
+// Exact 4 categories/order from the approved sitemap — keep in sync with
+// ProblemSignsPage.tsx's CATEGORIES. Plain vertical list, each category flies
+// out its symptoms on hover — client asked to drop the mega menu entirely in
+// favor of this simple list + flyout pattern (reference: competitor nav).
 const PROBLEM_SIGNS_CATEGORIES = [
   { slug: "structural-repair",  id: "structural",    icon: Home,     iconImg: iconFoundation as string,    img: imgSvcFoundation as string },
   { slug: "crawl-space-repair", id: "crawl",         icon: Layers,   iconImg: iconCrawlspace as string,    img: imgSvcCrawlspace as string },
@@ -273,64 +238,24 @@ const PROBLEM_SIGNS_CATEGORIES = [
 ].map((cat) => ({
   ...cat,
   label: SERVICES[cat.slug].name,
-  // First three symptoms from the sitemap — the full list lives on the service page.
-  signs: SERVICES[cat.slug].symptoms.slice(0, 3).map((s) => s.q),
+  // Mobile drill-in still uses the photo card; the desktop dropdown (below)
+  // is a plain list and ignores these fields.
+  signs: SERVICES[cat.slug].symptoms.map((s) => s.q),
 }));
-
 
 function ProblemSignsDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <DropdownShell eyebrow="Problem Signs" onGoToPage={() => onNavigate("problem-signs")}>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-        {PROBLEM_SIGNS_CATEGORIES.map((cat) => (
-          <div key={cat.id} className="group flex flex-col">
-            <button
-              onClick={() => onNavigate(`problem-signs/${cat.id}`)}
-              className="relative overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-              style={{ height: 190, border: "1px solid rgba(255,255,255,.08)", background: "none", padding: 0, cursor: "pointer", width: "100%" }}
-            >
-              <img
-                src={cat.img}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 transition-opacity" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.94) 0%, rgba(10,11,20,.35) 60%, rgba(10,11,20,.15) 100%)" }} />
-              <div className="absolute inset-x-0 bottom-0 p-4 flex items-center gap-2.5">
-                {cat.iconImg
-                  ? <img src={cat.iconImg} alt="" style={{ width: 26, height: 26, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
-                  : <cat.icon size={24} color="#fff" strokeWidth={2} />}
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 16, color: "#fff", lineHeight: 1.15 }}>{cat.label}</span>
-              </div>
-              <div className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" style={{ background: B }} />
-            </button>
-            <div className="flex flex-wrap gap-1.5 mt-2.5">
-              {cat.signs.map((sign) => (
-                <button
-                  key={sign}
-                  onClick={() => onNavigate(signRoute(sign))}
-                  className="text-left transition-colors hover:text-white hover:border-white/25"
-                  style={{
-                    fontFamily: "'Inter',sans-serif",
-                    fontSize: 12.5,
-                    lineHeight: 1.2,
-                    color: "rgba(255,255,255,.75)",
-                    background: "rgba(10,11,20,.55)",
-                    backdropFilter: "blur(6px)",
-                    WebkitBackdropFilter: "blur(6px)",
-                    border: "1px solid rgba(255,255,255,.12)",
-                    borderRadius: 999,
-                    padding: "6px 12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {sign}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </DropdownShell>
+    <SimpleDropdown width={260}>
+      {PROBLEM_SIGNS_CATEGORIES.map((cat) => (
+        <FlyoutItem key={cat.id} label={cat.label}>
+          {cat.signs.map((sign) => (
+            <SimpleDropdownItem key={sign} label={sign} onClick={() => onNavigate(signRoute(sign))} />
+          ))}
+        </FlyoutItem>
+      ))}
+      <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
+      <SimpleDropdownItem label="All problem signs" onClick={() => onNavigate("problem-signs")} />
+    </SimpleDropdown>
   );
 }
 
@@ -362,74 +287,26 @@ const SERVICE_CATEGORIES = SERVICE_ORDER.map((slug) => {
   };
 });
 
-// ─── Mega Menu ─────────────────────────────────────────────────────────────────
-// Client QA call (Jul 24) rejected the image-card version explicitly: "I have
-// not seen a version where if I hover over services, there is a list coming
-// off of the menu... those choices would be the launching point." The ask was
-// a simple vertical list you can click immediately — modeled on a competitor
-// (Baird) they pointed to — not cards that need a second hover to reveal
-// anything. The list is now the primary surface; the photo panel is a
-// secondary preview that follows the hovered row, not a prerequisite to act.
+// ─── Services Dropdown ──────────────────────────────────────────────────────
+// Client asked to drop the mega menu (list + photo preview) entirely in favor
+// of a plain vertical list — each category flies out its symptoms on hover,
+// same pattern as Problem Signs and the reference competitor nav they pointed
+// to. No photos, no second surface to scan before acting.
 const MEGA_MENU_SERVICES = SERVICE_CATEGORIES.slice(0, 5);
 
 function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
-  const [hovered, setHovered] = useState(0);
-  const active = MEGA_MENU_SERVICES[hovered];
-
   return (
-    <DropdownShell eyebrow="Services" onGoToPage={() => onNavigate("services-landing")}>
-      {/* Col 1 — the click-first list. Every category is one click away, no hover required to reveal it. */}
-      <div className="w-64 shrink-0 flex flex-col gap-1" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-        {MEGA_MENU_SERVICES.map((c, i) => (
-          <DropdownRailItem
-            key={c.label}
-            label={c.label}
-            active={i === hovered}
-            icon={c.icon}
-            iconImg={c.iconImg ?? undefined}
-            onMouseEnter={() => setHovered(i)}
-            onClick={() => onNavigate(`service/${c.slug}`)}
-          />
-        ))}
-      </div>
-
-      {/* Col 2 — photo preview of the hovered category, secondary to the list, not required to act on it */}
-      <div className="flex-1 pl-8 flex flex-col">
-        <div className="relative overflow-hidden flex-1" style={{ minHeight: 280, border: "1px solid rgba(255,255,255,.08)" }}>
-          <img src={active.img} alt={active.label} className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.25) 55%, transparent 100%)" }} />
-          <div className="absolute inset-x-0 bottom-0 p-7">
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", marginBottom: 8 }}>{active.label}</p>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.65)", marginBottom: active.signs.length ? 16 : 0, maxWidth: 420 }}>{active.tagline}</p>
-            {active.signs.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {active.signs.map((symptom) => (
-                  <button
-                    key={symptom}
-                    onClick={() => onNavigate(signRoute(symptom))}
-                    className="text-left transition-colors hover:text-white hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                    style={{
-                      fontFamily: "'Inter',sans-serif",
-                      fontSize: 12,
-                      color: "rgba(255,255,255,.85)",
-                      background: "rgba(10,11,20,.5)",
-                      backdropFilter: "blur(6px)",
-                      WebkitBackdropFilter: "blur(6px)",
-                      border: "1px solid rgba(255,255,255,.18)",
-                      borderRadius: 999,
-                      padding: "7px 14px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {symptom}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </DropdownShell>
+    <SimpleDropdown width={260}>
+      {MEGA_MENU_SERVICES.map((c) => (
+        <FlyoutItem key={c.slug} label={c.label} onClick={() => onNavigate(`service/${c.slug}`)}>
+          {c.signs.map((symptom) => (
+            <SimpleDropdownItem key={symptom} label={symptom} onClick={() => onNavigate(signRoute(symptom))} />
+          ))}
+        </FlyoutItem>
+      ))}
+      <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
+      <SimpleDropdownItem label="All services" onClick={() => onNavigate("services-landing")} />
+    </SimpleDropdown>
   );
 }
 
@@ -470,14 +347,6 @@ export default function SharedNavBar({
   const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about" | "our-difference" | "problem-signs">("root");
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
-  // Compact dropdowns (Resources/Our Difference/About) render outside the <nav>
-  // — inside it they get clipped — so they need their trigger's x offset.
-  const [anchorLeft, setAnchorLeft] = useState(0);
-  const anchorTo = (e: React.MouseEvent<HTMLElement>) => {
-    const nav = navRef.current;
-    if (!nav) return;
-    setAnchorLeft(e.currentTarget.getBoundingClientRect().left - nav.getBoundingClientRect().left);
-  };
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
@@ -549,7 +418,7 @@ export default function SharedNavBar({
       >
         <div className="flex items-center justify-between px-8 md:px-14 py-3 gap-4 lg:gap-6">
           {/* Logo */}
-          <button onClick={() => handleNavigate("home")} className="h-14 lg:h-16 xl:h-20 shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
+          <button onClick={() => handleNavigate("home")} className="h-16 lg:h-20 xl:h-24 shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
             <Logo light />
           </button>
 
@@ -559,126 +428,160 @@ export default function SharedNavBar({
               const pageKey = NAV_PAGE_MAP[l];
               const isActive = l === active;
 
+              // Each item owns a relative wrapper so its dropdown is CSS-anchored
+              // directly under its own button (left:0 top:full) — no shared
+              // JS-measured x offset, so switching between items can't make an
+              // exiting panel snap to the newly-hovered item's position.
               if (l === "Services") {
                 return (
-                  <button
-                    key="Services"
-                    ref={servicesBtnRef}
-                    aria-haspopup="menu"
-                    aria-expanded={megaOpen}
-                    onMouseEnter={() => { setMegaOpen(true); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                    onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                    className="flex items-center gap-1 transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                    style={{
-                      fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
-                      color: megaOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
-                      letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
-                      borderBottom: isActive ? `2px solid ${SAND}` : "2px solid transparent",
-                      paddingBottom: 2,
-                    }}
-                  >
-                    Services
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                      style={{ transform: megaOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
-                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+                  <div key="Services" className="relative">
+                    <button
+                      ref={servicesBtnRef}
+                      aria-haspopup="menu"
+                      aria-expanded={megaOpen}
+                      onMouseEnter={() => { setMegaOpen(true); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      className="flex items-center gap-1 transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                      style={{
+                        fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
+                        color: megaOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
+                        letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
+                        borderBottom: isActive ? `2px solid ${SAND}` : megaOpen ? `2px solid ${SAND}` : "2px solid transparent",
+                        paddingBottom: 2,
+                      }}
+                    >
+                      Services
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        style={{ transform: megaOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    <div className="absolute left-0 top-full z-[200] pt-2">
+                      <AnimatePresence>
+                        {megaOpen && <MegaMenu key="services" onNavigate={handleNavigate} />}
+                      </AnimatePresence>
+                    </div>
+                  </div>
                 );
               }
 
               if (l === "Resources") {
                 return (
-                  <button
-                    key="Resources"
-                    onMouseEnter={(e) => { anchorTo(e); setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                    onClick={() => { setResourcesOpen((prev) => !prev); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                    className="flex items-center gap-1 transition-colors whitespace-nowrap"
-                    style={{
-                      fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
-                      color: resourcesOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
-                      letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
-                      borderBottom: isActive ? `2px solid ${SAND}` : resourcesOpen ? `2px solid ${SAND}` : "2px solid transparent",
-                      paddingBottom: 2,
-                    }}
-                  >
-                    Resources
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                      style={{ transform: resourcesOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
-                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+                  <div key="Resources" className="relative">
+                    <button
+                      onMouseEnter={() => { setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      onClick={() => { setResourcesOpen((prev) => !prev); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      className="flex items-center gap-1 transition-colors whitespace-nowrap"
+                      style={{
+                        fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
+                        color: resourcesOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
+                        letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
+                        borderBottom: isActive ? `2px solid ${SAND}` : resourcesOpen ? `2px solid ${SAND}` : "2px solid transparent",
+                        paddingBottom: 2,
+                      }}
+                    >
+                      Resources
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        style={{ transform: resourcesOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    <div className="absolute left-0 top-full z-[200] pt-2">
+                      <AnimatePresence>
+                        {resourcesOpen && <ResourcesDropdown key="res" onNavigate={handleNavigate} />}
+                      </AnimatePresence>
+                    </div>
+                  </div>
                 );
               }
 
               if (l === "Problem Signs") {
                 return (
-                  <button
-                    key="Problem Signs"
-                    onMouseEnter={() => { setSignsOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
-                    onClick={() => { setSignsOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
-                    className="flex items-center gap-1 transition-colors whitespace-nowrap"
-                    style={{
-                      fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
-                      color: signsOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
-                      letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
-                      borderBottom: isActive ? `2px solid ${SAND}` : signsOpen ? `2px solid ${SAND}` : "2px solid transparent",
-                      paddingBottom: 2,
-                    }}
-                  >
-                    Problem Signs
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                      style={{ transform: signsOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
-                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+                  <div key="Problem Signs" className="relative">
+                    <button
+                      onMouseEnter={() => { setSignsOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                      onClick={() => { setSignsOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                      className="flex items-center gap-1 transition-colors whitespace-nowrap"
+                      style={{
+                        fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
+                        color: signsOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
+                        letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
+                        borderBottom: isActive ? `2px solid ${SAND}` : signsOpen ? `2px solid ${SAND}` : "2px solid transparent",
+                        paddingBottom: 2,
+                      }}
+                    >
+                      Problem Signs
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        style={{ transform: signsOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    <div className="absolute left-0 top-full z-[200] pt-2">
+                      <AnimatePresence>
+                        {signsOpen && <ProblemSignsDropdown key="signs" onNavigate={handleNavigate} />}
+                      </AnimatePresence>
+                    </div>
+                  </div>
                 );
               }
 
               if (l === "Our Difference") {
                 return (
-                  <button
-                    key="Our Difference"
-                    onMouseEnter={(e) => { anchorTo(e); setOurDiffOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
-                    onClick={() => { setOurDiffOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
-                    className="flex items-center gap-1 transition-colors whitespace-nowrap"
-                    style={{
-                      fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
-                      color: ourDiffOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
-                      letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
-                      borderBottom: isActive ? `2px solid ${SAND}` : ourDiffOpen ? `2px solid ${SAND}` : "2px solid transparent",
-                      paddingBottom: 2,
-                    }}
-                  >
-                    Our Difference
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                      style={{ transform: ourDiffOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
-                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+                  <div key="Our Difference" className="relative">
+                    <button
+                      onMouseEnter={() => { setOurDiffOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
+                      onClick={() => { setOurDiffOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
+                      className="flex items-center gap-1 transition-colors whitespace-nowrap"
+                      style={{
+                        fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
+                        color: ourDiffOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
+                        letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
+                        borderBottom: isActive ? `2px solid ${SAND}` : ourDiffOpen ? `2px solid ${SAND}` : "2px solid transparent",
+                        paddingBottom: 2,
+                      }}
+                    >
+                      Our Difference
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        style={{ transform: ourDiffOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    <div className="absolute left-0 top-full z-[200] pt-2">
+                      <AnimatePresence>
+                        {ourDiffOpen && <OurDifferenceDropdown key="diff" onNavigate={handleNavigate} />}
+                      </AnimatePresence>
+                    </div>
+                  </div>
                 );
               }
 
               if (l === "About") {
                 return (
-                  <button
-                    key="About"
-                    onMouseEnter={(e) => { anchorTo(e); setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                    onClick={() => { setAboutOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                    className="flex items-center gap-1 transition-colors whitespace-nowrap"
-                    style={{
-                      fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
-                      color: aboutOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
-                      letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
-                      borderBottom: isActive ? `2px solid ${SAND}` : aboutOpen ? `2px solid ${SAND}` : "2px solid transparent",
-                      paddingBottom: 2,
-                    }}
-                  >
-                    About
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                      style={{ transform: aboutOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
-                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+                  <div key="About" className="relative">
+                    <button
+                      onMouseEnter={() => { setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      onClick={() => { setAboutOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      className="flex items-center gap-1 transition-colors whitespace-nowrap"
+                      style={{
+                        fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
+                        color: aboutOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
+                        letterSpacing: ".3px", background: "none", border: "none", cursor: "pointer",
+                        borderBottom: isActive ? `2px solid ${SAND}` : aboutOpen ? `2px solid ${SAND}` : "2px solid transparent",
+                        paddingBottom: 2,
+                      }}
+                    >
+                      About
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        style={{ transform: aboutOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    <div className="absolute left-0 top-full z-[200] pt-2">
+                      <AnimatePresence>
+                        {aboutOpen && <AboutDropdown key="about" onNavigate={handleNavigate} />}
+                      </AnimatePresence>
+                    </div>
+                  </div>
                 );
               }
 
@@ -1006,31 +909,6 @@ export default function SharedNavBar({
           </div>
         )}
       </nav>
-
-      {/* Mega menu — z-[200] clears the StickyAnchorBar (z-50) that lives in the fixed header after SharedNavBar */}
-      {megaOpen && (
-        <div className="absolute left-0 w-full z-[200]">
-          <MegaMenu onNavigate={handleNavigate} />
-        </div>
-      )}
-
-      {/* Resources / Our Difference / About — compact panels anchored to their
-          own nav item's x offset. Only Services and Problem Signs get the
-          full-width mega panel. */}
-      <div className="absolute z-[200] pt-2" style={{ left: anchorLeft }}>
-        <AnimatePresence>
-          {resourcesOpen && <ResourcesDropdown key="res" onNavigate={handleNavigate} />}
-          {ourDiffOpen && <OurDifferenceDropdown key="diff" onNavigate={handleNavigate} />}
-          {aboutOpen && <AboutDropdown key="about" onNavigate={handleNavigate} />}
-        </AnimatePresence>
-      </div>
-
-      {/* Problem Signs dropdown */}
-      {signsOpen && (
-        <div className="absolute left-0 w-full z-[200]">
-          <ProblemSignsDropdown onNavigate={handleNavigate} />
-        </div>
-      )}
 
       <InspectionModal />
     </div>

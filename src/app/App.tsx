@@ -195,7 +195,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
   const slide = SLIDES[current];
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ height: "100dvh", minHeight: 760 }}>
+    <section className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 200px)", minHeight: 560 }}>
       {/* Embla carousel */}
       <div ref={emblaRef} className="h-full overflow-hidden">
         <div className="flex h-full" style={{ touchAction: "pan-y" }}>

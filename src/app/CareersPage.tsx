@@ -217,7 +217,12 @@ function Footer({ onBack }: { onBack: () => void }) {
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: "92vh", background: DARK }}>
+    // Home's hero sits at y:0 under a transparent nav, so its own
+    // `calc(100dvh - 200px)` IS the page's total hero footprint. This page's
+    // hero instead sits below a 148px nav-offset spacer (pt-[148px] on the
+    // page wrapper), so the section height must be shorter by that same
+    // amount for the hero to bottom out at the same y as Home's.
+    <section className="relative overflow-hidden" style={{ height: "calc(100dvh - 348px)", minHeight: 420, background: DARK }}>
       {/* Background image */}
       <div className="absolute inset-0">
         <ImageWithFallback
@@ -236,7 +241,7 @@ function HeroSection() {
       <div className="absolute left-0 top-0 bottom-0 w-[3px]"
         style={{ background: `linear-gradient(to bottom, transparent 10%, ${SAND} 40%, ${SAND} 60%, transparent 90%)`, opacity: 0.6 }} />
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 flex flex-col justify-center" style={{ minHeight: "92vh", paddingTop: 60, paddingBottom: 120 }}>
+      <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 flex flex-col justify-center h-full" style={{ paddingTop: 60, paddingBottom: 60 }}>
         <div className="max-w-[680px]">
           <Reveal>
             <div className="flex items-center gap-3 mb-6">
