@@ -3,9 +3,14 @@ import { motion, useInView } from "motion/react";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
+import { getSymptomImage } from "./data/services";
 import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import iconFoundation from "../assets/icons/icon-foundation.svg";
+import iconCrawlspace from "../assets/icons/icon-crawlspace.svg";
+import iconWaterproofing from "../assets/icons/icon-waterproofing.svg";
+import iconConcrete from "../assets/icons/icon-concrete.svg";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 const B = "#1A52A8";
@@ -92,14 +97,9 @@ const CATEGORIES = [
     id: "structural",
     filter: "Structural Repair",
     title: "Structural Repair",
-    page: "service",
+    page: "service/structural-repair",
     img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <rect x="2" y="19" width="20" height="2" rx="1" stroke={B} strokeWidth="2" />
-        <path d="M12 3L4 19M12 3l8 16" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+    icon: iconFoundation as string,
     symptoms: [
       "Uneven, sloping, or bouncy floors",
       "Cracks in exterior or interior walls",
@@ -114,14 +114,9 @@ const CATEGORIES = [
     id: "crawl",
     filter: "Crawl Space Repair",
     title: "Crawl Space Repair",
-    page: "service",
+    page: "service/crawl-space-repair",
     img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M9 22V12h6v10" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+    icon: iconCrawlspace as string,
     symptoms: [
       "My floors are sagging, bouncy, or buckling.",
       "The baseboards have separated from the floor.",
@@ -132,13 +127,9 @@ const CATEGORIES = [
     id: "waterproofing",
     filter: "Waterproofing",
     title: "Waterproofing",
-    page: "service",
+    page: "service/waterproofing",
     img: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+    icon: iconWaterproofing as string,
     symptoms: [
       "Water getting in to basement or other.",
       "Water pooling around house.",
@@ -152,14 +143,9 @@ const CATEGORIES = [
     id: "concrete",
     filter: "Concrete",
     title: "Concrete",
-    page: "service",
+    page: "service/concrete-services",
     img: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M3 12h18M3 6h18M3 18h18" stroke={B} strokeWidth="2" strokeLinecap="round" />
-        <path d="M7 9v6M17 9v6" stroke={B} strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
+    icon: iconConcrete as string,
     symptoms: [
       "Uneven concrete slabs",
       "Sinking driveway, walkway, patio",
@@ -266,8 +252,8 @@ function HeroSection() {
                   className="absolute bottom-2 left-2 flex items-center justify-center w-8 h-8 shrink-0"
                   style={{ background: "rgba(10,11,20,.85)", border: "1.5px solid rgba(196,171,108,.5)" }}
                 >
-                  <span className="flex items-center justify-center scale-75" style={{ filter: "brightness(0) invert(1)" }}>
-                    {cat.icon}
+                  <span className="flex items-center justify-center" style={{ width: 20, height: 20, filter: "brightness(0) invert(1)" }}>
+                    <img src={cat.icon} alt="" className="w-full h-full object-contain" />
                   </span>
                 </div>
               </div>
@@ -289,8 +275,149 @@ function HeroSection() {
   );
 }
 
+// ─── Category Hero ────────────────────────────────────────────────────────────
+// Landing on "Problem Signs > <category>" must answer "am I in the right
+// place?" without scrolling: the category's own symptoms are the first thing
+// on screen, each with its photo and a direct link to that sign's page. The
+// generic diagnosis hero (4 tiles, no specifics) only renders when no category
+// is selected.
+function CategoryHero({
+  cat,
+  onSignClick,
+  onNavigate,
+}: {
+  cat: typeof CATEGORIES[0];
+  onSignClick?: (label?: string) => void;
+  onNavigate?: (p: string) => void;
+}) {
+  const [hovered, setHovered] = useState<string | null>(null);
+  const others = CATEGORIES.filter((c) => c.id !== cat.id);
+
+  return (
+    <section className="relative w-full overflow-hidden" style={{ background: DARK }}>
+      <BlueprintGrid opacity={0.05} />
+      <div
+        className="absolute pointer-events-none"
+        style={{ top: -140, right: -120, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(26,82,168,.25) 0%, transparent 70%)" }}
+      />
+
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-8 pb-10 lg:pt-10 lg:pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+
+          {/* Left: which category you're in, and what to do next */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-4 lg:col-start-1 lg:row-start-1"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center w-10 h-10 shrink-0"
+                style={{ background: "rgba(10,11,20,.85)", border: `1.5px solid ${SAND}` }}>
+                <span className="flex items-center justify-center" style={{ width: 22, height: 22, filter: "brightness(0) invert(1)" }}>
+                  <img src={cat.icon} alt="" className="w-full h-full object-contain" />
+                </span>
+              </div>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
+                Problem Signs
+              </span>
+            </div>
+
+            <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.6vw,46px)", color: "#fff", lineHeight: 1.02, letterSpacing: "-1.2px", marginBottom: 14 }}>
+              {cat.title}
+            </h1>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15.5, color: "rgba(255,255,255,.65)", lineHeight: 1.65, maxWidth: 380, marginBottom: 22 }}>
+              These are the {cat.symptoms.length} signs we're called out for most in this category. Pick the one that matches
+              your home — you'll get what causes it and how it's repaired.
+            </p>
+
+          </motion.div>
+
+          {/* Right: the category's actual signs — first thing on screen, and on
+              mobile they come before the CTA so the fold still shows content. */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-8 lg:col-start-5 lg:row-start-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3"
+          >
+            {cat.symptoms.map((symptom, i) => {
+              const on = hovered === symptom;
+              return (
+                <button
+                  key={symptom}
+                  onClick={() => onSignClick?.(symptom)}
+                  onMouseEnter={() => setHovered(symptom)}
+                  onMouseLeave={() => setHovered(null)}
+                  className="group relative flex items-center gap-3 p-3 text-left transition-all duration-200"
+                  style={{ background: CHAR, border: `1.5px solid ${on ? SAND : "rgba(255,255,255,.1)"}`, cursor: "pointer" }}
+                >
+                  <span className="relative overflow-hidden shrink-0" style={{ width: 58, height: 46 }}>
+                    <ImageWithFallback
+                      src={getSymptomImage(symptom)}
+                      alt={symptom}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-300"
+                      style={{ transform: on ? "scale(1.08)" : "scale(1)" }}
+                    />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 10, color: on ? SAND : "rgba(255,255,255,.35)", letterSpacing: 1.5 }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="block mt-0.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, lineHeight: 1.35, color: on ? "#fff" : "rgba(255,255,255,.78)", fontWeight: on ? 500 : 400 }}>
+                      {symptom}
+                    </span>
+                  </span>
+                  <ChevronRight size={15} color={on ? SAND : "rgba(255,255,255,.3)"} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
+                </button>
+              );
+            })}
+          </motion.div>
+
+          {/* Actions + category switch — sits under the heading on desktop */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.18 }}
+            className="lg:col-span-4 lg:col-start-1 lg:row-start-2 lg:-mt-2"
+          >
+            <button
+              onClick={() => onNavigate?.(cat.page)}
+              className="group inline-flex items-center gap-2.5 px-5 py-3 transition-all hover:bg-white/5"
+              style={{ border: `1.5px solid ${SAND}`, background: "transparent", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13.5, color: "#fff" }}
+            >
+              See {cat.title} solutions
+              <ArrowRight size={14} color={SAND} className="transition-transform group-hover:translate-x-1" />
+            </button>
+
+            {/* Switch category without scrolling back up */}
+            <div className="mt-7 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,.1)" }}>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,.4)", letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 10 }}>
+                Other categories
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {others.map((o) => (
+                  <button
+                    key={o.id}
+                    onClick={() => onNavigate?.(`problem-signs/${o.id}`)}
+                    className="transition-colors hover:text-white hover:border-white/30"
+                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(255,255,255,.7)", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.12)", padding: "6px 12px", cursor: "pointer" }}
+                  >
+                    {o.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Category Card ────────────────────────────────────────────────────────────
-function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat: typeof CATEGORIES[0]; index: number; delay?: number; onSignClick?: () => void; onNavigate?: (p: string) => void }) {
+function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat: typeof CATEGORIES[0]; index: number; delay?: number; onSignClick?: (label?: string) => void; onNavigate?: (p: string) => void }) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [cardHover, setCardHover] = useState(false);
   const num = String(index + 1).padStart(2, "0");
@@ -341,7 +468,7 @@ function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat:
             className="flex items-center justify-center w-12 h-12 shrink-0 transition-colors duration-300"
             style={{ background: "rgba(26,82,168,.06)", border: `1.5px dashed ${cardHover ? B : "rgba(26,82,168,.3)"}` }}
           >
-            {cat.icon}
+            <img src={cat.icon} alt="" style={{ width: 26, height: 26, objectFit: "contain" }} />
           </div>
           <h3
             style={{
@@ -363,7 +490,7 @@ function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat:
           {cat.symptoms.map((symptom, si) => (
             <button
               key={symptom}
-              onClick={onSignClick}
+              onClick={() => onSignClick?.(symptom)}
               className="group flex items-center justify-between w-full py-2.5 text-left transition-all duration-200"
               style={{
                 borderBottom: si < cat.symptoms.length - 1 ? "1px dashed rgba(11,28,74,.1)" : "none",
@@ -371,12 +498,18 @@ function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat:
               onMouseEnter={() => setHovered(symptom)}
               onMouseLeave={() => setHovered(null)}
             >
-              <span className="flex items-center gap-2.5">
+              <span className="flex items-center gap-3">
+                {/* Thumbnail per symptom — recognition is visual first. */}
                 <span
-                  className="transition-colors duration-200"
-                  style={{ fontSize: 11, color: hovered === symptom ? SAND : "rgba(11,28,74,.3)" }}
+                  className="relative overflow-hidden shrink-0 transition-all duration-200"
+                  style={{ width: 52, height: 40, border: `1px solid ${hovered === symptom ? B : "rgba(11,28,74,.12)"}` }}
                 >
-                  ▸
+                  <ImageWithFallback
+                    src={getSymptomImage(symptom)}
+                    alt={symptom}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-300"
+                    style={{ transform: hovered === symptom ? "scale(1.08)" : "scale(1)" }}
+                  />
                 </span>
                 <span
                   style={{
@@ -429,11 +562,14 @@ function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat:
 }
 
 // ─── Browse Section ───────────────────────────────────────────────────────────
-function BrowseSection({ onSignClick, onNavigate }: { onSignClick?: () => void; onNavigate?: (p: string) => void }) {
+function BrowseSection({ onSignClick, onNavigate, excludeId }: { onSignClick?: (label?: string) => void; onNavigate?: (p: string) => void; excludeId?: string }) {
   const [activeFilter, setActiveFilter] = useState("All");
 
+  // On a category route the hero already carries that category in full, so the
+  // unfiltered grid below shows the remaining ones instead of repeating it.
+  // Picking its own chip brings the full card back.
   const filtered = activeFilter === "All"
-    ? CATEGORIES
+    ? CATEGORIES.filter((c) => c.id !== excludeId)
     : CATEGORIES.filter((c) => c.filter === activeFilter || c.filter === "All");
 
   return (
@@ -445,6 +581,13 @@ function BrowseSection({ onSignClick, onNavigate }: { onSignClick?: () => void; 
             below was flagged as content duplication; this section now goes
             straight to the filter + the full detail cards (which carry the
             per-symptom lists the hero tiles don't). */}
+        {excludeId && activeFilter === "All" && (
+          <Reveal className="text-center mb-6">
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: MUTED, letterSpacing: 3, textTransform: "uppercase" }}>
+              Not what you're seeing? Browse the other categories
+            </p>
+          </Reveal>
+        )}
         <Reveal delay={0.05} className="flex items-center gap-2 flex-wrap mb-12 justify-center">
           {FILTERS.map((f) => {
             const active = activeFilter === f;
@@ -655,7 +798,11 @@ function Footer({ onBack }: { onBack: () => void }) {
 }
 
 // ─── ProblemSignsPage ─────────────────────────────────────────────────────────
-export default function ProblemSignsPage({ onBack, onSignClick, onNavigate, scrollTo: initialSection }: { onBack: () => void; onSignClick?: () => void; onNavigate?: (p: string) => void; scrollTo?: string }) {
+export default function ProblemSignsPage({ onBack, onSignClick, onNavigate, scrollTo: initialSection, category }: { onBack: () => void; onSignClick?: (label?: string) => void; onNavigate?: (p: string) => void; scrollTo?: string; category?: string }) {
+  // Route "problem-signs/<category-id>" — an unknown id falls back to the
+  // generic diagnosis hero rather than rendering an empty category.
+  const activeCat = CATEGORIES.find((c) => c.id === category);
+
   useEffect(() => {
     if (initialSection) {
       const t = setTimeout(() => {
@@ -685,14 +832,32 @@ export default function ProblemSignsPage({ onBack, onSignClick, onNavigate, scro
               Home
             </button>
             <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>
-              Problem Signs
-            </span>
+            {activeCat ? (
+              <>
+                <button
+                  onClick={() => onNavigate?.("problem-signs")}
+                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
+                  className="hover:text-white transition-colors"
+                >
+                  Problem Signs
+                </button>
+                <ChevronRight size={14} color="rgba(255,255,255,.3)" />
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>
+                  {activeCat.title}
+                </span>
+              </>
+            ) : (
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>
+                Problem Signs
+              </span>
+            )}
           </div>
         </div>
 
-        <HeroSection />
-        <BrowseSection onSignClick={onSignClick} onNavigate={onNavigate} />
+        {activeCat
+          ? <CategoryHero cat={activeCat} onSignClick={onSignClick} onNavigate={onNavigate} />
+          : <HeroSection />}
+        <BrowseSection onSignClick={onSignClick} onNavigate={onNavigate} excludeId={activeCat?.id} />
         <DiagnosticBanner />
         <CtaSection />
         <Footer onBack={onBack} />

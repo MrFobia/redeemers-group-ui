@@ -12,6 +12,14 @@ import iconFoundation from "../assets/icons/icon-foundation.svg";
 import iconCrawlspace from "../assets/icons/icon-crawlspace.svg";
 import iconWaterproofing from "../assets/icons/icon-waterproofing.svg";
 import iconConcrete from "../assets/icons/icon-concrete.svg";
+import { SERVICES, SERVICE_ORDER, getSymptomImage } from "./data/services";
+import { getProblemSignByLabel } from "./data/problemSigns";
+
+/** Route for a symptom label — lands on that sign's own page, not the default. */
+const signRoute = (label: string) => {
+  const sign = getProblemSignByLabel(label);
+  return sign ? `problem-sign-inner/${sign.slug}` : "problem-sign-inner";
+};
 
 // ─── Brand Tokens ──────────────────────────────────────────────────────────────
 const B = "#1A52A8";
@@ -124,28 +132,57 @@ function DropdownRailItem({
   );
 }
 
-// Plain destination link — used in the preview panel and in flat-grid dropdowns
-function DropdownLinkItem({
-  label, onClick, icon: Icon, iconImg,
-}: { label: string; onClick: () => void; icon?: React.ComponentType<{ size?: number; color?: string; strokeWidth?: number }>; iconImg?: string }) {
+// ─── Simple (non-mega) dropdown ───────────────────────────────────────────────
+// Our Difference / Resources / About are link lists, not visual destinations —
+// a full-width mega panel for a list of text links reads as noise next to the
+// Services/Problem Signs image menus. These get a compact panel anchored under
+// their own nav item instead.
+function SimpleDropdown({ children, width = 260 }: { children: React.ReactNode; width?: number }) {
+  return (
+    <motion.div
+      role="menu"
+      initial={{ opacity: 0, y: -6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -6 }}
+      transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+      style={{ width }}
+    >
+      <div
+        className="flex flex-col py-2"
+        style={{
+          background: "rgba(10,11,20,.98)",
+          backdropFilter: "blur(24px)",
+          border: "1px solid rgba(255,255,255,.08)",
+          boxShadow: "0 24px 60px rgba(0,0,0,.5)",
+        }}
+      >
+        {children}
+      </div>
+    </motion.div>
+  );
+}
+
+function SimpleDropdownItem({ label, onClick }: { label: string; onClick: () => void }) {
   return (
     <button
+      role="menuitem"
       onClick={onClick}
-      className="group flex items-center gap-3 px-3 py-2.5 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-      style={{ background: "rgba(255,255,255,.04)", cursor: "pointer", border: "none" }}
+      className="w-full text-left px-4 py-2.5 transition-colors hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(255,255,255,.75)", background: "none", border: "none", cursor: "pointer" }}
     >
-      {(Icon || iconImg) && (
-        <span className="flex items-center justify-center shrink-0" style={{ width: 20, height: 20 }}>
-          {iconImg
-            ? <img src={iconImg} alt="" className="w-full h-full object-contain transition-opacity" style={{ filter: "brightness(0) invert(1)", opacity: .7 }} />
-            : Icon ? <Icon size={18} color="rgba(255,255,255,.7)" strokeWidth={2} /> : null}
-        </span>
-      )}
-      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)", flex: 1 }}>{label}</span>
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
-        <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      {label}
     </button>
+  );
+}
+
+function SimpleDropdownLabel({ label }: { label: string }) {
+  return (
+    <p
+      className="px-4 pt-3 pb-1.5"
+      style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}
+    >
+      {label}
+    </p>
   );
 }
 
@@ -160,29 +197,18 @@ type ResourcesDropdownProps = {
 // preview) for nav items covering multiple destination pages, one flat-grid
 // template for nav items that are anchors on a single page. See DropdownShell.
 function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
-  const [activeTab, setActiveTab] = useState<"resources" | "news">("resources");
-  const tabs = [{ key: "resources" as const, label: "Resources" }, { key: "news" as const, label: "News / Blog" }];
-
   return (
-    <DropdownShell eyebrow="Resources" onGoToPage={() => onNavigate("resources")}>
-      <div className="w-64 shrink-0 flex flex-col gap-1" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-        {tabs.map((tab) => (
-          <DropdownRailItem
-            key={tab.key}
-            label={tab.label}
-            active={activeTab === tab.key}
-            onMouseEnter={() => setActiveTab(tab.key)}
-            onClick={() => onNavigate(tab.key === "resources" ? "resources" : "news-blog")}
-          />
-        ))}
-      </div>
-      <div className="flex-1 pl-8 flex flex-col gap-1">
-        {(activeTab === "resources" ? RESOURCES_SECTIONS : NEWS_SECTIONS).map((sec: { label: string; id?: string }) => {
-          const page = activeTab === "resources" ? "resources" : "news-blog";
-          return <DropdownLinkItem key={sec.label} label={sec.label} onClick={() => onNavigate(sec.id ? `${page}#${sec.id}` : page)} />;
-        })}
-      </div>
-    </DropdownShell>
+    <SimpleDropdown>
+      <SimpleDropdownLabel label="Resources" />
+      {RESOURCES_SECTIONS.map((sec) => (
+        <SimpleDropdownItem key={sec.label} label={sec.label} onClick={() => onNavigate(`resources#${sec.id}`)} />
+      ))}
+      <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
+      <SimpleDropdownLabel label="News / Blog" />
+      {NEWS_SECTIONS.map((sec) => (
+        <SimpleDropdownItem key={sec.label} label={sec.label} onClick={() => onNavigate("news-blog")} />
+      ))}
+    </SimpleDropdown>
   );
 }
 
@@ -194,53 +220,14 @@ const ABOUT_TABS = [
   { key: "contact" as const,      label: "Contact us",   page: "contact" },
 ];
 
-const ABOUT_SECTIONS: Record<"about" | "careers" | "service-area" | "contact", { label: string; id?: string }[]> = {
-  "about": [
-    { label: "People",      id: "people" },
-    { label: "Benefits",    id: "benefits" },
-    { label: "Initiatives", id: "initiatives" },
-    { label: "Contact us",  id: "contact" },
-  ],
-  "careers": [
-    { label: "Open positions" },
-    { label: "Benefits & culture" },
-    { label: "How we hire" },
-    { label: "Apply now" },
-  ],
-  "service-area": [
-    { label: "Check my area" },
-    { label: "Service map" },
-    { label: "All cities" },
-  ],
-  "contact": [
-    { label: "Contact information", id: "info" },
-    { label: "Locations map",       id: "locations" },
-    { label: "Contact form",        id: "form" },
-  ],
-};
 
 function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
-  const [activeTab, setActiveTab] = useState<"about" | "careers" | "service-area" | "contact">("about");
-
   return (
-    <DropdownShell eyebrow="About" onGoToPage={() => onNavigate(activeTab)}>
-      <div className="w-64 shrink-0 flex flex-col gap-1" style={{ borderRight: "1px solid rgba(255,255,255,.07)" }}>
-        {ABOUT_TABS.map((tab) => (
-          <DropdownRailItem
-            key={tab.key}
-            label={tab.label}
-            active={activeTab === tab.key}
-            onMouseEnter={() => setActiveTab(tab.key)}
-            onClick={() => onNavigate(tab.page)}
-          />
-        ))}
-      </div>
-      <div className="flex-1 pl-8 flex flex-col gap-1">
-        {ABOUT_SECTIONS[activeTab].map((sec) => (
-          <DropdownLinkItem key={sec.label} label={sec.label} onClick={() => onNavigate(sec.id ? `${activeTab}#${sec.id}` : activeTab)} />
-        ))}
-      </div>
-    </DropdownShell>
+    <SimpleDropdown>
+      {ABOUT_TABS.map((tab) => (
+        <SimpleDropdownItem key={tab.key} label={tab.label} onClick={() => onNavigate(tab.page)} />
+      ))}
+    </SimpleDropdown>
   );
 }
 
@@ -263,14 +250,11 @@ const OUR_DIFFERENCE_SECTIONS = [
 
 function OurDifferenceDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <DropdownShell eyebrow="Our Difference" onGoToPage={() => onNavigate("our-difference")}>
-      {/* Flat grid, 3 columns wide so 9 items don't require scrolling the menu itself */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-1 w-full">
-        {OUR_DIFFERENCE_SECTIONS.map((sec) => (
-          <DropdownLinkItem key={sec.id} label={sec.label} onClick={() => onNavigate(`our-difference#${sec.id}`)} />
-        ))}
-      </div>
-    </DropdownShell>
+    <SimpleDropdown width={290}>
+      {OUR_DIFFERENCE_SECTIONS.map((sec) => (
+        <SimpleDropdownItem key={sec.id} label={sec.label} onClick={() => onNavigate(`our-difference#${sec.id}`)} />
+      ))}
+    </SimpleDropdown>
   );
 }
 
@@ -278,25 +262,72 @@ function OurDifferenceDropdown({ onNavigate }: { onNavigate: (p: string) => void
 // "Problem Signs" had no dropdown at all — a plain nav link with no preview,
 // unlike every other top-level section. Exact 4 categories/order from the
 // approved sitemap — keep in sync with ProblemSignsPage.tsx's CATEGORIES.
+// Image cards, not a text grid: the symptom categories are what a homeowner
+// recognizes at a glance ("our consumer doesn't wanna read, they wanna see"),
+// same visual language as the Services mega menu.
 const PROBLEM_SIGNS_CATEGORIES = [
-  { label: "Structural Repair",   id: "structural",    icon: Home,     iconImg: iconFoundation as string },
-  { label: "Crawl Space Repair",  id: "crawl",          icon: Layers,   iconImg: iconCrawlspace as string },
-  { label: "Waterproofing",       id: "waterproofing",  icon: Droplets, iconImg: iconWaterproofing as string },
-  { label: "Concrete",            id: "concrete",       icon: Grid3x3,  iconImg: iconConcrete as string },
-];
+  { slug: "structural-repair",  id: "structural",    icon: Home,     iconImg: iconFoundation as string,    img: imgSvcFoundation as string },
+  { slug: "crawl-space-repair", id: "crawl",         icon: Layers,   iconImg: iconCrawlspace as string,    img: imgSvcCrawlspace as string },
+  { slug: "waterproofing",      id: "waterproofing", icon: Droplets, iconImg: iconWaterproofing as string, img: imgSvcWaterproofing as string },
+  { slug: "concrete-services",  id: "concrete",      icon: Grid3x3,  iconImg: iconConcrete as string,      img: imgSvcConcrete as string },
+].map((cat) => ({
+  ...cat,
+  label: SERVICES[cat.slug].name,
+  // First three symptoms from the sitemap — the full list lives on the service page.
+  signs: SERVICES[cat.slug].symptoms.slice(0, 3).map((s) => s.q),
+}));
+
 
 function ProblemSignsDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <DropdownShell eyebrow="Problem Signs" onGoToPage={() => onNavigate("problem-signs")}>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-1 w-full">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
         {PROBLEM_SIGNS_CATEGORIES.map((cat) => (
-          <DropdownLinkItem
-            key={cat.id}
-            label={cat.label}
-            icon={cat.icon}
-            iconImg={cat.iconImg}
-            onClick={() => onNavigate(`problem-signs#ps-${cat.id}`)}
-          />
+          <div key={cat.id} className="group flex flex-col">
+            <button
+              onClick={() => onNavigate(`problem-signs/${cat.id}`)}
+              className="relative overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+              style={{ height: 190, border: "1px solid rgba(255,255,255,.08)", background: "none", padding: 0, cursor: "pointer", width: "100%" }}
+            >
+              <img
+                src={cat.img}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 transition-opacity" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.94) 0%, rgba(10,11,20,.35) 60%, rgba(10,11,20,.15) 100%)" }} />
+              <div className="absolute inset-x-0 bottom-0 p-4 flex items-center gap-2.5">
+                {cat.iconImg
+                  ? <img src={cat.iconImg} alt="" style={{ width: 26, height: 26, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+                  : <cat.icon size={24} color="#fff" strokeWidth={2} />}
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 16, color: "#fff", lineHeight: 1.15 }}>{cat.label}</span>
+              </div>
+              <div className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" style={{ background: B }} />
+            </button>
+            <div className="flex flex-wrap gap-1.5 mt-2.5">
+              {cat.signs.map((sign) => (
+                <button
+                  key={sign}
+                  onClick={() => onNavigate(signRoute(sign))}
+                  className="text-left transition-colors hover:text-white hover:border-white/25"
+                  style={{
+                    fontFamily: "'Inter',sans-serif",
+                    fontSize: 12.5,
+                    lineHeight: 1.2,
+                    color: "rgba(255,255,255,.75)",
+                    background: "rgba(10,11,20,.55)",
+                    backdropFilter: "blur(6px)",
+                    WebkitBackdropFilter: "blur(6px)",
+                    border: "1px solid rgba(255,255,255,.12)",
+                    borderRadius: 999,
+                    padding: "6px 12px",
+                    cursor: "pointer",
+                  }}
+                >
+                  {sign}
+                </button>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </DropdownShell>
@@ -304,64 +335,32 @@ function ProblemSignsDropdown({ onNavigate }: { onNavigate: (p: string) => void 
 }
 
 // ─── Mega Menu data ────────────────────────────────────────────────────────────
-// Symptom labels shortened to 2-4 words per approved symptom-driven sitemap.
+// Labels and symptom lists come from data/services.ts, which mirrors the
+// approved sitemap verbatim — the nav must never drift from the service pages.
 // Icon per category for visual scanning; accent color stays on-brand (SAND/B),
 // not a per-category rainbow — client flagged that as off-brand ("no lo veo
 // dentro del lenguaje visual de la página").
-// TODO(content): validate final symptom labels against approved sitemap doc.
-// TODO(routing): every symptom currently routes to "problem-sign-inner" and every
-// category to "service" (only Crawl Space page exists). Wire real routes when
-// remaining service pages are built.
-const SERVICE_CATEGORIES = [
-  {
-    label: "Structural Repair",
-    icon: Home,
-    iconImg: iconFoundation as string,
-    img: imgSvcFoundation as string,
-    tagline: "Stop the cracks before they spread.",
-    signs: ["Cracks in walls", "Bowing or leaning walls", "Sinking slab"],
-  },
-  {
-    label: "Crawl Space Repair",
-    icon: Layers,
-    iconImg: iconCrawlspace as string,
-    img: imgSvcCrawlspace as string,
-    tagline: "Dry, sealed, and structurally sound below your home.",
-    signs: ["Sagging or bouncy floors", "Baseboards separated from floor", "Doors won't close properly"],
-  },
-  {
-    label: "Waterproofing",
-    icon: Droplets,
-    iconImg: iconWaterproofing as string,
-    img: imgSvcWaterproofing as string,
-    tagline: "Keep water out of your basement for good.",
-    signs: ["Water in basement", "Damp walls or floor", "Musty mold smell"],
-  },
-  {
-    label: "Concrete Services",
-    icon: Grid3x3,
-    iconImg: iconConcrete as string,
-    img: imgSvcConcrete as string,
-    tagline: "Level driveways, walkways, and slabs.",
-    signs: ["Uneven concrete slabs", "Sinking driveway or walkway", "Cracked pool deck"],
-  },
-  {
-    label: "Commercial Services",
-    icon: Building2,
-    iconImg: null as string | null,
-    img: imgSvcFoundation as string,
-    tagline: "Structural repair for commercial properties.",
-    signs: [] as string[],
-  },
-  {
-    label: "Mold Prevention",
-    icon: Leaf,
-    iconImg: null as string | null,
-    img: imgSvcMold as string,
-    tagline: "Find the moisture source, stop mold at the root.",
-    signs: ["Musty odor", "Dark spots on walls", "Indoor allergies", "Peeling paint", "Ceiling stains"],
-  },
-];
+const CATEGORY_CHROME: Record<string, { icon: typeof Home; iconImg: string | null; img: string; tagline: string }> = {
+  "structural-repair":   { icon: Home,      iconImg: iconFoundation as string,    img: imgSvcFoundation as string,    tagline: "Stop the cracks before they spread." },
+  "crawl-space-repair":  { icon: Layers,    iconImg: iconCrawlspace as string,    img: imgSvcCrawlspace as string,    tagline: "Dry, sealed, and structurally sound below your home." },
+  "waterproofing":       { icon: Droplets,  iconImg: iconWaterproofing as string, img: imgSvcWaterproofing as string, tagline: "Keep water out of your basement for good." },
+  "concrete-services":   { icon: Grid3x3,   iconImg: iconConcrete as string,      img: imgSvcConcrete as string,      tagline: "Level driveways, walkways, and slabs." },
+  "commercial-services": { icon: Building2, iconImg: null,                        img: imgSvcMold as string,          tagline: "Structural repair for commercial properties." },
+};
+
+const SERVICE_CATEGORIES = SERVICE_ORDER.map((slug) => {
+  const svc = SERVICES[slug];
+  const chrome = CATEGORY_CHROME[slug];
+  return {
+    slug,
+    label: svc.name,
+    icon: chrome.icon,
+    iconImg: chrome.iconImg,
+    img: chrome.img,
+    tagline: chrome.tagline,
+    signs: svc.symptoms.map((sym) => sym.q),
+  };
+});
 
 // ─── Mega Menu ─────────────────────────────────────────────────────────────────
 // Client QA call (Jul 24) rejected the image-card version explicitly: "I have
@@ -389,7 +388,7 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
             icon={c.icon}
             iconImg={c.iconImg ?? undefined}
             onMouseEnter={() => setHovered(i)}
-            onClick={() => onNavigate("service")}
+            onClick={() => onNavigate(`service/${c.slug}`)}
           />
         ))}
       </div>
@@ -407,9 +406,20 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
                 {active.signs.map((symptom) => (
                   <button
                     key={symptom}
-                    onClick={() => onNavigate("problem-sign-inner")}
-                    className="transition-colors hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
-                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.75)", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.15)", padding: "5px 11px", cursor: "pointer" }}
+                    onClick={() => onNavigate(signRoute(symptom))}
+                    className="text-left transition-colors hover:text-white hover:border-white/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                    style={{
+                      fontFamily: "'Inter',sans-serif",
+                      fontSize: 12,
+                      color: "rgba(255,255,255,.85)",
+                      background: "rgba(10,11,20,.5)",
+                      backdropFilter: "blur(6px)",
+                      WebkitBackdropFilter: "blur(6px)",
+                      border: "1px solid rgba(255,255,255,.18)",
+                      borderRadius: 999,
+                      padding: "7px 14px",
+                      cursor: "pointer",
+                    }}
                   >
                     {symptom}
                   </button>
@@ -460,6 +470,14 @@ export default function SharedNavBar({
   const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about" | "our-difference" | "problem-signs">("root");
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
+  // Compact dropdowns (Resources/Our Difference/About) render outside the <nav>
+  // — inside it they get clipped — so they need their trigger's x offset.
+  const [anchorLeft, setAnchorLeft] = useState(0);
+  const anchorTo = (e: React.MouseEvent<HTMLElement>) => {
+    const nav = navRef.current;
+    if (!nav) return;
+    setAnchorLeft(e.currentTarget.getBoundingClientRect().left - nav.getBoundingClientRect().left);
+  };
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
@@ -572,7 +590,7 @@ export default function SharedNavBar({
                 return (
                   <button
                     key="Resources"
-                    onMouseEnter={() => { setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                    onMouseEnter={(e) => { anchorTo(e); setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
                     onClick={() => { setResourcesOpen((prev) => !prev); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     style={{
@@ -620,7 +638,7 @@ export default function SharedNavBar({
                 return (
                   <button
                     key="Our Difference"
-                    onMouseEnter={() => { setOurDiffOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
+                    onMouseEnter={(e) => { anchorTo(e); setOurDiffOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
                     onClick={() => { setOurDiffOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     style={{
@@ -644,7 +662,7 @@ export default function SharedNavBar({
                 return (
                   <button
                     key="About"
-                    onMouseEnter={() => { setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                    onMouseEnter={(e) => { anchorTo(e); setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
                     onClick={() => { setAboutOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
                     className="flex items-center gap-1 transition-colors whitespace-nowrap"
                     style={{
@@ -800,18 +818,32 @@ export default function SharedNavBar({
                                 {cat.label}
                               </span>
                             </div>
-                            <div className="pl-[50px] flex flex-col gap-2">
-                              {cat.signs.slice(0, 5).map((symptom) => (
-                                <button
-                                  key={symptom}
-                                  onClick={() => handleNavigate("problem-sign-inner")}
-                                  className="text-left"
-                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", background: "none", border: "none", cursor: "pointer" }}>
-                                  {symptom}
-                                </button>
-                              ))}
+                            <div className="pl-[50px] flex flex-col gap-2.5">
+                              <div className="flex flex-wrap gap-1.5">
+                                {cat.signs.slice(0, 5).map((symptom) => (
+                                  <button
+                                    key={symptom}
+                                    onClick={() => handleNavigate(signRoute(sign))}
+                                    className="text-left"
+                                    style={{
+                                      fontFamily: "'Inter',sans-serif",
+                                      fontSize: 12.5,
+                                      lineHeight: 1.2,
+                                      color: "rgba(255,255,255,.8)",
+                                      background: "rgba(10,11,20,.55)",
+                                      backdropFilter: "blur(6px)",
+                                      WebkitBackdropFilter: "blur(6px)",
+                                      border: "1px solid rgba(255,255,255,.15)",
+                                      borderRadius: 999,
+                                      padding: "6px 12px",
+                                      cursor: "pointer",
+                                    }}>
+                                    {symptom}
+                                  </button>
+                                ))}
+                              </div>
                               <button
-                                onClick={() => handleNavigate("service")}
+                                onClick={() => handleNavigate(`service/${cat.slug}`)}
                                 className="text-left"
                                 style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
                                 View {cat.label} →
@@ -928,13 +960,43 @@ export default function SharedNavBar({
                     <MobileBackHeader title="Problem Signs" onBack={() => setMobilePanel("root")} />
                     <div className="flex flex-col gap-1">
                       {PROBLEM_SIGNS_CATEGORIES.map((cat) => (
-                        <button
-                          key={cat.id}
-                          onClick={() => handleNavigate(`problem-signs#ps-${cat.id}`)}
-                          className="w-full py-3 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                          {cat.label}
-                        </button>
+                        <div key={cat.id} className="flex flex-col gap-1 mb-3">
+                          <button
+                            onClick={() => handleNavigate(`problem-signs/${cat.id}`)}
+                            className="relative w-full overflow-hidden text-left"
+                            style={{ height: 110, background: "none", border: "1px solid rgba(255,255,255,.08)", padding: 0, cursor: "pointer" }}>
+                            <img src={cat.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                            <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.3) 70%)" }} />
+                            <span className="absolute inset-x-0 bottom-0 p-3 flex items-center gap-2"
+                              style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 15, color: "#fff" }}>
+                              {cat.iconImg && <img src={cat.iconImg} alt="" style={{ width: 20, height: 20, objectFit: "contain", filter: "brightness(0) invert(1)" }} />}
+                              {cat.label}
+                            </span>
+                          </button>
+                          <div className="flex flex-wrap gap-1.5">
+                            {cat.signs.map((sign) => (
+                              <button
+                                key={sign}
+                                onClick={() => handleNavigate(signRoute(sign))}
+                                className="text-left"
+                                style={{
+                                  fontFamily: "'Inter',sans-serif",
+                                  fontSize: 12.5,
+                                  lineHeight: 1.2,
+                                  color: "rgba(255,255,255,.8)",
+                                  background: "rgba(10,11,20,.55)",
+                                  backdropFilter: "blur(6px)",
+                                  WebkitBackdropFilter: "blur(6px)",
+                                  border: "1px solid rgba(255,255,255,.15)",
+                                  borderRadius: 999,
+                                  padding: "6px 12px",
+                                  cursor: "pointer",
+                                }}>
+                                {sign}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </motion.div>
@@ -952,31 +1014,21 @@ export default function SharedNavBar({
         </div>
       )}
 
-      {/* Resources dropdown */}
-      {resourcesOpen && (
-        <div className="absolute left-0 w-full z-[200]">
-          <ResourcesDropdown onNavigate={handleNavigate} />
-        </div>
-      )}
-
-      {/* Our Difference dropdown */}
-      {ourDiffOpen && (
-        <div className="absolute left-0 w-full z-[200]">
-          <OurDifferenceDropdown onNavigate={handleNavigate} />
-        </div>
-      )}
+      {/* Resources / Our Difference / About — compact panels anchored to their
+          own nav item's x offset. Only Services and Problem Signs get the
+          full-width mega panel. */}
+      <div className="absolute z-[200] pt-2" style={{ left: anchorLeft }}>
+        <AnimatePresence>
+          {resourcesOpen && <ResourcesDropdown key="res" onNavigate={handleNavigate} />}
+          {ourDiffOpen && <OurDifferenceDropdown key="diff" onNavigate={handleNavigate} />}
+          {aboutOpen && <AboutDropdown key="about" onNavigate={handleNavigate} />}
+        </AnimatePresence>
+      </div>
 
       {/* Problem Signs dropdown */}
       {signsOpen && (
         <div className="absolute left-0 w-full z-[200]">
           <ProblemSignsDropdown onNavigate={handleNavigate} />
-        </div>
-      )}
-
-      {/* About dropdown */}
-      {aboutOpen && (
-        <div className="absolute left-0 w-full z-[200]">
-          <AboutDropdown onNavigate={handleNavigate} />
         </div>
       )}
 

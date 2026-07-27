@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
-import { ChevronRight, ChevronLeft, ArrowRight, CheckCircle, XCircle, X, Gift, Heart } from "lucide-react";
+import { ChevronRight, ChevronLeft, ArrowRight, X, Gift, Heart } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import useEmblaCarousel from "embla-carousel-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -278,78 +278,104 @@ const ALWAYS_WILL = [
   { title: "Respect your time and your home", desc: "We arrive on time, protect your floors and walls, and clean up completely before we leave." },
 ];
 
+// Redesign brief: the old layout was two color-coded twin cards (sand-tinted
+// "never" box mirroring a blue-tinted "always" box) — a comparison-card
+// template. This version is one bordered ledger, not two boxes: a single
+// sheet split by one hairline rule, with a wax-seal badge straddling the
+// divider — an actual "pledge" motif — instead of matching icon chips.
 function PledgeSection() {
   return (
-    <section id="pledge" style={{ background: CHAR }} className="py-20 lg:py-28">
+    <section id="pledge" style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="mb-14">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-5">
                 <div className="w-5 h-[2px]" style={{ background: SAND }} />
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Pledge</span>
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Our Pledge</span>
               </div>
-              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", maxWidth: 600 }}>
+              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px", maxWidth: 600 }}>
                 Things we promise we'll never do
               </h2>
             </div>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.45)", lineHeight: 1.7, maxWidth: 420 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, lineHeight: 1.7, maxWidth: 420 }}>
               Most contractors have fine print. Ours works the other way — here's what we explicitly commit to not doing.
             </p>
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <Reveal delay={0.05}>
-            <div className="h-full flex flex-col" style={{ border: "1px solid rgba(196,171,108,.2)", background: "rgba(196,171,108,.04)" }}>
-              <div className="flex items-center gap-3 px-8 py-6" style={{ borderBottom: "1px solid rgba(196,171,108,.12)" }}>
-                <div className="w-8 h-8 flex items-center justify-center shrink-0" style={{ background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.3)" }}>
-                  <XCircle size={16} color={SAND} />
+        <Reveal delay={0.05}>
+          <div className="relative" style={{ border: "1px solid rgba(10,11,20,.1)", background: "#fff" }}>
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              {/* We will never */}
+              <div className="px-8 md:px-12 py-10 lg:py-12" style={{ borderRight: "1px solid rgba(10,11,20,.1)" }}>
+                <div className="flex items-center gap-3 mb-7">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke={MUTED} strokeWidth="1.6" opacity="0.5" />
+                    <path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke={MUTED} strokeWidth="1.6" strokeLinecap="round" />
+                  </svg>
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 24, color: CHAR, letterSpacing: "-0.5px" }}>
+                    We will never
+                  </h3>
                 </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", letterSpacing: "-0.5px" }}>
-                  We will never
-                </h3>
-              </div>
-              <div className="flex flex-col flex-1 px-8 py-6 gap-6">
-                {NEVER_DO.map((item, i) => (
-                  <div key={i} className="flex gap-4">
-                    <div className="w-1 shrink-0 mt-1.5 self-stretch rounded-full" style={{ background: "rgba(196,171,108,.3)", minHeight: 16 }} />
-                    <div>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 3 }}>{item.title}</p>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", lineHeight: 1.7 }}>{item.desc}</p>
+                <div className="flex flex-col">
+                  {NEVER_DO.map((item, i) => (
+                    <div key={i} className="flex gap-4 py-4" style={{ borderTop: i > 0 ? "1px solid rgba(10,11,20,.07)" : "none" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="shrink-0" style={{ marginTop: 3 }}>
+                        <path d="M6 6l12 12M18 6L6 18" stroke={MUTED} strokeWidth="1.8" strokeLinecap="round" />
+                      </svg>
+                      <div>
+                        <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14.5, color: CHAR, marginBottom: 3 }}>{item.title}</p>
+                        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.7 }}>{item.desc}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          </Reveal>
 
-          <Reveal delay={0.1}>
-            <div className="h-full flex flex-col" style={{ border: "1px solid rgba(26,82,168,.4)", background: "rgba(26,82,168,.08)" }}>
-              <div className="flex items-center gap-3 px-8 py-6" style={{ borderBottom: "1px solid rgba(26,82,168,.2)" }}>
-                <div className="w-8 h-8 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.3)", border: "1px solid rgba(26,82,168,.5)" }}>
-                  <CheckCircle size={16} color="#7EB8FF" />
+              {/* We always will */}
+              <div className="px-8 md:px-12 py-10 lg:py-12">
+                <div className="flex items-center gap-3 mb-7">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke={B} strokeWidth="1.6" opacity="0.5" />
+                    <path d="M8 12.3l2.6 2.6L16.3 9" stroke={B} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 24, color: CHAR, letterSpacing: "-0.5px" }}>
+                    We always will
+                  </h3>
                 </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", letterSpacing: "-0.5px" }}>
-                  We always will
-                </h3>
-              </div>
-              <div className="flex flex-col flex-1 px-8 py-6 gap-6">
-                {ALWAYS_WILL.map((item, i) => (
-                  <div key={i} className="flex gap-4">
-                    <div className="shrink-0 mt-0.5">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#7EB8FF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                <div className="flex flex-col">
+                  {ALWAYS_WILL.map((item, i) => (
+                    <div key={i} className="flex gap-4 py-4" style={{ borderTop: i > 0 ? "1px solid rgba(10,11,20,.07)" : "none" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="shrink-0" style={{ marginTop: 3 }}>
+                        <path d="M5 12.5l4.5 4.5L19 7" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <div>
+                        <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14.5, color: CHAR, marginBottom: 3 }}>{item.title}</p>
+                        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.7 }}>{item.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 3 }}>{item.title}</p>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </Reveal>
-        </div>
+
+            {/* Wax-seal badge straddling the divider — the pledge motif */}
+            <div className="hidden lg:flex absolute flex-col items-center justify-center" style={{
+              top: "50%", left: "50%", transform: "translate(-50%,-50%)",
+              width: 88, height: 88, borderRadius: "50%",
+              background: NAVY, border: `4px solid ${CREAM}`,
+              boxShadow: "0 10px 28px rgba(10,11,20,.18)",
+            }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill={SAND}>
+                <path d="M12 2l2.6 6.1 6.6.5-5 4.4 1.6 6.4L12 16l-5.8 3.4 1.6-6.4-5-4.4 6.6-.5z" />
+              </svg>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 8.5, color: SAND, letterSpacing: 2, textTransform: "uppercase", marginTop: 3 }}>
+                Pledge
+              </span>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

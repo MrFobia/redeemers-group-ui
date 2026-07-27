@@ -1,11 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { openInspection } from "./components/InspectionModal";
-import imgCrawlspace from "../assets/svc-crawlspace.jpg";
-import iconCrawlspace from "../assets/icons/icon-crawlspace.svg";
-import useEmblaCarousel from "embla-carousel-react";
 import { motion, useInView } from "motion/react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { ChevronDown, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronDown, ChevronRight, ArrowRight, Building2 } from "lucide-react";
+import { getService, type ServiceDef, type Solution, type CostRange } from "./data/services";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { FloatingSideNav } from "./components/FloatingSideNav";
@@ -42,33 +40,14 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
-// ─── Breadcrumb + Section Tabs ────────────────────────────────────────────────
-// The first tab must not repeat the service name — client QA flagged the
-// service name appearing 3x above the fold (breadcrumb, this tab, hero
-// eyebrow), reading as 3 separate menus and pushing real content down.
-const SERVICE_TABS = [
-  { id: "overview", label: "Overview" },
-  { id: "signs", label: "Problem Signs" },
-  { id: "cost", label: "Cost Guide" },
-  { id: "gallery", label: "Project Gallery" },
-  { id: "faq", label: "FAQs" },
-];
-
-
 // ─── Hero: Problem Signs Section ──────────────────────────────────────────────
-const SYMPTOMS = [
-  { id: "s1", q: "My floors are sagging or bouncy", a: "This typically indicates deteriorating floor joists or support beams in the crawl space. Our SmartJack systems can restore structural integrity and eliminate the bounce permanently." },
-  { id: "s2", q: "Moisture or standing water", a: "Excess moisture leads to mold, rot, and pest infestations. We install full encapsulation systems with drainage matting and sump pumps to permanently resolve the moisture source." },
-  { id: "s3", q: "I smell mold or mildew", a: "Musty odors signal active mold growth — often in the crawl space. We remediate existing mold and install vapor barriers to prevent recurrence." },
-  { id: "s4", q: "High energy bills or drafts", a: "An uninsulated or unencapsulated crawl space bleeds energy. Our crawl space insulation and air sealing solutions can reduce bills significantly." },
-  { id: "s5", q: "Pest or insect activity", a: "Damp, open crawl spaces invite termites, rodents, and other pests. Encapsulation removes the environment they need to thrive." },
-];
-
-function SymptomAccordion({ onNavigate }: { onNavigate?: (p: string) => void }) {
-  const [open, setOpen] = useState<string>("s1");
+// Symptom copy comes from data/services.ts, which mirrors the approved sitemap
+// verbatim — never hardcode symptom labels here.
+function SymptomAccordion({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
+  const [open, setOpen] = useState<string>(svc.symptoms[0]?.id ?? "");
   return (
     <AccordionPrimitive.Root type="single" value={open} onValueChange={(v) => setOpen(v || "")}>
-      {SYMPTOMS.map((s) => (
+      {svc.symptoms.map((s) => (
         <AccordionPrimitive.Item key={s.id} value={s.id} style={{ marginBottom: 8 }}>
           <AccordionPrimitive.Header>
             <AccordionPrimitive.Trigger
@@ -99,7 +78,14 @@ function SymptomAccordion({ onNavigate }: { onNavigate?: (p: string) => void }) 
                 borderTop: "none",
                 borderRadius: "0 0 4px 4px",
               }}>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", lineHeight: 1.7, marginBottom: 14 }}>{s.a}</p>
+              {/* Photo of the symptom — the panel has to show what it looks
+                  like, not just describe it. */}
+              <div className="flex gap-4 mb-4">
+                <div className="relative overflow-hidden shrink-0" style={{ width: 104, height: 78 }}>
+                  <ImageWithFallback src={s.img} alt={s.q} className="absolute inset-0 w-full h-full object-cover" />
+                </div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", lineHeight: 1.7, margin: 0 }}>{s.a}</p>
+              </div>
               <button
                 onClick={() => onNavigate?.("problem-sign-inner")}
                 className="inline-flex items-center gap-1.5 transition-opacity hover:opacity-85"
@@ -119,7 +105,7 @@ function SymptomAccordion({ onNavigate }: { onNavigate?: (p: string) => void }) 
   );
 }
 
-function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
+function HeroSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
   return (
     <section
       id="overview"
@@ -128,8 +114,8 @@ function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
     >
       {/* Background image */}
       <img
-        src={imgCrawlspace}
-        alt="Crawl space repair"
+        src={svc.heroImg}
+        alt={svc.name}
         className="absolute inset-0 w-full h-full object-cover"
       />
       {/* Gradient overlay — dark left, fades right */}
@@ -145,27 +131,46 @@ function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
           {/* Eyebrow */}
           <div className="flex items-center gap-3 mb-8">
             <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34 }}>
-              <img src={iconCrawlspace} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+              {svc.iconImg
+                ? <img src={svc.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                : <Building2 size={30} color="#fff" strokeWidth={1.8} />}
             </span>
             <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}>
-              Crawl Space Repair
+              {svc.name}
             </span>
           </div>
 
           {/* H1 */}
-          <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(38px,4.5vw,68px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 32 }}>
-            Is your home showing<br />these signs?
+          <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(38px,4.5vw,68px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 32, whiteSpace: "pre-line" }}>
+            {svc.heroHeadline}
           </h1>
 
-          {/* Accordion */}
-          <SymptomAccordion onNavigate={onNavigate} />
-
-          {/* Footer link */}
-          <p style={{ marginTop: 20, fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>
-            {"Can't find your symptom? "}
-            <a href="#" style={{ color: "#fff", fontWeight: 600 }}>View all problem signs →</a>
-          </p>
+          {/* Accordion — services with no Problem Signs node in the sitemap
+              (Commercial) get a direct CTA instead of a symptom list. */}
+          {svc.symptoms.length > 0 ? (
+            <>
+              <SymptomAccordion svc={svc} onNavigate={onNavigate} />
+              <p style={{ marginTop: 20, fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>
+                {"Can't find your symptom? "}
+                <button
+                  onClick={() => onNavigate?.("problem-signs")}
+                  style={{ color: "#fff", fontWeight: 600, background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 13 }}
+                >
+                  View all problem signs →
+                </button>
+              </p>
+            </>
+          ) : (
+            <button
+              onClick={() => openInspection()}
+              className="group inline-flex items-center gap-3 px-8 py-4"
+              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", border: "none", cursor: "pointer" }}
+            >
+              Request a bid
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            </button>
+          )}
         </div>
       </div>
     </section>
@@ -173,9 +178,81 @@ function HeroSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
 }
 
 // ─── Solutions / Services Grid ────────────────────────────────────────────────
-function SolutionsSection() {
+function SolutionCard({ sol, size }: { sol: Solution; size: "lg" | "sm" | "wide" }) {
+  const imgH = size === "lg" ? 381 : 200;
+  const titleSize = size === "sm" ? 24 : 34;
+  const pad = size === "sm" ? "28px 32px 32px" : "40px 40px 44px";
+
+  const body = (
+    <div className="flex flex-col flex-1 justify-center" style={{ padding: size === "wide" ? "48px 40px 52px" : pad }}>
+      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: size === "sm" ? 12 : 16 }}>
+        Solution
+      </span>
+      <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: titleSize, color: "#fff", lineHeight: 1.1, letterSpacing: "-0.5px", margin: "0 0 12px" }}>
+        {sol.title}
+      </h3>
+      {/* Sitemap flags a couple of concrete services as not yet launched — the
+          label has to survive on the page, not just in the sitemap. */}
+      {sol.note && (
+        <span className="inline-flex items-center w-fit px-2.5 py-1 mb-3"
+          style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: SAND, background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.25)", letterSpacing: ".3px" }}>
+          {sol.note}
+        </span>
+      )}
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: size === "sm" ? 14 : 15, color: "rgba(255,255,255,.55)", lineHeight: 1.75, margin: "0 0 24px", maxWidth: size === "wide" ? 480 : undefined }}>
+        {sol.blurb}
+      </p>
+      <button
+        onClick={() => openInspection()}
+        className="inline-flex items-center gap-2"
+        style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, background: "none", border: "none", padding: 0, cursor: "pointer", width: "fit-content" }}
+      >
+        Schedule now
+        <ChevronRight size={16} color={SAND} />
+      </button>
+    </div>
+  );
+
+  if (size === "wide") {
+    return (
+      <div className="flex flex-col md:flex-row overflow-hidden h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", minHeight: 340 }}>
+        {body}
+        <div className="relative overflow-hidden shrink-0 w-full md:w-[45%] h-56 md:h-auto" style={{ minHeight: 280 }}>
+          <ImageWithFallback src={sol.img} alt={sol.title} className="absolute inset-0 w-full h-full object-cover" />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <section style={{ background: DARK }} className="py-20 lg:py-28">
+    <div className="flex flex-col overflow-hidden h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+      <div className="relative overflow-hidden shrink-0" style={{ height: imgH }}>
+        <ImageWithFallback src={sol.img} alt={sol.title} className="absolute inset-0 w-full h-full object-cover" />
+      </div>
+      {body}
+    </div>
+  );
+}
+
+// The template row is "1 large card + 2 stacked". Services carry 2–5 solutions
+// per the sitemap, so rows are packed: groups of 3 first, then a pair, then a
+// single full-width card — never a half-empty row.
+function packRows(solutions: Solution[]): Solution[][] {
+  const rows: Solution[][] = [];
+  let rest = [...solutions];
+  while (rest.length >= 3) {
+    rows.push(rest.slice(0, 3));
+    rest = rest.slice(3);
+  }
+  if (rest.length) rows.push(rest);
+  return rows;
+}
+
+function SolutionsSection({ svc }: { svc: ServiceDef }) {
+  const rows = packRows(svc.solutions);
+
+  return (
+    <section id="solutions" style={{ background: DARK }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header */}
@@ -183,167 +260,47 @@ function SolutionsSection() {
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
             <span style={{ display: "block", width: 32, height: 2, background: SAND, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
-              Crawl Space Repair
+              {svc.name}
             </span>
           </div>
           <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,58px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", margin: 0 }}>
-            Crawl Space Solutions
+            {svc.solutionsHeadline}
           </h2>
         </Reveal>
 
         <div className="flex flex-col" style={{ gap: 20 }}>
-
-          {/* Row 1: Left large card + Right 2 stacked cards */}
-          <Reveal>
-            <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20 }}>
-
-              {/* LEFT — large card: image top, content bottom */}
-              <div className="flex flex-col overflow-hidden" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
-                <div className="relative overflow-hidden shrink-0" style={{ height: 381 }}>
-                  <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1591638436281-078219f200af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080"
-                    alt="Floor Joist Repair"
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex flex-col flex-1 justify-center" style={{ padding: "40px 40px 44px" }}>
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
-                    Solution
-                  </span>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", lineHeight: 1.1, letterSpacing: "-0.5px", margin: "0 0 16px" }}>
-                    Floor Joist Repair &amp; Replacement
-                  </h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.55)", lineHeight: 1.75, margin: "0 0 28px" }}>
-                    Damaged floor joists lead to sagging, squeaky, and unsafe floors. We repair or fully replace compromised joists to restore structural integrity and stop the problem at its source.
-                  </p>
-                  <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, textDecoration: "none", width: "fit-content" }}>
-                    Schedule now
-                    <ChevronRight size={16} color={SAND} />
-                  </a>
-                </div>
-              </div>
-
-              {/* RIGHT — 2 stacked smaller cards: image top, content bottom */}
-              <div className="flex flex-col" style={{ gap: 20 }}>
-
-                {/* Top small card */}
-                <div className="flex flex-col overflow-hidden" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", flex: 1 }}>
-                  <div className="relative overflow-hidden shrink-0" style={{ height: 200 }}>
-                    <ImageWithFallback
-                      src="https://images.unsplash.com/photo-1760776024932-38040caef5d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800"
-                      alt="Encapsulation Systems"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col flex-1 justify-center" style={{ padding: "28px 32px 32px" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
-                      Solution
-                    </span>
-                    <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 24, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.3px", margin: "0 0 12px" }}>
-                      Encapsulation Systems
-                    </h3>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.7, margin: "0 0 20px" }}>
-                      Heavy-duty vapor barriers seal moisture out of your crawl space permanently, improving air quality and protecting your home's structure year-round.
-                    </p>
-                    <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, textDecoration: "none", width: "fit-content" }}>
-                      Schedule now
-                      <ChevronRight size={16} color={SAND} />
-                    </a>
+          {rows.map((row, ri) => (
+            <Reveal key={row[0].title} delay={ri * 0.08}>
+              {row.length === 3 && (
+                <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20 }}>
+                  <SolutionCard sol={row[0]} size="lg" />
+                  <div className="flex flex-col" style={{ gap: 20 }}>
+                    <SolutionCard sol={row[1]} size="sm" />
+                    <SolutionCard sol={row[2]} size="sm" />
                   </div>
                 </div>
-
-                {/* Bottom small card */}
-                <div className="flex flex-col overflow-hidden" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", flex: 1 }}>
-                  <div className="relative overflow-hidden shrink-0" style={{ height: 200 }}>
-                    <ImageWithFallback
-                      src="https://images.unsplash.com/photo-1708214148950-ccbb69d40e25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800"
-                      alt="Floor Joist Stabilization"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col flex-1 justify-center" style={{ padding: "28px 32px 32px" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
-                      Solution
-                    </span>
-                    <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 24, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.3px", margin: "0 0 12px" }}>
-                      Floor Joist Stabilization
-                    </h3>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.7, margin: "0 0 20px" }}>
-                      When joists are structurally sound but losing support, we install sister joists and support beams to stop flex and restore a firm, level floor.
-                    </p>
-                    <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, textDecoration: "none", width: "fit-content" }}>
-                      Schedule now
-                      <ChevronRight size={16} color={SAND} />
-                    </a>
-                  </div>
+              )}
+              {row.length === 2 && (
+                <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20 }}>
+                  <SolutionCard sol={row[0]} size="lg" />
+                  <SolutionCard sol={row[1]} size="lg" />
                 </div>
-
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Row 2: Full-width horizontal card — text left, image right */}
-          <Reveal delay={0.08}>
-            <div className="flex flex-col md:flex-row overflow-hidden" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", minHeight: 340 }}>
-              {/* Text left */}
-              <div className="flex flex-col justify-center flex-1" style={{ padding: "48px 40px 52px" }}>
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
-                  Solution
-                </span>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", lineHeight: 1.1, letterSpacing: "-0.5px", margin: "0 0 16px" }}>
-                  Mold Prevention
-                </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.55)", lineHeight: 1.75, margin: "0 0 28px", maxWidth: 480 }}>
-                  Mold hides before you can see it. We find the moisture source, treat existing growth, and install prevention systems so the problem never returns to your crawl space.
-                </p>
-                <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, textDecoration: "none", width: "fit-content" }}>
-                  Schedule now
-                  <ChevronRight size={16} color={SAND} />
-                </a>
-              </div>
-              {/* Image right */}
-              <div className="relative overflow-hidden shrink-0 w-full md:w-[45%] h-56 md:h-auto" style={{ minHeight: 280 }}>
-                <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1720631618132-83cdab1b237e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080"
-                  alt="Mold Prevention"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </Reveal>
-
+              )}
+              {row.length === 1 && <SolutionCard sol={row[0]} size="wide" />}
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Problem Signs Section ────────────────────────────────────────────────────
-const SIGN_COLS = [
-  {
-    title: "Moisture & Water",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-    ),
-    items: ["Water in my basement", "Damp or wet walls", "Condensation on pipes", "Puddles after rain", "Efflorescence (white stains)"],
-  },
-  {
-    title: "Structural & Foundation",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><polyline points="9 22 9 12 15 12 15 22" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-    ),
-    items: ["Sagging or bouncy floors", "Cracks in walls or floor", "Doors that stick or won't close", "Gaps between walls and ceilings", "Visible pier or beam rot"],
-  },
-  {
-    title: "Air Quality & Smell",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M17.7 7.7a7.5 7.5 0 1 1-10.5 10.7" stroke={B} strokeWidth="2" strokeLinecap="round" /><path d="M9 12c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3" stroke={B} strokeWidth="2" strokeLinecap="round" /></svg>
-    ),
-    items: ["Musty or earthy smell", "Allergy or asthma flare-ups", "Visible mold growth", "Pest or insect activity", "High energy bills"],
-  },
-];
-
-function ProblemSignsSection() {
+// ─── Problem Signs Section (sitemap: "CTA per symptom") ───────────────────────
+// One card per symptom straight from the sitemap list — the earlier version
+// invented three category buckets ("Moisture & Water", etc.) that exist nowhere
+// in the approved sitemap.
+function ProblemSignsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
+  if (!svc.symptoms.length) return null;
   return (
     <section id="signs" style={{ background: CHAR }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
@@ -359,27 +316,45 @@ function ProblemSignsSection() {
           </p>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {SIGN_COLS.map((col, i) => (
-            <Reveal key={col.title} delay={i * 0.1}>
-              <div className="h-full flex flex-col" style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
-                <div className="px-8 py-6 flex items-center gap-4" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-                  <div className="flex items-center justify-center w-12 h-12 shrink-0"
-                    style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.2)" }}>
-                    {col.icon}
-                  </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff" }}>
-                    {col.title}
-                  </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {svc.symptoms.map((s, i) => (
+            <Reveal key={s.id} delay={(i % 3) * 0.08}>
+              <div className="group h-full flex flex-col" style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
+                {/* Photo first: homeowners recognize the problem by sight before
+                    they read the label. */}
+                <div className="relative overflow-hidden shrink-0" style={{ height: 190 }}>
+                  <ImageWithFallback
+                    src={s.img}
+                    alt={s.q}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.55) 0%, rgba(10,11,20,0) 55%)" }} />
                 </div>
-                <div className="flex flex-col px-6 py-5 gap-2 flex-1">
-                  {col.items.map((item) => (
-                    <button key={item} className="group flex items-center justify-between w-full px-4 py-3 transition-colors text-left"
-                      style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.06)", borderRadius: 4 }}>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)" }}>{item}</span>
-                      <ChevronRight size={14} color={MUTED} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
+                <div className="flex flex-col flex-1 px-7 py-7">
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 20, color: "#fff", lineHeight: 1.25, marginBottom: 12 }}>
+                    {s.q}
+                  </h3>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.75, marginBottom: 22, flex: 1 }}>
+                    {s.a}
+                  </p>
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <button
+                      onClick={() => openInspection()}
+                      className="inline-flex items-center gap-2 px-5 py-2.5"
+                      style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff", border: "none", cursor: "pointer" }}
+                    >
+                      Free inspection
+                      <ArrowRight size={13} />
                     </button>
-                  ))}
+                    <button
+                      onClick={() => onNavigate?.("problem-sign-inner")}
+                      className="group inline-flex items-center gap-1.5"
+                      style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                    >
+                      See full solution
+                      <ChevronRight size={14} color={SAND} className="transition-transform group-hover:translate-x-0.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </Reveal>
@@ -391,91 +366,85 @@ function ProblemSignsSection() {
 }
 
 // ─── Cost Guide Section ───────────────────────────────────────────────────────
-const COST_RANGES = [
-  { label: "Basic Moisture Control", range: "$1,500 – $3,500", pct: 25 },
-  { label: "Partial Encapsulation", range: "$3,500 – $6,000", pct: 50 },
-  { label: "Full Encapsulation + Drainage", range: "$6,000 – $10,000", pct: 75 },
-  { label: "Full Repair + SmartJack System", range: "$10,000 – $18,000", pct: 100 },
-];
-
-function CostBar({ item, i }: { item: typeof COST_RANGES[0]; i: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+// Light module (client QA: break up the all-dark rhythm). Replaces the generic
+// "progress bar" pricing pattern with a plain priced list — the bar had no real
+// proportional meaning, it was just decoration.
+function CostRow({ item, i }: { item: CostRange; i: number }) {
   return (
-    <div ref={ref} className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)" }}>{item.label}</span>
-        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: SAND }}>{item.range}</span>
+    <div className="flex items-center justify-between gap-6" style={{ padding: "18px 0", borderBottom: "1px solid rgba(10,11,20,.1)" }}>
+      <div className="flex items-center gap-4">
+        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 12, color: SAND, flexShrink: 0 }}>
+          {String(i + 1).padStart(2, "0")}
+        </span>
+        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: CHAR }}>{item.label}</span>
       </div>
-      <div className="h-1.5 w-full rounded-full" style={{ background: "rgba(255,255,255,.1)" }}>
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: `linear-gradient(90deg, ${B}, ${SAND})` }}
-          initial={{ width: 0 }}
-          animate={inView ? { width: `${item.pct}%` } : {}}
-          transition={{ duration: 1, delay: 0.1 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-        />
-      </div>
+      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 16, color: B, whiteSpace: "nowrap" }}>{item.range}</span>
     </div>
   );
 }
 
-function CostSection() {
+function CostSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
+  // Sitemap: only services with a "Cost guide" child render this section.
+  if (!svc.cost) return null;
+  const cost = svc.cost;
   return (
-    <section id="cost" style={{ background: NAVY }} className="py-20 lg:py-28">
+    <section id="cost" style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Text + bars */}
+          {/* Left: Text + priced list */}
           <Reveal>
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
-              Cost Guide
-            </p>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
-              How much does crawl space repair cost?
+            <div className="flex items-center gap-3 mb-4">
+              <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", margin: 0 }}>
+                Cost Guide
+              </p>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
+              {cost.headline}
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.6)", lineHeight: 1.75, marginBottom: 32 }}>
-              {"Typical range: $3,000 – $18,000 depending on size and damage level. We'll give you an exact number after your free inspection — no obligation."}
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, lineHeight: 1.75, marginBottom: 32 }}>
+              {cost.intro}
             </p>
-            <div className="flex flex-col gap-5 mb-10">
-              {COST_RANGES.map((item, i) => (
-                <CostBar key={item.label} item={item} i={i} />
+            <div className="flex flex-col mb-10">
+              {cost.ranges.map((item, i) => (
+                <CostRow key={item.label} item={item} i={i} />
               ))}
             </div>
             <div className="flex items-center gap-4 flex-wrap">
-              <a href="#" className="group inline-flex items-center justify-center gap-2 px-7 py-3.5"
-                style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
+              <button onClick={() => onNavigate?.("pricing")} className="group inline-flex items-center justify-center gap-2 px-7 py-3.5"
+                style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
                 See full cost guide
                 <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
-              </a>
-              <a href="#" className="inline-flex items-center gap-2"
-                style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND }}>
+              </button>
+              <button onClick={() => onNavigate?.("pricing")} className="inline-flex items-center gap-2"
+                style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", padding: 0, cursor: "pointer" }}>
                 Financing options
                 <ArrowRight size={14} />
-              </a>
+              </button>
             </div>
           </Reveal>
 
           {/* Right: Image + callout */}
           <Reveal delay={0.1}>
             <div className="relative">
-              <div className="relative overflow-hidden" style={{ borderRadius: 2 }}>
+              <div className="relative overflow-hidden" style={{ border: "1px solid rgba(10,11,20,.1)" }}>
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1745865448615-aa1905c6db7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="Cost estimation"
                   className="w-full object-cover"
                   style={{ height: 420 }}
                 />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.65) 0%, transparent 50%)" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.75) 0%, transparent 50%)" }} />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: SAND, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>
-                    Cost breakdown
+                    {cost.calloutLabel}
                   </p>
-                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", lineHeight: 1.1 }}>
-                    Most homeowners spend<br />$6,000 – $10,000
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", lineHeight: 1.1, whiteSpace: "pre-line" }}>
+                    {cost.calloutValue}
                   </p>
                 </div>
               </div>
-              {/* Financing chip */}
+              {/* Financing chip — dark accent on the light section, same move as the FAQ closing panel */}
               <div className="absolute -bottom-4 right-4 px-5 py-3 flex items-center gap-3"
                 style={{ background: DARK, border: `1px solid ${SAND}30` }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke={SAND} strokeWidth="2" strokeLinecap="round" /></svg>
@@ -495,43 +464,24 @@ function GallerySection() {
 }
 
 // ─── FAQ Section ──────────────────────────────────────────────────────────────
-const FAQS = [
-  {
-    q: "How long does crawl space repair take?",
-    a: "Most repairs take 1–2 days. Full encapsulation on larger spaces may take 2–3 days. We'll give you a specific timeline during your inspection.",
-  },
-  {
-    q: "Do you offer financing?",
-    a: "Yes. We work with trusted lenders to make repairs affordable. Flexible terms and competitive rates are available for qualified homeowners. Ask about options during your free inspection.",
-  },
-  {
-    q: "What areas do you serve?",
-    a: "We serve communities across Tennessee, Arkansas, Mississippi, and Missouri — including Memphis, Nashville, Jackson, Southaven, Little Rock, Jonesboro, Springfield, and Cape Girardeau. Contact us to confirm your location.",
-  },
-  {
-    q: "Are your installers certified?",
-    a: "Every installer is trained and certified in our methods. We stand behind their work with a lifetime transferable warranty. Your home is in capable hands.",
-  },
-  {
-    q: "What if I need emergency service?",
-    a: "Call us immediately if you have water intrusion or structural concerns. We prioritize urgent situations and respond quickly.",
-  },
-  {
-    q: "Will my homeowner's insurance cover this?",
-    a: "Coverage depends on your policy and the cause of damage. We'll provide detailed documentation to help with your claim. Some repairs — especially water damage — may be partially covered.",
-  },
-];
-
-function FaqSection() {
+// Light module (client QA: break up the all-dark rhythm). Rows replace the
+// boxed +/- accordion (generic template pattern) with a numbered list divided
+// by rules, matching the Cost Guide list next to it and the TypeRow pattern
+// from the style guide.
+function FaqSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
   const [open, setOpen] = useState<string>("");
   return (
-    <section id="faq" style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="faq" style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="text-center mb-16">
-          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
-            FAQs
-          </p>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", margin: 0 }}>
+              FAQs
+            </p>
+            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
+          </div>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
             Frequently asked questions
           </h2>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED }}>
@@ -541,52 +491,37 @@ function FaqSection() {
 
         <div className="max-w-[768px] mx-auto">
           <AccordionPrimitive.Root type="single" value={open} onValueChange={(v) => setOpen(v)} collapsible>
-            {FAQS.map((faq, i) => (
+            {svc.faqs.map((faq, i) => (
               <AccordionPrimitive.Item key={i} value={String(i)}
-                className="mb-3 overflow-hidden"
-                style={{ border: "1px solid rgba(255,255,255,.07)", background: CHAR }}>
+                className="overflow-hidden"
+                style={{ borderBottom: "1px solid rgba(10,11,20,.1)" }}>
                 <AccordionPrimitive.Header>
                   <AccordionPrimitive.Trigger
-                    className="w-full flex items-center justify-between px-6 py-5 text-left group transition-colors"
-                    style={{ background: "none", border: "none", cursor: "pointer" }}
+                    className="w-full flex items-center gap-5 text-left group transition-colors"
+                    style={{ background: "none", border: "none", cursor: "pointer", padding: "22px 0" }}
                   >
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 17, color: "#fff", flex: 1, paddingRight: 16, lineHeight: 1.4 }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 12, color: SAND, flexShrink: 0, width: 22 }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 17, color: CHAR, flex: 1, paddingRight: 16, lineHeight: 1.4 }}>
                       {faq.q}
                     </span>
                     <div className="shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-200 group-data-[state=open]:rotate-45"
-                      style={{ border: `1.5px solid ${open === String(i) ? SAND : "rgba(255,255,255,.2)"}`, color: open === String(i) ? SAND : MUTED }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                      style={{ color: open === String(i) ? B : MUTED }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                       </svg>
                     </div>
                   </AccordionPrimitive.Trigger>
                 </AccordionPrimitive.Header>
                 <AccordionPrimitive.Content className="overflow-hidden rdx-accordion-content">
-                  <div className="px-6 pb-6 pt-1">
-                    <div className="h-px mb-4" style={{ background: "rgba(255,255,255,.06)" }} />
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.8 }}>{faq.a}</p>
+                  <div className="pb-6" style={{ paddingLeft: 42, paddingRight: 40 }}>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.8 }}>{faq.a}</p>
                   </div>
                 </AccordionPrimitive.Content>
               </AccordionPrimitive.Item>
             ))}
           </AccordionPrimitive.Root>
-
-          <Reveal delay={0.1}>
-            <div className="mt-14 text-center p-10"
-              style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
-              <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: "#fff", marginBottom: 10 }}>
-                Still have questions?
-              </h3>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, marginBottom: 24 }}>
-                Reach out to our team anytime
-              </p>
-              <a href="#" className="group inline-flex items-center gap-2 px-7 py-3.5 transition-opacity hover:opacity-85"
-                style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
-                Contact Us
-                <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
-              </a>
-            </div>
-          </Reveal>
         </div>
       </div>
     </section>
@@ -594,14 +529,14 @@ function FaqSection() {
 }
 
 // ─── CTA Banner ───────────────────────────────────────────────────────────────
-function CtaBanner() {
+function CtaBanner({ svc }: { svc: ServiceDef }) {
   return (
     <section className="relative overflow-hidden" style={{ background: NAVY }}>
       {/* BG image overlay */}
       <div className="absolute inset-0 z-0">
         <ImageWithFallback
           src="https://images.unsplash.com/photo-1541205646242-30258c7485b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
-          alt="Ready to fix your crawl space"
+          alt={svc.ctaHeadline.replace("\n", " ")}
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0" style={{ background: "rgba(11,28,74,.82)" }} />
@@ -617,8 +552,8 @@ function CtaBanner() {
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Get started today</span>
             <div className="h-[1px] w-8" style={{ background: SAND }} />
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,72px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", marginBottom: 16 }}>
-            Ready to fix your<br />crawl space?
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,72px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", marginBottom: 16, whiteSpace: "pre-line" }}>
+            {svc.ctaHeadline}
           </h2>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.55)", maxWidth: 480, margin: "0 auto 44px" }}>
             Free inspection · Same-week availability · Lifetime warranty
@@ -626,7 +561,7 @@ function CtaBanner() {
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden px-9 py-4 inline-flex items-center gap-3"
               style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: NAVY }}>
-              <span className="relative z-10">Schedule Free Inspection</span>
+              <span className="relative z-10">{svc.symptoms.length ? "Schedule Free Inspection" : "Request a Bid"}</span>
               <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" color={NAVY} />
               <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
             </a>
@@ -699,7 +634,9 @@ function Footer({ onBack }: { onBack: () => void }) {
 }
 
 // ─── ServicePage ──────────────────────────────────────────────────────────────
-export default function ServicePage({ onBack, onNavigate, scrollTo }: { onBack: () => void; onNavigate?: (p: string) => void; scrollTo?: string }) {
+export default function ServicePage({ onBack, onNavigate, scrollTo, slug }: { onBack: () => void; onNavigate?: (p: string) => void; scrollTo?: string; slug?: string }) {
+  const svc = getService(slug);
+  const tabs = svc.tabs;
   const [activeTab, setActiveTab] = useState(scrollTo ?? "overview");
 
   const scrollToSection = (id: string) => {
@@ -731,18 +668,18 @@ export default function ServicePage({ onBack, onNavigate, scrollTo }: { onBack: 
 
   // Track active tab on scroll
   useEffect(() => {
-    const sections = SERVICE_TABS.map((t) => document.getElementById(t.id)).filter(Boolean) as HTMLElement[];
+    const sections = tabs.map((t) => document.getElementById(t.id)).filter(Boolean) as HTMLElement[];
     const handler = () => {
       for (let i = sections.length - 1; i >= 0; i--) {
         if (window.scrollY + 160 >= sections[i].offsetTop) {
-          setActiveTab(SERVICE_TABS[i].id);
+          setActiveTab(tabs[i].id);
           break;
         }
       }
     };
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
-  }, []);
+  }, [tabs]);
 
   // Scroll to top on mount
   useEffect(() => { window.scrollTo(0, 0); }, []);
@@ -773,7 +710,7 @@ export default function ServicePage({ onBack, onNavigate, scrollTo }: { onBack: 
           nav layer). This page has no main-nav dropdown that already covers
           its internal anchors, so per the client's alternative it becomes a
           floating rail that follows the scroll instead of stacking under the header. */}
-      <FloatingSideNav tabs={SERVICE_TABS} active={activeTab} onChange={scrollToSection} />
+      <FloatingSideNav tabs={tabs} active={activeTab} onChange={scrollToSection} />
       <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: "#0A0B14" }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
@@ -786,16 +723,16 @@ export default function ServicePage({ onBack, onNavigate, scrollTo }: { onBack: 
               style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
               className="hover:text-white transition-colors">Services</button>
             <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Crawl Space Repair</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>{svc.name}</span>
           </div>
         </div>
-        <HeroSection onNavigate={onNavigate} />
-        <SolutionsSection />
-        <div id="signs"><ProblemSignsSection /></div>
-        <div id="cost"><CostSection /></div>
+        <HeroSection svc={svc} onNavigate={onNavigate} />
+        <SolutionsSection svc={svc} />
+        <ProblemSignsSection svc={svc} onNavigate={onNavigate} />
+        <CostSection svc={svc} onNavigate={onNavigate} />
         <GallerySection />
-        <div id="faq"><FaqSection /></div>
-        <CtaBanner />
+        <FaqSection svc={svc} onNavigate={onNavigate} />
+        <CtaBanner svc={svc} />
         <Footer onBack={onBack} />
       </div>
     </>

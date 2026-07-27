@@ -31,13 +31,13 @@ export const GALLERY_ITEMS: {
     products: ["CleanSpace™ Moisture Barrier", "SmartSump™ Pump", "SaniDry™ Dehumidifier"],
     images: [
       { src: U("photo-1591638436281-078219f200af", 1400), caption: "Old crawl space wall before encapsulation" },
-      { src: U("photo-1766497278321-dff63e463f72", 1400), caption: "Moldy, moisture-damaged subfloor" },
+      { src: U("photo-1720631618132-83cdab1b237e", 1400), caption: "Moldy, moisture-damaged subfloor" },
       { src: U("photo-1708214148950-ccbb69d40e25", 1400), caption: "CleanSpace™ vapor barrier installed" },
       { src: U("photo-1760776024932-38040caef5d1", 1400), caption: "Finished, sealed crawl space" },
     ],
   },
   {
-    src: U("photo-1766497278321-dff63e463f72", 900), label: "Floor Joist Repair", loc: "Jonesboro, AR", category: "Crawl Space", year: "2025",
+    src: U("photo-1720631618132-83cdab1b237e", 900), label: "Floor Joist Repair", loc: "Jonesboro, AR", category: "Crawl Space", year: "2025",
     whatWeDid: "Sistered floor joists and installed SmartJack™ supports to stop sagging floors.",
     story: [
       "Sagging floors and a bouncy feeling near the kitchen led the homeowner to call for an inspection.",
@@ -46,7 +46,7 @@ export const GALLERY_ITEMS: {
     ],
     products: ["SmartJack™ Support System", "Pressure-Treated Sister Joists"],
     images: [
-      { src: U("photo-1766497278321-dff63e463f72", 1400), caption: "Rotted joists before repair" },
+      { src: U("photo-1720631618132-83cdab1b237e", 1400), caption: "Rotted joists before repair" },
       { src: U("photo-1591638436281-078219f200af", 1400), caption: "Sistering new joists in place" },
       { src: U("photo-1646184466560-f81b1e495604", 1400), caption: "SmartJack™ supports installed" },
     ],
@@ -93,7 +93,7 @@ export const GALLERY_ITEMS: {
     images: [
       { src: U("photo-1646184466560-f81b1e495604", 1400), caption: "Water intrusion along the basement wall" },
       { src: U("photo-1708214148950-ccbb69d40e25", 1400), caption: "Perimeter drain channel installed" },
-      { src: U("photo-1766497278321-dff63e463f72", 1400), caption: "Dual sump pump system with backup" },
+      { src: U("photo-1760776024932-38040caef5d1", 1400), caption: "Dual sump pump system with backup" },
     ],
   },
   {
@@ -127,7 +127,7 @@ export const GALLERY_ITEMS: {
     ],
   },
   {
-    src: U("photo-1766497278321-dff63e463f72", 900), label: "Concrete Leveling", loc: "Bartlett, TN", category: "Concrete", year: "2025",
+    src: U("photo-1708214148950-ccbb69d40e25", 900), label: "Concrete Leveling", loc: "Bartlett, TN", category: "Concrete", year: "2025",
     whatWeDid: "Polyurethane foam injection to lift and level a sunken driveway slab.",
     story: [
       "One section of the driveway had sunk nearly 3 inches, creating a tripping hazard and pooling water after every rain.",
@@ -136,7 +136,7 @@ export const GALLERY_ITEMS: {
     ],
     products: ["Polyurethane Foam Injection"],
     images: [
-      { src: U("photo-1766497278321-dff63e463f72", 1400), caption: "Sunken driveway slab before leveling" },
+      { src: U("photo-1708214148950-ccbb69d40e25", 1400), caption: "Sunken driveway slab before leveling" },
       { src: U("photo-1720631618132-83cdab1b237e", 1400), caption: "Foam injection in progress" },
       { src: U("photo-1760776024932-38040caef5d1", 1400), caption: "Driveway lifted level, ready for use" },
     ],

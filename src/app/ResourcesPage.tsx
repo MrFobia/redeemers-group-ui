@@ -3,7 +3,7 @@ import { openInspection } from "./components/InspectionModal";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronRight, ChevronLeft, ArrowRight, Play, Download, FileText, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, ArrowRight, Play, Download, FileText, X, Home, Tag } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import imgFloor01 from "../assets/floor-01.jpeg";
@@ -52,8 +52,14 @@ const NAV_TABS = [
 // ─── 1. HERO ──────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }} className="py-20 lg:py-28">
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+    <section className="relative w-full overflow-hidden" style={{ minHeight: 420 }}>
+      <ImageWithFallback
+        src={imgFloor01}
+        alt="Homeowner education center"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.94) 0%,rgba(10,11,20,0.75) 55%,rgba(10,11,20,0.5) 100%)" }} />
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-32">
         <Reveal>
           <div className="flex items-center gap-2 mb-5">
             <div className="w-5 h-[2px]" style={{ background: SAND }} />
@@ -62,7 +68,7 @@ function HeroSection() {
           <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,5.5vw,80px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-2px", marginBottom: 20, maxWidth: 800 }}>
             Homeowner education center
           </h1>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.5)", lineHeight: 1.75, maxWidth: 560 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.6)", lineHeight: 1.75, maxWidth: 560 }}>
             Cost guides, checklists, buyer/seller guides, and everything you need to make informed decisions about your home.
           </p>
         </Reveal>
@@ -96,7 +102,6 @@ function CostCard({ card, index, isActive, onHover }: {
   const [mouse, setMouse] = useState({ x: 50, y: 50 });
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
-  const pct = Math.round(((card.low + card.high) / 2 / card.high) * 100);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -114,22 +119,22 @@ function CostCard({ card, index, isActive, onHover }: {
       onMouseMove={handleMouseMove}
       className="relative flex flex-col h-full overflow-hidden cursor-pointer"
       style={{
-        background: CHAR,
-        border: `1px solid ${isActive ? "rgba(196,171,108,0.4)" : "rgba(255,255,255,0.06)"}`,
+        background: "#fff",
+        border: `1px solid ${isActive ? "rgba(26,82,168,0.35)" : "rgba(10,11,20,0.1)"}`,
         transition: "border-color .25s",
       }}
     >
       {/* Spotlight */}
       <div style={{
         position: "absolute", inset: 0, opacity: isActive ? 1 : 0,
-        background: `radial-gradient(circle at ${mouse.x}% ${mouse.y}%, rgba(196,171,108,0.08) 0%, transparent 65%)`,
+        background: `radial-gradient(circle at ${mouse.x}% ${mouse.y}%, rgba(26,82,168,0.05) 0%, transparent 65%)`,
         transition: "opacity .3s",
         pointerEvents: "none",
       }} />
 
       {/* Top bar accent */}
       <motion.div
-        style={{ height: 2, background: SAND, transformOrigin: "left" }}
+        style={{ height: 2, background: B, transformOrigin: "left" }}
         initial={{ scaleX: 0 }}
         animate={{ scaleX: isActive ? 1 : 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
@@ -138,39 +143,24 @@ function CostCard({ card, index, isActive, onHover }: {
       <div className="flex flex-col flex-1 p-7">
         {/* Number + tag row */}
         <div className="flex items-start justify-between mb-6">
-          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 13, color: "rgba(196,171,108,0.5)", letterSpacing: 2 }}>{card.n}</span>
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 13, color: "rgba(196,171,108,0.7)", letterSpacing: 2 }}>{card.n}</span>
           {card.tag && (
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: SAND, letterSpacing: 2, textTransform: "uppercase", border: "1px solid rgba(196,171,108,0.3)", padding: "3px 8px" }}>
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 2, textTransform: "uppercase", border: "1px solid rgba(196,171,108,0.4)", padding: "3px 8px" }}>
               {card.tag}
             </span>
           )}
         </div>
 
         {/* Title */}
-        <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(18px,1.6vw,22px)", color: "#fff", lineHeight: 1.2, marginBottom: 6 }}>
+        <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(18px,1.6vw,22px)", color: CHAR, lineHeight: 1.2, marginBottom: 6 }}>
           {card.title}
         </h3>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, color: SAND, marginBottom: 10, opacity: 0.8 }}>{card.sub}</p>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.45)", lineHeight: 1.7, flex: 1, marginBottom: 22 }}>{card.desc}</p>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, color: "#8A7238", marginBottom: 10 }}>{card.sub}</p>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, lineHeight: 1.7, flex: 1, marginBottom: 22 }}>{card.desc}</p>
 
-        {/* Price range */}
-        <div style={{ marginBottom: 18 }}>
-          <div className="flex items-center justify-between mb-2">
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: "#fff", letterSpacing: "-0.5px" }}>{card.range}</span>
-          </div>
-          {/* Bar */}
-          <div style={{ height: 3, background: "rgba(255,255,255,0.08)", borderRadius: 2, overflow: "hidden" }}>
-            <motion.div
-              style={{ height: "100%", background: `linear-gradient(90deg, ${SAND}88, ${SAND})`, borderRadius: 2, transformOrigin: "left" }}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: inView ? pct / 100 : 0 }}
-              transition={{ duration: 1.1, delay: index * 0.07 + 0.4, ease: [0.22, 1, 0.36, 1] }}
-            />
-          </div>
-          <div className="flex justify-between mt-1">
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(255,255,255,.25)" }}>Min</span>
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(255,255,255,.25)" }}>Max</span>
-          </div>
+        {/* Price range — plain figure, no decorative bar */}
+        <div style={{ marginBottom: 18, paddingTop: 16, borderTop: "1px solid rgba(10,11,20,.08)" }}>
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 19, color: B, letterSpacing: "-0.5px" }}>{card.range}</span>
         </div>
 
         {/* CTA */}
@@ -179,9 +169,9 @@ function CostCard({ card, index, isActive, onHover }: {
           animate={{ x: isActive ? 4 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>Read full guide</span>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B }}>Read full guide</span>
           <motion.div animate={{ x: isActive ? 3 : 0 }} transition={{ duration: 0.2 }}>
-            <ArrowRight size={13} color={SAND} />
+            <ArrowRight size={13} color={B} />
           </motion.div>
         </motion.div>
       </div>
@@ -195,7 +185,7 @@ function CostGuideSection() {
   const titleInView = useInView(titleRef, { once: true });
 
   return (
-    <section id="cost" style={{ background: DARK }} className="py-20 lg:py-28 overflow-hidden">
+    <section id="cost" style={{ background: CREAM }} className="py-20 lg:py-28 overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Header */}
@@ -207,9 +197,9 @@ function CostGuideSection() {
           >
             <div className="flex items-center gap-3 mb-4">
               <div style={{ width: 28, height: 2, background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Cost guide</span>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Cost guide</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4.5vw,58px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4.5vw,58px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px" }}>
               What does it<br />really cost?
             </h2>
           </motion.div>
@@ -220,15 +210,15 @@ function CostGuideSection() {
             transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-end gap-3"
           >
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.4)", maxWidth: 260, textAlign: "right", lineHeight: 1.6 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, maxWidth: 260, textAlign: "right", lineHeight: 1.6 }}>
               Real price ranges based on 12,000+ jobs across TN, AR, MS & MO.
             </p>
             <button className="group inline-flex items-center gap-2 px-6 py-3"
-              style={{ border: "1px solid rgba(196,171,108,.4)", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", cursor: "pointer", transition: "background .2s" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(196,171,108,.08)")}
+              style={{ border: `1px solid rgba(26,82,168,.35)`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", cursor: "pointer", transition: "background .2s" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(26,82,168,.06)")}
               onMouseLeave={e => (e.currentTarget.style.background = "none")}>
               View all guides
-              <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" color={SAND} />
+              <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" color={B} />
             </button>
           </motion.div>
         </div>
@@ -312,7 +302,6 @@ function ResourcesDownloadSection() {
 const PERSONA_DATA = {
   buyer: {
     label: "Buying a home",
-    icon: "🏠",
     headline: "Know what you're buying before you close",
     subline: "Foundation issues can cost $4,000–$20,000 to fix. These guides help you identify risks, understand costs, and negotiate like a professional.",
     featured: {
@@ -330,7 +319,6 @@ const PERSONA_DATA = {
   },
   seller: {
     label: "Selling a home",
-    icon: "🏡",
     headline: "Protect your sale price before you list",
     subline: "Buyers' agents are trained to spot structural issues and use them to negotiate. Get ahead of it with the right information.",
     featured: {
@@ -355,7 +343,7 @@ function BuyerSellerSection() {
   const data = PERSONA_DATA[persona];
 
   return (
-    <section id="buyer-seller" style={{ background: CHAR }} className="py-20 lg:py-28">
+    <section id="buyer-seller" style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* ── Header ── */}
@@ -368,13 +356,13 @@ function BuyerSellerSection() {
         >
           <div className="flex items-center gap-3 mb-4">
             <div style={{ width: 28, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Buyer &amp; Seller</span>
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Buyer &amp; Seller</span>
           </div>
           <div className="flex flex-col lg:flex-row lg:items-end gap-6">
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4.5vw,56px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px", flex: 1 }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4.5vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px", flex: 1 }}>
               Guides for every<br />side of the table
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.4)", lineHeight: 1.7, maxWidth: 380 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, lineHeight: 1.7, maxWidth: 380 }}>
               Whether you're buying or selling, structural issues at closing can make or break the deal. Know your position.
             </p>
           </div>
@@ -387,30 +375,33 @@ function BuyerSellerSection() {
           transition={{ duration: 0.5, delay: 0.15 }}
           className="flex gap-3 mb-10"
         >
-          {(["buyer", "seller"] as const).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPersona(p)}
-              className="relative px-6 py-3 flex items-center gap-2.5 transition-all"
-              style={{
-                fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14,
-                background: persona === p ? "#fff" : "transparent",
-                color: persona === p ? DARK : "rgba(255,255,255,.45)",
-                border: `1.5px solid ${persona === p ? "#fff" : "rgba(255,255,255,.15)"}`,
-                cursor: "pointer", letterSpacing: 0.3,
-              }}
-            >
-              <span style={{ fontSize: 16 }}>{PERSONA_DATA[p].icon}</span>
-              {PERSONA_DATA[p].label}
-              {persona === p && (
-                <motion.div
-                  layoutId="persona-indicator"
-                  className="absolute bottom-0 left-0 right-0 h-[2px]"
-                  style={{ background: B }}
-                />
-              )}
-            </button>
-          ))}
+          {(["buyer", "seller"] as const).map((p) => {
+            const PersonaIcon = p === "buyer" ? Home : Tag;
+            return (
+              <button
+                key={p}
+                onClick={() => setPersona(p)}
+                className="relative px-6 py-3 flex items-center gap-2.5 transition-all"
+                style={{
+                  fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14,
+                  background: persona === p ? CHAR : "transparent",
+                  color: persona === p ? "#fff" : MUTED,
+                  border: `1.5px solid ${persona === p ? CHAR : "rgba(10,11,20,.15)"}`,
+                  cursor: "pointer", letterSpacing: 0.3,
+                }}
+              >
+                <PersonaIcon size={16} strokeWidth={2} />
+                {PERSONA_DATA[p].label}
+                {persona === p && (
+                  <motion.div
+                    layoutId="persona-indicator"
+                    className="absolute bottom-0 left-0 right-0 h-[2px]"
+                    style={{ background: SAND }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </motion.div>
 
         {/* ── Context strip ── */}
@@ -422,11 +413,11 @@ function BuyerSellerSection() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
             className="flex flex-col lg:flex-row lg:items-center gap-4 mb-12 p-5"
-            style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)" }}
+            style={{ background: "#fff", border: "1px solid rgba(10,11,20,.1)" }}
           >
             <div className="flex-1">
-              <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff", marginBottom: 6 }}>{data.headline}</h3>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", lineHeight: 1.6 }}>{data.subline}</p>
+              <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, marginBottom: 6 }}>{data.headline}</h3>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.6 }}>{data.subline}</p>
             </div>
             <button
               onClick={openInspection}
@@ -449,20 +440,20 @@ function BuyerSellerSection() {
             className="grid grid-cols-1 lg:grid-cols-5 gap-5"
           >
             {/* Featured guide — 3/5 width */}
-            <div className="lg:col-span-3 flex flex-col" style={{ background: DARK, border: "1px solid rgba(255,255,255,.08)" }}>
+            <div className="lg:col-span-3 flex flex-col" style={{ background: "#fff", border: "1px solid rgba(10,11,20,.1)" }}>
               {/* Visual top */}
-              <div className="relative overflow-hidden flex items-center justify-center" style={{ height: 200, background: `linear-gradient(135deg, ${B}22 0%, rgba(196,171,108,.1) 100%)`, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+              <div className="relative overflow-hidden flex items-center justify-center" style={{ height: 200, background: `linear-gradient(135deg, ${B}0F 0%, rgba(196,171,108,.1) 100%)`, borderBottom: "1px solid rgba(10,11,20,.08)" }}>
                 {/* Decorative document mockup */}
                 <div className="relative" style={{ width: 120, height: 155 }}>
-                  <div className="absolute inset-0" style={{ background: "#fff", borderRadius: 4, boxShadow: "0 8px 40px rgba(0,0,0,.4)" }} />
+                  <div className="absolute inset-0" style={{ background: "#fff", borderRadius: 4, border: "1px solid rgba(10,11,20,.08)", boxShadow: "0 8px 32px rgba(10,11,20,.12)" }} />
                   <div style={{ padding: "16px 14px" }}>
                     <div style={{ height: 6, background: B, borderRadius: 2, marginBottom: 10, width: "70%" }} />
                     {[100, 85, 90, 75, 65].map((w, i) => (
-                      <div key={i} style={{ height: 4, background: `rgba(0,0,0,${i === 0 ? .12 : .06})`, borderRadius: 2, marginBottom: 6, width: `${w}%` }} />
+                      <div key={i} style={{ height: 4, background: `rgba(10,11,20,${i === 0 ? .14 : .07})`, borderRadius: 2, marginBottom: 6, width: `${w}%` }} />
                     ))}
-                    <div style={{ height: 1, background: "rgba(0,0,0,.08)", margin: "10px 0" }} />
+                    <div style={{ height: 1, background: "rgba(10,11,20,.08)", margin: "10px 0" }} />
                     {[80, 70].map((w, i) => (
-                      <div key={i} style={{ height: 4, background: "rgba(0,0,0,.06)", borderRadius: 2, marginBottom: 6, width: `${w}%` }} />
+                      <div key={i} style={{ height: 4, background: "rgba(10,11,20,.07)", borderRadius: 2, marginBottom: 6, width: `${w}%` }} />
                     ))}
                   </div>
                 </div>
@@ -478,21 +469,21 @@ function BuyerSellerSection() {
               {/* Content */}
               <div className="flex flex-col flex-1 p-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: SAND, letterSpacing: 2.5, textTransform: "uppercase", border: "1px solid rgba(196,171,108,.3)", padding: "3px 8px" }}>PDF</span>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.3)" }}>{data.featured.pages}</span>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 2.5, textTransform: "uppercase", border: "1px solid rgba(196,171,108,.4)", padding: "3px 8px" }}>PDF</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{data.featured.pages}</span>
                 </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: "#fff", lineHeight: 1.2, marginBottom: 12 }}>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: CHAR, lineHeight: 1.2, marginBottom: 12 }}>
                   {data.featured.title}
                 </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.7, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.7, marginBottom: 20 }}>
                   {data.featured.desc}
                 </p>
                 {/* Topics */}
                 <ul className="flex flex-col gap-2.5 mb-8 flex-1">
                   {data.featured.topics.map((t) => (
                     <li key={t} className="flex items-start gap-2.5">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginTop: 2, shrink: 0 }}><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.65)", lineHeight: 1.5 }}>{t}</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginTop: 2, shrink: 0 }}><path d="M20 6L9 17l-5-5" stroke={B} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#3D4152", lineHeight: 1.5 }}>{t}</span>
                     </li>
                   ))}
                 </ul>
@@ -512,22 +503,22 @@ function BuyerSellerSection() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
                   className="flex flex-col flex-1 p-6 group"
-                  style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)", cursor: "pointer", transition: "border-color .2s" }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(196,171,108,.25)")}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,.07)")}
+                  style={{ background: "#fff", border: "1px solid rgba(10,11,20,.1)", cursor: "pointer", transition: "border-color .2s" }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(196,171,108,.4)")}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(10,11,20,.1)")}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <FileText size={15} color={SAND} strokeWidth={1.5} />
-                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>PDF</span>
+                      <FileText size={15} color="#8A7238" strokeWidth={1.5} />
+                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 2, textTransform: "uppercase" }}>PDF</span>
                     </div>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.25)" }}>{g.pages}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: MUTED }}>{g.pages}</span>
                   </div>
-                  <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", lineHeight: 1.3, marginBottom: 8 }}>{g.title}</h4>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.4)", lineHeight: 1.6, flex: 1, marginBottom: 16 }}>{g.desc}</p>
+                  <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, lineHeight: 1.3, marginBottom: 8 }}>{g.title}</h4>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, lineHeight: 1.6, flex: 1, marginBottom: 16 }}>{g.desc}</p>
                   <div className="flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                    <Download size={12} color={SAND} />
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>Download</span>
+                    <Download size={12} color={B} />
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B }}>Download</span>
                   </div>
                 </motion.div>
               ))}
@@ -544,7 +535,7 @@ function BuyerSellerSection() {
 const JOB_STORIES = [
   { name: "Jennifer M.", type: "Crawl Space", loc: "Memphis, TN", date: "March 2026", duration: "2 days", result: "SmartJack system + full encapsulation. Floors leveled and moisture eliminated.", quote: "I could feel the difference the first morning I walked in. No more bounce, no more smell. Redeemers was worth every penny.", img: "https://images.unsplash.com/photo-1591638436281-078219f200af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
   { name: "Robert T.", type: "Foundation", loc: "Jonesboro, AR", date: "February 2026", duration: "1 day", result: "6 push piers driven to bedrock. Foundation stabilized with lifetime warranty.", quote: "I had three different companies tell me three different things. Redeemers explained it clearly, showed me the evidence, and fixed it the right way.", img: "https://images.unsplash.com/photo-1708214148950-ccbb69d40e25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
-  { name: "Jennifer M.", type: "Waterproofing", loc: "Memphis, TN", date: "January 2026", duration: "3 days", result: "Interior drainage system and dual sump pump installed. Basement stays dry through heavy rain.", quote: "After years of a damp basement, it's finally dry. The crew was professional and cleaned up everything when done.", img: "https://images.unsplash.com/photo-1766497278321-dff63e463f72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
+  { name: "Jennifer M.", type: "Waterproofing", loc: "Memphis, TN", date: "January 2026", duration: "3 days", result: "Interior drainage system and dual sump pump installed. Basement stays dry through heavy rain.", quote: "After years of a damp basement, it's finally dry. The crew was professional and cleaned up everything when done.", img: "https://images.unsplash.com/photo-1646184466560-f81b1e495604?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
 ];
 
 type PreviewStory = typeof JOB_STORIES[0];
@@ -750,18 +741,18 @@ function FaqSection() {
   const filtered = FAQS.filter((f) => activeFilter === "All" || f.cat === activeFilter || f.cat === "All");
 
   return (
-    <section id="faq" style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="faq" style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-5 h-[1px]" style={{ background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>FAQs</span>
-            <div className="w-5 h-[1px]" style={{ background: SAND }} />
+            <div className="w-5 h-[2px]" style={{ background: SAND }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>FAQs</span>
+            <div className="w-5 h-[2px]" style={{ background: SAND }} />
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
             Frequently asked questions
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(255,255,255,.5)" }}>Find answers about our services and process</p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED }}>Find answers about our services and process</p>
         </Reveal>
 
         {/* Filter pills */}
@@ -771,9 +762,9 @@ function FaqSection() {
               className="transition-all duration-200 px-5 py-2"
               style={{
                 fontFamily: "'Inter',sans-serif", fontWeight: activeFilter === f ? 600 : 400, fontSize: 14,
-                color: activeFilter === f ? DARK : "rgba(255,255,255,.6)",
-                background: activeFilter === f ? SAND : "transparent",
-                border: `1.5px solid ${activeFilter === f ? SAND : "rgba(255,255,255,.15)"}`,
+                color: activeFilter === f ? "#fff" : MUTED,
+                background: activeFilter === f ? B : "transparent",
+                border: `1.5px solid ${activeFilter === f ? B : "rgba(10,11,20,.15)"}`,
                 cursor: "pointer",
               }}>{f}</button>
           ))}
@@ -788,42 +779,30 @@ function FaqSection() {
           `}</style>
           <AccordionPrimitive.Root type="single" value={open} onValueChange={setOpen} collapsible>
             {filtered.map((faq, i) => (
-              <AccordionPrimitive.Item key={i} value={String(i)} className="mb-3 overflow-hidden"
-                style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+              <AccordionPrimitive.Item key={i} value={String(i)} className="overflow-hidden"
+                style={{ borderBottom: "1px solid rgba(10,11,20,.1)" }}>
                 <AccordionPrimitive.Header>
                   <AccordionPrimitive.Trigger
-                    className="w-full flex items-center justify-between px-6 py-5 text-left group"
-                    style={{ background: "none", border: "none", cursor: "pointer" }}>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 16, color: "#fff", flex: 1, paddingRight: 16, lineHeight: 1.4 }}>{faq.q}</span>
+                    className="w-full flex items-center gap-5 text-left group"
+                    style={{ background: "none", border: "none", cursor: "pointer", padding: "22px 0" }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 12, color: SAND, flexShrink: 0, width: 22 }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 16, color: CHAR, flex: 1, paddingRight: 16, lineHeight: 1.4 }}>{faq.q}</span>
                     <div className="shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-200 group-data-[state=open]:rotate-45"
-                      style={{ border: `1.5px solid ${open === String(i) ? SAND : "rgba(255,255,255,.2)"}`, color: open === String(i) ? SAND : "rgba(255,255,255,.4)" }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /></svg>
+                      style={{ color: open === String(i) ? B : MUTED }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
                     </div>
                   </AccordionPrimitive.Trigger>
                 </AccordionPrimitive.Header>
                 <AccordionPrimitive.Content className="overflow-hidden rfaq">
-                  <div className="px-6 pb-6 pt-1">
-                    <div className="h-px mb-4" style={{ background: "rgba(255,255,255,.06)" }} />
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.55)", lineHeight: 1.8 }}>{faq.a}</p>
+                  <div className="pb-6" style={{ paddingLeft: 42, paddingRight: 40 }}>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.8 }}>{faq.a}</p>
                   </div>
                 </AccordionPrimitive.Content>
               </AccordionPrimitive.Item>
             ))}
           </AccordionPrimitive.Root>
-
-          <Reveal delay={0.1}>
-            <div className="mt-10 p-8 flex flex-col sm:flex-row items-center justify-between gap-6" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
-              <div>
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", marginBottom: 4 }}>Still have questions?</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)" }}>Our team is available Mon–Sat, 8am–6pm.</p>
-              </div>
-              <a href="#" className="group inline-flex items-center gap-2 px-6 py-3 shrink-0 transition-opacity hover:opacity-85"
-                style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
-                Contact us
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-              </a>
-            </div>
-          </Reveal>
         </div>
       </div>
     </section>

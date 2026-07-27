@@ -4,6 +4,8 @@ import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import { Home, Hammer, BadgeCheck, ShieldCheck, Users, Leaf } from "lucide-react";
 import ServicePage from "./ServicePage";
+import { getSymptomImage } from "./data/services";
+import { getProblemSignByLabel } from "./data/problemSigns";
 import ProblemSignsPage from "./ProblemSignsPage";
 import ProblemSignInnerPage from "./ProblemSignInnerPage";
 import OurDifferencePage from "./OurDifferencePage";
@@ -139,7 +141,7 @@ const SLIDES: {
     headline: ["Stop the Water.", "Save the", "Structure."],
     sub: "Interior drainage, sump pumps, and membrane systems designed to permanently keep water out of your home.",
     cta: "Explore Waterproofing",
-    ctaAction: "service",
+    ctaAction: "service/waterproofing",
     overlay: "linear-gradient(113deg,rgba(10,28,74,0.90) 8%,rgba(10,28,74,0.60) 54%,rgba(10,28,74,0.15) 91%)",
     card: {
       eyebrow: "Over 12,250 homes protected",
@@ -543,14 +545,16 @@ function ServiceCard({ s, onNavigate }: { s: typeof SERVICES[0]; onNavigate?: ()
 }
 
 // ─── Signs / Problem Selector ─────────────────────────────────────────────────
+// Sitemap: Home > "SYMPTOM ENTRY POINTS" — these four labels are verbatim from
+// the sitemap; the category and route point at the owning service page.
 const SIGNS = [
-  { cat: "Crawl Space",       label: "My floors are\nsinking" },
-  { cat: "Waterproofing",     label: "My basement is wet" },
-  { cat: "Foundation Repair", label: "I see wall cracks" },
-  { cat: "Concrete Services", label: "Uneven concrete" },
+  { cat: "Crawl Space Repair", slug: "crawl-space-repair", label: "My floors are sinking",     img: getSymptomImage("My floors are sagging, bouncy, or buckling.") },
+  { cat: "Waterproofing",      slug: "waterproofing",      label: "My basement is wet",        img: getSymptomImage("Water getting in to basement or other.") },
+  { cat: "Structural Repair",  slug: "structural-repair",  label: "I see wall cracks",         img: getSymptomImage("Cracks in exterior or interior walls") },
+  { cat: "Concrete Services",  slug: "concrete-services",  label: "Uneven concrete / driveway", img: getSymptomImage("Uneven concrete slabs") },
 ];
 
-function SignsSection({ onNavigate }: { onNavigate: () => void }) {
+function SignsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <section className="py-12 px-8 md:px-14" style={{ background: DARK }}>
       <div className="max-w-[1440px] mx-auto flex flex-col gap-14">
@@ -566,8 +570,15 @@ function SignsSection({ onNavigate }: { onNavigate: () => void }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {SIGNS.map((s, i) => (
             <Reveal key={s.cat} delay={i * 0.07}>
-              <div onClick={onNavigate} className="flex flex-col gap-2 p-7 cursor-pointer group"
+              <div onClick={() => onNavigate(`service/${s.slug}#signs`)} className="flex flex-col cursor-pointer group overflow-hidden"
                 style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+                {/* Photo first — homeowners pick their problem by sight. */}
+                <div className="relative overflow-hidden shrink-0" style={{ height: 150 }}>
+                  <ImageWithFallback src={s.img} alt={s.label}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(30,34,53,.85) 0%, rgba(30,34,53,0) 60%)" }} />
+                </div>
+                <div className="flex flex-col gap-2 p-7">
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>
                   {s.cat}
                 </p>
@@ -582,6 +593,7 @@ function SignsSection({ onNavigate }: { onNavigate: () => void }) {
                     </svg>
                   </div>
                 </div>
+                </div>
               </div>
             </Reveal>
           ))}
@@ -591,7 +603,40 @@ function SignsSection({ onNavigate }: { onNavigate: () => void }) {
   );
 }
 
-function ServicesSection({ onNavigate }: { onNavigate: () => void }) {
+// ─── Services Overview (sitemap: Home > "Services Overview (cards)") ─────────
+// The sitemap's Home node lists three overview cards. Their labels there
+// ("Foundation repair") predate the Services branch, so the cards carry the
+// official service names and route to the matching service page.
+const HOME_SERVICE_CARDS = [
+  {
+    slug: "structural-repair",
+    cat: "Structural Repair",
+    // Symptom-led headline, verbatim from the sitemap's home symptom entry points.
+    title: "I see wall cracks",
+    desc: "Push piers, wall anchors, and slab repair that stop foundation movement permanently.",
+    img: imgSvcFoundation as string,
+    tags: ["Slab Repair", "Wall Stabilization", "Lintel Repair"],
+  },
+  {
+    slug: "waterproofing",
+    cat: "Waterproofing",
+    title: "My basement is wet",
+    desc: "Interior drainage and exterior membranes keep water where it belongs.",
+    img: imgSvcWaterproofing as string,
+    tags: [],
+  },
+  {
+    slug: "concrete-services",
+    cat: "Concrete Services",
+    title: "Uneven concrete / driveway",
+    desc: "Foam injection lifts sunken slabs without full replacement. Fast, clean, permanent.",
+    img: imgSvcConcrete as string,
+    tags: [],
+  },
+];
+
+function ServicesSection({ onNavigate }: { onNavigate: (p: string) => void }) {
+  const [lead, ...rest] = HOME_SERVICE_CARDS;
   return (
     <section style={{ background: CREAM }} className="py-24 px-8 md:px-14">
       <div className="max-w-[1440px] mx-auto">
@@ -604,48 +649,76 @@ function ServicesSection({ onNavigate }: { onNavigate: () => void }) {
               What We Repair<br />and Restore
             </h2>
           </div>
-          <a href="#" className="group inline-flex items-center gap-2 px-6 py-3 shrink-0"
-            style={{ border: `1.5px solid ${CHAR}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: CHAR }}>
+          <button onClick={() => onNavigate("services-landing")} className="group inline-flex items-center gap-2 px-6 py-3 shrink-0"
+            style={{ border: `1.5px solid ${CHAR}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: CHAR, background: "none", cursor: "pointer" }}>
             All services
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-1">
               <path d="M5 12h14M13 6l6 6-6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </a>
+          </button>
         </Reveal>
 
-        {/* Services Grid — wireframe layout */}
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
-          {/* ── ROW 1: Crawl Space (wide) | Foundation | Waterproofing ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          {/* Lead card — horizontal: image LEFT · content RIGHT */}
+          <Reveal delay={0} className="lg:col-span-2">
+            <div className="relative overflow-hidden group cursor-pointer flex flex-col lg:flex-row lg:h-[500px]" style={{ background: CHAR }}
+              onClick={() => onNavigate(`service/${lead.slug}`)}>
+              <div className="relative shrink-0 overflow-hidden h-52 sm:h-64 lg:h-full lg:w-1/2">
+                <ImageWithFallback src={lead.img} alt={lead.cat}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
+              </div>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{ background: "linear-gradient(135deg, rgba(26,82,168,0.08) 0%, transparent 60%)" }} />
+              <div className="flex flex-col justify-center px-6 py-8 sm:px-8 sm:py-10 flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-5 h-[1px]" style={{ background: SAND }} />
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>{lead.cat}</span>
+                </div>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", lineHeight: 1.08, marginBottom: 14 }}>{lead.title}</h3>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.52)", lineHeight: 1.7, marginBottom: 22 }}>
+                  {lead.desc}
+                </p>
+                <div className="flex flex-col gap-2 mb-7">
+                  {lead.tags.map(tag => (
+                    <div key={tag} className="flex items-center gap-2 px-3 py-1.5 w-fit"
+                      style={{ background: "rgba(196,171,108,.07)", border: "1px solid rgba(196,171,108,.22)" }}>
+                      <div className="w-1 h-1 rounded-full shrink-0" style={{ background: SAND }} />
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(196,171,108,.8)", letterSpacing: 1 }}>{tag}</span>
+                    </div>
+                  ))}
+                </div>
+                <span className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
+                  <span>Explore</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </Reveal>
 
-            {/* Crawl Space — horizontal: image LEFT · content RIGHT */}
-            <Reveal delay={0} className="lg:col-span-2">
-              <div className="relative overflow-hidden group cursor-pointer flex flex-col lg:flex-row lg:h-[500px]" style={{ background: CHAR }}
-                onClick={onNavigate}>
-                <div className="relative shrink-0 overflow-hidden h-52 sm:h-64 lg:h-full lg:w-1/2">
-                  <ImageWithFallback src={SERVICES[0].img} alt="Crawl Space"
+          {/* Remaining cards — vertical: image TOP · content BOTTOM */}
+          {rest.map((card, i) => (
+            <Reveal key={card.slug} delay={0.08 + i * 0.08}>
+              <div className="relative overflow-hidden group cursor-pointer flex flex-col h-[420px] lg:h-[500px]" style={{ background: CHAR }}
+                onClick={() => onNavigate(`service/${card.slug}`)}>
+                <div className="relative overflow-hidden shrink-0" style={{ height: "42%" }}>
+                  <ImageWithFallback src={card.img} alt={card.cat}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
                 </div>
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "linear-gradient(135deg, rgba(26,82,168,0.08) 0%, transparent 60%)" }} />
-                <div className="flex flex-col justify-center px-6 py-8 sm:px-8 sm:py-10 flex-1">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-5 h-[1px]" style={{ background: SAND }} />
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Crawl Space</span>
-                  </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", lineHeight: 1.08, marginBottom: 14 }}>My floors are sagging</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.52)", lineHeight: 1.7, marginBottom: 22 }}>
-                    SmartJack systems, encapsulation, and moisture control that restore structural integrity from the ground up.
-                  </p>
-                  <div className="flex flex-col gap-2 mb-7">
-                    {["Encapsulation", "SmartJack Systems", "Moisture Control"].map(tag => (
-                      <div key={tag} className="flex items-center gap-2 px-3 py-1.5 w-fit"
-                        style={{ background: "rgba(196,171,108,.07)", border: "1px solid rgba(196,171,108,.22)" }}>
-                        <div className="w-1 h-1 rounded-full shrink-0" style={{ background: SAND }} />
-                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(196,171,108,.8)", letterSpacing: 1 }}>{tag}</span>
-                      </div>
-                    ))}
+                  style={{ background: "linear-gradient(180deg, rgba(26,82,168,0.12) 0%, transparent 50%)" }} />
+                <div className="flex flex-col justify-between flex-1 p-6 pt-5">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-4 h-[1px]" style={{ background: SAND }} />
+                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>{card.cat}</span>
+                    </div>
+                    <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 27, color: "#fff", lineHeight: 1.1, marginBottom: 10 }}>{card.title}</h3>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.48)", lineHeight: 1.65 }}>
+                      {card.desc}
+                    </p>
                   </div>
                   <span className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
                     <span>Explore</span>
@@ -656,159 +729,7 @@ function ServicesSection({ onNavigate }: { onNavigate: () => void }) {
                 </div>
               </div>
             </Reveal>
-
-            {/* Foundation Repair — vertical: image TOP · content BOTTOM */}
-            <Reveal delay={0.08}>
-              <div className="relative overflow-hidden group cursor-pointer flex flex-col h-[420px] lg:h-[500px]" style={{ background: CHAR }}>
-                <div className="relative overflow-hidden shrink-0" style={{ height: "42%" }}>
-                  <ImageWithFallback src={SERVICES[1].img} alt="Foundation Repair"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
-                </div>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "linear-gradient(180deg, rgba(26,82,168,0.12) 0%, transparent 50%)" }} />
-                <div className="flex flex-col justify-between flex-1 p-6 pt-5">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-4 h-[1px]" style={{ background: SAND }} />
-                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Foundation Repair</span>
-                    </div>
-                    <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 27, color: "#fff", lineHeight: 1.1, marginBottom: 10 }}>I see wall cracks</h3>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.48)", lineHeight: 1.65 }}>
-                      Push piers and wall anchors stop movement permanently.
-                    </p>
-                  </div>
-                  <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-                    <span>Explore</span>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Waterproofing — vertical: image TOP · content BOTTOM */}
-            <Reveal delay={0.16}>
-              <div className="relative overflow-hidden group cursor-pointer flex flex-col h-[420px] lg:h-[500px]" style={{ background: CHAR }}>
-                <div className="relative overflow-hidden shrink-0" style={{ height: "42%" }}>
-                  <ImageWithFallback src={SERVICES[2].img} alt="Waterproofing"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
-                </div>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "linear-gradient(180deg, rgba(26,82,168,0.12) 0%, transparent 50%)" }} />
-                <div className="flex flex-col justify-between flex-1 p-6 pt-5">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-4 h-[1px]" style={{ background: SAND }} />
-                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Waterproofing</span>
-                    </div>
-                    <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 27, color: "#fff", lineHeight: 1.1, marginBottom: 10 }}>My basement is wet</h3>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.48)", lineHeight: 1.65 }}>
-                      Interior drainage and membranes keep water where it belongs.
-                    </p>
-                  </div>
-                  <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-                    <span>Explore</span>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-
-          {/* ── ROW 2: Concrete Lifting — full-width horizontal banner ── */}
-          <Reveal delay={0.04}>
-            <div className="relative overflow-hidden group cursor-pointer flex flex-col lg:flex-row lg:h-[260px]" style={{ background: NAVY }}>
-              <div className="relative shrink-0 overflow-hidden h-48 lg:h-full lg:w-[45%]">
-                <ImageWithFallback src={SERVICES[3].img} alt="Concrete Lifting"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
-              </div>
-              <div className="hidden lg:block absolute top-0 bottom-0 w-[2px] skew-x-[-3deg]" style={{ left: "44.5%", background: `linear-gradient(to bottom, transparent, ${SAND}, transparent)`, opacity: 0.3 }} />
-              <div className="flex flex-col justify-center px-6 py-8 sm:px-8 lg:px-10 xl:px-14 lg:py-0 flex-1">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-5 h-[1px]" style={{ background: SAND }} />
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Concrete Services</span>
-                </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,6vw,42px)", color: "#fff", lineHeight: 1.05, marginBottom: 12 }}>
-                  Uneven concrete / driveway
-                </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.52)", lineHeight: 1.65, maxWidth: 480, marginBottom: 18 }}>
-                  PolyLevel foam lifts sunken slabs without full replacement. Fast, clean, and permanent.
-                </p>
-                <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-                  <span>Explore</span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
-              </div>
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: "linear-gradient(135deg, rgba(26,82,168,0.1) 0%, transparent 60%)" }} />
-            </div>
-          </Reveal>
-
-          {/* ── ROW 3: Mold Prevention | Insulation ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-            {/* Mold Prevention — horizontal: image LEFT · content RIGHT */}
-            <Reveal delay={0}>
-              <div className="relative overflow-hidden group cursor-pointer flex flex-col lg:flex-row lg:h-[460px]" style={{ background: CHAR }}>
-                <div className="relative shrink-0 overflow-hidden h-48 sm:h-56 lg:h-full lg:w-[46%]">
-                  <ImageWithFallback src={SERVICES[4].img} alt="Mold Prevention"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
-                </div>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "linear-gradient(135deg, rgba(26,82,168,0.08) 0%, transparent 60%)" }} />
-                <div className="flex flex-col justify-center px-6 py-8 sm:px-8 sm:py-10 flex-1">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-5 h-[1px]" style={{ background: SAND }} />
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Mold Prevention</span>
-                  </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: "#fff", lineHeight: 1.08, marginBottom: 14 }}>I smell something musty</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.52)", lineHeight: 1.7, marginBottom: 24 }}>
-                    Mold hides before you can see it. We find the moisture source and treat it before it spreads through your home.
-                  </p>
-                  <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-                    <span>Explore</span>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Insulation — horizontal: content LEFT · image RIGHT */}
-            <Reveal delay={0.08}>
-              <div className="relative overflow-hidden group cursor-pointer flex flex-col-reverse lg:flex-row lg:h-[460px]" style={{ background: DARK }}>
-                <div className="flex flex-col justify-center px-6 py-8 sm:px-8 sm:py-10 shrink-0 lg:w-1/2">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-5 h-[1px]" style={{ background: SAND }} />
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Insulation</span>
-                  </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: "#fff", lineHeight: 1.08, marginBottom: 14 }}>My home is always too hot or cold</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.52)", lineHeight: 1.7, marginBottom: 24 }}>
-                    Poor insulation forces your HVAC to work overtime. We seal the gaps so you stay comfortable and cut energy bills.
-                  </p>
-                  <a href="#" className="inline-flex items-center gap-2" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-                    <span>Explore</span>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                </div>
-                <div className="relative flex-1 overflow-hidden h-48 sm:h-56 lg:h-auto">
-                  <ImageWithFallback src={SERVICES[5].img} alt="Insulation"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
-                </div>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "linear-gradient(225deg, rgba(26,82,168,0.1) 0%, transparent 60%)" }} />
-              </div>
-            </Reveal>
-          </div>
-
+          ))}
         </div>
       </div>
     </section>
@@ -1551,17 +1472,27 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const initPage = window.location.hash.replace("#", "") || "home";
-  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage as any);
+  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
   const [scrollTarget, setScrollTarget] = useState<string | null>(null);
 
+  // Routes look like "page", "page#anchor" or "page/<slug>#anchor" — the slug
+  // picks which service definition ServicePage renders, or which problem sign
+  // ProblemSignInnerPage renders.
+  const [routeSlug, setRouteSlug] = useState<string | null>(() => {
+    const [, slug] = initPage.split("#")[0].split("/");
+    return slug ?? null;
+  });
+
   const navigate = (p: string) => {
-    const [pageName, anchor] = p.split("#");
+    const [route, anchor] = p.split("#");
+    const [pageName, slug] = route.split("/");
     window.scrollTo(0, 0);
-    window.location.hash = pageName === "home" ? "" : pageName;
+    window.location.hash = pageName === "home" ? "" : route;
     setPage(pageName as typeof page);
+    setRouteSlug(slug ?? null);
     setScrollTarget(anchor ?? null);
     setPageKey((k) => k + 1);
   };
@@ -1571,15 +1502,18 @@ export default function App() {
   }
 
   if (page === "service") {
-    return <ServicePage key={pageKey} onBack={() => navigate("services-landing")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
+    return <ServicePage key={pageKey} onBack={() => navigate("services-landing")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} slug={routeSlug ?? undefined} />;
   }
 
   if (page === "problem-signs") {
-    return <ProblemSignsPage key={pageKey} onBack={() => navigate("home")} onSignClick={() => navigate("problem-sign-inner")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
+    return <ProblemSignsPage key={pageKey} onBack={() => navigate("home")} onSignClick={(label) => {
+      const sign = label ? getProblemSignByLabel(label) : undefined;
+      navigate(sign ? `problem-sign-inner/${sign.slug}` : "problem-sign-inner");
+    }} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} category={routeSlug ?? undefined} />;
   }
 
   if (page === "problem-sign-inner") {
-    return <ProblemSignInnerPage key={pageKey} onBack={() => navigate("problem-signs")} onNavigate={navigate} />;
+    return <ProblemSignInnerPage key={pageKey} onBack={() => navigate("problem-signs")} onNavigate={navigate} slug={routeSlug ?? undefined} />;
   }
 
   if (page === "our-difference") {
@@ -1659,8 +1593,8 @@ export default function App() {
       {/* Page content — hero starts at viewport top, header overlays it */}
       <div className="w-full min-h-screen bg-white">
         <HeroSlider onNavigate={navigate} />
-        <SignsSection onNavigate={() => navigate("problem-sign-inner")} />
-        <ServicesSection onNavigate={() => navigate("service")} />
+        <SignsSection onNavigate={navigate} />
+        <ServicesSection onNavigate={navigate} />
         <WhySection />
         <TestimonialsSection onNavigate={navigate} />
         <CaseStudiesSection />

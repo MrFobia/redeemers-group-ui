@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import SharedNavBar from "./SharedNavBar";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { SERVICES as SERVICE_DEFS } from "./data/services";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const B     = "#1A52A8";
@@ -20,7 +21,7 @@ const INTER = "'Inter',sans-serif";
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer({ onBack }: { onBack: () => void }) {
   const cols = [
-    { head: "Services",  links: ["Crawl Space Repair", "Waterproofing", "Foundation Repair", "Concrete Services", "Mold Prevention", "Commercial"] },
+    { head: "Services",  links: ["Structural Repair", "Crawl Space Repair", "Waterproofing", "Concrete Services", "Commercial Services"] },
     { head: "Company",   links: ["About Us", "Our Difference", "Resources", "Careers", "Financing"] },
     { head: "Locations", links: ["Tennessee", "Mississippi", "Arkansas", "Missouri"] },
     { head: "Contact",   links: ["1-833-584-1049", "info@redeemersgroup.com", "Schedule Inspection", "Customer Portal"] },
@@ -93,7 +94,7 @@ function SymptomChips({ items }: { items: string[] }) {
   );
 }
 
-function CardCTAs({ onNavigate }: { onNavigate: () => void }) {
+function CardCTAs({ onNavigate }: { onNavigate: () => void }) { // slug-bound by caller
   return (
     <div className="flex items-center gap-6">
       <button
@@ -135,41 +136,37 @@ const SERVICES = {
     category: "Crawl Space Repair",
     title: "Floor joist repair\n& encapsulation",
     body: "Sagging floors, wood rot, and moisture infiltration — all solved with SmartJack systems and full crawl space encapsulation backed by a lifetime warranty.",
-    symptoms: ["My floors are sagging", "I smell mold", "Wood rot", "Energy loss", "Pests / vapor"],
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200",
+    symptoms: SERVICE_DEFS["crawl-space-repair"].symptoms.map((s) => s.q),
+    img: SERVICE_DEFS["crawl-space-repair"].heroImg,
   },
   waterproofing: {
     category: "Waterproofing",
     title: "Interior drainage\nsolutions",
     body: "Interior drainage channels, sump pumps, and wall encapsulation stop water at the source before it damages your home.",
-    symptoms: ["Water intrusion", "Damp walls", "Mold & mildew", "Efflorescence"],
-    img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    symptoms: SERVICE_DEFS["waterproofing"].symptoms.slice(0, 4).map((s) => s.q),
+    img: SERVICE_DEFS["waterproofing"].heroImg,
   },
   foundation: {
-    category: "Foundation Repair",
+    // Sitemap calls this service line "Structural Repair" — the home node's
+    // older "Foundation repair" label is not used anywhere on the site.
+    category: "Structural Repair",
     title: "Slab repair\n& stabilization",
     body: "From sinking piers to bowing walls — we restore your foundation to its original position using helical piers and carbon fiber reinforcement.",
-    symptoms: ["Wall cracks", "Sticking doors / windows", "Uneven floors", "Bowing walls"],
-    img: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200",
+    symptoms: SERVICE_DEFS["structural-repair"].symptoms.slice(0, 4).map((s) => s.q),
+    img: SERVICE_DEFS["structural-repair"].heroImg,
   },
   concrete: {
     category: "Concrete Services",
     title: "Lifting\n& leveling",
     body: "PolyLevel foam injection lifts and levels sinking slabs — driveways, walkways, and pool decks — in hours, not days.",
-    symptoms: ["Uneven slabs", "Sinking driveway", "Cracked pool deck", "Trip hazards"],
-    img: "https://images.unsplash.com/photo-1583599740042-a9b67f5b8299?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
-  },
-  mold: {
-    category: "Mold Prevention",
-    title: "I smell something musty",
-    body: "Mold hides before you can see it. We find the moisture source and treat it before it spreads through your home — then seal it permanently.",
-    img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    symptoms: SERVICE_DEFS["concrete-services"].symptoms.slice(0, 4).map((s) => s.q),
+    img: SERVICE_DEFS["concrete-services"].heroImg,
   },
   commercial: {
     category: "Commercial Services",
     title: "Geotechnical &\nstructural solutions",
     body: "As a foundation repair specialist, we provide foundation and concrete services for existing residential, commercial, and industrial structures — backed by engineering-grade systems.",
-    img: "https://images.unsplash.com/photo-1486325212027-8081e485255e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
+    img: SERVICE_DEFS["commercial-services"].heroImg,
   },
 };
 
@@ -209,7 +206,17 @@ function IntroSection() {
   );
 }
 
-function WhatWeHandleSection({ onNavigate }: { onNavigate: () => void }) {
+// Each card routes to its own service page — slugs match data/services.ts and
+// the sitemap's Services branch (five services, no Mold Prevention).
+const CARD_SLUGS = {
+  crawlSpace: "crawl-space-repair",
+  waterproofing: "waterproofing",
+  foundation: "structural-repair",
+  concrete: "concrete-services",
+  commercial: "commercial-services",
+} as const;
+
+function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <section style={{ background: DARK, padding: "96px 56px 96px" }}>
       <div className="max-w-[1280px] mx-auto">
@@ -248,7 +255,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: () => void }) {
                 <div style={{ marginBottom: 28 }}>
                   <SymptomChips items={SERVICES.crawlSpace.symptoms} />
                 </div>
-                <CardCTAs onNavigate={onNavigate} />
+                <CardCTAs onNavigate={() => onNavigate(`service/${CARD_SLUGS.crawlSpace}`)} />
               </div>
               <div style={{ height: 320, flexShrink: 0, position: "relative" }}>
                 <ImageWithFallback
@@ -280,7 +287,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: () => void }) {
                 <div style={{ marginBottom: 20 }}>
                   <SymptomChips items={SERVICES.concrete.symptoms} />
                 </div>
-                <CardCTAs onNavigate={onNavigate} />
+                <CardCTAs onNavigate={() => onNavigate(`service/${CARD_SLUGS.concrete}`)} />
               </div>
             </div>
 
@@ -309,7 +316,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: () => void }) {
                 <div style={{ marginBottom: 20 }}>
                   <SymptomChips items={SERVICES.waterproofing.symptoms} />
                 </div>
-                <CardCTAs onNavigate={onNavigate} />
+                <CardCTAs onNavigate={() => onNavigate(`service/${CARD_SLUGS.waterproofing}`)} />
               </div>
             </div>
 
@@ -328,7 +335,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: () => void }) {
                 <div style={{ marginBottom: 28 }}>
                   <SymptomChips items={SERVICES.foundation.symptoms} />
                 </div>
-                <CardCTAs onNavigate={onNavigate} />
+                <CardCTAs onNavigate={() => onNavigate(`service/${CARD_SLUGS.foundation}`)} />
               </div>
               <div style={{ height: 280, flexShrink: 0, position: "relative" }}>
                 <ImageWithFallback
@@ -343,30 +350,10 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: () => void }) {
           </div>
         </div>
 
-        {/* Bento grid row 2: 2 equal cards (Mold + Commercial) */}
+        {/* Bento grid row 2: Commercial — the sitemap's fifth and last service.
+            "Mold Prevention" used to sit here; it is not a top-level service in
+            the sitemap (it lives under Crawl Space Repair), so it was removed. */}
         <div className="flex flex-col lg:flex-row gap-6">
-
-          {/* Card E — Mold Prevention (image left, content right) */}
-          <div style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", overflow: "hidden", display: "flex", flex: 1, minHeight: 340 }}>
-            <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
-              <ImageWithFallback
-                src={SERVICES.mold.img}
-                alt="Mold prevention"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div style={{ position: "absolute", inset: 0, background: "rgba(10,11,20,0.35)" }} />
-            </div>
-            <div style={{ flex: 1, padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 20 }}>
-              <CategoryBadge label={SERVICES.mold.category} />
-              <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.2vw,32px)", color: WHITE, lineHeight: 1.15, letterSpacing: "-0.5px", margin: 0 }}>
-                {SERVICES.mold.title}
-              </h3>
-              <p style={{ fontFamily: INTER, fontSize: 15, color: MUTED, lineHeight: 1.65, margin: 0 }}>
-                {SERVICES.mold.body}
-              </p>
-              <ExploreLink onNavigate={onNavigate} />
-            </div>
-          </div>
 
           {/* Card F — Commercial (content left, image right) */}
           <div style={{ background: NAVY, border: "1px solid rgba(255,255,255,.07)", overflow: "hidden", display: "flex", flex: 1, minHeight: 340 }}>
@@ -378,7 +365,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: () => void }) {
               <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.65, margin: 0 }}>
                 {SERVICES.commercial.body}
               </p>
-              <ExploreLink onNavigate={onNavigate} />
+              <ExploreLink onNavigate={() => onNavigate(`service/${CARD_SLUGS.commercial}`)} />
             </div>
             <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
               <ImageWithFallback
@@ -490,7 +477,7 @@ export default function ServicesLandingPage({
 
         <IntroSection />
         <TrustBar />
-        <WhatWeHandleSection onNavigate={() => onNavigate("service")} />
+        <WhatWeHandleSection onNavigate={onNavigate} />
         <CTASection />
         <Footer onBack={onBack} />
       </div>
