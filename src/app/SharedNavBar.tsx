@@ -298,11 +298,7 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <SimpleDropdown width={260}>
       {MEGA_MENU_SERVICES.map((c) => (
-        <FlyoutItem key={c.slug} label={c.label} onClick={() => onNavigate(`service/${c.slug}`)}>
-          {c.signs.map((symptom) => (
-            <SimpleDropdownItem key={symptom} label={symptom} onClick={() => onNavigate(signRoute(symptom))} />
-          ))}
-        </FlyoutItem>
+        <SimpleDropdownItem key={c.slug} label={c.label} onClick={() => onNavigate(`service/${c.slug}`)} />
       ))}
       <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
       <SimpleDropdownItem label="All services" onClick={() => onNavigate("services-landing")} />
