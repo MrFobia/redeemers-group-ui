@@ -14,7 +14,6 @@ import NewsBlogPage from "./NewsBlogPage";
 import BlogInnerPage from "./BlogInnerPage";
 import AboutPage from "./AboutPage";
 import CareersPage from "./CareersPage";
-import PricingPage from "./PricingPage";
 import ServiceAreaPage from "./ServiceAreaPage";
 import GuiaEstilosPage from "./GuiaEstilosPage";
 import ServicesLandingPage from "./ServicesLandingPage";
@@ -188,7 +187,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
   const slide = SLIDES[current];
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 200px)", minHeight: 760 }}>
+    <section className="relative w-full overflow-hidden h-[calc(100dvh-110px)] min-h-[560px] md:h-[calc(100dvh-200px)] md:min-h-[760px]">
       {/* Embla carousel */}
       <div ref={emblaRef} className="h-full overflow-hidden">
         <div className="flex h-full" style={{ touchAction: "pan-y" }}>
@@ -209,8 +208,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
           after clearing the fixed header — centering would then push the
           top of the text up past paddingTop and under the nav. Anchoring to
           the top guarantees the header clearance always holds. */}
-      <div className="absolute inset-0 flex flex-col justify-start px-8 md:px-14"
-        style={{ paddingTop: 168, paddingBottom: 120 }}>
+      <div className="absolute inset-0 flex flex-col justify-center sm:justify-start px-8 md:px-14 pt-24 pb-16 sm:pt-[168px] sm:pb-[120px]">
         <div className="w-full max-w-full md:max-w-[58%] lg:max-w-[50%]">
 
           {/* Eyebrow */}
@@ -1473,7 +1471,7 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const initPage = window.location.hash.replace("#", "") || "home";
-  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
+  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
@@ -1525,10 +1523,6 @@ export default function App() {
     return <ResourcesPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
   }
 
-  if (page === "pricing") {
-    return <PricingPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
-  }
-
   if (page === "news-blog") {
     return <NewsBlogPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
@@ -1575,7 +1569,7 @@ export default function App() {
 
   const KNOWN_PAGES = [
     "home", "service", "services-landing", "problem-signs", "problem-sign-inner",
-    "our-difference", "resources", "pricing", "news-blog", "blog-inner", "about",
+    "our-difference", "resources", "news-blog", "blog-inner", "about",
     "careers", "service-area", "reviews", "job-stories", "contact", "guiaestilos",
   ];
 

@@ -30,7 +30,6 @@ export const NAV_PAGE_MAP: Record<string, string> = {
   "Problem Signs": "problem-signs",
   "Our Difference":"our-difference",
   "Resources":     "resources",
-  "Pricing":       "pricing",
   "About":         "about",
   "Careers":       "careers",
   "Service Area":  "service-area",
@@ -417,7 +416,7 @@ export default function SharedNavBar({
 
   const isTransparent = transparent && !scrolled && !megaOpen && !resourcesOpen && !aboutOpen && !ourDiffOpen && !signsOpen && !mobileOpen;
 
-  const links = ["Services", "Problem Signs", "Our Difference", "Resources", "Pricing", "About"];
+  const links = ["Services", "Problem Signs", "Our Difference", "Resources", "About"];
 
   return (
     <div
@@ -648,7 +647,10 @@ export default function SharedNavBar({
             anything with a desktop dropdown (Services/Resources/About) instead
             of an inline accordion. Client: "una esperiencia mucha más mobile". */}
         {mobileOpen && (
-          <div className="lg:hidden fixed top-0 left-0 right-0 z-[250] flex flex-col overflow-y-auto" style={{ background: DARK, height: "100dvh" }}>
+          <div className="lg:hidden fixed inset-0 z-[240]" style={{ background: "rgba(0,0,0,.5)" }} onClick={() => { setMobileOpen(false); openMobilePanel("root"); }} />
+        )}
+        {mobileOpen && (
+          <div className="lg:hidden fixed top-0 left-0 right-0 z-[250] flex flex-col overflow-y-auto" style={{ background: DARK, maxHeight: "85dvh" }}>
             <div className="flex items-center justify-between px-8 py-3 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
               <button onClick={() => handleNavigate("home")} className="h-14" style={{ background: "none", border: "none", cursor: "pointer" }}>
                 <Logo light />
@@ -723,68 +725,34 @@ export default function SharedNavBar({
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col"
                   >
-                    {(() => {
-                      const cat = MEGA_MENU_SERVICES.find((c) => c.slug === mobileCat);
-
-                      if (cat) {
+                    <MobileBackHeader title="Services" onBack={() => setMobilePanel("root")} />
+                    <div className="flex flex-col gap-1">
+                      {MEGA_MENU_SERVICES.map((c) => {
+                        const Icon = c.icon;
                         return (
-                          <>
-                            <MobileBackHeader title={cat.label} onBack={() => setMobileCat(null)} />
-                            <div className="flex flex-col gap-1">
-                              {cat.signs.map((symptom) => (
-                                <button
-                                  key={symptom}
-                                  onClick={() => handleNavigate(signRoute(symptom))}
-                                  className="w-full py-3 pl-3 text-left"
-                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 14.5, lineHeight: 1.35, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                                  {symptom}
-                                </button>
-                              ))}
-                              <button
-                                onClick={() => handleNavigate(`service/${cat.slug}`)}
-                                className="py-3 pl-3 mt-1 text-left"
-                                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                                View {cat.label} →
-                              </button>
-                            </div>
-                          </>
+                          <button
+                            key={c.slug}
+                            onClick={() => handleNavigate(`service/${c.slug}`)}
+                            className="w-full flex items-center gap-3 py-3.5 pl-3 pr-2 text-left"
+                            style={{ background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                            <span className="flex items-center justify-center shrink-0" style={{ width: 24, height: 24 }}>
+                              {c.iconImg
+                                ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                                : <Icon size={22} color="#fff" strokeWidth={2} />}
+                            </span>
+                            <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff", fontWeight: 600 }}>
+                              {c.label}
+                            </span>
+                          </button>
                         );
-                      }
-
-                      return (
-                        <>
-                          <MobileBackHeader title="Services" onBack={() => setMobilePanel("root")} />
-                          <div className="flex flex-col gap-1">
-                            {MEGA_MENU_SERVICES.map((c) => {
-                              const Icon = c.icon;
-                              return (
-                                <button
-                                  key={c.slug}
-                                  onClick={() => c.signs.length ? setMobileCat(c.slug) : handleNavigate(`service/${c.slug}`)}
-                                  className="w-full flex items-center gap-3 py-3.5 pl-3 pr-2 text-left"
-                                  style={{ background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                                  <span className="flex items-center justify-center shrink-0" style={{ width: 24, height: 24 }}>
-                                    {c.iconImg
-                                      ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
-                                      : <Icon size={22} color="#fff" strokeWidth={2} />}
-                                  </span>
-                                  <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff", fontWeight: 600 }}>
-                                    {c.label}
-                                  </span>
-                                  {c.signs.length > 0 && <ChevronRight size={16} color="rgba(255,255,255,.4)" className="shrink-0" />}
-                                </button>
-                              );
-                            })}
-                            <button
-                              onClick={() => handleNavigate("services-landing")}
-                              className="py-3 pl-3 mt-1 text-left"
-                              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                              All services →
-                            </button>
-                          </div>
-                        </>
-                      );
-                    })()}
+                      })}
+                      <button
+                        onClick={() => handleNavigate("services-landing")}
+                        className="py-3 pl-3 mt-1 text-left"
+                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                        All services →
+                      </button>
+                    </div>
                   </motion.div>
                 )}
 

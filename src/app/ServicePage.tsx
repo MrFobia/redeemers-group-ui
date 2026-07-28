@@ -306,12 +306,12 @@ function CostSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: st
               ))}
             </div>
             <div className="flex items-center gap-4 flex-wrap">
-              <button onClick={() => onNavigate?.("pricing")} className="group inline-flex items-center justify-center gap-2 px-7 py-3.5"
+              <button onClick={() => onNavigate?.("resources#cost")} className="group inline-flex items-center justify-center gap-2 px-7 py-3.5"
                 style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
                 See full cost guide
                 <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
               </button>
-              <button onClick={() => onNavigate?.("pricing")} className="inline-flex items-center gap-2"
+              <button onClick={() => onNavigate?.("resources#cost")} className="inline-flex items-center gap-2"
                 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", padding: 0, cursor: "pointer" }}>
                 Financing options
                 <ArrowRight size={14} />
