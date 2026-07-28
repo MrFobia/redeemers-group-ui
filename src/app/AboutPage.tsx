@@ -9,13 +9,9 @@ import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
+import { PageHeroBanner } from "./components/PageHeroBanner";
+import imgAboutHero from "../assets/svc-concrete.jpg";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -312,38 +308,25 @@ function TeamMemberModal({ member, onClose }: { member: TeamMember; onClose: () 
 // ─── 1. HERO ──────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden py-24 lg:py-36" style={{ background: DARK }}>
-      {/* Subtle grid texture */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px)", backgroundSize: "80px 80px" }} />
-      {/* Gold accent line */}
-      <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: `linear-gradient(to bottom, transparent 10%, ${SAND} 40%, ${SAND} 60%, transparent 90%)`, opacity: 0.5 }} />
-
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 relative z-10">
-        <Reveal>
-          <div className="flex items-center gap-2 mb-6">
-            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>About</span>
+    <PageHeroBanner
+      image={imgAboutHero}
+      imageAlt="Redeemers technician on a Mid-South job site"
+      eyebrow="About"
+      title="We believe every family deserves a safe, stable home."
+      lede="Redeemers Group was founded not just to repair homes — but to restore peace of mind for families across the mid-South. Since 2008, we've served over 12,000 homeowners with engineered, warrantied solutions."
+      minHeight={560}
+    >
+      {/* Stats row */}
+      <div className="flex flex-wrap gap-0">
+        {[["12,250+", "Homes protected"], ["18 yrs", "In business"], ["4.9 ★", "Google rating"], ["A+", "BBB rating"]].map(([val, label], i) => (
+          <div key={label} className="flex flex-col px-8 py-4"
+            style={{ borderLeft: i === 0 ? `2px solid ${SAND}` : "1px solid rgba(255,255,255,.07)", borderRight: i === 3 ? "1px solid rgba(255,255,255,.07)" : "none" }}>
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,36px)", color: "#fff", lineHeight: 1, letterSpacing: "-0.5px" }}>{val}</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)", letterSpacing: 1.5, textTransform: "uppercase", marginTop: 4 }}>{label}</span>
           </div>
-          <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5.5vw,80px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-2px", maxWidth: 820, marginBottom: 24 }}>
-            We believe every family deserves a safe, stable home.
-          </h1>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(15px,1.5vw,18px)", color: "rgba(255,255,255,.55)", lineHeight: 1.75, maxWidth: 600, marginBottom: 40 }}>
-            Redeemers Group was founded not just to repair homes — but to restore peace of mind for families across the mid-South. Since 2008, we've served over 12,000 homeowners with engineered, warrantied solutions.
-          </p>
-          {/* Stats row */}
-          <div className="flex flex-wrap gap-0">
-            {[["12,250+", "Homes protected"], ["18 yrs", "In business"], ["4.9 ★", "Google rating"], ["A+", "BBB rating"]].map(([val, label], i) => (
-              <div key={label} className="flex flex-col px-8 py-4"
-                style={{ borderLeft: i === 0 ? `2px solid ${SAND}` : "1px solid rgba(255,255,255,.07)", borderRight: i === 3 ? "1px solid rgba(255,255,255,.07)" : "none" }}>
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,36px)", color: "#fff", lineHeight: 1, letterSpacing: "-0.5px" }}>{val}</span>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)", letterSpacing: 1.5, textTransform: "uppercase", marginTop: 4 }}>{label}</span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
+        ))}
       </div>
-    </section>
+    </PageHeroBanner>
   );
 }
 
@@ -396,16 +379,16 @@ function PeopleSection() {
   };
 
   return (
-    <section id="people" className="py-20 lg:py-28" style={{ background: DARK }}>
+    <section id="people" className="py-20 lg:py-28" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header */}
         <Reveal className="mb-14 lg:mb-20">
           <div className="flex items-center gap-2 mb-5">
-            <div style={{ width: 20, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>People</span>
+            <div style={{ width: 20, height: 2, background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>People</span>
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px" }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px" }}>
             Meet our team
           </h2>
         </Reveal>
@@ -416,7 +399,7 @@ function PeopleSection() {
           {/* Prev arrow */}
           <button onClick={goPrev}
             className="shrink-0 flex items-center justify-center transition-all hover:bg-white/10"
-            style={{ width: 44, height: 44, border: "1px solid rgba(255,255,255,.15)", background: "none", cursor: "pointer" }}>
+            style={{ width: 44, height: 44, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
               <path d="M19 12H5M11 6l-6 6 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -431,7 +414,7 @@ function PeopleSection() {
                   onClick={() => changeDept(dept)}>
                   <motion.span
                     animate={{
-                      color: isActive ? "#ffffff" : "rgba(255,255,255,.18)",
+                      color: isActive ? "#ffffff" : "rgba(10,11,20,.18)",
                       scale: isActive ? 1 : 0.92,
                     }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
@@ -449,7 +432,7 @@ function PeopleSection() {
                   {isActive && (
                     <motion.div
                       layoutId="dept-underline"
-                      style={{ height: 2, background: SAND, width: "100%", borderRadius: 1 }}
+                      style={{ height: 2, background: B, width: "100%", borderRadius: 1 }}
                       transition={{ type: "spring", stiffness: 420, damping: 32 }}
                     />
                   )}
@@ -461,7 +444,7 @@ function PeopleSection() {
           {/* Next arrow */}
           <button onClick={goNext}
             className="shrink-0 flex items-center justify-center transition-all hover:bg-white/10"
-            style={{ width: 44, height: 44, border: "1px solid rgba(255,255,255,.15)", background: "none", cursor: "pointer" }}>
+            style={{ width: 44, height: 44, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
               <path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -502,7 +485,7 @@ function PeopleSection() {
                       style={{ background: "linear-gradient(0deg, rgba(10,11,20,.85) 0%, rgba(26,82,168,.35) 100%)" }}
                     >
                       <span className="inline-flex items-center gap-1.5"
-                        style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
+                        style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B }}>
                         See profile
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                           <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -513,13 +496,13 @@ function PeopleSection() {
 
                   {/* Name + title — below image, centered */}
                   <div className="flex flex-col items-center gap-1 text-center w-full">
-                    <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: "#fff", lineHeight: 1.3 }}>{m.name}</p>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.4)" }}>{m.title}</p>
+                    <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: CHAR, lineHeight: 1.3 }}>{m.name}</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.4)" }}>{m.title}</p>
                   </div>
                 </motion.div>
               )) : (
                 <motion.div variants={cardVariants} className="col-span-3 py-16 text-center">
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.35)" }}>No team members listed for this department yet.</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.35)" }}>No team members listed for this department yet.</p>
                 </motion.div>
               )}
             </motion.div>
@@ -531,7 +514,7 @@ function PeopleSection() {
           <div className="flex justify-center mt-2">
             <button onClick={() => setShowAll(true)}
               className="group inline-flex items-center gap-2 px-8 py-3 transition-all hover:bg-white/5"
-              style={{ border: "1px solid rgba(255,255,255,.15)", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(255,255,255,.7)", background: "none", cursor: "pointer" }}>
+              style={{ border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(10,11,20,.7)", background: "none", cursor: "pointer" }}>
               Load more
             </button>
           </div>
@@ -575,10 +558,10 @@ function BenefitsSection() {
             <div className="lg:w-[40%] shrink-0">
               <Reveal>
                 <div className="flex items-center gap-2 mb-4">
-                  <div style={{ width: 20, height: 2, background: SAND }} />
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Benefits</span>
+                  <div style={{ width: 20, height: 2, background: B }} />
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Benefits</span>
                 </div>
-                <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+                <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
                   Built on partnerships with proven experts
                 </h2>
               </Reveal>
@@ -587,7 +570,7 @@ function BenefitsSection() {
             {/* Right — body copy + carousel */}
             <div className="flex-1 flex flex-col min-w-0">
               <Reveal>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.65)", lineHeight: 1.75, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.65)", lineHeight: 1.75, marginBottom: 20 }}>
                   We work alongside manufacturers and organizations that share our standards for quality and integrity.
                 </p>
               </Reveal>
@@ -603,16 +586,16 @@ function BenefitsSection() {
                         width: "min(calc(100% - 32px), 320px)",
                         background: "rgba(10,11,20,0.55)",
                         backdropFilter: "blur(16px)",
-                        border: "1px solid rgba(255,255,255,.1)",
+                        border: `1px solid ${ON_LIGHT.border}`,
                       }}
                     >
                       {/* Icon / abbr box */}
                       <div className="w-12 h-12 flex items-center justify-center shrink-0"
-                        style={{ background: "rgba(196,171,108,.12)", border: "1px solid rgba(196,171,108,.25)" }}>
-                        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 10, color: SAND, letterSpacing: 1 }}>{p.abbr}</span>
+                        style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.25)" }}>
+                        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 10, color: B, letterSpacing: 1 }}>{p.abbr}</span>
                       </div>
-                      <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", lineHeight: 1.3 }}>{p.name}</p>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.55)", lineHeight: 1.65 }}>{p.desc}</p>
+                      <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, lineHeight: 1.3 }}>{p.name}</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.55)", lineHeight: 1.65 }}>{p.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -626,7 +609,7 @@ function BenefitsSection() {
                       className="transition-all duration-300"
                       style={{
                         width: cur === i ? 24 : 8, height: 8,
-                        background: cur === i ? SAND : "rgba(255,255,255,.25)",
+                        background: cur === i ? B : "rgba(10,11,20,.25)",
                         border: "none", cursor: "pointer", padding: 0, borderRadius: 4,
                       }} />
                   ))}
@@ -634,12 +617,12 @@ function BenefitsSection() {
                 <div className="flex gap-2 ml-auto">
                   <button onClick={() => emblaApi?.scrollPrev()}
                     className="flex items-center justify-center transition-all hover:bg-white/10"
-                    style={{ width: 38, height: 38, border: "1px solid rgba(255,255,255,.2)", background: "none", cursor: "pointer" }}>
+                    style={{ width: 38, height: 38, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </button>
                   <button onClick={() => emblaApi?.scrollNext()}
                     className="flex items-center justify-center transition-all hover:bg-white/10"
-                    style={{ width: 38, height: 38, border: "1px solid rgba(255,255,255,.2)", background: "none", cursor: "pointer" }}>
+                    style={{ width: 38, height: 38, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </button>
                 </div>
@@ -650,13 +633,13 @@ function BenefitsSection() {
       </div>
 
       {/* Part 2 — Manufacturers */}
-      <div className="py-16 lg:py-20" style={{ background: DARK }}>
+      <div className="py-16 lg:py-20" style={{ background: SURFACE.alt }}>
         <div className="max-w-[1440px] mx-auto px-8 md:px-14">
           <Reveal className="mb-10">
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: "#fff", lineHeight: 1.1, marginBottom: 6 }}>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: CHAR, lineHeight: 1.1, marginBottom: 6 }}>
               We install products engineered to last and tested in the field.
             </p>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.4)", lineHeight: 1.65 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.4)", lineHeight: 1.65 }}>
               Manufacturers who stand behind their work like we stand behind ours.
             </p>
           </Reveal>
@@ -664,8 +647,8 @@ function BenefitsSection() {
             {["TerraFirm", "Everdry", "Supportworks", "CleanSpace", "PolyLevel", "WaterGuard"].map((brand, i) => (
               <Reveal key={brand} delay={i * 0.05}>
                 <div className="flex items-center justify-center px-6 py-4"
-                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", minWidth: 140 }}>
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,.4)", letterSpacing: 1 }}>{brand}</span>
+                  style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, minWidth: 140 }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(10,11,20,.4)", letterSpacing: 1 }}>{brand}</span>
                 </div>
               </Reveal>
             ))}
@@ -686,20 +669,20 @@ function ContactSection() {
   const toggle = (s: string) => setSelected(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
 
   return (
-    <section id="contact" className="py-20 lg:py-28" style={{ background: DARK }}>
+    <section id="contact" className="py-20 lg:py-28" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           {/* Left — copy */}
           <div className="lg:w-[380px] shrink-0">
             <Reveal>
               <div className="flex items-center gap-2 mb-5">
-                <div style={{ width: 20, height: 2, background: SAND }} />
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Contact us</span>
+                <div style={{ width: 20, height: 2, background: B }} />
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Contact us</span>
               </div>
-              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 14 }}>
+              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 14 }}>
                 Schedule free inspection
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.7, marginBottom: 32 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.5)", lineHeight: 1.7, marginBottom: 32 }}>
                 The fastest way to get answers. No obligation.
               </p>
               {/* Trust signals */}
@@ -709,7 +692,7 @@ function ContactSection() {
                     <div className="w-4 h-4 flex items-center justify-center shrink-0">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                     </div>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)" }}>{t}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.6)" }}>{t}</span>
                   </div>
                 ))}
               </div>
@@ -718,21 +701,21 @@ function ContactSection() {
 
           {/* Right — form */}
           <Reveal className="flex-1">
-            <div className="p-8 lg:p-10" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+            <div className="p-8 lg:p-10" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 {[["First name", "text"], ["Last name", "text"], ["Email", "email"], ["Phone number", "tel"]].map(([label, type]) => (
                   <div key={label} className="flex flex-col gap-1.5">
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>{label}</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>{label}</label>
                     <input type={type} placeholder={label}
                       className="px-4 py-3 outline-none transition-all focus:border-blue-500"
-                      style={{ background: DARK, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", width: "100%" }} />
+                      style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%" }} />
                   </div>
                 ))}
               </div>
 
               {/* Service checkboxes */}
               <div className="mb-4">
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5, marginBottom: 10 }}>Service needed</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5, marginBottom: 10 }}>Service needed</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {SERVICES_LIST.map((s) => (
                     <label key={s} className="flex items-center gap-2.5 cursor-pointer group">
@@ -740,12 +723,12 @@ function ContactSection() {
                         className="w-4 h-4 flex items-center justify-center shrink-0 transition-all"
                         style={{
                           background: selected.includes(s) ? B : "transparent",
-                          border: `1.5px solid ${selected.includes(s) ? B : "rgba(255,255,255,.2)"}`,
+                          border: `1.5px solid ${selected.includes(s) ? B : "rgba(10,11,20,.2)"}`,
                           cursor: "pointer",
                         }}>
                         {selected.includes(s) && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                       </div>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.6)" }}>{s}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.6)" }}>{s}</span>
                     </label>
                   ))}
                 </div>
@@ -753,19 +736,19 @@ function ContactSection() {
 
               {/* Textarea */}
               <div className="flex flex-col gap-1.5 mb-5">
-                <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>Describe your problem (optional)</label>
+                <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>Describe your problem (optional)</label>
                 <textarea rows={4} placeholder="Tell us more..."
                   className="px-4 py-3 outline-none resize-none transition-all"
-                  style={{ background: DARK, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", width: "100%" }} />
+                  style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%" }} />
               </div>
 
               {/* Agree + submit */}
               <div className="flex items-center gap-2.5 mb-5 cursor-pointer" onClick={() => setAgreed(a => !a)}>
                 <div className="w-4 h-4 flex items-center justify-center shrink-0"
-                  style={{ background: agreed ? B : "transparent", border: `1.5px solid ${agreed ? B : "rgba(255,255,255,.2)"}`, cursor: "pointer" }}>
+                  style={{ background: agreed ? B : "transparent", border: `1.5px solid ${agreed ? B : "rgba(10,11,20,.2)"}`, cursor: "pointer" }}>
                   {agreed && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                 </div>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.45)" }}>I agree to the terms of service</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.45)" }}>I agree to the terms of service</span>
               </div>
 
               <button className="w-full py-4 flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
@@ -784,14 +767,14 @@ function ContactSection() {
 // ─── 6. INITIATIVES ───────────────────────────────────────────────────────────
 function InitiativesSection() {
   return (
-    <section id="initiatives" className="py-20 lg:py-24" style={{ background: CHAR }}>
+    <section id="initiatives" className="py-20 lg:py-24" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="mb-12">
           <div className="flex items-center gap-2 mb-4">
-            <div style={{ width: 20, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Programs</span>
+            <div style={{ width: 20, height: 2, background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Programs</span>
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
             More ways we serve you
           </h2>
         </Reveal>
@@ -799,23 +782,23 @@ function InitiativesSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {INITIATIVES.map((item, i) => (
             <Reveal key={item.title} delay={i * 0.08}>
-              <div className="flex flex-col p-8 h-full group" style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="flex flex-col p-8 h-full group" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* Icon */}
                 <div className="w-12 h-12 flex items-center justify-center mb-6 shrink-0"
-                  style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.2)" }}>
+                  style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)" }}>
                   {item.icon}
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}>{item.eyebrow}</span>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3, textTransform: "uppercase" }}>{item.eyebrow}</span>
                 </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff", lineHeight: 1.2, marginBottom: 12 }}>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: CHAR, lineHeight: 1.2, marginBottom: 12 }}>
                   {item.title}
                 </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.7, flex: 1, marginBottom: 24 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.5)", lineHeight: 1.7, flex: 1, marginBottom: 24 }}>
                   {item.desc}
                 </p>
                 <button className="group/btn inline-flex items-center gap-2 self-start"
-                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                   {item.cta}
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover/btn:translate-x-0.5">
                     <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -840,7 +823,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     Contact: ["(901) 555-0100", "info@redeemersgroup.com", "Schedule inspection", "Customer portal"],
   };
   return (
-    <footer style={{ background: DARK, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-16 px-8 md:px-14">
+    <footer style={{ background: SURFACE.footer, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-16 px-8 md:px-14">
       <div className="max-w-[1440px] mx-auto">
         <div className="flex flex-col lg:flex-row gap-10 mb-12">
           <div className="shrink-0 lg:w-48">
@@ -891,7 +874,7 @@ export default function AboutPage({ onBack, onNavigate, scrollTo: initialSection
   }, []);
 
   return (
-    <div className="w-full min-h-screen" style={{ background: DARK }}>
+    <div className="w-full min-h-screen" style={{ background: SURFACE.base }}>
       {/* Client QA: the About hover dropdown already lists these exact 4
           anchors (People/Benefits/Initiatives/Contact us), so this page
           keeps only the global menu + breadcrumb-equivalent hero, not a 3rd
@@ -900,7 +883,7 @@ export default function AboutPage({ onBack, onNavigate, scrollTo: initialSection
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="About" />
       </div>
-      <div className="pt-[81px] md:pt-[148px]">
+      <div className="pt-[68px] md:pt-[111px]">
         <HeroSection />
         <PeopleSection />
         <BenefitsSection />

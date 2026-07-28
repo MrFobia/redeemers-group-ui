@@ -15,13 +15,7 @@ import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT, ON_DARK } from "./theme";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -115,13 +109,13 @@ const TRUST_STATS = [
 
 function TrustBar() {
   return (
-    <section style={{ background: CHAR, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+    <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
         {TRUST_STATS.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.08}>
             <div className="flex flex-col items-center text-center gap-2">
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,40px)", color: SAND, lineHeight: 1 }}>{s.val}</p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)", letterSpacing: 1.5, textTransform: "uppercase" }}>{s.label}</p>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,40px)", color: B, lineHeight: 1 }}>{s.val}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.4)", letterSpacing: 1.5, textTransform: "uppercase" }}>{s.label}</p>
             </div>
           </Reveal>
         ))}
@@ -156,24 +150,24 @@ const STEPS = [
 
 function ProcessSection() {
   return (
-    <section id="process" style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="process" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-5 h-[2px]" style={{ background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>What to expect</span>
-            <div className="w-5 h-[2px]" style={{ background: SAND }} />
+            <div className="w-5 h-[2px]" style={{ background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>What to expect</span>
+            <div className="w-5 h-[2px]" style={{ background: B }} />
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
             Your experience, start to finish
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(255,255,255,.55)" }}>Four simple steps — no surprises, no pressure.</p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.55)" }}>Four simple steps — no surprises, no pressure.</p>
         </Reveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
           {STEPS.map((step, i) => (
             <Reveal key={step.n} delay={i * 0.08}>
-              <div className="group flex flex-col h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="group flex flex-col h-full" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 <div className="relative overflow-hidden" style={{ aspectRatio: "3/2" }}>
                   <ImageWithFallback src={step.img} alt={step.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
@@ -183,8 +177,8 @@ function ProcessSection() {
                   </div>
                 </div>
                 <div className="flex flex-col flex-1 p-6">
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: "#fff", lineHeight: 1.2, marginBottom: 8 }}>{step.title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>{step.desc}</p>
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: CHAR, lineHeight: 1.2, marginBottom: 8 }}>{step.title}</h3>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.5)", lineHeight: 1.7 }}>{step.desc}</p>
                 </div>
               </div>
             </Reveal>
@@ -196,7 +190,7 @@ function ProcessSection() {
             style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
             <span className="relative z-10">Schedule free inspection</span>
             <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" />
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
+            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: B }} />
           </a>
         </Reveal>
       </div>
@@ -207,18 +201,18 @@ function ProcessSection() {
 // ─── 4. STORY (DARK) ─────────────────────────────────────────────────────────
 function StorySection() {
   return (
-    <section id="story" style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="story" style={{ background: SURFACE.alt }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <Reveal>
             <div className="flex items-center gap-2 mb-5">
-              <div className="w-5 h-[2px]" style={{ background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>The Evergreen difference</span>
+              <div className="w-5 h-[2px]" style={{ background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>The Evergreen difference</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
               A family business, built on one bad experience
             </h2>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(255,255,255,.6)", lineHeight: 1.8 }}>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.6)", lineHeight: 1.8 }}>
               <p style={{ marginBottom: 18 }}>
                 Redeemers Group started the way most small businesses do — out of frustration. Our founder had a crawl space problem that three national contractors quoted wrong, fixed halfway, or simply never called back about.
               </p>
@@ -227,7 +221,7 @@ function StorySection() {
               </p>
             </div>
             <a href="#" className="group mt-8 inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
-              style={{ border: "1.5px solid rgba(255,255,255,.2)", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
+              style={{ border: `1.5px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>
               Contact Us
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </a>
@@ -247,11 +241,11 @@ function StorySection() {
                 { raw: "20+ yrs", label: "In business" },
               ].map((s) => (
                 <div key={s.label} className="flex flex-col items-center justify-center py-8 px-4 text-center"
-                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
-                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,3.5vw,48px)", color: SAND, lineHeight: 1, marginBottom: 6 }}>
+                  style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,3.5vw,48px)", color: B, lineHeight: 1, marginBottom: 6 }}>
                     {s.raw ? s.raw : <Counter to={(s as { val: number; suffix: string }).val} suffix={(s as { val: number; suffix: string }).suffix} />}
                   </p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.4)", letterSpacing: 0.5 }}>{s.label}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.4)", letterSpacing: 0.5 }}>{s.label}</p>
                 </div>
               ))}
             </div>
@@ -285,20 +279,20 @@ const ALWAYS_WILL = [
 // divider — an actual "pledge" motif — instead of matching icon chips.
 function PledgeSection() {
   return (
-    <section id="pledge" style={{ background: CREAM }} className="py-20 lg:py-28">
+    <section id="pledge" style={{ background: SURFACE.panel }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="mb-14">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-5">
                 <div className="w-5 h-[2px]" style={{ background: SAND }} />
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Our Pledge</span>
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Pledge</span>
               </div>
-              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px", maxWidth: 600 }}>
+              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", maxWidth: 600 }}>
                 Things we promise we'll never do
               </h2>
             </div>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, lineHeight: 1.7, maxWidth: 420 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: ON_DARK.body, lineHeight: 1.7, maxWidth: 420 }}>
               Most contractors have fine print. Ours works the other way — here's what we explicitly commit to not doing.
             </p>
           </div>
@@ -364,7 +358,7 @@ function PledgeSection() {
             <div className="hidden lg:flex absolute flex-col items-center justify-center" style={{
               top: "50%", left: "50%", transform: "translate(-50%,-50%)",
               width: 88, height: 88, borderRadius: "50%",
-              background: NAVY, border: `4px solid ${CREAM}`,
+              background: NAVY, border: "4px solid #fff",
               boxShadow: "0 10px 28px rgba(10,11,20,.18)",
             }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill={SAND}>
@@ -993,20 +987,20 @@ const PROJECT_STORIES = [
 
 function ProjectStoriesSection() {
   return (
-    <section id="news-awards" style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="news-awards" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-5">
-              <div className="w-5 h-[2px]" style={{ background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>News &amp; Awards</span>
+              <div className="w-5 h-[2px]" style={{ background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>News &amp; Awards</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
               News and awards
             </h2>
           </div>
           <button className="group inline-flex items-center gap-2 shrink-0"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
             See all (436)
             <ChevronRight size={16} className="transition-transform group-hover:translate-x-0.5" />
           </button>
@@ -1015,20 +1009,20 @@ function ProjectStoriesSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {PROJECT_STORIES.map((card, i) => (
             <Reveal key={card.title} delay={i * 0.08}>
-              <div className="flex flex-col h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="flex flex-col h-full" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 <div className="relative overflow-hidden group" style={{ aspectRatio: "3/2" }}>
                   <ImageWithFallback src={card.img} alt={card.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.5) 0%,transparent 60%)" }} />
-                  <div className="absolute top-4 left-4 px-3 py-1" style={{ background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.35)" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
+                  <div className="absolute top-4 left-4 px-3 py-1" style={{ background: "rgba(26,82,168,.15)", border: "1px solid rgba(26,82,168,.35)" }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
                   </div>
                 </div>
                 <div className="flex flex-col flex-1 p-7">
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.2, marginBottom: 10 }}>{card.title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.7, flex: 1, marginBottom: 16 }}>{card.desc}</p>
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: CHAR, lineHeight: 1.2, marginBottom: 10 }}>{card.title}</h3>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.55)", lineHeight: 1.7, flex: 1, marginBottom: 16 }}>{card.desc}</p>
                   <button className="group inline-flex items-center gap-1.5"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                     Read full story
                     <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
                   </button>
@@ -1253,22 +1247,22 @@ function AwardsCarousel() {
 
 function CertificationsSection() {
   return (
-    <section id="certifications" style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="certifications" style={{ background: SURFACE.alt }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Header */}
         <Reveal className="mb-16">
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-[2px] w-8" style={{ background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>
+            <div className="h-[2px] w-8" style={{ background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
               Affiliations &amp; certifications
             </span>
           </div>
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
               Credentials that matter
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.5)", lineHeight: 1.7, maxWidth: 420 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.5)", lineHeight: 1.7, maxWidth: 420 }}>
               We hold industry certifications so you never have to guess about our qualifications.
             </p>
           </div>
@@ -1276,13 +1270,13 @@ function CertificationsSection() {
 
         {/* Stats row */}
         <Reveal className="mb-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.06)" }}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(10,11,20,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
             {CERT_STATS.map((s) => (
-              <div key={s.label} className="flex flex-col items-center justify-center py-10 px-6 text-center" style={{ background: CHAR }}>
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,52px)", color: SAND, lineHeight: 1, marginBottom: 8 }}>
+              <div key={s.label} className="flex flex-col items-center justify-center py-10 px-6 text-center" style={{ background: SURFACE.base }}>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,52px)", color: B, lineHeight: 1, marginBottom: 8 }}>
                   {s.val}
                 </p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.45)", letterSpacing: 0.5 }}>{s.label}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)", letterSpacing: 0.5 }}>{s.label}</p>
               </div>
             ))}
           </div>
@@ -1293,15 +1287,15 @@ function CertificationsSection() {
 
           {/* Certification badges */}
           <Reveal>
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
               Certifications
             </p>
             <div className="flex flex-col gap-3">
               {CERT_CHIPS.map((chip) => (
                 <div key={chip.label} className="flex items-center gap-4 px-5 py-4"
-                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 16, color: SAND }}>{chip.icon}</span>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", fontWeight: 500 }}>{chip.label}</span>
+                  style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 16, color: B }}>{chip.icon}</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, fontWeight: 500 }}>{chip.label}</span>
                 </div>
               ))}
             </div>
@@ -1309,7 +1303,7 @@ function CertificationsSection() {
 
           {/* Industry affiliations — awards slider */}
           <Reveal delay={0.1}>
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
               Industry affiliations
             </p>
             <AwardsCarousel />
@@ -1379,7 +1373,7 @@ function ReferralProgramSection() {
 // Added to match the approved sitemap — was missing from the built page entirely.
 function LoveWellInitiativeSection() {
   return (
-    <section id="love-well" style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="love-well" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <Reveal className="order-2 lg:order-1">
@@ -1391,26 +1385,26 @@ function LoveWellInitiativeSection() {
 
           <Reveal delay={0.1} className="order-1 lg:order-2">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-9 h-9 flex items-center justify-center shrink-0" style={{ background: "rgba(196,171,108,.12)", border: "1.5px dashed rgba(196,171,108,.5)" }}>
+              <div className="w-9 h-9 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.12)", border: "1.5px dashed rgba(26,82,168,.5)" }}>
                 <Heart size={16} color={SAND} />
               </div>
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Love Well Initiative</span>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Love Well Initiative</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 20, maxWidth: 500 }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 20, maxWidth: 500 }}>
               Giving back to the neighborhoods we serve
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.6)", lineHeight: 1.8, maxWidth: 480, marginBottom: 28 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.6)", lineHeight: 1.8, maxWidth: 480, marginBottom: 28 }}>
               A structural problem doesn't wait for a family to be able to afford it. Through the Love Well Initiative, we set aside discounted and, in some cases, free repairs for qualifying families in underserved Memphis-area neighborhoods.
             </p>
             <div className="grid grid-cols-2 gap-3 mb-8 max-w-md">
               {["Discounted repairs", "Qualifying families", "Underserved neighborhoods", "Community-first"].map((tag) => (
-                <div key={tag} className="px-4 py-3" style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)" }}>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)", fontWeight: 500 }}>{tag}</span>
+                <div key={tag} className="px-4 py-3" style={{ background: "rgba(10,11,20,.04)", border: `1px solid ${ON_LIGHT.border}` }}>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", fontWeight: 500 }}>{tag}</span>
                 </div>
               ))}
             </div>
             <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
-              style={{ border: "1.5px solid rgba(255,255,255,.2)", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
+              style={{ border: `1.5px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>
               See if you qualify
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </a>
@@ -1471,7 +1465,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="lg:w-72 shrink-0">
@@ -1537,7 +1531,7 @@ export default function OurDifferencePage({ onBack, onNavigate, scrollTo: initia
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
       </div>
 
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

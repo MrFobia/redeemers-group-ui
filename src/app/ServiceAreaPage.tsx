@@ -7,14 +7,11 @@ import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { ServiceAreaExplorer } from "./components/ServiceAreaExplorer";
+import { PageHeroBanner } from "./components/PageHeroBanner";
+import imgServiceAreaHero from "../assets/case-duplex.jpg";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -62,23 +59,23 @@ const BENEFIT_CARDS = [
 
 function BenefitCardsSection() {
   return (
-    <section style={{ background: CHAR }} className="py-16 lg:py-20">
+    <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {BENEFIT_CARDS.map((card, i) => (
             <Reveal key={card.title} delay={i * 0.08}>
-              <div className="flex flex-col h-full p-8" style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
+              <div className="flex flex-col h-full p-8" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
                   {card.eyebrow}
                 </span>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 24, color: "#fff", lineHeight: 1.15, marginBottom: 12 }}>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 24, color: CHAR, lineHeight: 1.15, marginBottom: 12 }}>
                   {card.title}
                 </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>
                   {card.desc}
                 </p>
                 <button className="group inline-flex items-center gap-1.5"
-                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                   {card.cta}
                   <ChevronRight size={14} color={SAND} className="transition-transform group-hover:translate-x-0.5" />
                 </button>
@@ -145,7 +142,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="lg:w-72 shrink-0">
@@ -206,7 +203,14 @@ export default function ServiceAreaPage({ onBack, onNavigate }: { onBack: () => 
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="About" />
       </div>
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
+        <PageHeroBanner
+          image={imgServiceAreaHero}
+          imageAlt="Redeemers crew stabilizing a home in the Mid-South"
+          eyebrow="Service areas"
+          title="We're in your neighborhood"
+          lede="Local experts across Tennessee, Mississippi, Arkansas, and Missouri. Search your city, county, or ZIP to instantly see your local team, reviews, and available services."
+        />
         <ServiceAreaExplorer id="coverage" />
         <BenefitCardsSection />
         <CtaSection />

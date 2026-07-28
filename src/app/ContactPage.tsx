@@ -11,13 +11,7 @@ import {
 import imgServiceAreaMap from "../assets/service-area-map.jpg";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B    = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -81,7 +75,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     Contact:  ["(901) 555-0100", "info@redeemersgroup.com", "Schedule inspection"],
   };
   return (
-    <footer style={{ background: DARK, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-16 px-8 md:px-14">
+    <footer style={{ background: SURFACE.footer, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-16 px-8 md:px-14">
       <div className="max-w-[1440px] mx-auto">
         <div className="flex flex-col lg:flex-row gap-10 mb-12">
           <div className="shrink-0 lg:w-48">
@@ -131,8 +125,6 @@ function HeroSection() {
         />
         <div className="absolute inset-0" style={{ background: "linear-gradient(105deg, rgba(10,11,20,0.96) 0%, rgba(10,11,20,0.80) 55%, rgba(10,11,20,0.45) 100%)" }} />
       </div>
-      <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-        style={{ background: `linear-gradient(to bottom, transparent 10%, ${SAND} 40%, ${SAND} 60%, transparent 90%)`, opacity: 0.6 }} />
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 flex flex-col justify-center" style={{ minHeight: "70vh" }}>
         <div className="max-w-[620px]">
@@ -202,18 +194,18 @@ function ContactInfoSection() {
   ];
 
   return (
-    <section id="info" className="py-20 lg:py-28" style={{ background: DARK }}>
+    <section id="info" className="py-20 lg:py-28" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="mb-14">
           <div className="flex items-center gap-2 mb-4">
-            <div style={{ width: 20, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Contact Information</span>
+            <div style={{ width: 20, height: 2, background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Contact Information</span>
           </div>
           <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,52px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,52px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px" }}>
               How to reach us.
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.75, maxWidth: 420 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.5)", lineHeight: 1.75, maxWidth: 420 }}>
               Multiple ways to get in touch. Choose whichever works best for you — we respond fast.
             </p>
           </div>
@@ -222,21 +214,21 @@ function ContactInfoSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {CHANNELS.map((ch, i) => (
             <Reveal key={ch.title} delay={i * 0.07}>
-              <div className="flex flex-col h-full p-7" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.06)", borderTop: `2px solid ${SAND}` }}>
-                <div className="w-12 h-12 flex items-center justify-center mb-6" style={{ background: "rgba(196,171,108,.08)", border: "1px solid rgba(196,171,108,.2)", color: SAND }}>
+              <div className="flex flex-col h-full p-7" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, borderTop: `2px solid ${SAND}` }}>
+                <div className="w-12 h-12 flex items-center justify-center mb-6" style={{ background: "rgba(26,82,168,.08)", border: "1px solid rgba(26,82,168,.2)", color: B }}>
                   {ch.icon}
                 </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff", marginBottom: 10 }}>{ch.title}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{ch.desc}</p>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, marginBottom: 10 }}>{ch.title}</h3>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.5)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{ch.desc}</p>
                 {ch.href ? (
                   <a href={ch.href}
                     className="inline-flex items-center gap-1.5 group"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, wordBreak: "break-word" }}>
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, wordBreak: "break-word" }}>
                     {ch.action}
                     <ChevronRight size={14} strokeWidth={2} className="transition-transform group-hover:translate-x-0.5 shrink-0" />
                   </a>
                 ) : (
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>{ch.action}</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B }}>{ch.action}</span>
                 )}
               </div>
             </Reveal>
@@ -248,10 +240,10 @@ function ContactInfoSection() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-8 py-6"
             style={{ background: "rgba(26,82,168,.08)", border: "1px solid rgba(26,82,168,.25)", borderLeft: `3px solid ${B}` }}>
             <div>
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 4 }}>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: CHAR, marginBottom: 4 }}>
                 Emergency structural concern?
               </p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.5)" }}>
                 If you notice sudden cracks, foundation shifts, or water intrusion, call us immediately.
               </p>
             </div>
@@ -467,7 +459,7 @@ function ContactFormSection() {
   const toggle = (s: string) => setSelected(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
 
   return (
-    <section id="form" className="py-20 lg:py-28" style={{ background: DARK }}>
+    <section id="form" className="py-20 lg:py-28" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
 
@@ -475,13 +467,13 @@ function ContactFormSection() {
           <div className="lg:w-[380px] shrink-0">
             <Reveal>
               <div className="flex items-center gap-2 mb-5">
-                <div style={{ width: 20, height: 2, background: SAND }} />
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Contact form</span>
+                <div style={{ width: 20, height: 2, background: B }} />
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Contact form</span>
               </div>
-              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 14 }}>
+              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 14 }}>
                 Schedule free inspection
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.7, marginBottom: 32 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.5)", lineHeight: 1.7, marginBottom: 32 }}>
                 The fastest way to get answers. No obligation.
               </p>
               <div className="flex flex-col gap-3">
@@ -490,7 +482,7 @@ function ContactFormSection() {
                     <div className="w-4 h-4 flex items-center justify-center shrink-0">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                     </div>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)" }}>{t}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.6)" }}>{t}</span>
                   </div>
                 ))}
               </div>
@@ -499,47 +491,47 @@ function ContactFormSection() {
 
           {/* Right — form */}
           <Reveal className="flex-1">
-            <div className="p-8 lg:p-10" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+            <div className="p-8 lg:p-10" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 {[["First name", "text"], ["Last name", "text"], ["Email", "email"], ["Phone number", "tel"]].map(([label, type]) => (
                   <div key={label} className="flex flex-col gap-1.5">
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>{label}</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>{label}</label>
                     <input type={type} placeholder={label}
                       className="px-4 py-3 outline-none transition-all"
-                      style={{ background: DARK, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", width: "100%" }} />
+                      style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%" }} />
                   </div>
                 ))}
               </div>
 
               <div className="mb-4">
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5, marginBottom: 10 }}>Service needed</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5, marginBottom: 10 }}>Service needed</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {SERVICES_LIST.map((s) => (
                     <label key={s} className="flex items-center gap-2.5 cursor-pointer">
                       <div onClick={() => toggle(s)}
                         className="w-4 h-4 flex items-center justify-center shrink-0 transition-all"
-                        style={{ background: selected.includes(s) ? B : "transparent", border: `1.5px solid ${selected.includes(s) ? B : "rgba(255,255,255,.2)"}`, cursor: "pointer" }}>
+                        style={{ background: selected.includes(s) ? B : "transparent", border: `1.5px solid ${selected.includes(s) ? B : "rgba(10,11,20,.2)"}`, cursor: "pointer" }}>
                         {selected.includes(s) && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                       </div>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.6)" }}>{s}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.6)" }}>{s}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5 mb-5">
-                <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>Describe your problem (optional)</label>
+                <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>Describe your problem (optional)</label>
                 <textarea rows={4} placeholder="Tell us more..."
                   className="px-4 py-3 outline-none resize-none transition-all"
-                  style={{ background: DARK, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", width: "100%" }} />
+                  style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%" }} />
               </div>
 
               <div className="flex items-center gap-2.5 mb-5 cursor-pointer" onClick={() => setAgreed(a => !a)}>
                 <div className="w-4 h-4 flex items-center justify-center shrink-0"
-                  style={{ background: agreed ? B : "transparent", border: `1.5px solid ${agreed ? B : "rgba(255,255,255,.2)"}`, cursor: "pointer" }}>
+                  style={{ background: agreed ? B : "transparent", border: `1.5px solid ${agreed ? B : "rgba(10,11,20,.2)"}`, cursor: "pointer" }}>
                   {agreed && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                 </div>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.45)" }}>I agree to the terms of service</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.45)" }}>I agree to the terms of service</span>
               </div>
 
               <button className="w-full py-4 flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
@@ -570,7 +562,7 @@ export default function ContactPage({
   }, []);
 
   return (
-    <div className="w-full min-h-screen" style={{ background: DARK }}>
+    <div className="w-full min-h-screen" style={{ background: SURFACE.base }}>
       {/* Client QA: the About/Contact hover dropdown already lists these
           exact 3 anchors (Contact information/Locations map/Contact form),
           so this page keeps only the global menu, not a 3rd fixed bar. */}
@@ -578,7 +570,7 @@ export default function ContactPage({
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="About" />
       </div>
-      <div className="pt-[81px] md:pt-[148px]">
+      <div className="pt-[68px] md:pt-[111px]">
         <HeroSection />
         <ContactInfoSection />
         <LocationsMapSection />

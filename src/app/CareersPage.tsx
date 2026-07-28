@@ -13,12 +13,9 @@ import {
 } from "lucide-react";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B    = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, SURFACE, ON_LIGHT } from "./theme";
+import { PageHeroBanner } from "./components/PageHeroBanner";
+import imgCareersHero from "../assets/svc-foundation.jpg";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -177,7 +174,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     Contact:  ["(901) 555-0100", "info@redeemersgroup.com", "Schedule inspection"],
   };
   return (
-    <footer style={{ background: DARK, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-16 px-8 md:px-14">
+    <footer style={{ background: SURFACE.footer, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-16 px-8 md:px-14">
       <div className="max-w-[1440px] mx-auto">
         <div className="flex flex-col lg:flex-row gap-10 mb-12">
           <div className="shrink-0 lg:w-48">
@@ -217,94 +214,51 @@ function Footer({ onBack }: { onBack: () => void }) {
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    // Home's hero sits at y:0 under a transparent nav, so its own
-    // `calc(100dvh - 200px)` IS the page's total hero footprint. This page's
-    // hero instead sits below a 148px nav-offset spacer (pt-[148px] on the
-    // page wrapper), so the section height must be shorter by that same
-    // amount for the hero to bottom out at the same y as Home's.
-    <section className="relative overflow-hidden" style={{ height: "calc(100dvh - 348px)", minHeight: 420, background: DARK }}>
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
-          alt="Redeemers team at work"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(105deg, rgba(10,11,20,0.97) 0%, rgba(10,11,20,0.82) 55%, rgba(10,11,20,0.4) 100%)" }} />
+    <PageHeroBanner
+      image={imgCareersHero}
+      imageAlt="Redeemers crew stabilizing a foundation"
+      eyebrow="Careers at Redeemers"
+      title={<>Life is short.<br />Work somewhere <span style={{ color: SAND }}>awesome.</span></>}
+      lede="We don't just repair foundations — we build futures. Join a family-owned team that's been protecting homes across the Mid-South for over 18 years."
+      minHeight={600}
+      contentMaxWidth={1000}
+    >
+      <div className="flex flex-wrap gap-3 mb-12">
+        <button
+          onClick={() => { const el = document.getElementById("open-positions"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}
+          className="group inline-flex items-center gap-3 px-7 py-4 font-semibold text-white transition-opacity hover:opacity-85"
+          style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, cursor: "pointer", border: "none" }}>
+          View Open Positions
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-1">
+            <path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button
+          onClick={() => { const el = document.getElementById("culture"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}
+          className="px-7 py-4 font-semibold transition-all hover:bg-white/5"
+          style={{ border: "1px solid rgba(255,255,255,.2)", color: "rgba(255,255,255,.85)", fontFamily: "'Inter',sans-serif", fontSize: 14, cursor: "pointer", background: "none" }}>
+          Our Culture
+        </button>
       </div>
 
-      {/* Grid texture */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.025]"
-        style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px)", backgroundSize: "80px 80px" }} />
-
-      {/* Gold left accent */}
-      <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-        style={{ background: `linear-gradient(to bottom, transparent 10%, ${SAND} 40%, ${SAND} 60%, transparent 90%)`, opacity: 0.6 }} />
-
-      <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 flex flex-col justify-center h-full" style={{ paddingTop: 60, paddingBottom: 60 }}>
-        <div className="max-w-[680px]">
-          <Reveal>
-            <div className="flex items-center gap-3 mb-6">
-              <div style={{ width: 24, height: 2, background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Careers at Redeemers</span>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(42px,5.5vw,80px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-2px", marginBottom: 24 }}>
-              Life is short.<br />Work somewhere<br /><span style={{ color: SAND }}>awesome.</span>
-            </h1>
-          </Reveal>
-
-          <Reveal delay={0.16}>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(14px,1.4vw,18px)", color: "rgba(255,255,255,.65)", lineHeight: 1.75, maxWidth: 540, marginBottom: 40 }}>
-              We don't just repair foundations — we build futures. Join a family-owned team that's been protecting homes across the Mid-South for over 18 years.
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.22}>
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => { const el = document.getElementById("open-positions"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}
-                className="group inline-flex items-center gap-3 px-7 py-4 font-semibold text-white transition-opacity hover:opacity-85"
-                style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 14, cursor: "pointer", border: "none" }}>
-                View Open Positions
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-1">
-                  <path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <button
-                onClick={() => { const el = document.getElementById("culture"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}
-                className="px-7 py-4 font-semibold transition-all hover:bg-white/5"
-                style={{ border: "1px solid rgba(255,255,255,.2)", color: "rgba(255,255,255,.85)", fontFamily: "'Inter',sans-serif", fontSize: 14, cursor: "pointer", background: "none" }}>
-                Our Culture
-              </button>
-            </div>
-          </Reveal>
-        </div>
-      </div>
-
-      {/* Bottom stat strip */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <div className="max-w-[1440px] mx-auto px-8 md:px-14 pb-0">
-          <div className="flex flex-wrap border-t" style={{ borderColor: "rgba(255,255,255,.08)" }}>
-            {[
-              ["18+", "Years in business"],
-              ["12,250+", "Homes protected"],
-              ["A+", "BBB rating"],
-              ["4.9 ★", "Google rating"],
-              ["∞", "Lifetime warranty"],
-            ].map(([val, label], i) => (
-              <div key={label} className="flex flex-col px-6 py-5"
-                style={{ borderLeft: i > 0 ? "1px solid rgba(255,255,255,.06)" : "none" }}>
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(18px,2vw,26px)", color: SAND, lineHeight: 1 }}>{val}</span>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(255,255,255,.35)", letterSpacing: 1.5, textTransform: "uppercase", marginTop: 4 }}>{label}</span>
-              </div>
-            ))}
+      {/* Stat strip — was absolutely pinned to the old hero's bottom edge; it
+          now flows with the banner so the copy block can't collide with it. */}
+      <div className="flex flex-wrap border-t" style={{ borderColor: "rgba(255,255,255,.1)" }}>
+        {[
+          ["18+", "Years in business"],
+          ["12,250+", "Homes protected"],
+          ["A+", "BBB rating"],
+          ["4.9 ★", "Google rating"],
+          ["∞", "Lifetime warranty"],
+        ].map(([val, label], i) => (
+          <div key={label} className="flex flex-col pr-6 py-5"
+            style={{ paddingLeft: i > 0 ? 24 : 0, borderLeft: i > 0 ? "1px solid rgba(255,255,255,.1)" : "none" }}>
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(18px,2vw,26px)", color: SAND, lineHeight: 1 }}>{val}</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(255,255,255,.4)", letterSpacing: 1.5, textTransform: "uppercase", marginTop: 4 }}>{label}</span>
           </div>
-        </div>
+        ))}
       </div>
-    </section>
+    </PageHeroBanner>
   );
 }
 
@@ -333,19 +287,19 @@ function CultureSection() {
   ];
 
   return (
-    <section id="culture" className="py-20 lg:py-28" style={{ background: DARK }}>
+    <section id="culture" className="py-20 lg:py-28" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         <Reveal className="mb-14">
           <div className="flex items-center gap-2 mb-4">
-            <div style={{ width: 20, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Culture</span>
+            <div style={{ width: 20, height: 2, background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Our Culture</span>
           </div>
           <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px", maxWidth: 520 }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px", maxWidth: 520 }}>
               More than a job — it's a mission.
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.5)", lineHeight: 1.75, maxWidth: 440 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.5)", lineHeight: 1.75, maxWidth: 440 }}>
               When you join Redeemers, you join a company that treats every home like it's their own. That mindset starts internally — with how we treat each other.
             </p>
           </div>
@@ -357,17 +311,17 @@ function CultureSection() {
           <Reveal>
             <div className="grid grid-cols-2 gap-3" style={{ gridTemplateRows: "320px 220px" }}>
               {/* Main tall photo — spans both rows */}
-              <div className="relative overflow-hidden group row-span-2" style={{ border: "1px solid rgba(255,255,255,.06)" }}>
+              <div className="relative overflow-hidden group row-span-2" style={{ border: `1px solid ${ON_LIGHT.border}` }}>
                 <ImageWithFallback src={PHOTOS[0].src} alt={PHOTOS[0].label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.8) 0%, transparent 50%)" }} />
-                <span className="absolute bottom-4 left-4 right-4" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>{PHOTOS[0].label}</span>
+                <span className="absolute bottom-4 left-4 right-4" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>{PHOTOS[0].label}</span>
               </div>
               {/* Two stacked photos on right */}
               {PHOTOS.slice(1).map((p) => (
-                <div key={p.label} className="relative overflow-hidden group" style={{ border: "1px solid rgba(255,255,255,.06)" }}>
+                <div key={p.label} className="relative overflow-hidden group" style={{ border: `1px solid ${ON_LIGHT.border}` }}>
                   <ImageWithFallback src={p.src} alt={p.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.75) 0%, transparent 60%)" }} />
-                  <span className="absolute bottom-3 left-3 right-3" style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(255,255,255,.55)", letterSpacing: 0.5 }}>{p.label}</span>
+                  <span className="absolute bottom-3 left-3 right-3" style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(10,11,20,.55)", letterSpacing: 0.5 }}>{p.label}</span>
                 </div>
               ))}
             </div>
@@ -378,14 +332,14 @@ function CultureSection() {
             {VALUES.map((v, i) => (
               <Reveal key={v.title} delay={i * 0.07}>
                 <div className="flex gap-5 p-6 group transition-all hover:bg-white/[0.025]"
-                  style={{ background: CHAR, border: "1px solid rgba(255,255,255,.05)", borderLeft: `2px solid ${SAND}` }}>
+                  style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, borderLeft: `2px solid ${SAND}` }}>
                   <div className="shrink-0 mt-0.5 flex items-center justify-center w-9 h-9"
-                    style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.2)", color: SAND }}>
+                    style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)", color: B }}>
                     {v.icon}
                   </div>
                   <div>
-                    <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 6 }}>{v.title}</h4>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>{v.desc}</p>
+                    <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, marginBottom: 6 }}>{v.title}</h4>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.5)", lineHeight: 1.7 }}>{v.desc}</p>
                   </div>
                 </div>
               </Reveal>
@@ -427,7 +381,7 @@ function EmployeeQuotesSection() {
   ];
 
   return (
-    <section className="py-20 lg:py-28 overflow-hidden" style={{ background: NAVY }}>
+    <section className="py-20 lg:py-28 overflow-hidden" style={{ background: SURFACE.panel }}>
       {/* Diagonal accent */}
       <div className="absolute right-0 top-0 bottom-0 w-[40%] pointer-events-none hidden lg:block"
         style={{ background: "rgba(255,255,255,.015)", transform: "skewX(-6deg)", transformOrigin: "top right" }} />
@@ -479,7 +433,7 @@ function EmployeeQuotesSection() {
 // ─── Hiring Process ───────────────────────────────────────────────────────────
 function HiringProcessSection() {
   return (
-    <section id="hiring-process" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: CHAR }}>
+    <section id="hiring-process" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: SURFACE.alt }}>
       {/* Background image bleed */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
         <ImageWithFallback
@@ -494,14 +448,14 @@ function HiringProcessSection() {
           <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div style={{ width: 20, height: 2, background: SAND }} />
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Process</span>
+                <div style={{ width: 20, height: 2, background: B }} />
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Our Process</span>
               </div>
-              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
                 How We Hire
               </h2>
             </div>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.45)", lineHeight: 1.7, maxWidth: 400 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.45)", lineHeight: 1.7, maxWidth: 400 }}>
               We believe in total transparency at every step. Here's exactly what to expect from your journey with us — start to finish.
             </p>
           </div>
@@ -510,7 +464,7 @@ function HiringProcessSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 relative">
           {/* Connecting line desktop */}
           <div className="hidden md:block absolute top-[58px] left-[14%] right-[14%] z-0"
-            style={{ borderTop: "1px dashed rgba(196,171,108,.2)" }} />
+            style={{ borderTop: "1px dashed rgba(26,82,168,.2)" }} />
           {[
             { step: "01", name: "Apply Online",    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Select a position and fill out our quick 5-minute application form. Attach your resume or describe your experience." },
             { step: "02", name: "Recruiter Call",  img: "https://images.unsplash.com/photo-1553484771-689f780a5a05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "A 15-minute phone chat with our talent specialist to review your qualifications and expectations." },
@@ -518,20 +472,20 @@ function HiringProcessSection() {
             { step: "04", name: "Get Started",     img: "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Receive your offer, complete onboarding, and begin your paid training and certification program." },
           ].map((item, i) => (
             <Reveal key={item.step} delay={i * 0.1} className="relative z-10">
-              <div className="flex flex-col overflow-hidden" style={{ background: DARK, border: "1px solid rgba(255,255,255,.05)" }}>
+              <div className="flex flex-col overflow-hidden" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* Step image */}
                 <div className="relative overflow-hidden group" style={{ height: 160 }}>
                   <ImageWithFallback src={item.img} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.85) 0%, rgba(10,11,20,.2) 60%, transparent 100%)" }} />
                   {/* Step badge */}
                   <div className="absolute top-4 left-4 w-9 h-9 flex items-center justify-center"
-                    style={{ background: SAND, fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 13, color: DARK }}>
+                    style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 13, color: DARK }}>
                     {item.step}
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: "#fff", marginBottom: 8 }}>{item.name}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)", lineHeight: 1.65 }}>{item.desc}</p>
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: CHAR, marginBottom: 8 }}>{item.name}</h3>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.4)", lineHeight: 1.65 }}>{item.desc}</p>
                 </div>
               </div>
             </Reveal>
@@ -597,34 +551,34 @@ function JobBoardSection() {
   };
 
   return (
-    <section id="open-positions" className="py-20 lg:py-28" style={{ background: DARK }}>
+    <section id="open-positions" className="py-20 lg:py-28" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         <Reveal className="mb-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <div style={{ width: 20, height: 2, background: SAND }} />
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Opportunities</span>
+                <div style={{ width: 20, height: 2, background: B }} />
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Opportunities</span>
               </div>
-              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
                 Open Positions
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", marginTop: 6 }}>Find the perfect role to match your skills and ambitions.</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", marginTop: 6 }}>Find the perfect role to match your skills and ambitions.</p>
             </div>
             <div className="relative w-full md:w-80">
               <input type="text" placeholder="Search roles, code, or keyword…"
                 value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                 className="w-full px-4 py-2.5 pl-10 outline-none"
-                style={{ background: CHAR, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#fff" }} />
-              <svg className="absolute left-3.5 top-3.5" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR }} />
+              <svg className="absolute left-3.5 top-3.5" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(10,11,20,.4)" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap mt-6">
             {DEPTS.map(dept => (
               <button key={dept} onClick={() => setSelectedDept(dept)}
                 className="px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all"
-                style={{ background: selectedDept === dept ? B : "rgba(255,255,255,.05)", border: `1px solid ${selectedDept === dept ? B : "rgba(255,255,255,.1)"}`, color: selectedDept === dept ? "#fff" : "rgba(255,255,255,.6)", cursor: "pointer" }}>
+                style={{ background: selectedDept === dept ? B : "rgba(10,11,20,.05)", border: `1px solid ${selectedDept === dept ? B : "rgba(10,11,20,.1)"}`, color: selectedDept === dept ? "#fff" : "rgba(10,11,20,.6)", cursor: "pointer" }}>
                 {dept}
               </button>
             ))}
@@ -636,21 +590,21 @@ function JobBoardSection() {
             <Reveal key={job.id} delay={i * 0.05}>
               <div onClick={() => { setSelectedJob(job); setShowApplyForm(false); setApplySuccess(false); }}
                 className="p-6 cursor-pointer transition-all hover:bg-white/[0.03] flex flex-col justify-between h-full"
-                style={{ background: CHAR, border: "1px solid rgba(255,255,255,.06)", borderLeft: `3px solid ${SAND}` }}>
+                style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, borderLeft: `3px solid ${SAND}` }}>
                 <div>
                   <div className="flex justify-between items-start gap-4 mb-3">
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: SAND, letterSpacing: 1.5, textTransform: "uppercase", fontWeight: 600 }}>{job.dept}</span>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.25)" }}>#{job.id}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: B, letterSpacing: 1.5, textTransform: "uppercase", fontWeight: 600 }}>{job.dept}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.25)" }}>#{job.id}</span>
                   </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff", marginBottom: 8 }}>{job.title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.45)", lineHeight: 1.65, marginBottom: 16 }}>{job.description}</p>
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, marginBottom: 8 }}>{job.title}</h3>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.45)", lineHeight: 1.65, marginBottom: 16 }}>{job.description}</p>
                 </div>
-                <div className="flex justify-between items-center pt-4" style={{ borderTop: "1px solid rgba(255,255,255,.05)" }}>
+                <div className="flex justify-between items-center pt-4" style={{ borderTop: "1px solid rgba(10,11,20,.05)" }}>
                   <div className="flex gap-4">
-                    <span className="inline-flex items-center gap-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.35)" }}><MapPin size={11} strokeWidth={1.8} /> {job.location}</span>
-                    <span className="inline-flex items-center gap-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.35)" }}><Briefcase size={11} strokeWidth={1.8} /> {job.type}</span>
+                    <span className="inline-flex items-center gap-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)" }}><MapPin size={11} strokeWidth={1.8} /> {job.location}</span>
+                    <span className="inline-flex items-center gap-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)" }}><Briefcase size={11} strokeWidth={1.8} /> {job.type}</span>
                   </div>
-                  <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}>
+                  <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: B }}>
                     View details
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </span>
@@ -658,8 +612,8 @@ function JobBoardSection() {
               </div>
             </Reveal>
           )) : (
-            <div className="col-span-2 py-14 text-center" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.05)" }}>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.3)" }}>No positions match your search.</p>
+            <div className="col-span-2 py-14 text-center" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.3)" }}>No positions match your search.</p>
             </div>
           )}
         </div>
@@ -673,62 +627,62 @@ function JobBoardSection() {
             onClick={e => { if (e.target === e.currentTarget) setSelectedJob(null); }}>
             <button onClick={() => setSelectedJob(null)}
               className="fixed top-5 right-5 flex items-center justify-center transition-all hover:bg-white/10"
-              style={{ width: 40, height: 40, background: CHAR, border: "1px solid rgba(255,255,255,.15)", cursor: "pointer", zIndex: 201 }}>
+              style={{ width: 40, height: 40, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, cursor: "pointer", zIndex: 201 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
             </button>
 
             <motion.div initial={{ opacity: 0, y: 50, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.97 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="relative w-full flex flex-col my-auto"
-              style={{ maxWidth: 720, background: DARK, border: "1px solid rgba(255,255,255,.07)", borderLeft: `2px solid ${SAND}`, padding: 40, gap: 24 }}
+              style={{ maxWidth: 720, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, borderLeft: `2px solid ${SAND}`, padding: 40, gap: 24 }}
               onClick={e => e.stopPropagation()}>
 
               {!applySuccess ? <>
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <div style={{ width: 14, height: 2, background: SAND }} />
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>
+                    <div style={{ width: 14, height: 2, background: B }} />
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
                       {selectedJob.dept} · #{selectedJob.id}
                     </span>
                   </div>
-                  <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,3vw,32px)", color: "#fff", lineHeight: 1.2 }}>{selectedJob.title}</h2>
+                  <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,3vw,32px)", color: CHAR, lineHeight: 1.2 }}>{selectedJob.title}</h2>
                   <div className="flex flex-wrap gap-4 mt-3">
-                    <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.45)" }}><MapPin size={13} strokeWidth={1.6} /> {selectedJob.location}</span>
-                    <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.45)" }}><Briefcase size={13} strokeWidth={1.6} /> {selectedJob.type}</span>
-                    <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: SAND, fontWeight: 600 }}><DollarSign size={13} strokeWidth={1.6} /> {selectedJob.pay}</span>
+                    <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)" }}><MapPin size={13} strokeWidth={1.6} /> {selectedJob.location}</span>
+                    <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)" }}><Briefcase size={13} strokeWidth={1.6} /> {selectedJob.type}</span>
+                    <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: B, fontWeight: 600 }}><DollarSign size={13} strokeWidth={1.6} /> {selectedJob.pay}</span>
                   </div>
                 </div>
-                <div style={{ height: 1, background: "rgba(255,255,255,.07)" }} />
+                <div style={{ height: 1, background: "rgba(10,11,20,.07)" }} />
 
                 {!showApplyForm ? (
                   <div className="flex flex-col gap-6">
                     <div>
-                      <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 8 }}>About the Role</h4>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", lineHeight: 1.7 }}>{selectedJob.description}</p>
+                      <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: CHAR, marginBottom: 8 }}>About the Role</h4>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.6)", lineHeight: 1.7 }}>{selectedJob.description}</p>
                     </div>
                     <div>
-                      <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 8 }}>Key Responsibilities</h4>
+                      <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: CHAR, marginBottom: 8 }}>Key Responsibilities</h4>
                       <ul className="flex flex-col gap-2.5">
                         {selectedJob.responsibilities.map((r, i) => (
                           <li key={i} className="flex gap-2.5 items-start">
-                            <span className="w-1.5 h-1.5 rounded-full shrink-0 mt-2" style={{ background: SAND }} />
-                            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", lineHeight: 1.6 }}>{r}</span>
+                            <span className="w-1.5 h-1.5 rounded-full shrink-0 mt-2" style={{ background: B }} />
+                            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.6)", lineHeight: 1.6 }}>{r}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                     <div>
-                      <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 8 }}>Requirements</h4>
+                      <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: CHAR, marginBottom: 8 }}>Requirements</h4>
                       <ul className="flex flex-col gap-2.5">
                         {selectedJob.requirements.map((r, i) => (
                           <li key={i} className="flex gap-2.5 items-start">
-                            <span className="w-1.5 h-1.5 rounded-full shrink-0 mt-2" style={{ background: SAND }} />
-                            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", lineHeight: 1.6 }}>{r}</span>
+                            <span className="w-1.5 h-1.5 rounded-full shrink-0 mt-2" style={{ background: B }} />
+                            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.6)", lineHeight: 1.6 }}>{r}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div style={{ height: 1, background: "rgba(255,255,255,.07)" }} />
+                    <div style={{ height: 1, background: "rgba(10,11,20,.07)" }} />
                     <button onClick={() => setShowApplyForm(true)}
                       className="w-full py-4 flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
                       style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
@@ -738,52 +692,52 @@ function JobBoardSection() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 4 }}>Submit Your Application</h4>
+                    <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, marginBottom: 4 }}>Submit Your Application</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {[["First name", firstName, setFirstName], ["Last name", lastName, setLastName]].map(([label, val, setter]: any) => (
                         <div key={label} className="flex flex-col gap-1.5">
-                          <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>{label} *</label>
+                          <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>{label} *</label>
                           <input required type="text" value={val} onChange={e => setter(e.target.value)} placeholder={label}
                             className="px-4 py-2.5 outline-none"
-                            style={{ background: CHAR, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#fff", width: "100%" }} />
+                            style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR, width: "100%" }} />
                         </div>
                       ))}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="flex flex-col gap-1.5">
-                        <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>Email *</label>
+                        <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>Email *</label>
                         <input required type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
                           className="px-4 py-2.5 outline-none"
-                          style={{ background: CHAR, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#fff", width: "100%" }} />
+                          style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR, width: "100%" }} />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>Phone *</label>
+                        <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>Phone *</label>
                         <input required type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="(901) 555-0199"
                           className="px-4 py-2.5 outline-none"
-                          style={{ background: CHAR, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#fff", width: "100%" }} />
+                          style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR, width: "100%" }} />
                       </div>
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>Relevant experience (optional)</label>
+                      <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>Relevant experience (optional)</label>
                       <textarea rows={3} value={experience} onChange={e => setExperience(e.target.value)} placeholder="Summarize your background…"
                         className="px-4 py-2.5 outline-none resize-none"
-                        style={{ background: CHAR, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#fff", width: "100%" }} />
+                        style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR, width: "100%" }} />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,.6)", letterSpacing: 0.5 }}>Resume</label>
+                      <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>Resume</label>
                       <div onClick={() => setAttachedFile("resume.pdf")}
                         className="py-5 flex flex-col items-center gap-1 cursor-pointer transition-all hover:bg-white/5"
-                        style={{ border: `2px dashed ${attachedFile ? SAND : "rgba(255,255,255,.12)"}`, background: attachedFile ? "rgba(196,171,108,.04)" : "transparent" }}>
+                        style={{ border: `2px dashed ${attachedFile ? B : "rgba(10,11,20,.12)"}`, background: attachedFile ? "rgba(26,82,168,.04)" : "transparent" }}>
                         {attachedFile
-                          ? <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={SAND} strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg><span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: SAND, fontWeight: 600 }}>resume.pdf attached</span></>
-                          : <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)" }}>Click to attach (PDF)</span></>
+                          ? <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={SAND} strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg><span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: B, fontWeight: 600 }}>resume.pdf attached</span></>
+                          : <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(10,11,20,.4)" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.4)" }}>Click to attach (PDF)</span></>
                         }
                       </div>
                     </div>
                     <div className="flex gap-3 mt-1">
                       <button type="button" onClick={() => setShowApplyForm(false)}
                         className="px-5 py-3 font-semibold transition-all hover:bg-white/5"
-                        style={{ border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.6)", fontFamily: "'Inter',sans-serif", fontSize: 13, cursor: "pointer", background: "none" }}>
+                        style={{ border: `1px solid ${ON_LIGHT.border}`, color: "rgba(10,11,20,.6)", fontFamily: "'Inter',sans-serif", fontSize: 13, cursor: "pointer", background: "none" }}>
                         ← Back
                       </button>
                       <button type="submit"
@@ -796,19 +750,19 @@ function JobBoardSection() {
                 )}
               </> : (
                 <div className="flex flex-col items-center text-center py-8 gap-5">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(196,171,108,.1)", border: `2px solid ${SAND}` }}>
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(26,82,168,.1)", border: `2px solid ${SAND}` }}>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={SAND} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
                   </div>
                   <div>
-                    <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", marginBottom: 8 }}>Application Submitted!</h3>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.6, maxWidth: 400 }}>
-                      Thank you for applying for <strong style={{ color: "#fff" }}>{selectedJob.title}</strong>. Our team will review your application and reach out soon.
+                    <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: CHAR, marginBottom: 8 }}>Application Submitted!</h3>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.55)", lineHeight: 1.6, maxWidth: 400 }}>
+                      Thank you for applying for <strong style={{ color: CHAR }}>{selectedJob.title}</strong>. Our team will review your application and reach out soon.
                     </p>
                   </div>
-                  <div className="p-5 w-full max-w-xs" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.06)" }}>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(255,255,255,.35)", textTransform: "uppercase", letterSpacing: 1.5 }}>Your Application Code</span>
-                    <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 28, color: SAND, marginTop: 4, letterSpacing: 2 }}>{generatedCode}</p>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.3)", marginTop: 4, display: "block" }}>Save this code to track your status below.</span>
+                  <div className="p-5 w-full max-w-xs" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(10,11,20,.35)", textTransform: "uppercase", letterSpacing: 1.5 }}>Your Application Code</span>
+                    <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 28, color: B, marginTop: 4, letterSpacing: 2 }}>{generatedCode}</p>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.3)", marginTop: 4, display: "block" }}>Save this code to track your status below.</span>
                   </div>
                   <button onClick={handleCloseSuccess}
                     className="px-8 py-3.5 font-semibold text-white transition-opacity hover:opacity-85 mt-1"
@@ -836,25 +790,25 @@ function BenefitsSection() {
     { title: "Modern Fleet & Equipment",  desc: "Company trucks, professional uniforms, safety gear, and corporate iPads.",  icon: <Truck size={18} strokeWidth={1.6} /> },
   ];
   return (
-    <section id="benefits" className="py-20 lg:py-28" style={{ background: CHAR }}>
+    <section id="benefits" className="py-20 lg:py-28" style={{ background: SURFACE.alt }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header with image accent */}
         <div className="flex flex-col lg:flex-row gap-10 mb-14 items-start">
           <Reveal className="lg:w-1/2">
             <div className="flex items-center gap-2 mb-4">
-              <div style={{ width: 20, height: 2, background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Workplace Perks</span>
+              <div style={{ width: 20, height: 2, background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Workplace Perks</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
               Benefits &amp; Compensation
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.5)", lineHeight: 1.7 }}>
               We take care of the people who take care of our customers. Starting from day one.
             </p>
           </Reveal>
           <Reveal delay={0.1} className="lg:w-1/2">
-            <div className="relative overflow-hidden group" style={{ height: 220, border: "1px solid rgba(255,255,255,.06)" }}>
+            <div className="relative overflow-hidden group" style={{ height: 220, border: `1px solid ${ON_LIGHT.border}` }}>
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1556761175-b413da4baf72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900"
                 alt="Team celebration"
@@ -862,7 +816,7 @@ function BenefitsSection() {
               />
               <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(30,34,53,0.9) 0%, transparent 60%)" }} />
               <div className="absolute inset-0 flex flex-col justify-center px-8">
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: "#fff", lineHeight: 1.1, maxWidth: 280 }}>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: CHAR, lineHeight: 1.1, maxWidth: 280 }}>
                   A team that celebrates wins together.
                 </p>
               </div>
@@ -875,26 +829,22 @@ function BenefitsSection() {
             <Reveal key={perk.title} delay={i * 0.06}>
               <div
                 className="relative flex flex-col gap-5 p-7 h-full group overflow-hidden transition-all duration-300"
-                style={{ background: DARK, border: "1px solid rgba(255,255,255,.06)" }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(196,171,108,.4)"; e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 16px 32px rgba(0,0,0,.35)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.06)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(26,82,168,.4)"; e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 16px 32px rgba(0,0,0,.35)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(10,11,20,.06)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
               >
                 {/* Top accent line */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
                   style={{ background: `linear-gradient(90deg, ${SAND}, transparent)` }} />
 
-                {/* Index number, faint */}
-                <span className="absolute top-5 right-6" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "rgba(255,255,255,.04)", letterSpacing: -1 }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
 
                 <div className="relative w-12 h-12 shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-105"
                   style={{ background: "linear-gradient(135deg, rgba(196,171,108,.16), rgba(196,171,108,.04))", border: "1px solid rgba(196,171,108,.25)", color: SAND }}>
                   {perk.icon}
                 </div>
                 <div>
-                  <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 8, letterSpacing: "-0.2px" }}>{perk.title}</h4>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
+                  <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, marginBottom: 8, letterSpacing: "-0.2px" }}>{perk.title}</h4>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
                 </div>
               </div>
             </Reveal>
@@ -903,7 +853,7 @@ function BenefitsSection() {
 
         {/* Application Tracker */}
         <Reveal className="mt-16">
-          <div id="status-tracker" className="p-8 md:p-10" style={{ background: DARK, border: "1px solid rgba(255,255,255,.05)" }}>
+          <div id="status-tracker" className="p-8 md:p-10" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
             <StatusTracker applications={MOCK_APPLICATIONS} />
           </div>
         </Reveal>
@@ -928,16 +878,16 @@ function StatusTracker({ applications }: { applications: ApplicationType[] }) {
 
   return (
     <div className="max-w-2xl">
-      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}>Track</span>
-      <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 24, color: "#fff", marginTop: 6, marginBottom: 10 }}>My Application Status</h3>
-      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.45)", lineHeight: 1.65, marginBottom: 20 }}>
-        Enter the email address you applied with, or your application code (e.g. <span style={{ color: SAND }}>RG-7492</span>).
+      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3, textTransform: "uppercase" }}>Track</span>
+      <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 24, color: CHAR, marginTop: 6, marginBottom: 10 }}>My Application Status</h3>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)", lineHeight: 1.65, marginBottom: 20 }}>
+        Enter the email address you applied with, or your application code (e.g. <span style={{ color: B }}>RG-7492</span>).
       </p>
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <input type="text" placeholder="Email or application code…" value={query} onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === "Enter" && handleTrack()}
           className="flex-1 px-4 py-3 outline-none"
-          style={{ background: CHAR, border: "1px solid rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 13, color: "#fff" }} />
+          style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR }} />
         <button onClick={handleTrack}
           className="px-6 py-3 font-semibold text-white transition-opacity hover:opacity-85"
           style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 13, cursor: "pointer", border: "none", flexShrink: 0 }}>
@@ -948,13 +898,13 @@ function StatusTracker({ applications }: { applications: ApplicationType[] }) {
       <AnimatePresence mode="wait">
         {result && (
           <motion.div key={result.code} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.3 }} style={{ borderTop: "1px solid rgba(255,255,255,.08)", paddingTop: 24 }}>
+            transition={{ duration: 0.3 }} style={{ borderTop: "1px solid rgba(10,11,20,.08)", paddingTop: 24 }}>
             <div className="flex justify-between items-start gap-4 mb-7">
               <div>
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff" }}>{result.name}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: SAND, marginTop: 3 }}>Applied for: {result.job}</p>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR }}>{result.name}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: B, marginTop: 3 }}>Applied for: {result.job}</p>
               </div>
-              <span className="px-3 py-1 text-xs font-semibold" style={{ background: "rgba(196,171,108,.1)", border: `1.5px solid ${SAND}`, color: SAND }}>
+              <span className="px-3 py-1 text-xs font-semibold" style={{ background: "rgba(26,82,168,.1)", border: `1.5px solid ${SAND}`, color: B }}>
                 Code: {result.code}
               </span>
             </div>
@@ -965,21 +915,21 @@ function StatusTracker({ applications }: { applications: ApplicationType[] }) {
                   <div key={update.status} className="flex gap-4 relative">
                     {idx < result.updates.length - 1 && (
                       <div className="absolute left-[13px] top-[26px] bottom-[-24px] w-[2px]"
-                        style={{ background: idx < result.status ? SAND : "rgba(255,255,255,.08)" }} />
+                        style={{ background: idx < result.status ? B : "rgba(10,11,20,.08)" }} />
                     )}
                     <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 z-10"
-                      style={{ background: done ? SAND : DARK, border: `2px solid ${done ? SAND : "rgba(255,255,255,.12)"}` }}>
+                      style={{ background: done ? B : SURFACE.base, border: `2px solid ${done ? B : "rgba(10,11,20,.12)"}` }}>
                       {done
-                        ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={DARK} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                        : <span style={{ fontSize: 10, color: "rgba(255,255,255,.25)", fontWeight: 700 }}>{idx + 1}</span>
+                        ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        : <span style={{ fontSize: 10, color: "rgba(10,11,20,.25)", fontWeight: 700 }}>{idx + 1}</span>
                       }
                     </div>
                     <div className="flex-1 pt-0.5">
                       <div className="flex justify-between items-center gap-4">
-                        <h5 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: done ? "#fff" : "rgba(255,255,255,.25)" }}>{update.status}</h5>
-                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: done ? "rgba(255,255,255,.35)" : "rgba(255,255,255,.12)" }}>{update.date}</span>
+                        <h5 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: done ? "#fff" : "rgba(10,11,20,.25)" }}>{update.status}</h5>
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: done ? "rgba(10,11,20,.35)" : "rgba(10,11,20,.12)" }}>{update.date}</span>
                       </div>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: done ? "rgba(255,255,255,.5)" : "rgba(255,255,255,.15)", marginTop: 3, lineHeight: 1.6 }}>{update.desc}</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: done ? "rgba(10,11,20,.5)" : "rgba(10,11,20,.15)", marginTop: 3, lineHeight: 1.6 }}>{update.desc}</p>
                     </div>
                   </div>
                 );
@@ -1000,18 +950,7 @@ function StatusTracker({ applications }: { applications: ApplicationType[] }) {
 // ─── CTA Banner ───────────────────────────────────────────────────────────────
 function CtaBanner({ onOpenInspection }: { onOpenInspection: () => void }) {
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: 380 }}>
-      <div className="absolute inset-0">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
-          alt="Team collaboration"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(10,28,74,0.97) 0%, rgba(10,11,20,0.88) 60%, rgba(10,28,74,0.8) 100%)" }} />
-      </div>
-      {/* Gold left rule */}
-      <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-        style={{ background: `linear-gradient(to bottom, transparent, ${SAND}, transparent)`, opacity: 0.7 }} />
+    <section className="relative overflow-hidden" style={{ minHeight: 380, background: SURFACE.cta }}>
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-24 flex flex-col lg:flex-row items-center justify-between gap-10">
         <div>
@@ -1087,7 +1026,7 @@ export default function CareersPage({
   }, []);
 
   return (
-    <div className="w-full min-h-screen" style={{ background: DARK }}>
+    <div className="w-full min-h-screen" style={{ background: SURFACE.base }}>
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="About" />
@@ -1096,7 +1035,7 @@ export default function CareersPage({
           anchor ids, so this page follows the client's other approved option
           — a floating rail that follows scroll instead of a fixed bar. */}
       <FloatingSideNav tabs={PAGE_TABS} active={activeTab} onChange={scrollToSection} />
-      <div className="pt-[81px] md:pt-[148px]">
+      <div className="pt-[68px] md:pt-[111px]">
         <HeroSection />
         <CultureSection />
         <EmployeeQuotesSection />

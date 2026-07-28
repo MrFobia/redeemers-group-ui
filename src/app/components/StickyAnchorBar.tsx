@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const DARK = "#0A0B14";
-const SAND = "#C4AB6C";
-const MUTED = "#6B6E85";
+import { DARK, SAND, MUTED, SURFACE } from "../theme";
 
 export type AnchorTab = { id: string; label: string };
 

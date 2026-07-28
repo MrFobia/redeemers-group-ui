@@ -3,11 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { X, CheckCircle, Phone, Mail, MapPin, Clock, Wrench, ChevronRight, ChevronLeft, Shield, Star, Calendar } from "lucide-react";
 
 // ─── Brand Tokens ──────────────────────────────────────────────────────────────
-const DARK = "#0A0B14";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const MUTED = "#6B6E85";
-const B = "#1A52A8";
+import { B, DARK, CHAR, SAND, MUTED, SURFACE } from "../theme";
 
 // ─── Global helper ─────────────────────────────────────────────────────────────
 export const openInspection = () =>

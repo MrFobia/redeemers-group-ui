@@ -11,40 +11,12 @@ import iconFoundation from "../assets/icons/icon-foundation.svg";
 import iconCrawlspace from "../assets/icons/icon-crawlspace.svg";
 import iconWaterproofing from "../assets/icons/icon-waterproofing.svg";
 import iconConcrete from "../assets/icons/icon-concrete.svg";
+import imgSvcFoundation from "../assets/svc-foundation.jpg";
+import imgSvcCrawlspace from "../assets/svc-crawlspace.jpg";
+import imgSvcWaterproofing from "../assets/svc-waterproofing.jpg";
+import imgSvcConcrete from "../assets/svc-concrete.jpg";
 
-// ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
-
-// ─── Blueprint corner marks ───────────────────────────────────────────────────
-// Camera-viewfinder-style corner brackets used across the "Blueprint industrial"
-// system to make cards read as technical/structural rather than generic SaaS.
-function CornerMarks({ color = SAND, size = 14 }: { color?: string; size?: number }) {
-  const arm = size;
-  const stroke = 1.5;
-  const corners = [
-    { top: -1, left: -1, borderTop: stroke, borderLeft: stroke },
-    { top: -1, right: -1, borderTop: stroke, borderRight: stroke },
-    { bottom: -1, left: -1, borderBottom: stroke, borderLeft: stroke },
-    { bottom: -1, right: -1, borderBottom: stroke, borderRight: stroke },
-  ];
-  return (
-    <>
-      {corners.map((c, i) => (
-        <span
-          key={i}
-          className="absolute pointer-events-none"
-          style={{ width: arm, height: arm, borderColor: color, ...c }}
-        />
-      ))}
-    </>
-  );
-}
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_DARK, ON_LIGHT } from "./theme";
 
 // Subtle blueprint grid — faint crosshatch used behind hero/section imagery.
 function BlueprintGrid({ opacity = 0.05, color = "255,255,255" }: { opacity?: number; color?: string }) {
@@ -98,7 +70,7 @@ const CATEGORIES = [
     filter: "Structural Repair",
     title: "Structural Repair",
     page: "service/structural-repair",
-    img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
+    img: imgSvcFoundation,
     icon: iconFoundation as string,
     symptoms: [
       "Uneven, sloping, or bouncy floors",
@@ -115,7 +87,7 @@ const CATEGORIES = [
     filter: "Crawl Space Repair",
     title: "Crawl Space Repair",
     page: "service/crawl-space-repair",
-    img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
+    img: imgSvcCrawlspace,
     icon: iconCrawlspace as string,
     symptoms: [
       "My floors are sagging, bouncy, or buckling.",
@@ -128,7 +100,7 @@ const CATEGORIES = [
     filter: "Waterproofing",
     title: "Waterproofing",
     page: "service/waterproofing",
-    img: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
+    img: imgSvcWaterproofing,
     icon: iconWaterproofing as string,
     symptoms: [
       "Water getting in to basement or other.",
@@ -144,7 +116,7 @@ const CATEGORIES = [
     filter: "Concrete",
     title: "Concrete",
     page: "service/concrete-services",
-    img: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800",
+    img: imgSvcConcrete,
     icon: iconConcrete as string,
     symptoms: [
       "Uneven concrete slabs",
@@ -181,12 +153,12 @@ function HeroSection() {
         className="absolute pointer-events-none"
         style={{ top: -120, right: -120, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(26,82,168,.25) 0%, transparent 70%)" }}
       />
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-12 pb-14 lg:pt-16 lg:pb-16">
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-7 pb-9 lg:pt-9 lg:pb-10">
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 14 }}
+          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 10 }}
         >
           Diagnosis Guide
         </motion.p>
@@ -197,25 +169,16 @@ function HeroSection() {
           style={{
             fontFamily: "'Articulat CF',sans-serif",
             fontWeight: 800,
-            fontSize: "clamp(30px,4.2vw,50px)",
+            fontSize: "clamp(26px,3.4vw,40px)",
             color: "#fff",
             lineHeight: 1.05,
             letterSpacing: "-1px",
-            marginBottom: 14,
+            marginBottom: 18,
             maxWidth: 720,
           }}
         >
           What's going on with your home?
         </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.65)", lineHeight: 1.6, maxWidth: 520, marginBottom: 28 }}
-        >
-          Pick what you're seeing — we'll show you exactly what it means and how to fix it.
-        </motion.p>
-
         {/* Actionable above the fold: tap a category, jump straight to it. No scroll required to know what to do.
             Each tile carries its own real photo — high-contrast solid card body underneath, not text-over-photo. */}
         <motion.div
@@ -232,7 +195,6 @@ function HeroSection() {
               className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1"
               style={{ background: CHAR, border: "1.5px solid rgba(255,255,255,.1)" }}
             >
-              <CornerMarks color="rgba(196,171,108,.55)" size={9} />
 
               {/* Photo block — real, high-contrast, no text laid over it */}
               <div className="relative w-full overflow-hidden" style={{ height: 96 }}>
@@ -242,12 +204,6 @@ function HeroSection() {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(30,34,53,.95) 0%, rgba(30,34,53,.15) 100%)" }} />
-                <span
-                  className="absolute top-2 left-2"
-                  style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND, letterSpacing: 1.5 }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
                 <div
                   className="absolute bottom-2 left-2 flex items-center justify-center w-8 h-8 shrink-0"
                   style={{ background: "rgba(10,11,20,.85)", border: "1.5px solid rgba(196,171,108,.5)" }}
@@ -361,9 +317,6 @@ function CategoryHero({
                     />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 10, color: on ? SAND : "rgba(255,255,255,.35)", letterSpacing: 1.5 }}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     <span className="block mt-0.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, lineHeight: 1.35, color: on ? "#fff" : "rgba(255,255,255,.78)", fontWeight: on ? 500 : 400 }}>
                       {symptom}
                     </span>
@@ -417,114 +370,79 @@ function CategoryHero({
 }
 
 // ─── Category Card ────────────────────────────────────────────────────────────
-function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat: typeof CATEGORIES[0]; index: number; delay?: number; onSignClick?: (label?: string) => void; onNavigate?: (p: string) => void }) {
+// QA pass: the card leads with one large photo instead of a thumbnail per
+// symptom — the per-row thumbs were too small to recognise anything and forced
+// you to hover every line to use them. Two cards per row, so the photo gets
+// real estate.
+function CategoryCard({ cat, delay = 0, onSignClick, onNavigate }: { cat: typeof CATEGORIES[0]; delay?: number; onSignClick?: (label?: string) => void; onNavigate?: (p: string) => void }) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [cardHover, setCardHover] = useState(false);
-  const num = String(index + 1).padStart(2, "0");
 
   return (
     <Reveal delay={delay}>
       <div
         id={`ps-${cat.id}`}
-        className="group/card relative flex flex-col h-full transition-transform duration-300"
-        style={{ background: "#fff", border: `1.5px solid ${cardHover ? B : "rgba(11,28,74,.14)"}`, scrollMarginTop: 160 }}
+        className="relative flex flex-col h-full transition-transform duration-300"
+        style={{ background: "#fff", border: `1px solid ${cardHover ? B : ON_LIGHT.border}`, scrollMarginTop: 160 }}
         onMouseEnter={() => setCardHover(true)}
         onMouseLeave={() => setCardHover(false)}
       >
-        <CornerMarks color={cardHover ? SAND : "rgba(11,28,74,.3)"} />
-
-        {/* Diagonal sand accent stripe */}
-        <div
-          className="absolute top-0 right-0 overflow-hidden pointer-events-none"
-          style={{ width: 64, height: 64 }}
+        {/* Lead photo — the visual cue for the whole category */}
+        <button
+          onClick={() => onNavigate ? onNavigate(cat.page) : onSignClick?.()}
+          className="group relative w-full overflow-hidden text-left"
+          style={{ height: 260, background: "none", border: "none", padding: 0, cursor: "pointer" }}
         >
-          <div
-            className="absolute transition-colors duration-300"
-            style={{
-              top: 10, right: -34, width: 96, height: 14,
-              background: cardHover ? SAND : "rgba(11,28,74,.1)",
-              transform: "rotate(45deg)",
-            }}
+          <ImageWithFallback
+            src={cat.img}
+            alt={cat.title}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
-        </div>
-
-        {/* Card Header */}
-        <div
-          className="relative flex items-center gap-4 px-7 pt-7 pb-5"
-          style={{ borderBottom: "1px dashed rgba(11,28,74,.16)" }}
-        >
-          <span
-            style={{
-              fontFamily: "'Articulat CF',sans-serif",
-              fontWeight: 800,
-              fontSize: 12,
-              color: SAND,
-              letterSpacing: 2,
-            }}
-          >
-            {num}
-          </span>
-          <div
-            className="flex items-center justify-center w-12 h-12 shrink-0 transition-colors duration-300"
-            style={{ background: "rgba(26,82,168,.06)", border: `1.5px dashed ${cardHover ? B : "rgba(26,82,168,.3)"}` }}
-          >
-            <img src={cat.icon} alt="" style={{ width: 26, height: 26, objectFit: "contain" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.86) 0%, rgba(10,11,20,.12) 65%)" }} />
+          <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 px-7 pb-6">
+            <span className="flex items-center justify-center w-10 h-10 shrink-0" style={{ background: "rgba(255,255,255,.12)" }}>
+              <img src={cat.icon} alt="" style={{ width: 24, height: 24, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+            </span>
+            <h3
+              style={{
+                fontFamily: "'Articulat CF',sans-serif",
+                fontWeight: 800,
+                fontSize: 26,
+                color: "#fff",
+                lineHeight: 1.1,
+                letterSpacing: "-0.5px",
+                textTransform: "uppercase",
+              }}
+            >
+              {cat.title}
+            </h3>
           </div>
-          <h3
-            style={{
-              fontFamily: "'Articulat CF',sans-serif",
-              fontWeight: 800,
-              fontSize: 23,
-              color: CHAR,
-              lineHeight: 1.1,
-              letterSpacing: "-0.5px",
-              textTransform: "uppercase",
-            }}
-          >
-            {cat.title}
-          </h3>
-        </div>
+        </button>
 
-        {/* Symptoms list */}
-        <div className="relative flex flex-col px-7 py-5 gap-0.5 flex-1">
+        {/* Symptoms — plain rows, no per-row thumbnail */}
+        <div className="flex flex-col px-7 py-4 flex-1">
           {cat.symptoms.map((symptom, si) => (
             <button
               key={symptom}
               onClick={() => onSignClick?.(symptom)}
-              className="group flex items-center justify-between w-full py-2.5 text-left transition-all duration-200"
-              style={{
-                borderBottom: si < cat.symptoms.length - 1 ? "1px dashed rgba(11,28,74,.1)" : "none",
-              }}
+              className="group flex items-center justify-between w-full py-3 text-left transition-colors duration-200"
+              style={{ borderBottom: si < cat.symptoms.length - 1 ? `1px solid ${ON_LIGHT.hairline}` : "none", background: "none", cursor: "pointer" }}
               onMouseEnter={() => setHovered(symptom)}
               onMouseLeave={() => setHovered(null)}
             >
-              <span className="flex items-center gap-3">
-                {/* Thumbnail per symptom — recognition is visual first. */}
-                <span
-                  className="relative overflow-hidden shrink-0 transition-all duration-200"
-                  style={{ width: 52, height: 40, border: `1px solid ${hovered === symptom ? B : "rgba(11,28,74,.12)"}` }}
-                >
-                  <ImageWithFallback
-                    src={getSymptomImage(symptom)}
-                    alt={symptom}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-300"
-                    style={{ transform: hovered === symptom ? "scale(1.08)" : "scale(1)" }}
-                  />
-                </span>
-                <span
-                  style={{
-                    fontFamily: "'Inter',sans-serif",
-                    fontSize: 14,
-                    color: hovered === symptom ? CHAR : "#444",
-                    fontWeight: hovered === symptom ? 500 : 400,
-                    lineHeight: 1.5,
-                  }}
-                >
-                  {symptom}
-                </span>
+              <span
+                style={{
+                  fontFamily: "'Inter',sans-serif",
+                  fontSize: 15,
+                  color: hovered === symptom ? B : ON_LIGHT.body,
+                  fontWeight: hovered === symptom ? 600 : 400,
+                  lineHeight: 1.5,
+                }}
+              >
+                {symptom}
               </span>
               <ChevronRight
-                size={15}
+                size={16}
                 className="shrink-0 ml-3 transition-transform duration-200 group-hover:translate-x-0.5"
                 color={hovered === symptom ? B : MUTED}
               />
@@ -532,34 +450,21 @@ function CategoryCard({ cat, index, delay = 0, onSignClick, onNavigate }: { cat:
           ))}
         </div>
 
-        {/* Photo-strip footer CTA */}
         <button
           onClick={() => onNavigate ? onNavigate(cat.page) : onSignClick?.()}
-          className="group relative w-full overflow-hidden text-left"
-          style={{ height: 84, borderTop: `1.5px solid ${cardHover ? B : "rgba(11,28,74,.14)"}` }}
+          className="group flex items-center justify-between w-full px-7 py-5 text-left"
+          style={{ borderTop: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}
         >
-          <ImageWithFallback
-            src={cat.img}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-          <div className="absolute inset-0" style={{ background: cardHover ? "rgba(11,28,74,.72)" : "rgba(10,11,20,.6)" }} />
-          <div className="relative h-full flex items-center justify-between px-7">
-            <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>
-              See {cat.title} solutions
-            </span>
-            <span
-              className="flex items-center justify-center w-8 h-8 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
-              style={{ background: SAND }}
-            >
-              <ArrowRight size={14} color={NAVY} />
-            </span>
-          </div>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B }}>
+            See {cat.title} solutions
+          </span>
+          <ArrowRight size={16} color={B} className="transition-transform duration-300 group-hover:translate-x-1" />
         </button>
       </div>
     </Reveal>
   );
 }
+
 
 // ─── Browse Section ───────────────────────────────────────────────────────────
 function BrowseSection({ onSignClick, onNavigate, excludeId }: { onSignClick?: (label?: string) => void; onNavigate?: (p: string) => void; excludeId?: string }) {
@@ -573,7 +478,7 @@ function BrowseSection({ onSignClick, onNavigate, excludeId }: { onSignClick?: (
     : CATEGORIES.filter((c) => c.filter === activeFilter || c.filter === "All");
 
   return (
-    <section style={{ background: CREAM }} className="py-20 lg:py-28">
+    <section style={{ background: CREAM }} className="pt-10 pb-20 lg:pt-12 lg:pb-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         {/* No repeated "Browse by category" intro here — the hero already
             states the page's purpose and shows these same 4 categories as
@@ -607,7 +512,6 @@ function BrowseSection({ onSignClick, onNavigate, excludeId }: { onSignClick?: (
                   border: `1.5px solid ${active ? NAVY : "rgba(11,28,74,.2)"}`,
                 }}
               >
-                {active && <CornerMarks color={SAND} size={7} />}
                 {f}
               </button>
             );
@@ -615,9 +519,9 @@ function BrowseSection({ onSignClick, onNavigate, excludeId }: { onSignClick?: (
         </Reveal>
 
         {/* Category Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-[1180px] mx-auto">
           {filtered.map((cat, i) => (
-            <CategoryCard key={cat.id} cat={cat} index={CATEGORIES.findIndex((c) => c.id === cat.id)} delay={i * 0.06} onSignClick={onSignClick} onNavigate={onNavigate} />
+            <CategoryCard key={cat.id} cat={cat} delay={i * 0.06} onSignClick={onSignClick} onNavigate={onNavigate} />
           ))}
         </div>
 
@@ -644,16 +548,13 @@ function DiagnosticBanner() {
   ];
 
   return (
-    <section style={{ background: DARK }} className="py-16 px-8 md:px-14">
+    <section style={{ background: SURFACE.panel }} className="py-16 px-8 md:px-14">
       <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x"
-          style={{ borderTop: "1px solid rgba(255,255,255,.07)", borderBottom: "1px solid rgba(255,255,255,.07)", divideColor: "rgba(255,255,255,.07)" }}>
+          style={{ borderTop: `1px solid ${ON_DARK.hairline}`, borderBottom: `1px solid ${ON_DARK.hairline}`, divideColor: ON_DARK.hairline }}>
           {items.map((item, i) => (
             <Reveal key={item.q} delay={i * 0.08}>
               <div className="relative px-8 py-10 flex flex-col gap-3">
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND, letterSpacing: 2 }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff" }}>{item.q}</p>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>{item.a}</p>
               </div>
@@ -666,16 +567,11 @@ function DiagnosticBanner() {
 }
 
 // ─── CTA Section ─────────────────────────────────────────────────────────────
+// Flat blue closing band — matches the CTA surface used on every other page.
 function CtaSection() {
   return (
-    <section className="relative overflow-hidden" style={{ background: NAVY }}>
+    <section className="relative overflow-hidden" style={{ background: SURFACE.cta }}>
       <div className="absolute inset-0 z-0">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1591638436281-078219f200af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
-          alt="Schedule an inspection"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0" style={{ background: "rgba(11,28,74,.84)" }} />
         <div
           className="absolute inset-0 opacity-[0.05]"
           style={{
@@ -741,7 +637,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="lg:w-72 shrink-0">
@@ -820,7 +716,7 @@ export default function ProblemSignsPage({ onBack, onSignClick, onNavigate, scro
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Problem Signs" />
       </div>
 
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: "#0A0B14" }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

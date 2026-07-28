@@ -4,8 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { STATES, CITY_MARKERS, type StateAbbr, type LatLng } from "../data/serviceAreas";
 import { KIND_META, type ContentItem } from "../data/localContent";
 
-const B = "#1A52A8";
-const SAND = "#C4AB6C";
+import { B, CHAR, SURFACE } from "../theme";
 
 /** Pans/zooms the map to the selected state, or to a city when one is open. */
 function FlyTo({ abbr, cityPos }: { abbr: StateAbbr; cityPos?: LatLng }) {
@@ -48,13 +47,13 @@ export function ServiceAreaMap({
         center={[35.65, -89.2]}
         zoom={6}
         scrollWheelZoom={false}
-        style={{ height: "100%", width: "100%", background: "#0A0B14" }}
+        style={{ height: "100%", width: "100%", background: SURFACE.alt }}
       >
-        {/* OpenStreetMap data, dark raster style from CARTO (free, no API key) so
-            the basemap sits on the site's dark surface instead of fighting it. */}
+        {/* OpenStreetMap data, light raster style from CARTO (free, no API key) so
+            the basemap sits on the site's light surfaces instead of fighting them. */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           subdomains="abcd"
           maxZoom={19}
         />
@@ -73,10 +72,10 @@ export function ServiceAreaMap({
               positions={s.polygon}
               eventHandlers={{ click: () => onSelectState(s.abbr) }}
               pathOptions={{
-                color: isActive ? SAND : "rgba(255,255,255,.35)",
+                color: isActive ? B : "rgba(10,11,20,.35)",
                 weight: isActive ? 3 : 1.5,
-                fillColor: isActive ? B : "#ffffff",
-                fillOpacity: isActive ? 0.35 : 0.07,
+                fillColor: isActive ? B : CHAR,
+                fillOpacity: isActive ? 0.22 : 0.06,
               }}
             >
               <Tooltip sticky>{s.name}</Tooltip>
@@ -90,7 +89,7 @@ export function ServiceAreaMap({
             key={m.name}
             center={m.pos}
             radius={7}
-            pathOptions={{ color: "#0A0B14", weight: 2, fillColor: SAND, fillOpacity: 1 }}
+            pathOptions={{ color: "#fff", weight: 2, fillColor: B, fillOpacity: 1 }}
           >
             <Tooltip direction="top" offset={[0, -6]} opacity={1} permanent>
               {m.name}
@@ -108,7 +107,7 @@ export function ServiceAreaMap({
               radius={9}
               eventHandlers={{ click: () => onPinClick?.(item) }}
               pathOptions={{
-                color: "#0A0B14", weight: 2,
+                color: "#fff", weight: 2,
                 fillColor: accent, fillOpacity: 1,
               }}
             >

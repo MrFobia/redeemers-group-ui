@@ -12,11 +12,7 @@ import imgRevThumb3 from "../assets/rev-thumb3.jpg";
 import imgRevAvatar from "../assets/rev-avatar.png";
 
 // ─── Brand tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const MUTED = "#6B6E85";
+import { B, DARK, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const SERVICE_FILTERS = ["All", "Crawl Space", "Basement", "Foundation", "Concrete", "Commercial"];
@@ -51,10 +47,10 @@ function ReviewCard({ r, i, onClick }: { r: typeof ALL_REVIEWS[0]; i: number; on
       transition={{ duration: 0.55, delay: (i % PER_PAGE) * 0.05, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
       className="flex flex-col cursor-pointer group"
-      style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", transition: "border-color .2s" }}
+      style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, transition: "border-color .2s" }}
       whileHover={{ y: -4 }}
-      onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(196,171,108,.35)")}
-      onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,.07)")}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(26,82,168,.35)")}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(10,11,20,.07)")}
     >
       {/* Thumb */}
       <div className="relative overflow-hidden" style={{ paddingBottom: "52%" }}>
@@ -68,7 +64,7 @@ function ReviewCard({ r, i, onClick }: { r: typeof ALL_REVIEWS[0]; i: number; on
         <span style={{
           position: "absolute", top: 12, left: 12,
           fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9,
-          color: "#fff", letterSpacing: 2, textTransform: "uppercase",
+          color: CHAR, letterSpacing: 2, textTransform: "uppercase",
           background: "rgba(26,82,168,.85)", padding: "3px 8px",
         }}>{r.service}</span>
       </div>
@@ -80,19 +76,19 @@ function ReviewCard({ r, i, onClick }: { r: typeof ALL_REVIEWS[0]; i: number; on
             <Star key={si} size={13} fill={SAND} stroke="none" />
           ))}
         </div>
-        <div style={{ fontFamily: "Georgia,serif", fontSize: 40, color: "rgba(196,171,108,.25)", lineHeight: 0.6, marginBottom: 10 }}>&ldquo;</div>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.6)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>
+        <div style={{ fontFamily: "Georgia,serif", fontSize: 40, color: "rgba(26,82,168,.25)", lineHeight: 0.6, marginBottom: 10 }}>&ldquo;</div>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.6)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>
           {r.quote}
         </p>
-        <div className="flex items-center gap-3 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}>
-          <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "rgba(255,255,255,.1)" }}>
+        <div className="flex items-center gap-3 pt-4" style={{ borderTop: "1px solid rgba(10,11,20,.07)" }}>
+          <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "rgba(10,11,20,.1)" }}>
             <ImageWithFallback src={r.avatar} alt={r.name} className="w-full h-full object-cover" />
           </div>
           <div className="flex-1">
-            <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>{r.name}</p>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.35)" }}>{r.loc}</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>{r.name}</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.35)" }}>{r.loc}</p>
           </div>
-          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.2)" }}>{r.date}</span>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.2)" }}>{r.date}</span>
         </div>
       </div>
     </motion.div>
@@ -278,7 +274,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="lg:w-72 shrink-0">
@@ -355,35 +351,35 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={nav} active="" />
-        <div style={{ background: CHAR, borderBottom: "1px solid rgba(255,255,255,.07)" }}>
+        <div style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.07)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-3">
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,.4)", flexShrink: 0 }}>Filter by:</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.4)", flexShrink: 0 }}>Filter by:</span>
             <div className="flex items-center gap-3 overflow-x-auto" style={{ flex: 1 }}>
               {SERVICE_FILTERS.map((f) => (
                 <button key={f} onClick={() => handleFilterChange(f)} className="flex-shrink-0 px-4 py-1.5 transition-colors"
                   style={{
                     fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
-                    background: activeFilter === f ? SAND : "transparent",
-                    color: activeFilter === f ? DARK : "rgba(255,255,255,.55)",
-                    border: `1.5px solid ${activeFilter === f ? SAND : "rgba(255,255,255,.15)"}`,
+                    background: activeFilter === f ? B : "transparent",
+                    color: activeFilter === f ? DARK : "rgba(10,11,20,.55)",
+                    border: `1.5px solid ${activeFilter === f ? B : "rgba(10,11,20,.15)"}`,
                     borderRadius: 4, cursor: "pointer",
                   }}>
                   {f}
                 </button>
               ))}
             </div>
-            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,.1)", flexShrink: 0, margin: "0 4px" }} />
+            <div style={{ width: 1, height: 20, background: "rgba(10,11,20,.1)", flexShrink: 0, margin: "0 4px" }} />
             <div className="flex-shrink-0" ref={areaRef}>
               <button onClick={() => { setAreaPos(areaRef.current?.getBoundingClientRect() ?? null); setServiceAreaOpen(v => !v); setSymptomsOpen(false); }}
                 className="flex items-center gap-1.5 px-4 py-1.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,.55)", border: "1.5px solid rgba(255,255,255,.15)", borderRadius: 4, cursor: "pointer", background: "transparent" }}>
+                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
                 Service area <ChevronDown size={13} />
               </button>
             </div>
             <div className="flex-shrink-0" ref={symptomsRef}>
               <button onClick={() => { setSymptomsPos(symptomsRef.current?.getBoundingClientRect() ?? null); setSymptomsOpen(v => !v); setServiceAreaOpen(false); }}
                 className="flex items-center gap-1.5 px-4 py-1.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,.55)", border: "1.5px solid rgba(255,255,255,.15)", borderRadius: 4, cursor: "pointer", background: "transparent" }}>
+                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
                 All Symptoms <ChevronDown size={13} />
               </button>
             </div>
@@ -392,11 +388,11 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
 
         {/* Fixed-positioned dropdowns — escape overflow clipping */}
         {serviceAreaOpen && areaPos && (
-          <div style={{ position: "fixed", top: areaPos.bottom + 4, left: areaPos.left, zIndex: 200, background: CHAR, border: "1px solid rgba(255,255,255,.1)", boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 160 }}>
+          <div style={{ position: "fixed", top: areaPos.bottom + 4, left: areaPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 160 }}>
             {["Tennessee", "Arkansas", "Mississippi", "Missouri"].map((s) => (
               <button key={s} onClick={() => setServiceAreaOpen(false)} className="w-full text-left px-4 py-2.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
-                onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,.06)")}
+                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
                 onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
                 {s}
               </button>
@@ -404,11 +400,11 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
           </div>
         )}
         {symptomsOpen && symptomsPos && (
-          <div style={{ position: "fixed", top: symptomsPos.bottom + 4, left: symptomsPos.left, zIndex: 200, background: CHAR, border: "1px solid rgba(255,255,255,.1)", boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 180 }}>
+          <div style={{ position: "fixed", top: symptomsPos.bottom + 4, left: symptomsPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 180 }}>
             {["Cracked walls", "Uneven floors", "Wet basement", "Musty smell", "Sticking doors", "Sagging floor joists"].map((s) => (
               <button key={s} onClick={() => setSymptomsOpen(false)} className="w-full text-left px-4 py-2.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
-                onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,.06)")}
+                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
                 onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
                 {s}
               </button>
@@ -418,25 +414,25 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
       </div>
 
       {/* Header height varies by breakpoint (announcement bar hides < md) */}
-      <div className="w-full min-h-screen pt-[136px] md:pt-[196px]" style={{ background: DARK }}>
+      <div className="w-full min-h-screen pt-[123px] md:pt-[159px]" style={{ background: SURFACE.base }}>
 
         {/* ── Breadcrumb ── */}
-        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
+        <div style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
             <button
               onClick={() => nav("home")}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.35)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+              style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.35)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
               className="hover:text-white/60 transition-colors"
             >
               Home
             </button>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="rgba(255,255,255,.2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.55)" }}>All Reviews</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="rgba(10,11,20,.2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.55)" }}>All Reviews</span>
           </div>
         </div>
 
         {/* ── Hero ── */}
-        <section style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }} className="py-20 lg:py-24">
+        <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }} className="py-20 lg:py-24">
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
             <div className="max-w-[760px]">
               {/* Stars + rating */}
@@ -444,16 +440,16 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} size={14} fill={SAND} stroke="none" />
                 ))}
-                <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, marginLeft: 4 }}>4.9 on Google</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, marginLeft: 4 }}>4.9 on Google</span>
               </div>
 
-              <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,5vw,70px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-2px", marginBottom: 20 }}>
+              <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,5vw,70px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-2px", marginBottom: 20 }}>
                 All Customer Reviews
               </h1>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(15px,1.2vw,17px)", color: "rgba(255,255,255,.45)", lineHeight: 1.7, marginBottom: 14, maxWidth: 560 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(15px,1.2vw,17px)", color: "rgba(10,11,20,.45)", lineHeight: 1.7, marginBottom: 14, maxWidth: 560 }}>
                 Real results from homeowners across Tennessee, Arkansas, Mississippi, and Missouri. Every review is verified and unedited.
               </p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.25)" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.25)" }}>
                 {ALL_REVIEWS.length} verified reviews &nbsp;·&nbsp; Last updated: June 2026
               </p>
             </div>
@@ -461,16 +457,16 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
         </section>
 
         {/* ── Review grid ── */}
-        <section style={{ background: DARK }} className="py-16 lg:py-20">
+        <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
             <div className="flex items-center justify-between mb-10">
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.3)" }}>
-                Showing <strong style={{ color: "rgba(255,255,255,.7)" }}>{filtered.length}</strong> reviews
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.3)" }}>
+                Showing <strong style={{ color: "rgba(10,11,20,.7)" }}>{filtered.length}</strong> reviews
                 {activeFilter !== "All" && (
                   <span> ·{" "}
                     <button onClick={() => handleFilterChange("All")}
-                      style={{ color: SAND, fontWeight: 600, background: "none", border: "none", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 14 }}>
+                      style={{ color: B, fontWeight: 600, background: "none", border: "none", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 14 }}>
                       Clear filter
                     </button>
                   </span>
@@ -495,7 +491,7 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
                   onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 148, behavior: "smooth" }); }}
                   disabled={page === 1}
                   className="w-10 h-10 flex items-center justify-center transition-colors disabled:opacity-30"
-                  style={{ border: "1.5px solid rgba(255,255,255,.2)", color: "#fff", background: "none", cursor: page === 1 ? "not-allowed" : "pointer" }}
+                  style={{ border: `1.5px solid ${ON_LIGHT.border}`, color: CHAR, background: "none", cursor: page === 1 ? "not-allowed" : "pointer" }}
                 >
                   <ChevronLeft size={16} />
                 </button>
@@ -507,9 +503,9 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
                     className="w-10 h-10 flex items-center justify-center transition-colors"
                     style={{
                       fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14,
-                      background: page === p ? SAND : "transparent",
-                      color: page === p ? DARK : "rgba(255,255,255,.5)",
-                      border: `1.5px solid ${page === p ? SAND : "rgba(255,255,255,.15)"}`,
+                      background: page === p ? B : "transparent",
+                      color: page === p ? DARK : "rgba(10,11,20,.5)",
+                      border: `1.5px solid ${page === p ? B : "rgba(10,11,20,.15)"}`,
                       cursor: "pointer",
                     }}
                   >
@@ -521,7 +517,7 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
                   onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 148, behavior: "smooth" }); }}
                   disabled={page === totalPages}
                   className="w-10 h-10 flex items-center justify-center transition-colors disabled:opacity-30"
-                  style={{ border: "1.5px solid rgba(255,255,255,.2)", color: "#fff", background: "none", cursor: page === totalPages ? "not-allowed" : "pointer" }}
+                  style={{ border: `1.5px solid ${ON_LIGHT.border}`, color: CHAR, background: "none", cursor: page === totalPages ? "not-allowed" : "pointer" }}
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -531,17 +527,17 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
         </section>
 
         {/* ── Bottom CTA ── */}
-        <section style={{ background: CHAR, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-20 lg:py-24">
+        <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(10,11,20,.06)" }} className="py-20 lg:py-24">
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
             <div className="max-w-[640px]">
               <div className="flex items-center gap-3 mb-5">
-                <div style={{ width: 28, height: 2, background: SAND }} />
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Ready to start?</span>
+                <div style={{ width: 28, height: 2, background: B }} />
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Ready to start?</span>
               </div>
-              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1.5px", marginBottom: 16 }}>
+              <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1.5px", marginBottom: 16 }}>
                 Join 400+ satisfied homeowners
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.4)", lineHeight: 1.7, marginBottom: 32 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.4)", lineHeight: 1.7, marginBottom: 32 }}>
                 Free inspection. No obligation. Same-week availability across TN, AR, MS & MO.
               </p>
               <button

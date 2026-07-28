@@ -7,12 +7,7 @@ import { AnnouncementBar } from "./components/AnnouncementBar";
 import { SERVICES as SERVICE_DEFS } from "./data/services";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
-const B     = "#1A52A8";
-const DARK  = "#0A0B14";
-const NAVY  = "#0B1C4A";
-const CHAR  = "#1E2235";
-const SAND  = "#C4AB6C";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
 const WHITE = "#FFFFFF";
 const CF    = "'Articulat CF',sans-serif";
 const INTER = "'Inter',sans-serif";
@@ -27,7 +22,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { head: "Contact",   links: ["1-833-584-1049", "info@redeemersgroup.com", "Schedule Inspection", "Customer Portal"] },
   ];
   return (
-    <footer style={{ background: DARK, borderTop: "1px solid rgba(255,255,255,.07)", padding: "64px 56px 40px" }}>
+    <footer style={{ background: SURFACE.footer, borderTop: "1px solid rgba(255,255,255,.07)", padding: "64px 56px 40px" }}>
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
           {cols.map(col => (
@@ -64,8 +59,8 @@ function CategoryBadge({ label }: { label: string }) {
   return (
     <span style={{
       display: "inline-block", padding: "5px 14px",
-      background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.35)",
-      fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND,
+      background: "rgba(26,82,168,.08)", border: "1px solid rgba(26,82,168,.25)",
+      fontFamily: CF, fontWeight: 700, fontSize: 10, color: B,
       letterSpacing: 2.5, textTransform: "uppercase",
     }}>
       {label}
@@ -83,8 +78,8 @@ function SymptomChips({ items }: { items: string[] }) {
         {items.map(s => (
           <span key={s} style={{
             padding: "4px 12px",
-            background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)",
-            fontFamily: INTER, fontSize: 12, color: "rgba(255,255,255,.6)",
+            background: ON_LIGHT.wash, border: `1px solid ${ON_LIGHT.border}`,
+            fontFamily: INTER, fontSize: 12, color: ON_LIGHT.body,
           }}>
             {s}
           </span>
@@ -107,11 +102,11 @@ function CardCTAs({ onNavigate }: { onNavigate: () => void }) { // slug-bound by
       </button>
       <button
         onClick={onNavigate}
-        style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontFamily: INTER, fontWeight: 600, fontSize: 13, color: SAND, padding: 0 }}
+        style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontFamily: INTER, fontWeight: 600, fontSize: 13, color: B, padding: 0 }}
         className="hover:opacity-80 transition-opacity"
       >
         View more
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
       </button>
     </div>
   );
@@ -121,11 +116,11 @@ function ExploreLink({ onNavigate }: { onNavigate: () => void }) {
   return (
     <button
       onClick={onNavigate}
-      style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontFamily: INTER, fontWeight: 600, fontSize: 13, color: SAND, padding: 0 }}
+      style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontFamily: INTER, fontWeight: 600, fontSize: 13, color: B, padding: 0 }}
       className="hover:opacity-80 transition-opacity"
     >
       Explore service
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
     </button>
   );
 }
@@ -174,26 +169,26 @@ const SERVICES = {
 
 function IntroSection() {
   return (
-    <section style={{ background: DARK, padding: "96px 56px 80px" }}>
+    <section style={{ background: SURFACE.base, padding: "96px 56px 80px" }}>
       <div className="max-w-[1280px] mx-auto">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start lg:items-center">
           <div className="flex-1">
-            <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 20 }}>
+            <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 20 }}>
               Services
             </p>
-            <h1 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(36px,4.5vw,64px)", color: WHITE, lineHeight: 1.05, letterSpacing: "-1px", margin: 0 }}>
+            <h1 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(36px,4.5vw,64px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", margin: 0 }}>
               What can we<br />help you fix?
             </h1>
           </div>
           <div className="flex-1 lg:max-w-[480px]">
-            <p style={{ fontFamily: INTER, fontSize: 18, color: "rgba(255,255,255,.6)", lineHeight: 1.7 }}>
+            <p style={{ fontFamily: INTER, fontSize: 18, color: "rgba(10,11,20,.6)", lineHeight: 1.7 }}>
               From sagging floors to flooded basements — every problem has a permanent solution, backed by our lifetime warranty and 17 years of experience.
             </p>
             <div className="flex flex-wrap gap-4 mt-8">
               {["Crawl Space", "Waterproofing", "Foundation", "Concrete"].map(s => (
                 <span key={s} style={{
-                  padding: "6px 14px", background: "rgba(196,171,108,.12)", border: "1px solid rgba(196,171,108,.3)",
-                  fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase",
+                  padding: "6px 14px", background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.3)",
+                  fontFamily: CF, fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2.5, textTransform: "uppercase",
                 }}>
                   {s}
                 </span>
@@ -218,15 +213,15 @@ const CARD_SLUGS = {
 
 function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <section style={{ background: DARK, padding: "96px 56px 96px" }}>
+    <section style={{ background: SURFACE.alt, padding: "96px 56px 96px" }}>
       <div className="max-w-[1280px] mx-auto">
 
         {/* Section header */}
         <div className="text-center mb-16">
-          <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
+          <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
             Solutions
           </p>
-          <h2 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: WHITE, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
+          <h2 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
             What we handle
           </h2>
           <p style={{ fontFamily: INTER, fontSize: 17, color: MUTED, lineHeight: 1.6 }}>
@@ -241,12 +236,12 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }
           <div className="flex flex-col gap-6 flex-1">
 
             {/* Card A — Crawl Space (tall, content + image) */}
-            <div style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+            <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
               <div style={{ padding: "40px 40px 32px" }}>
                 <div style={{ marginBottom: 20 }}>
                   <CategoryBadge label={SERVICES.crawlSpace.category} />
                 </div>
-                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: WHITE, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 16, whiteSpace: "pre-line" }}>
+                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 16, whiteSpace: "pre-line" }}>
                   {SERVICES.crawlSpace.title}
                 </h3>
                 <p style={{ fontFamily: INTER, fontSize: 15, color: MUTED, lineHeight: 1.65, marginBottom: 28 }}>
@@ -268,7 +263,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }
             </div>
 
             {/* Card B — Concrete (horizontal: image left, content right) */}
-            <div style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", overflow: "hidden", display: "flex", minHeight: 280 }}>
+            <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", minHeight: 280 }}>
               <div style={{ width: 220, flexShrink: 0, position: "relative" }} className="hidden md:block">
                 <ImageWithFallback
                   src={SERVICES.concrete.img}
@@ -281,7 +276,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }
                 <div style={{ marginBottom: 16 }}>
                   <CategoryBadge label={SERVICES.concrete.category} />
                 </div>
-                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,30px)", color: WHITE, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 12, whiteSpace: "pre-line" }}>
+                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,30px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 12, whiteSpace: "pre-line" }}>
                   {SERVICES.concrete.title}
                 </h3>
                 <div style={{ marginBottom: 20 }}>
@@ -297,7 +292,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }
           <div className="flex flex-col gap-6 flex-1">
 
             {/* Card C — Waterproofing (horizontal: image left, content right) */}
-            <div style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", overflow: "hidden", display: "flex", minHeight: 280 }}>
+            <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", minHeight: 280 }}>
               <div style={{ width: 220, flexShrink: 0, position: "relative" }} className="hidden md:block">
                 <ImageWithFallback
                   src={SERVICES.waterproofing.img}
@@ -310,7 +305,7 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }
                 <div style={{ marginBottom: 16 }}>
                   <CategoryBadge label={SERVICES.waterproofing.category} />
                 </div>
-                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,30px)", color: WHITE, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 12, whiteSpace: "pre-line" }}>
+                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,30px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 12, whiteSpace: "pre-line" }}>
                   {SERVICES.waterproofing.title}
                 </h3>
                 <div style={{ marginBottom: 20 }}>
@@ -321,12 +316,12 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }
             </div>
 
             {/* Card D — Foundation (tall, content + image) */}
-            <div style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", overflow: "hidden", display: "flex", flexDirection: "column", flex: 1 }}>
+            <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", flexDirection: "column", flex: 1 }}>
               <div style={{ padding: "40px 40px 32px" }}>
                 <div style={{ marginBottom: 20 }}>
                   <CategoryBadge label={SERVICES.foundation.category} />
                 </div>
-                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: WHITE, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 16, whiteSpace: "pre-line" }}>
+                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 16, whiteSpace: "pre-line" }}>
                   {SERVICES.foundation.title}
                 </h3>
                 <p style={{ fontFamily: INTER, fontSize: 15, color: MUTED, lineHeight: 1.65, marginBottom: 28 }}>
@@ -356,13 +351,13 @@ function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }
         <div className="flex flex-col lg:flex-row gap-6">
 
           {/* Card F — Commercial (content left, image right) */}
-          <div style={{ background: NAVY, border: "1px solid rgba(255,255,255,.07)", overflow: "hidden", display: "flex", flex: 1, minHeight: 340 }}>
+          <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", flex: 1, minHeight: 340 }}>
             <div style={{ flex: 1, padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 20 }}>
               <CategoryBadge label={SERVICES.commercial.category} />
-              <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.2vw,32px)", color: WHITE, lineHeight: 1.15, letterSpacing: "-0.5px", margin: 0 }}>
+              <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.2vw,32px)", color: CHAR, lineHeight: 1.15, letterSpacing: "-0.5px", margin: 0 }}>
                 {SERVICES.commercial.title}
               </h3>
-              <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(10,11,20,.6)", lineHeight: 1.65, margin: 0 }}>
                 {SERVICES.commercial.body}
               </p>
               <ExploreLink onNavigate={() => onNavigate(`service/${CARD_SLUGS.commercial}`)} />
@@ -391,12 +386,12 @@ function TrustBar() {
     { num: "Lifetime", label: "Warranty" },
   ];
   return (
-    <section style={{ background: CHAR, borderTop: "1px solid rgba(255,255,255,.06)", borderBottom: "1px solid rgba(255,255,255,.06)", padding: "40px 56px" }}>
+    <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(10,11,20,.06)", borderBottom: "1px solid rgba(10,11,20,.06)", padding: "40px 56px" }}>
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map(s => (
             <div key={s.label} className="text-center">
-              <p style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: SAND, lineHeight: 1, marginBottom: 6 }}>
+              <p style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: B, lineHeight: 1, marginBottom: 6 }}>
                 {s.num}
               </p>
               <p style={{ fontFamily: INTER, fontSize: 10, color: MUTED, letterSpacing: 1.5, textTransform: "uppercase" }}>
@@ -459,7 +454,7 @@ export default function ServicesLandingPage({
         <SharedNavBar onNavigate={onNavigate ?? onBack} active="Services" />
       </div>
 
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

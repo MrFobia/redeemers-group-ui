@@ -1,5 +1,4 @@
-const DARK = "#0A0B14";
-const SAND = "#C4AB6C";
+import { DARK, SAND, SURFACE } from "../theme";
 
 export function AnnouncementBar() {
   return (

@@ -9,13 +9,7 @@ import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -118,20 +112,20 @@ const BUYER_SELLER_ITEMS = [
 
 function BuyerSellerSection() {
   return (
-    <section id="buyer-seller" style={{ background: DARK }} className="py-20 lg:py-24">
+    <section id="buyer-seller" style={{ background: SURFACE.base }} className="py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex items-end justify-between mb-14 flex-wrap gap-6">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span style={{ display: "block", width: 28, height: 2, background: SAND, flexShrink: 0 }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
+              <span style={{ display: "block", width: 28, height: 2, background: B, flexShrink: 0 }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>
                 Buyer &amp; Seller
               </span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
               Buyer &amp; seller guides
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.45)", lineHeight: 1.7, marginTop: 12, maxWidth: 520 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.45)", lineHeight: 1.7, marginTop: 12, maxWidth: 520 }}>
               Downloadable guides to help buyers and sellers navigate structural issues during a real estate transaction.
             </p>
           </div>
@@ -140,22 +134,22 @@ function BuyerSellerSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {BUYER_SELLER_ITEMS.map((item, i) => (
             <Reveal key={item.title} delay={i * 0.07}>
-              <div className="flex flex-col h-full p-7" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="flex flex-col h-full p-7" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 <div className="flex items-center justify-between mb-6">
                   <div className="w-11 h-11 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.2)", border: "1px solid rgba(26,82,168,.3)" }}>
                     <FileText size={20} color={B} strokeWidth={1.5} />
                   </div>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(255,255,255,.3)" }}>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(10,11,20,.3)" }}>
                     {item.pages}
                   </span>
                 </div>
-                <div className="inline-flex items-center px-2 py-0.5 mb-4 w-fit" style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.2)" }}>
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>PDF</span>
+                <div className="inline-flex items-center px-2 py-0.5 mb-4 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)" }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>PDF</span>
                 </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.2, marginBottom: 8 }}>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: CHAR, lineHeight: 1.2, marginBottom: 8 }}>
                   {item.title}
                 </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
                   {item.desc}
                 </p>
                 <button className="inline-flex items-center gap-2 px-5 py-2.5 w-fit transition-opacity hover:opacity-85"
@@ -184,25 +178,25 @@ const COST_BY_SERVICE = [
 
 function CostByServiceSection() {
   return (
-    <section id="cost-by-service" style={{ background: CHAR }} className="py-20 lg:py-24">
+    <section id="cost-by-service" style={{ background: SURFACE.base }} className="py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex items-end justify-between mb-14 flex-wrap gap-6">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span style={{ display: "block", width: 28, height: 2, background: SAND, flexShrink: 0 }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
+              <span style={{ display: "block", width: 28, height: 2, background: B, flexShrink: 0 }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>
                 Cost by service
               </span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
               What does it really cost?
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.45)", lineHeight: 1.7, marginTop: 12, maxWidth: 520 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.45)", lineHeight: 1.7, marginTop: 12, maxWidth: 520 }}>
               Typical ranges for TN, MS, and AR homeowners. Every home is different — your free inspection gives you an exact number.
             </p>
           </div>
           <a href="#" className="group inline-flex items-center gap-2 px-6 py-3 shrink-0"
-            style={{ border: `1.5px solid rgba(255,255,255,.2)`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(255,255,255,.7)" }}>
+            style={{ border: `1.5px solid rgba(10,11,20,.2)`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(10,11,20,.7)" }}>
             Get exact quote
             <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
           </a>
@@ -211,24 +205,24 @@ function CostByServiceSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {COST_BY_SERVICE.map((card, i) => (
             <Reveal key={card.title} delay={i * 0.07}>
-              <div className="flex flex-col h-full p-8" style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
-                <div className="inline-flex items-center px-2 py-0.5 mb-5 w-fit" style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.18)" }}>
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>Cost guide</span>
+              <div className="flex flex-col h-full p-8" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
+                <div className="inline-flex items-center px-2 py-0.5 mb-5 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.18)" }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>Cost guide</span>
                 </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", lineHeight: 1.2, marginBottom: 6 }}>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: CHAR, lineHeight: 1.2, marginBottom: 6 }}>
                   {card.title}
                 </h3>
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.5vw,32px)", color: SAND, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 8 }}>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.5vw,32px)", color: B, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 8 }}>
                   {card.range}
                 </p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, color: "rgba(255,255,255,.4)", marginBottom: 12 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, color: "rgba(10,11,20,.4)", marginBottom: 12 }}>
                   {card.sub}
                 </p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
                   {card.desc}
                 </p>
                 <button className="group inline-flex items-center gap-1.5"
-                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                   Read full guide
                   <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5" color={SAND} />
                 </button>
@@ -283,19 +277,19 @@ const COST_BY_CITY = [
 
 function CostByCitySection() {
   return (
-    <section id="cost-by-city" style={{ background: DARK }} className="py-20 lg:py-24">
+    <section id="cost-by-city" style={{ background: SURFACE.base }} className="py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="mb-14">
           <div className="flex items-center gap-3 mb-4">
-            <span style={{ display: "block", width: 28, height: 2, background: SAND, flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
+            <span style={{ display: "block", width: 28, height: 2, background: B, flexShrink: 0 }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>
               Cost by city
             </span>
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
             Local pricing for your market
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.45)", lineHeight: 1.7, marginTop: 12, maxWidth: 540 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.45)", lineHeight: 1.7, marginTop: 12, maxWidth: 540 }}>
             Repair costs differ by market due to soil type, local labor rates, and common damage patterns. Here's what homeowners in our service area actually pay.
           </p>
         </Reveal>
@@ -303,28 +297,28 @@ function CostByCitySection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {COST_BY_CITY.map((item, i) => (
             <Reveal key={item.city} delay={i * 0.07}>
-              <div className="flex flex-col overflow-hidden" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="flex flex-col overflow-hidden" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* City image */}
                 <div className="relative overflow-hidden shrink-0" style={{ height: 160 }}>
                   <ImageWithFallback src={item.img} alt={item.city} className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.45)" }} />
                   <div className="absolute bottom-0 left-0 right-0 px-5 py-4 flex items-center gap-2">
                     <MapPin size={14} color={SAND} />
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff" }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR }}>
                       {item.city}
                     </span>
                   </div>
                 </div>
                 {/* Content */}
                 <div className="flex flex-col flex-1 p-6">
-                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2vw,30px)", color: SAND, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 8 }}>
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2vw,30px)", color: B, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 8 }}>
                     {item.range}
                   </p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
                     {item.note}
                   </p>
                   <button className="group inline-flex items-center gap-1.5"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                     View {item.city} guide
                     <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5" color={SAND} />
                   </button>
@@ -392,7 +386,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { h: "Pricing", ls: ["Cost by Service", "Cost by City", "Buyer & Seller Guides", "Financing Options"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="lg:w-72 shrink-0">
@@ -483,7 +477,7 @@ export default function PricingPage({ onBack, onNavigate }: { onBack: () => void
           so it follows the client's approved alternative — a floating rail
           instead of a fixed horizontal bar. */}
       <FloatingSideNav tabs={PRICING_TABS} active={activeTab} onChange={scrollTo} />
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: DARK }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         <HeroSection />
         <BuyerSellerSection />
         <CostByServiceSection />

@@ -1,43 +1,43 @@
 
-/* ─── Leaflet / OpenStreetMap — match the dark brand surface ────────────────── */
+/* ─── Leaflet / OpenStreetMap — match the light brand surface ───────────────── */
 .leaflet-container {
   font-family: 'Inter', sans-serif;
 }
 .leaflet-container .leaflet-control-attribution {
-  background: rgba(10, 11, 20, 0.75);
-  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.8);
+  color: rgba(10, 11, 20, 0.5);
   font-size: 10px;
 }
 .leaflet-container .leaflet-control-attribution a {
-  color: #c4ab6c;
+  color: #1a52a8;
 }
 .leaflet-container .leaflet-control-zoom a {
-  background: #1e2235;
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.12);
+  background: #fff;
+  color: #1e2235;
+  border-color: rgba(10, 11, 20, 0.12);
 }
 .leaflet-container .leaflet-control-zoom a:hover {
-  background: #2a2f4a;
+  background: #f7f5ef;
 }
 /* City name labels */
 .leaflet-tooltip {
-  background: rgba(10, 11, 20, 0.9);
-  border: 1px solid rgba(196, 171, 108, 0.5);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(26, 82, 168, 0.45);
+  color: #1e2235;
   font-size: 11px;
   font-weight: 600;
-  box-shadow: none;
+  box-shadow: 0 2px 10px rgba(10, 11, 20, 0.12);
   padding: 2px 7px;
 }
 .leaflet-tooltip::before { display: none; }
 /* Leaflet already gives interactive paths a pointer cursor; just soften hover. */
 .leaflet-interactive:hover { opacity: .8; }
 
-/* ─── Site scrollbar — brand dark track, sand thumb ──────────────────────────
+/* ─── Site scrollbar — cream track, sand thumb ───────────────────────────────
    Firefox uses `scrollbar-color`/`scrollbar-width`; everything WebKit-based
    (Chrome, Safari, Edge) uses the ::-webkit-scrollbar pseudo-elements. */
 html {
-  scrollbar-color: #C4AB6C rgba(255, 255, 255, 0.06);
+  scrollbar-color: #C4AB6C rgba(10, 11, 20, 0.08);
   scrollbar-width: thin;
 }
 
@@ -46,12 +46,12 @@ html {
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0B14;
+  background: #F7F5EF;
 }
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #C4AB6C 0%, #a68f56 100%);
   border-radius: 999px;
-  border: 3px solid #0A0B14;
+  border: 3px solid #F7F5EF;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -59,7 +59,7 @@ html {
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-corner {
-  background: #0A0B14;
+  background: #F7F5EF;
 }
 
 /* Any inner scroll container that should read as "secondary" (modals, lists) —
@@ -71,10 +71,10 @@ html {
 .rg-scroll-thin::-webkit-scrollbar-thumb {
   border: none;
   border-radius: 999px;
-  background: rgba(196, 171, 108, 0.5);
+  background: rgba(10, 11, 20, 0.22);
 }
 .rg-scroll-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(196, 171, 108, 0.75);
+  background: rgba(10, 11, 20, 0.38);
 }
 .rg-scroll-thin::-webkit-scrollbar-track {
   background: transparent;

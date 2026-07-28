@@ -22,9 +22,7 @@ const signRoute = (label: string) => {
 };
 
 // ─── Brand Tokens ──────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const SAND = "#C4AB6C";
+import { B, DARK, SAND, SURFACE } from "./theme";
 
 // ─── Page map ─────────────────────────────────────────────────────────────────
 export const NAV_PAGE_MAP: Record<string, string> = {
@@ -255,7 +253,10 @@ function ProblemSignsDropdown({ onNavigate }: { onNavigate: (p: string) => void 
   return (
     <SimpleDropdown width={260}>
       {PROBLEM_SIGNS_CATEGORIES.map((cat) => (
-        <FlyoutItem key={cat.id} label={cat.label}>
+        // The category row itself has to be clickable: QA flagged that picking
+        // a category in the menu landed nowhere. It goes to the Problem Signs
+        // page scoped to that category, which renders its own CategoryHero.
+        <FlyoutItem key={cat.id} label={cat.label} onClick={() => onNavigate(`problem-signs/${cat.id}`)}>
           {cat.signs.map((sign) => (
             <SimpleDropdownItem key={sign} label={sign} onClick={() => onNavigate(signRoute(sign))} />
           ))}
@@ -349,6 +350,10 @@ export default function SharedNavBar({
   const [ourDiffOpen, setOurDiffOpen] = useState(false);
   const [signsOpen, setSignsOpen] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<"root" | "services" | "resources" | "about" | "our-difference" | "problem-signs">("root");
+  // Second mobile level. QA: with every category expanded at once the 4th and
+  // 5th service were unreachable, so a category now opens on its own screen.
+  const [mobileCat, setMobileCat] = useState<string | null>(null);
+  const openMobilePanel = (panel: typeof mobilePanel) => { setMobilePanel(panel); setMobileCat(null); };
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -422,7 +427,7 @@ export default function SharedNavBar({
       >
         <div className="flex items-center justify-between px-8 md:px-14 py-3 gap-4 lg:gap-6">
           {/* Logo */}
-          <button onClick={() => handleNavigate("home")} className="h-16 lg:h-20 xl:h-24 shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
+          <button onClick={() => handleNavigate("home")} className="h-11 lg:h-[52px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
             <Logo light />
           </button>
 
@@ -622,7 +627,7 @@ export default function SharedNavBar({
           </div>
 
           {/* Mobile hamburger */}
-          <button className="lg:hidden p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); setMobilePanel("root"); }}>
+          <button className="lg:hidden p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); openMobilePanel("root"); }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               {mobileOpen
                 ? <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
@@ -640,7 +645,7 @@ export default function SharedNavBar({
               <button onClick={() => handleNavigate("home")} className="h-14" style={{ background: "none", border: "none", cursor: "pointer" }}>
                 <Logo light />
               </button>
-              <button onClick={() => { setMobileOpen(false); setMobilePanel("root"); }} className="p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }}>
+              <button onClick={() => { setMobileOpen(false); openMobilePanel("root"); }} className="p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
                 </svg>
@@ -698,8 +703,9 @@ export default function SharedNavBar({
                   </motion.div>
                 )}
 
-                {/* Services — drill-in: all 5 protagonist services shown already expanded
-                    with their symptom sub-links, no tap-to-expand needed. */}
+                {/* Services — two mobile levels: the 5 services first, then one
+                    service's symptoms on its own screen. Everything expanded at
+                    once pushed the 4th and 5th service below the fold. */}
                 {mobilePanel === "services" && (
                   <motion.div
                     key="services"
@@ -709,63 +715,68 @@ export default function SharedNavBar({
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col"
                   >
-                    <MobileBackHeader title="Services" onBack={() => setMobilePanel("root")} />
-                    <div className="flex flex-col gap-5">
-                      {MEGA_MENU_SERVICES.map((cat) => {
-                        const Icon = cat.icon;
+                    {(() => {
+                      const cat = MEGA_MENU_SERVICES.find((c) => c.slug === mobileCat);
+
+                      if (cat) {
                         return (
-                          <div key={cat.label} style={{ borderLeft: "2px solid rgba(255,255,255,.1)" }}>
-                            <div className="pl-3 flex items-center gap-3 mb-2.5">
-                              <span className="flex items-center justify-center shrink-0" style={{ width: 24, height: 24 }}>
-                                {cat.iconImg
-                                  ? <img src={cat.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
-                                  : <Icon size={22} color="#fff" strokeWidth={2} />}
-                              </span>
-                              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff", fontWeight: 600 }}>
-                                {cat.label}
-                              </span>
-                            </div>
-                            <div className="pl-[50px] flex flex-col gap-2.5">
-                              <div className="flex flex-wrap gap-1.5">
-                                {cat.signs.slice(0, 5).map((symptom) => (
-                                  <button
-                                    key={symptom}
-                                    onClick={() => handleNavigate(signRoute(sign))}
-                                    className="text-left"
-                                    style={{
-                                      fontFamily: "'Inter',sans-serif",
-                                      fontSize: 12.5,
-                                      lineHeight: 1.2,
-                                      color: "rgba(255,255,255,.8)",
-                                      background: "rgba(10,11,20,.55)",
-                                      backdropFilter: "blur(6px)",
-                                      WebkitBackdropFilter: "blur(6px)",
-                                      border: "1px solid rgba(255,255,255,.15)",
-                                      borderRadius: 999,
-                                      padding: "6px 12px",
-                                      cursor: "pointer",
-                                    }}>
-                                    {symptom}
-                                  </button>
-                                ))}
-                              </div>
+                          <>
+                            <MobileBackHeader title={cat.label} onBack={() => setMobileCat(null)} />
+                            <div className="flex flex-col gap-1">
+                              {cat.signs.map((symptom) => (
+                                <button
+                                  key={symptom}
+                                  onClick={() => handleNavigate(signRoute(symptom))}
+                                  className="w-full py-3 pl-3 text-left"
+                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 14.5, lineHeight: 1.35, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                                  {symptom}
+                                </button>
+                              ))}
                               <button
                                 onClick={() => handleNavigate(`service/${cat.slug}`)}
-                                className="text-left"
+                                className="py-3 pl-3 mt-1 text-left"
                                 style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
                                 View {cat.label} →
                               </button>
                             </div>
-                          </div>
+                          </>
                         );
-                      })}
-                      <button
-                        onClick={() => handleNavigate("services-landing")}
-                        className="py-2.5 pl-3 text-left"
-                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                        All services →
-                      </button>
-                    </div>
+                      }
+
+                      return (
+                        <>
+                          <MobileBackHeader title="Services" onBack={() => setMobilePanel("root")} />
+                          <div className="flex flex-col gap-1">
+                            {MEGA_MENU_SERVICES.map((c) => {
+                              const Icon = c.icon;
+                              return (
+                                <button
+                                  key={c.slug}
+                                  onClick={() => c.signs.length ? setMobileCat(c.slug) : handleNavigate(`service/${c.slug}`)}
+                                  className="w-full flex items-center gap-3 py-3.5 pl-3 pr-2 text-left"
+                                  style={{ background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                                  <span className="flex items-center justify-center shrink-0" style={{ width: 24, height: 24 }}>
+                                    {c.iconImg
+                                      ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                                      : <Icon size={22} color="#fff" strokeWidth={2} />}
+                                  </span>
+                                  <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff", fontWeight: 600 }}>
+                                    {c.label}
+                                  </span>
+                                  {c.signs.length > 0 && <ChevronRight size={16} color="rgba(255,255,255,.4)" className="shrink-0" />}
+                                </button>
+                              );
+                            })}
+                            <button
+                              onClick={() => handleNavigate("services-landing")}
+                              className="py-3 pl-3 mt-1 text-left"
+                              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                              All services →
+                            </button>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </motion.div>
                 )}
 
@@ -855,6 +866,9 @@ export default function SharedNavBar({
                   </motion.div>
                 )}
 
+                {/* Problem Signs — same two levels as Services: the 4 categories
+                    first (photo cards, the visual cue the client asked for),
+                    then that category's signs on their own screen. */}
                 {mobilePanel === "problem-signs" && (
                   <motion.div
                     key="problem-signs"
@@ -864,48 +878,64 @@ export default function SharedNavBar({
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col"
                   >
-                    <MobileBackHeader title="Problem Signs" onBack={() => setMobilePanel("root")} />
-                    <div className="flex flex-col gap-1">
-                      {PROBLEM_SIGNS_CATEGORIES.map((cat) => (
-                        <div key={cat.id} className="flex flex-col gap-1 mb-3">
-                          <button
-                            onClick={() => handleNavigate(`problem-signs/${cat.id}`)}
-                            className="relative w-full overflow-hidden text-left"
-                            style={{ height: 110, background: "none", border: "1px solid rgba(255,255,255,.08)", padding: 0, cursor: "pointer" }}>
-                            <img src={cat.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
-                            <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.3) 70%)" }} />
-                            <span className="absolute inset-x-0 bottom-0 p-3 flex items-center gap-2"
-                              style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 15, color: "#fff" }}>
-                              {cat.iconImg && <img src={cat.iconImg} alt="" style={{ width: 20, height: 20, objectFit: "contain", filter: "brightness(0) invert(1)" }} />}
-                              {cat.label}
-                            </span>
-                          </button>
-                          <div className="flex flex-wrap gap-1.5">
-                            {cat.signs.map((sign) => (
+                    {(() => {
+                      const cat = PROBLEM_SIGNS_CATEGORIES.find((c) => c.id === mobileCat);
+
+                      if (cat) {
+                        return (
+                          <>
+                            <MobileBackHeader title={cat.label} onBack={() => setMobileCat(null)} />
+                            <div className="flex flex-col gap-1">
+                              {cat.signs.map((sign) => (
+                                <button
+                                  key={sign}
+                                  onClick={() => handleNavigate(signRoute(sign))}
+                                  className="w-full py-3 pl-3 text-left"
+                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 14.5, lineHeight: 1.35, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                                  {sign}
+                                </button>
+                              ))}
                               <button
-                                key={sign}
-                                onClick={() => handleNavigate(signRoute(sign))}
-                                className="text-left"
-                                style={{
-                                  fontFamily: "'Inter',sans-serif",
-                                  fontSize: 12.5,
-                                  lineHeight: 1.2,
-                                  color: "rgba(255,255,255,.8)",
-                                  background: "rgba(10,11,20,.55)",
-                                  backdropFilter: "blur(6px)",
-                                  WebkitBackdropFilter: "blur(6px)",
-                                  border: "1px solid rgba(255,255,255,.15)",
-                                  borderRadius: 999,
-                                  padding: "6px 12px",
-                                  cursor: "pointer",
-                                }}>
-                                {sign}
+                                onClick={() => handleNavigate(`problem-signs/${cat.id}`)}
+                                className="py-3 pl-3 mt-1 text-left"
+                                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                                All {cat.label} signs →
+                              </button>
+                            </div>
+                          </>
+                        );
+                      }
+
+                      return (
+                        <>
+                          <MobileBackHeader title="Problem Signs" onBack={() => setMobilePanel("root")} />
+                          <div className="flex flex-col gap-2">
+                            {PROBLEM_SIGNS_CATEGORIES.map((c) => (
+                              <button
+                                key={c.id}
+                                onClick={() => setMobileCat(c.id)}
+                                className="relative w-full overflow-hidden text-left"
+                                style={{ height: 110, background: "none", border: "1px solid rgba(255,255,255,.08)", padding: 0, cursor: "pointer" }}>
+                                <img src={c.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.3) 70%)" }} />
+                                <span className="absolute inset-x-0 bottom-0 p-3 flex items-center gap-2"
+                                  style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 15, color: "#fff" }}>
+                                  {c.iconImg && <img src={c.iconImg} alt="" style={{ width: 20, height: 20, objectFit: "contain", filter: "brightness(0) invert(1)" }} />}
+                                  {c.label}
+                                </span>
+                                <ChevronRight size={18} color="rgba(255,255,255,.7)" className="absolute right-3 bottom-3.5" />
                               </button>
                             ))}
+                            <button
+                              onClick={() => handleNavigate("problem-signs")}
+                              className="py-3 pl-3 mt-1 text-left"
+                              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+                              All problem signs →
+                            </button>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        </>
+                      );
+                    })()}
                   </motion.div>
                 )}
               </>

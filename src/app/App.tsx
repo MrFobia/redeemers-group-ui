@@ -44,14 +44,7 @@ import imgSvcInsulation from "../assets/svc-insulation.jpg";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { openInspection } from "./components/InspectionModal";
 
-// ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";        // Redeemers Blue
-const DARK = "#0A0B14";     // Near Black
-const NAVY = "#0B1C4A";     // Deep Navy
-const CHAR = "#1E2235";     // Charcoal
-const SAND = "#C4AB6C";     // Sandstone Gold
-const CREAM = "#F7F5EF";    // Warm White
-const MUTED = "#6B6E85";    // Muted text
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE } from "./theme";
 
 // ─── Fade-up scroll animation wrapper ─────────────────────────────────────────
 function Reveal({
@@ -357,7 +350,13 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
         transition={{ duration: .7, delay: .3 }}
         className="absolute hidden xl:flex flex-col gap-6"
         style={{
-          top: "18%",
+          // Was pinned at 18%, floating well above the headline block; QA read
+          // the gap under it as the end of the page ("falso final"). Anchored to
+          // the vertical middle instead, less the stats bar at the bottom.
+          // Centring lives on `top`/`marginTop`, not `transform` — motion owns
+          // transform here for the slide-in and would drop a translate we set.
+          top: "50%",
+          marginTop: -206,
           right: "5%",
           width: "clamp(300px, 26vw, 400px)",
           background: "rgba(255,255,255,.18)",
@@ -556,13 +555,13 @@ const SIGNS = [
 
 function SignsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <section className="py-12 px-8 md:px-14" style={{ background: DARK }}>
+    <section className="py-20 px-8 md:px-14" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto flex flex-col gap-14">
         <Reveal>
-          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
+          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
             What are you dealing with?
           </p>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.8vw,62px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px" }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.8vw,62px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
             What are you dealing with?
           </h2>
         </Reveal>
@@ -989,22 +988,22 @@ function CaseCard({ c, i }: { c: typeof CASES[0]; i: number }) {
 
 function CaseStudiesSection() {
   return (
-    <section className="py-24 px-8 md:px-14" style={{ background: DARK }}>
+    <section className="py-24 px-8 md:px-14" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto">
         <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-4">
           <div>
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontSize: 11, fontWeight: 600, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontSize: 11, fontWeight: 600, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
               Featured Projects
             </p>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,4.5vw,64px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,4.5vw,64px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
               Real Homes, Real Results
             </h2>
           </div>
           <a href="#" className="group inline-flex items-center gap-2 shrink-0"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, borderBottom: `1px solid ${SAND}`, paddingBottom: 2 }}>
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, borderBottom: `1px solid ${B}`, paddingBottom: 2 }}>
             View all projects
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-1">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
         </Reveal>
@@ -1023,9 +1022,6 @@ function CaseStudiesSection() {
               {/* Content panel — bottom on mobile, left on desktop */}
               <div className="order-2 lg:order-1 relative flex flex-col justify-between w-full lg:w-[44%] lg:shrink-0 z-10 px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12"
                 style={{ background: "#053770" }}>
-                {/* Gold rule — right edge on desktop only */}
-                <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: `linear-gradient(to bottom, transparent 5%, ${SAND} 40%, ${SAND} 60%, transparent 95%)`, opacity: 0.5 }} />
 
                 <div>
                   <div className="flex items-center gap-3 mb-5 lg:mb-10">
@@ -1420,7 +1416,7 @@ function Footer() {
     { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         {/* Top row */}
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>

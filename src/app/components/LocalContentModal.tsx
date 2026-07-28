@@ -6,10 +6,7 @@ import { openInspection } from "./InspectionModal";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { KIND_META, type ContentItem } from "../data/localContent";
 
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
+import { B, DARK, CHAR, SAND, SURFACE } from "../theme";
 
 /**
  * One modal for every kind of local content.

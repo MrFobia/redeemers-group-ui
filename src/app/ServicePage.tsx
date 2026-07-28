@@ -10,15 +10,10 @@ import { FloatingSideNav } from "./components/FloatingSideNav";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { ProjectGallery } from "./components/ProjectGallery";
+import { PageHeroBanner } from "./components/PageHeroBanner";
 
 // ─── Brand Tokens (matches homepage) ─────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 
 // ─── Scroll-reveal wrapper ────────────────────────────────────────────────────
@@ -40,142 +35,45 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 
 // ─── Top bar ──────────────────────────────────────────────────────────────────
 
-// ─── Hero: Problem Signs Section ──────────────────────────────────────────────
-// Symptom copy comes from data/services.ts, which mirrors the approved sitemap
-// verbatim — never hardcode symptom labels here.
-function SymptomAccordion({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
-  const [open, setOpen] = useState<string>(svc.symptoms[0]?.id ?? "");
-  return (
-    <AccordionPrimitive.Root type="single" value={open} onValueChange={(v) => setOpen(v || "")}>
-      {svc.symptoms.map((s) => (
-        <AccordionPrimitive.Item key={s.id} value={s.id} style={{ marginBottom: 8 }}>
-          <AccordionPrimitive.Header>
-            <AccordionPrimitive.Trigger
-              className="w-full flex items-center justify-between px-4 transition-colors text-left group"
-              style={{
-                height: 45,
-                background: open === s.id ? B : "#fff",
-                borderRadius: open === s.id ? "4px 4px 0 0" : 4,
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, fontWeight: 700, color: open === s.id ? "#fff" : CHAR }}>
-                {s.q}
-              </span>
-              <ChevronDown
-                size={16}
-                className="shrink-0 ml-3 transition-transform duration-200 group-data-[state=open]:rotate-180"
-                color={open === s.id ? "rgba(255,255,255,.8)" : MUTED}
-              />
-            </AccordionPrimitive.Trigger>
-          </AccordionPrimitive.Header>
-          <AccordionPrimitive.Content className="overflow-hidden rdx-accordion-content">
-            <div className="px-4 py-3"
-              style={{
-                background: "rgba(26,82,168,0.25)",
-                border: `1px solid ${B}`,
-                borderTop: "none",
-                borderRadius: "0 0 4px 4px",
-              }}>
-              {/* Photo of the symptom — the panel has to show what it looks
-                  like, not just describe it. */}
-              <div className="flex gap-4 mb-4">
-                <div className="relative overflow-hidden shrink-0" style={{ width: 104, height: 78 }}>
-                  <ImageWithFallback src={s.img} alt={s.q} className="absolute inset-0 w-full h-full object-cover" />
-                </div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#fff", lineHeight: 1.7, margin: 0 }}>{s.a}</p>
-              </div>
-              <button
-                onClick={() => onNavigate?.("problem-sign-inner")}
-                className="inline-flex items-center gap-1.5 transition-opacity hover:opacity-85"
-                style={{
-                  background: SAND, color: DARK, fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700,
-                  padding: "9px 16px", border: "none", cursor: "pointer",
-                }}
-              >
-                See full solution
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </AccordionPrimitive.Content>
-        </AccordionPrimitive.Item>
-      ))}
-    </AccordionPrimitive.Root>
-  );
-}
-
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+// One banner treatment across the secondary pages. The symptom list used to
+// live here as an accordion *and* again as cards in ProblemSignsSection — the
+// team called that out as redundant, so the symptoms now live in one place and
+// the hero just sets up the service and the first action.
 function HeroSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
   return (
-    <section
-      id="overview"
-      className="relative w-full overflow-hidden"
-      style={{ minHeight: 680 }}
-    >
-      {/* Background image */}
-      <img
-        src={svc.heroImg}
-        alt={svc.name}
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-      {/* Gradient overlay — dark left, fades right */}
-      <div
-        className="absolute inset-0"
-        style={{ background: "linear-gradient(120.41deg, rgba(10,11,20,0.88) 8.49%, rgba(10,11,20,0.55) 54.15%, rgba(10,11,20,0.20) 91.51%)" }}
-      />
-
-      {/* Content */}
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-20 lg:py-28">
-        <div style={{ maxWidth: 587 }}>
-
-          {/* Eyebrow */}
-          <div className="flex items-center gap-3 mb-8">
-            <span className="flex items-center justify-center shrink-0" style={{ width: 34, height: 34 }}>
-              {svc.iconImg
-                ? <img src={svc.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
-                : <Building2 size={30} color="#fff" strokeWidth={1.8} />}
-            </span>
-            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}>
-              {svc.name}
-            </span>
-          </div>
-
-          {/* H1 */}
-          <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(38px,4.5vw,68px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 32, whiteSpace: "pre-line" }}>
-            {svc.heroHeadline}
-          </h1>
-
-          {/* Accordion — services with no Problem Signs node in the sitemap
-              (Commercial) get a direct CTA instead of a symptom list. */}
-          {svc.symptoms.length > 0 ? (
-            <>
-              <SymptomAccordion svc={svc} onNavigate={onNavigate} />
-              <p style={{ marginTop: 20, fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)" }}>
-                {"Can't find your symptom? "}
-                <button
-                  onClick={() => onNavigate?.("problem-signs")}
-                  style={{ color: "#fff", fontWeight: 600, background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 13 }}
-                >
-                  View all problem signs →
-                </button>
-              </p>
-            </>
-          ) : (
+    <div id="overview">
+      <PageHeroBanner
+        image={svc.heroImg}
+        imageAlt={svc.name}
+        eyebrow={svc.name}
+        title={svc.heroHeadline}
+        minHeight={560}
+      >
+        <div className="flex items-center gap-4 flex-wrap">
+          <button
+            onClick={() => openInspection()}
+            className="group inline-flex items-center gap-3 px-8 py-4"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", border: "none", cursor: "pointer" }}
+          >
+            {svc.symptoms.length > 0 ? "Schedule free inspection" : "Request a bid"}
+            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+          </button>
+          {svc.symptoms.length > 0 && (
             <button
-              onClick={() => openInspection()}
-              className="group inline-flex items-center gap-3 px-8 py-4"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", border: "none", cursor: "pointer" }}
+              onClick={() => document.getElementById("signs")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              className="px-8 py-4 transition-all hover:bg-white/10"
+              style={{ border: "1px solid rgba(255,255,255,.3)", background: "none", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 15, color: "rgba(255,255,255,.85)", cursor: "pointer" }}
             >
-              Request a bid
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              See the problem signs
             </button>
           )}
         </div>
-      </div>
-    </section>
+      </PageHeroBanner>
+    </div>
   );
 }
+
 
 // ─── Solutions / Services Grid ────────────────────────────────────────────────
 function SolutionCard({ sol, size }: { sol: Solution; size: "lg" | "sm" | "wide" }) {
@@ -185,37 +83,37 @@ function SolutionCard({ sol, size }: { sol: Solution; size: "lg" | "sm" | "wide"
 
   const body = (
     <div className="flex flex-col flex-1 justify-center" style={{ padding: size === "wide" ? "48px 40px 52px" : pad }}>
-      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: size === "sm" ? 12 : 16 }}>
+      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: size === "sm" ? 12 : 16 }}>
         Solution
       </span>
-      <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: titleSize, color: "#fff", lineHeight: 1.1, letterSpacing: "-0.5px", margin: "0 0 12px" }}>
+      <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: titleSize, color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", margin: "0 0 12px" }}>
         {sol.title}
       </h3>
       {/* Sitemap flags a couple of concrete services as not yet launched — the
           label has to survive on the page, not just in the sitemap. */}
       {sol.note && (
         <span className="inline-flex items-center w-fit px-2.5 py-1 mb-3"
-          style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: SAND, background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.25)", letterSpacing: ".3px" }}>
+          style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: B, background: "rgba(26,82,168,.07)", border: "1px solid rgba(26,82,168,.22)", letterSpacing: ".3px" }}>
           {sol.note}
         </span>
       )}
-      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: size === "sm" ? 14 : 15, color: "rgba(255,255,255,.55)", lineHeight: 1.75, margin: "0 0 24px", maxWidth: size === "wide" ? 480 : undefined }}>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: size === "sm" ? 14 : 15, color: MUTED, lineHeight: 1.75, margin: "0 0 24px", maxWidth: size === "wide" ? 480 : undefined }}>
         {sol.blurb}
       </p>
       <button
         onClick={() => openInspection()}
         className="inline-flex items-center gap-2"
-        style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, background: "none", border: "none", padding: 0, cursor: "pointer", width: "fit-content" }}
+        style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", padding: 0, cursor: "pointer", width: "fit-content" }}
       >
         Schedule now
-        <ChevronRight size={16} color={SAND} />
+        <ChevronRight size={16} color={B} />
       </button>
     </div>
   );
 
   if (size === "wide") {
     return (
-      <div className="flex flex-col md:flex-row overflow-hidden h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", minHeight: 340 }}>
+      <div className="flex flex-col md:flex-row overflow-hidden h-full" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, minHeight: 340 }}>
         {body}
         <div className="relative overflow-hidden shrink-0 w-full md:w-[45%] h-56 md:h-auto" style={{ minHeight: 280 }}>
           <ImageWithFallback src={sol.img} alt={sol.title} className="absolute inset-0 w-full h-full object-cover" />
@@ -225,7 +123,7 @@ function SolutionCard({ sol, size }: { sol: Solution; size: "lg" | "sm" | "wide"
   }
 
   return (
-    <div className="flex flex-col overflow-hidden h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+    <div className="flex flex-col overflow-hidden h-full" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
       <div className="relative overflow-hidden shrink-0" style={{ height: imgH }}>
         <ImageWithFallback src={sol.img} alt={sol.title} className="absolute inset-0 w-full h-full object-cover" />
       </div>
@@ -252,18 +150,18 @@ function SolutionsSection({ svc }: { svc: ServiceDef }) {
   const rows = packRows(svc.solutions);
 
   return (
-    <section id="solutions" style={{ background: DARK }} className="py-20 lg:py-28">
+    <section id="solutions" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header */}
         <Reveal className="mb-14">
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-            <span style={{ display: "block", width: 32, height: 2, background: SAND, flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
+            <span style={{ display: "block", width: 32, height: 2, background: B, flexShrink: 0 }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>
               {svc.name}
             </span>
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,58px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", margin: 0 }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,58px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", margin: 0 }}>
             {svc.solutionsHeadline}
           </h2>
         </Reveal>
@@ -302,13 +200,13 @@ function SolutionsSection({ svc }: { svc: ServiceDef }) {
 function ProblemSignsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
   if (!svc.symptoms.length) return null;
   return (
-    <section id="signs" style={{ background: CHAR }} className="py-20 lg:py-28">
+    <section id="signs" style={{ background: SURFACE.alt }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="text-center mb-16">
-          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
+          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
             Problem Signs
           </p>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
             What are you noticing?
           </h2>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED, maxWidth: 560, margin: "0 auto" }}>
@@ -319,7 +217,7 @@ function ProblemSignsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {svc.symptoms.map((s, i) => (
             <Reveal key={s.id} delay={(i % 3) * 0.08}>
-              <div className="group h-full flex flex-col" style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="group h-full flex flex-col" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* Photo first: homeowners recognize the problem by sight before
                     they read the label. */}
                 <div className="relative overflow-hidden shrink-0" style={{ height: 190 }}>
@@ -331,10 +229,10 @@ function ProblemSignsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.55) 0%, rgba(10,11,20,0) 55%)" }} />
                 </div>
                 <div className="flex flex-col flex-1 px-7 py-7">
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 20, color: "#fff", lineHeight: 1.25, marginBottom: 12 }}>
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 20, color: CHAR, lineHeight: 1.25, marginBottom: 12 }}>
                     {s.q}
                   </h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.55)", lineHeight: 1.75, marginBottom: 22, flex: 1 }}>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.75, marginBottom: 22, flex: 1 }}>
                     {s.a}
                   </p>
                   <div className="flex items-center gap-4 flex-wrap">
@@ -349,10 +247,10 @@ function ProblemSignsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?
                     <button
                       onClick={() => onNavigate?.("problem-sign-inner")}
                       className="group inline-flex items-center gap-1.5"
-                      style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                      style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", padding: 0, cursor: "pointer" }}
                     >
                       See full solution
-                      <ChevronRight size={14} color={SAND} className="transition-transform group-hover:translate-x-0.5" />
+                      <ChevronRight size={14} color={B} className="transition-transform group-hover:translate-x-0.5" />
                     </button>
                   </div>
                 </div>
@@ -373,9 +271,6 @@ function CostRow({ item, i }: { item: CostRange; i: number }) {
   return (
     <div className="flex items-center justify-between gap-6" style={{ padding: "18px 0", borderBottom: "1px solid rgba(10,11,20,.1)" }}>
       <div className="flex items-center gap-4">
-        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 12, color: SAND, flexShrink: 0 }}>
-          {String(i + 1).padStart(2, "0")}
-        </span>
         <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: CHAR }}>{item.label}</span>
       </div>
       <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 16, color: B, whiteSpace: "nowrap" }}>{item.range}</span>
@@ -500,9 +395,6 @@ function FaqSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: str
                     className="w-full flex items-center gap-5 text-left group transition-colors"
                     style={{ background: "none", border: "none", cursor: "pointer", padding: "22px 0" }}
                   >
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 12, color: SAND, flexShrink: 0, width: 22 }}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 17, color: CHAR, flex: 1, paddingRight: 16, lineHeight: 1.4 }}>
                       {faq.q}
                     </span>
@@ -531,15 +423,8 @@ function FaqSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: str
 // ─── CTA Banner ───────────────────────────────────────────────────────────────
 function CtaBanner({ svc }: { svc: ServiceDef }) {
   return (
-    <section className="relative overflow-hidden" style={{ background: NAVY }}>
-      {/* BG image overlay */}
+    <section className="relative overflow-hidden" style={{ background: SURFACE.cta }}>
       <div className="absolute inset-0 z-0">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1541205646242-30258c7485b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
-          alt={svc.ctaHeadline.replace("\n", " ")}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0" style={{ background: "rgba(11,28,74,.82)" }} />
         {/* Grain */}
         <div className="absolute inset-0 opacity-[0.05]"
           style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
@@ -585,7 +470,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="lg:w-72 shrink-0">
@@ -711,7 +596,7 @@ export default function ServicePage({ onBack, onNavigate, scrollTo, slug }: { on
           its internal anchors, so per the client's alternative it becomes a
           floating rail that follows the scroll instead of stacking under the header. */}
       <FloatingSideNav tabs={tabs} active={activeTab} onChange={scrollToSection} />
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: "#0A0B14" }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

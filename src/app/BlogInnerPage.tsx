@@ -8,12 +8,7 @@ import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -315,20 +310,20 @@ function ArticleBody() {
 // ─── 3. RELATED POSTS ─────────────────────────────────────────────────────────
 function RelatedPostsSection() {
   return (
-    <section className="py-16 lg:py-20" style={{ background: DARK }}>
+    <section className="py-16 lg:py-20" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex items-end justify-between gap-4 mb-10 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div style={{ width: 8, height: 2, background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Blog</span>
+              <div style={{ width: 8, height: 2, background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>Blog</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
               Related posts
             </h2>
           </div>
           <button className="group inline-flex items-center gap-2 shrink-0"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
             View all
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
               <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -339,29 +334,29 @@ function RelatedPostsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {RELATED_POSTS.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.06}>
-              <div className="flex flex-col group cursor-pointer h-full" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="flex flex-col group cursor-pointer h-full" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 <div className="relative overflow-hidden" style={{ aspectRatio: "405/270" }}>
                   <ImageWithFallback src={p.img} alt={p.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute top-4 left-4">
                     <span className="px-2.5 py-1"
-                      style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>
+                      style={{ background: "rgba(26,82,168,.18)", border: "1px solid rgba(26,82,168,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
                       {p.cat}
                     </span>
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-2 mb-3">
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.35)" }}>{p.readTime}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)" }}>{p.readTime}</span>
                   </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: "#fff", lineHeight: 1.25, marginBottom: 10, flex: 1 }}>
+                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: CHAR, lineHeight: 1.25, marginBottom: 10, flex: 1 }}>
                     {p.title}
                   </h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.4)", lineHeight: 1.65, marginBottom: 16 }}>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.4)", lineHeight: 1.65, marginBottom: 16 }}>
                     {p.desc}
                   </p>
                   <div className="flex items-center gap-2 self-start group/btn">
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}>Read more</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: B }}>Read more</span>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover/btn:translate-x-0.5">
                       <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -379,14 +374,14 @@ function RelatedPostsSection() {
 // ─── 4. RELATED SYMPTOMS ──────────────────────────────────────────────────────
 function RelatedSymptomsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <section className="py-16 lg:py-20" style={{ background: DARK }}>
+    <section className="py-16 lg:py-20" style={{ background: SURFACE.alt }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="mb-10">
           <div className="flex items-center gap-2 mb-3">
-            <div style={{ width: 20, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Follow also</span>
+            <div style={{ width: 20, height: 2, background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>Follow also</span>
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px" }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
             Related symptoms
           </h2>
         </Reveal>
@@ -394,16 +389,16 @@ function RelatedSymptomsSection({ onNavigate }: { onNavigate: (p: string) => voi
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {SYMPTOMS.map((s, i) => (
             <Reveal key={s.title} delay={i * 0.08}>
-              <div className="flex flex-col p-7" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.5vw,38px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-0.5px", marginBottom: 20 }}>
+              <div className="flex flex-col p-7" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.5vw,38px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-0.5px", marginBottom: 20 }}>
                   {s.title}
                 </h3>
                 <div className="flex flex-col gap-2">
                   {s.items.map((item) => (
                     <button key={item} onClick={() => onNavigate("problem-sign-inner")}
                       className="group flex items-center justify-between px-4 py-3 text-left transition-all hover:bg-white/5"
-                      style={{ background: "rgba(255,255,255,.04)", border: "none", cursor: "pointer" }}>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)", lineHeight: 1.4 }}>{item}</span>
+                      style={{ background: "rgba(10,11,20,.04)", border: "none", cursor: "pointer" }}>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.7)", lineHeight: 1.4 }}>{item}</span>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 opacity-40 group-hover:opacity-100 transition-opacity ml-3">
                         <path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
@@ -426,25 +421,25 @@ function JobStoriesSection() {
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   return (
-    <section className="py-16 lg:py-20 overflow-hidden" style={{ background: CHAR }}>
+    <section className="py-16 lg:py-20 overflow-hidden" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 mb-10">
         <Reveal className="flex items-end justify-between gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div style={{ width: 20, height: 2, background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Media</span>
+              <div style={{ width: 20, height: 2, background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>Media</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
               Related job stories
             </h2>
           </div>
           <div className="flex gap-3 shrink-0">
             <button onClick={scrollPrev} className="w-11 h-11 flex items-center justify-center transition-colors hover:bg-white/10"
-              style={{ border: "1px solid rgba(255,255,255,.2)", background: "none", cursor: "pointer" }}>
+              style={{ border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
             <button onClick={scrollNext} className="w-11 h-11 flex items-center justify-center transition-colors hover:bg-white/10"
-              style={{ border: "1px solid rgba(255,255,255,.2)", background: "none", cursor: "pointer" }}>
+              style={{ border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
           </div>
@@ -455,7 +450,7 @@ function JobStoriesSection() {
         <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
           {JOB_STORIES.map((s) => (
             <div key={s.title} className="shrink-0 w-[min(80vw,440px)] group cursor-pointer"
-              style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
+              style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
               {/* Video thumb */}
               <div className="relative overflow-hidden" style={{ aspectRatio: "440/280" }}>
                 <ImageWithFallback src={s.img} alt={s.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -468,14 +463,14 @@ function JobStoriesSection() {
                 {/* Tag */}
                 <div className="absolute top-4 left-4">
                   <span className="px-2.5 py-1"
-                    style={{ background: "rgba(196,171,108,.2)", border: "1px solid rgba(196,171,108,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>
+                    style={{ background: "rgba(26,82,168,.2)", border: "1px solid rgba(26,82,168,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
                     {s.tag}
                   </span>
                 </div>
               </div>
               <div className="p-5">
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: "#fff", marginBottom: 4 }}>{s.title}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)" }}>{s.loc}</p>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: CHAR, marginBottom: 4 }}>{s.title}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.4)" }}>{s.loc}</p>
               </div>
             </div>
           ))}
@@ -639,7 +634,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     Contact: ["Free Inspection", "1-833-584-1049", "Service Areas", "Financing"],
   };
   return (
-    <footer style={{ background: DARK, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-16 px-8 md:px-14">
+    <footer style={{ background: SURFACE.footer, borderTop: "1px solid rgba(255,255,255,.06)" }} className="py-16 px-8 md:px-14">
       <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
@@ -689,12 +684,12 @@ export default function BlogInnerPage({
   onNavigate: (p: string) => void;
 }) {
   return (
-    <div className="w-full min-h-screen" style={{ background: DARK }}>
+    <div className="w-full min-h-screen" style={{ background: SURFACE.base }}>
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="Resources" />
       </div>
-      <div className="pt-[81px] md:pt-[148px]">
+      <div className="pt-[68px] md:pt-[111px]">
         <HeroSection onBack={onBack} onNavigate={onNavigate} />
         <ArticleBody />
         <RelatedPostsSection />

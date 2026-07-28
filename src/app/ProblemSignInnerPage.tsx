@@ -23,13 +23,7 @@ import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Reveal wrapper ───────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -105,47 +99,55 @@ const FAQS = [
 ];
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
+// Split hero: the problem on the left, a photo of it on the right. Replaces the
+// text-over-photo version — the client's standing note is that copy laid over a
+// picture makes both harder to read.
 function HeroSection({ sign }: { sign: ProblemSignDef }) {
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: 560 }}>
-      <ImageWithFallback
-        src={getSignImage(sign)}
-        alt={sign.label}
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.92) 0%,rgba(10,11,20,0.72) 55%,rgba(10,11,20,0.45) 100%)" }} />
-      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
+    <section className="relative w-full overflow-hidden" style={{ background: DARK }}>
+      <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 lg:min-h-[560px]">
 
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-32">
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
-          {getService(sign.service).name}
-        </motion.p>
-        <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,64px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px", marginBottom: 24, maxWidth: 700 }}>
-          {sign.label}
-        </motion.h1>
-        <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }}
-          style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.65)", lineHeight: 1.75, maxWidth: 560, marginBottom: 36 }}>
-          {getSignSummary(sign)}
-        </motion.p>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.58 }}
-          className="flex items-center gap-4 flex-wrap">
-          <a href="#" className="group relative overflow-hidden px-7 py-4 inline-flex items-center gap-3"
-            style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: NAVY }}>
-            <span className="relative z-10">Schedule Free Inspection</span>
-            <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" color={NAVY} />
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
-          </a>
-          <a href="tel:+18335841049" className="px-7 py-4 inline-flex items-center gap-2 transition-all hover:bg-white/10"
-            style={{ border: "1px solid rgba(255,255,255,.35)", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 15, color: "rgba(255,255,255,.85)" }}>
-            Call local team
-          </a>
-        </motion.div>
+        {/* Photo — first on mobile so you can match what you're seeing at a glance */}
+        <div className="relative order-1 lg:order-2 h-56 sm:h-72 lg:h-auto overflow-hidden">
+          <ImageWithFallback
+            src={getSignImage(sign)}
+            alt={sign.label}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
+
+        <div className="order-2 lg:order-1 flex flex-col justify-center px-8 md:px-14 py-14 lg:py-20">
+          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
+            style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
+            {getService(sign.service).name}
+          </motion.p>
+          <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,3.8vw,54px)", color: "#fff", lineHeight: 1.02, letterSpacing: "-1.5px", marginBottom: 20 }}>
+            {sign.label}
+          </motion.h1>
+          <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }}
+            style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(255,255,255,.65)", lineHeight: 1.75, maxWidth: 520, marginBottom: 32 }}>
+            {getSignSummary(sign)}
+          </motion.p>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.58 }}
+            className="flex items-center gap-4 flex-wrap">
+            <a href="#" className="group relative overflow-hidden px-7 py-4 inline-flex items-center gap-3"
+              style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: NAVY }}>
+              <span className="relative z-10">Schedule Free Inspection</span>
+              <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" color={NAVY} />
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
+            </a>
+            <a href="tel:+18335841049" className="px-7 py-4 inline-flex items-center gap-2 transition-all hover:bg-white/10"
+              style={{ border: "1px solid rgba(255,255,255,.35)", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 15, color: "rgba(255,255,255,.85)" }}>
+              Call local team
+            </a>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 }
+
 
 // ─── Diagnostic Section (76:6107) ────────────────────────────────────────────
 const RELATED_TAGS = ["I smell mold", "Wood rot", "Energy loss", "Pests / vapor"];
@@ -268,9 +270,6 @@ function DiagnosticSection() {
                       onFocus={() => setActiveRow(symptom)}
                     >
                       <span className="flex items-baseline gap-3 min-w-0">
-                        <span style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: on ? B : "rgba(10,11,20,.25)", letterSpacing: 1 }}>
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
                         <span style={{ fontFamily: INTER, fontSize: 15, lineHeight: 1.45, color: on ? CHAR : INK, fontWeight: on ? 600 : 400 }}>
                           {symptom}
                         </span>
@@ -729,17 +728,17 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
   const causes = mech.causes;
 
   return (
-    <section style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }} className="py-16 lg:py-24">
+    <section style={{ background: SURFACE.base, borderBottom: `1px solid ${ON_LIGHT.hairline}` }} className="py-16 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Drawing-sheet header rule */}
         <Reveal>
           <div className="flex items-center justify-between pb-3 mb-12 lg:mb-16 flex-wrap gap-2"
-            style={{ borderBottom: "1px solid rgba(255,255,255,.12)" }}>
-            <span style={{ fontFamily: MONO, fontSize: 10.5, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>
+            style={{ borderBottom: "1px solid rgba(10,11,20,.12)" }}>
+            <span style={{ fontFamily: MONO, fontSize: 10.5, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
               Section A–A · {mech.sheetTitle}
             </span>
-            <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(255,255,255,.3)", letterSpacing: 2, textTransform: "uppercase" }}>
+            <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.3)", letterSpacing: 2, textTransform: "uppercase" }}>
               {mech.sheetSystem}
             </span>
           </div>
@@ -750,9 +749,9 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
           {/* ── Left: the explanation, drawn ── */}
           <div className="lg:col-span-6">
             <Reveal>
-              <h2 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(36px,4.4vw,58px)", color: "#fff", lineHeight: 0.98, letterSpacing: "-1.6px", marginBottom: 28 }}>
+              <h2 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(36px,4.4vw,58px)", color: CHAR, lineHeight: 0.98, letterSpacing: "-1.6px", marginBottom: 28 }}>
                 {sign.headline[0]}<br />{sign.headline[1]}<br />
-                <span style={{ color: SAND }}>{sign.headline[2]}</span>
+                <span style={{ color: B }}>{sign.headline[2]}</span>
               </h2>
             </Reveal>
 
@@ -761,7 +760,7 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div style={{ fontFamily: INTER, fontSize: 16.5, color: "rgba(255,255,255,.62)", lineHeight: 1.8, maxWidth: 520 }}>
+              <div style={{ fontFamily: INTER, fontSize: 16.5, color: "rgba(10,11,20,.62)", lineHeight: 1.8, maxWidth: 520 }}>
                 {sign.lede.map((para, i) => (
                   <p key={i} style={{ marginBottom: i < sign.lede.length - 1 ? 16 : 0 }}>{para}</p>
                 ))}
@@ -788,19 +787,19 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
           {/* ── Right: root causes stacked by elevation ── */}
           <Reveal delay={0.08} className="lg:col-span-6">
             <div className="flex items-baseline justify-between mb-5">
-              <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(255,255,255,.4)", letterSpacing: 2, textTransform: "uppercase" }}>
+              <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.4)", letterSpacing: 2, textTransform: "uppercase" }}>
                 Root causes
               </span>
-              <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(255,255,255,.25)", letterSpacing: 2 }}>
-                {String(causes.length).padStart(2, "0")} · MOST COMMON
+              <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.25)", letterSpacing: 2 }}>
+                {causes.length} most common
               </span>
             </div>
 
-            <div style={{ borderTop: "1px solid rgba(255,255,255,.12)" }}>
+            <div style={{ borderTop: "1px solid rgba(10,11,20,.12)" }}>
               {causes.map((cause, i) => {
                 const on = open === i;
                 return (
-                  <div key={cause.title} style={{ borderBottom: "1px solid rgba(255,255,255,.09)" }}>
+                  <div key={cause.title} style={{ borderBottom: "1px solid rgba(10,11,20,.09)" }}>
                     <button
                       onClick={() => setOpen(on ? -1 : i)}
                       onMouseEnter={() => setOpen(i)}
@@ -809,30 +808,30 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
                     >
                       {/* Elevation tick — reads as a dimension leader, not a badge */}
                       <span className="shrink-0 flex flex-col items-start pt-1" style={{ width: 66 }}>
-                        <span style={{ fontFamily: MONO, fontSize: 11, color: on ? SAND : "rgba(255,255,255,.38)", letterSpacing: 0.5, transition: "color .2s" }}>
+                        <span style={{ fontFamily: MONO, fontSize: 11, color: on ? B : "rgba(10,11,20,.38)", letterSpacing: 0.5, transition: "color .2s" }}>
                           {cause.elev}
                         </span>
-                        <span className="mt-2 h-px w-full" style={{ background: on ? SAND : "rgba(255,255,255,.15)", transition: "background .2s" }} />
+                        <span className="mt-2 h-px w-full" style={{ background: on ? B : "rgba(10,11,20,.15)", transition: "background .2s" }} />
                       </span>
 
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-3 flex-wrap">
-                          <span style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: on ? "#fff" : "rgba(255,255,255,.72)", letterSpacing: "-0.4px", transition: "color .2s" }}>
+                          <span style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: on ? CHAR : "rgba(10,11,20,.72)", letterSpacing: "-0.4px", transition: "color .2s" }}>
                             {cause.title}
                           </span>
-                          <span className="px-2 py-0.5" style={{ fontFamily: MONO, fontSize: 9.5, color: on ? SAND : "rgba(255,255,255,.35)", letterSpacing: 1.5, textTransform: "uppercase", border: `1px solid ${on ? "rgba(196,171,108,.45)" : "rgba(255,255,255,.14)"}`, transition: "all .2s" }}>
+                          <span className="px-2 py-0.5" style={{ fontFamily: MONO, fontSize: 9.5, color: on ? B : "rgba(10,11,20,.35)", letterSpacing: 1.5, textTransform: "uppercase", border: `1px solid ${on ? "rgba(26,82,168,.45)" : "rgba(10,11,20,.14)"}`, transition: "all .2s" }}>
                             {cause.tag}
                           </span>
                         </span>
-                        <span className="block mt-1.5" style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(255,255,255,.3)", letterSpacing: 1.2, textTransform: "uppercase" }}>
+                        <span className="block mt-1.5" style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.3)", letterSpacing: 1.2, textTransform: "uppercase" }}>
                           {cause.layer}
                         </span>
                       </span>
 
                       {/* Plus/minus drawn as a hairline, no icon library look */}
                       <span className="relative shrink-0 mt-2" style={{ width: 14, height: 14 }}>
-                        <span className="absolute" style={{ top: 6.5, left: 0, width: 14, height: 1.4, background: on ? SAND : "rgba(255,255,255,.45)" }} />
-                        <span className="absolute transition-transform duration-300" style={{ top: 0, left: 6.3, width: 1.4, height: 14, background: on ? SAND : "rgba(255,255,255,.45)", transform: on ? "scaleY(0)" : "scaleY(1)" }} />
+                        <span className="absolute" style={{ top: 6.5, left: 0, width: 14, height: 1.4, background: on ? B : "rgba(10,11,20,.45)" }} />
+                        <span className="absolute transition-transform duration-300" style={{ top: 0, left: 6.3, width: 1.4, height: 14, background: on ? B : "rgba(10,11,20,.45)", transform: on ? "scaleY(0)" : "scaleY(1)" }} />
                       </span>
                     </button>
 
@@ -843,7 +842,7 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
                       style={{ overflow: "hidden" }}
                     >
                       <div className="pb-7 pl-0 sm:pl-[86px]">
-                        <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.7, marginBottom: 16, maxWidth: 460 }}>
+                        <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(10,11,20,.6)", lineHeight: 1.7, marginBottom: 16, maxWidth: 460 }}>
                           {cause.desc}
                         </p>
                         <div className="relative overflow-hidden" style={{ height: 190 }}>
@@ -870,7 +869,7 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
             </div>
 
             <Reveal delay={0.12}>
-              <p className="mt-6" style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(255,255,255,.28)", letterSpacing: 1.4, lineHeight: 1.7 }}>
+              <p className="mt-6" style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.28)", letterSpacing: 1.4, lineHeight: 1.7 }}>
                 {mech.footnote}
               </p>
             </Reveal>
@@ -984,15 +983,15 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
 function FaqSection() {
   const [open, setOpen] = useState<string>("");
   return (
-    <section style={{ background: DARK }} className="py-20 lg:py-28">
+    <section style={{ background: SURFACE.base }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-6 h-[1px]" style={{ background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>FAQs</span>
-            <div className="w-6 h-[1px]" style={{ background: SAND }} />
+            <div className="w-6 h-[1px]" style={{ background: B }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>FAQs</span>
+            <div className="w-6 h-[1px]" style={{ background: B }} />
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
             Sagging floors frequently asked questions
           </h2>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED }}>
@@ -1010,16 +1009,16 @@ function FaqSection() {
           <AccordionPrimitive.Root type="single" value={open} onValueChange={(v) => setOpen(v)} collapsible>
             {FAQS.map((faq, i) => (
               <AccordionPrimitive.Item key={i} value={String(i)} className="mb-3 overflow-hidden"
-                style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+                style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 <AccordionPrimitive.Header>
                   <AccordionPrimitive.Trigger
                     className="w-full flex items-center justify-between px-6 py-5 text-left group"
                     style={{ background: "none", border: "none", cursor: "pointer" }}>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 17, color: "#fff", flex: 1, paddingRight: 16, lineHeight: 1.4 }}>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 17, color: CHAR, flex: 1, paddingRight: 16, lineHeight: 1.4 }}>
                       {faq.q}
                     </span>
                     <div className="shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-200 group-data-[state=open]:rotate-45"
-                      style={{ border: `1.5px solid ${open === String(i) ? SAND : "rgba(255,255,255,.2)"}`, color: open === String(i) ? SAND : MUTED }}>
+                      style={{ border: `1.5px solid ${open === String(i) ? B : "rgba(10,11,20,.2)"}`, color: open === String(i) ? B : MUTED }}>
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
                         <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
                       </svg>
@@ -1028,8 +1027,8 @@ function FaqSection() {
                 </AccordionPrimitive.Header>
                 <AccordionPrimitive.Content className="overflow-hidden rdx-content">
                   <div className="px-6 pb-6 pt-1">
-                    <div className="h-px mb-4" style={{ background: "rgba(255,255,255,.06)" }} />
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.8 }}>{faq.a}</p>
+                    <div className="h-px mb-4" style={{ background: "rgba(10,11,20,.06)" }} />
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.6)", lineHeight: 1.8 }}>{faq.a}</p>
                   </div>
                 </AccordionPrimitive.Content>
               </AccordionPrimitive.Item>
@@ -1044,14 +1043,8 @@ function FaqSection() {
 // ─── CTA ─────────────────────────────────────────────────────────────────────
 function CtaSection() {
   return (
-    <section className="relative overflow-hidden" style={{ background: NAVY }}>
+    <section className="relative overflow-hidden" style={{ background: SURFACE.cta }}>
       <div className="absolute inset-0 z-0">
-        <ImageWithFallback
-          src={imgFloor03}
-          alt="Ready to fix your floors"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0" style={{ background: "rgba(11,28,74,.84)" }} />
         <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
       </div>
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-28 text-center">
@@ -1094,7 +1087,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="lg:w-72 shrink-0">
@@ -1147,7 +1140,7 @@ export default function ProblemSignInnerPage({ onBack, onNavigate, slug }: { onB
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Problem Signs" />
       </div>
 
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: "#0A0B14" }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2 flex-wrap">

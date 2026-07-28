@@ -6,10 +6,7 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { openInspection } from "./InspectionModal";
 
 // ─── Brand tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
+import { B, DARK, CHAR, SAND, SURFACE } from "../theme";
 
 // ─── Gallery data ─────────────────────────────────────────────────────────────
 const U = (id: string, w = 1200) => `https://images.unsplash.com/${id}?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=${w}`;
@@ -354,10 +351,6 @@ function GalleryCard({ item, index, onClick, featured = false }: {
 
       {/* Top: index + category */}
       <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
-        <span style={{
-          fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 11,
-          color: "rgba(255,255,255,.4)", letterSpacing: 2,
-        }}>{String(index + 1).padStart(2, "0")}</span>
         <motion.span
           initial={{ opacity: 0, y: -6 }}
           whileHover={{ opacity: 1, y: 0 }}

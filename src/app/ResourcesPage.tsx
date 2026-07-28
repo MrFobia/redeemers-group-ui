@@ -14,12 +14,7 @@ import { AnnouncementBar } from "./components/AnnouncementBar";
 import { ProjectGallery } from "./components/ProjectGallery";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -250,18 +245,18 @@ const RESOURCE_ITEMS = [
 
 function ResourcesDownloadSection() {
   return (
-    <section id="resources" style={{ background: DARK }} className="py-20 lg:py-24">
+    <section id="resources" style={{ background: SURFACE.base }} className="py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex items-end justify-between mb-14 flex-wrap gap-6">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-5 h-[2px]" style={{ background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Resources</span>
+              <div className="w-5 h-[2px]" style={{ background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>Resources</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
               Download what matters
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.5)", lineHeight: 1.7 }}>
               Checklists, guides, and maintenance plans to keep your home strong.
             </p>
           </div>
@@ -270,20 +265,20 @@ function ResourcesDownloadSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {RESOURCE_ITEMS.map((item, i) => (
             <Reveal key={item.title} delay={i * 0.07}>
-              <div className="group flex flex-col h-full p-7 transition-colors" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="group flex flex-col h-full p-7 transition-colors" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* Icon + pages */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="w-11 h-11 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.2)", border: "1px solid rgba(26,82,168,.3)" }}>
                     <FileText size={20} color={B} strokeWidth={1.5} />
                   </div>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(255,255,255,.3)", letterSpacing: 0.5 }}>{item.pages}</span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(10,11,20,.3)", letterSpacing: 0.5 }}>{item.pages}</span>
                 </div>
                 {/* Tag */}
-                <div className="inline-flex items-center px-2 py-0.5 mb-4 w-fit" style={{ background: "rgba(196,171,108,.12)", border: "1px solid rgba(196,171,108,.2)" }}>
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>PDF</span>
+                <div className="inline-flex items-center px-2 py-0.5 mb-4 w-fit" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.2)" }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>PDF</span>
                 </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.2, marginBottom: 10 }}>{item.title}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{item.desc}</p>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: CHAR, lineHeight: 1.2, marginBottom: 10 }}>{item.title}</h3>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{item.desc}</p>
                 <button className="group/btn inline-flex items-center gap-2 px-5 py-2.5 transition-opacity hover:opacity-85 w-fit"
                   style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff", border: "none", cursor: "pointer" }}>
                   <Download size={13} />
@@ -657,20 +652,20 @@ function JobStoryPreviewModal({ story, onClose, onPrev, onNext }: {
 function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   return (
-    <section id="job-stories" style={{ background: DARK }} className="py-20 lg:py-24">
+    <section id="job-stories" style={{ background: SURFACE.alt }} className="py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex items-end justify-between mb-14 flex-wrap gap-6">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-5 h-[2px]" style={{ background: SAND }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Job stories</span>
+              <div className="w-5 h-[2px]" style={{ background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>Job stories</span>
             </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
               Real jobs, real results
             </h2>
           </div>
           <button onClick={() => onNavigate?.("job-stories")} className="group inline-flex items-center gap-2"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
             Read all job stories
             <ChevronRight size={16} className="transition-transform group-hover:translate-x-0.5" />
           </button>
@@ -679,7 +674,7 @@ function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void })
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {JOB_STORIES.map((story, i) => (
             <Reveal key={i} delay={i * 0.08}>
-              <div className="flex flex-col gap-0 cursor-pointer" onClick={() => setSelectedIdx(i)} style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+              <div className="flex flex-col gap-0 cursor-pointer" onClick={() => setSelectedIdx(i)} style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* Video thumb */}
                 <div className="relative overflow-hidden group" style={{ aspectRatio: "3/2" }}>
                   <ImageWithFallback src={story.img} alt={story.name}
@@ -696,10 +691,10 @@ function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void })
                 <div className="p-6">
                   <div className="flex gap-2 mb-3">
                     {[story.type, story.loc].map((t) => (
-                      <span key={t} className="px-2.5 py-1" style={{ background: "rgba(255,255,255,.07)", fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(255,255,255,.6)" }}>{t}</span>
+                      <span key={t} className="px-2.5 py-1" style={{ background: "rgba(10,11,20,.07)", fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(10,11,20,.6)" }}>{t}</span>
                     ))}
                   </div>
-                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff" }}>{story.name}</p>
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR }}>{story.name}</p>
                 </div>
               </div>
             </Reveal>
@@ -785,9 +780,6 @@ function FaqSection() {
                   <AccordionPrimitive.Trigger
                     className="w-full flex items-center gap-5 text-left group"
                     style={{ background: "none", border: "none", cursor: "pointer", padding: "22px 0" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 12, color: SAND, flexShrink: 0, width: 22 }}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 16, color: CHAR, flex: 1, paddingRight: 16, lineHeight: 1.4 }}>{faq.q}</span>
                     <div className="shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-200 group-data-[state=open]:rotate-45"
                       style={{ color: open === String(i) ? B : MUTED }}>
@@ -837,19 +829,19 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   }, [emblaApi]);
 
   return (
-    <section id="reviews" style={{ background: CHAR }} className="py-24 overflow-hidden">
+    <section id="reviews" style={{ background: SURFACE.base }} className="py-24 overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
           <div>
-            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontSize: 11, fontWeight: 600, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>Reviews</p>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontSize: 11, fontWeight: 600, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>Reviews</p>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
               What customers say about us
             </h2>
             {onNavigate && (
               <button
                 onClick={() => onNavigate("reviews")}
                 className="group inline-flex items-center gap-1.5 mt-4"
-                style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}
               >
                 Read all reviews
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5"><path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -859,15 +851,15 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
           <div className="flex gap-3">
             <button onClick={scrollPrev}
               className="w-11 h-11 flex items-center justify-center transition-colors"
-              style={{ border: "1px solid rgba(255,255,255,.2)", background: "transparent" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,.08)")}
+              style={{ border: `1px solid ${ON_LIGHT.border}`, background: "transparent" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.08)")}
               onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
             <button onClick={scrollNext}
               className="w-11 h-11 flex items-center justify-center transition-colors"
-              style={{ border: "1px solid rgba(255,255,255,.2)", background: "transparent" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,.08)")}
+              style={{ border: `1px solid ${ON_LIGHT.border}`, background: "transparent" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.08)")}
               onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
@@ -878,7 +870,7 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
       <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
         <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
           {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
+            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
@@ -894,14 +886,14 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                     <svg key={si} width="14" height="14" viewBox="0 0 24 24" fill={SAND}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                   ))}
                 </div>
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(196,171,108,.25)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.7)", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>{t.quote}</p>
-                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(26,82,168,.25)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.7)", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>{t.quote}</p>
+                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(10,11,20,.07)" }}>
                   <div className="w-9 h-9 flex items-center justify-center shrink-0" style={{ background: B }}>
                     <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 13, color: "#fff" }}>{t.name.charAt(0)}</span>
                   </div>
                   <div>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>{t.name}</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>{t.name}</p>
                     <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{t.loc}</p>
                   </div>
                 </div>
@@ -915,7 +907,7 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
         {TESTIMONIALS.map((_, i) => (
           <button key={i} onClick={() => emblaApi?.scrollTo(i)}
             className="rounded-full transition-all duration-300"
-            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? SAND : "rgba(255,255,255,.2)" }} />
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(10,11,20,.2)" }} />
         ))}
       </div>
     </section>
@@ -925,11 +917,8 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
 // ─── 10. CTA ─────────────────────────────────────────────────────────────────
 function CtaSection() {
   return (
-    <section className="relative overflow-hidden" style={{ background: "#0B1C4A" }}>
+    <section className="relative overflow-hidden" style={{ background: SURFACE.cta }}>
       <div className="absolute inset-0 z-0">
-        <ImageWithFallback src="https://images.unsplash.com/photo-1541205646242-30258c7485b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
-          alt="Schedule inspection" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "rgba(11,28,74,.86)" }} />
         <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
       </div>
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-28 text-center">
@@ -972,7 +961,7 @@ function Footer({ onBack }: { onBack: () => void }) {
     { h: "Careers", ls: ["Why Work With Us", "Job Positions", "Benefits", "Training Program"] },
   ];
   return (
-    <footer style={{ background: "#060710" }}>
+    <footer style={{ background: SURFACE.footer }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-10">
         <div className="flex flex-col lg:flex-row gap-12 pb-12" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="lg:w-72 shrink-0">
@@ -1038,7 +1027,7 @@ export default function ResourcesPage({ onBack, onNavigate, scrollTo: initialSec
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Resources" />
       </div>
 
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px]" style={{ background: "#0A0B14" }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

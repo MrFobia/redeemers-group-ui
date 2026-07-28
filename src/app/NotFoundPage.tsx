@@ -8,11 +8,7 @@ import { AnnouncementBar } from "./components/AnnouncementBar";
 import imgFloor02 from "../assets/floor-02.jpeg";
 
 // ─── Brand tokens ─────────────────────────────────────────────────────────────
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const MUTED = "#6B6E85";
+import { B, DARK, CHAR, SAND, MUTED, SURFACE } from "./theme";
 
 const SIGNS = [
   { label: "Walls bowing inward", note: "also known as: a broken link" },
@@ -39,7 +35,7 @@ export default function NotFoundPage({ onBack, onNavigate }: { onBack: () => voi
         <SharedNavBar onNavigate={nav} active="" />
       </div>
 
-      <div className="w-full min-h-screen pt-[81px] md:pt-[148px] relative overflow-hidden" style={{ background: DARK }}>
+      <div className="w-full min-h-screen pt-[68px] md:pt-[111px] relative overflow-hidden" style={{ background: SURFACE.base }}>
         <ImageWithFallback
           src={imgFloor02}
           alt=""

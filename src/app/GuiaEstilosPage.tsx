@@ -1,12 +1,6 @@
 import React from "react";
 
-const B = "#1A52A8";
-const DARK = "#0A0B14";
-const NAVY = "#0B1C4A";
-const CHAR = "#1E2235";
-const SAND = "#C4AB6C";
-const CREAM = "#F7F5EF";
-const MUTED = "#6B6E85";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE } from "./theme";
 const WHITE = "#FFFFFF";
 
 const CF = "'Articulat CF',sans-serif";
@@ -91,6 +85,20 @@ export default function GuiaEstilosPage() {
           <Swatch hex="#053770" name="Mid Blue"     variable="Card / Panel BG" />
           <Swatch hex="#0D5192" name="Pill Blue"    variable="Financing Pills" />
           <Swatch hex="rgba(196,171,108,.2)" name="Sand Ghost" variable="Badge BG" />
+        </div>
+
+        {/* Section surfaces — the rhythm every page follows, straight from the
+            Figma page designs. Defined once in src/app/theme.ts as SURFACE. */}
+        <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 10, color: MUTED, letterSpacing: 4, textTransform: "uppercase", margin: "40px 0 20px" }}>
+          Superficies de sección
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 24 }}>
+          <Swatch hex={SURFACE.base}   name="Base"   variable="SURFACE.base — sección blanca" />
+          <Swatch hex={SURFACE.alt}    name="Alt"    variable="SURFACE.alt — sección crema" />
+          <Swatch hex={SURFACE.panel}  name="Panel"  variable="SURFACE.panel — banda azul" />
+          <Swatch hex={SURFACE.cta}    name="CTA"    variable="SURFACE.cta — cierre" />
+          <Swatch hex={SURFACE.hero}   name="Hero"   variable="SURFACE.hero — above the fold" />
+          <Swatch hex={SURFACE.footer} name="Footer" variable="SURFACE.footer" />
         </div>
       </Section>
 

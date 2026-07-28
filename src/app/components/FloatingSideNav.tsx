@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronUp } from "lucide-react";
 import type { AnchorTab } from "./StickyAnchorBar";
 
-const NAVY = "#0B1C4A";
-const SAND = "#C4AB6C";
+import { NAVY, SAND, SURFACE } from "../theme";
 
 type FloatingSideNavProps = {
   tabs: AnchorTab[];
