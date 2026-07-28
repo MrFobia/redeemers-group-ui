@@ -3,7 +3,7 @@ import { openInspection } from "./components/InspectionModal";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronRight, ChevronLeft, ArrowRight, Play, Download, FileText, X, Home, Tag } from "lucide-react";
+import { ChevronRight, ChevronLeft, ArrowRight, Play, Download, FileText, X, ShieldCheck, ClipboardCheck, HelpCircle } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import imgFloor01 from "../assets/floor-01.jpeg";
@@ -34,14 +34,15 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 
 
 // ─── NAV TABS data ────────────────────────────────────────────────────────────
+// Order/labels from the approved sitemap — keep in sync with SharedNavBar.tsx's
+// RESOURCES_SECTIONS.
 const NAV_TABS = [
   { id: "gallery", label: "Project Gallery" },
-  { id: "cost", label: "Cost guide" },
-  { id: "resources", label: "Resources" },
-  { id: "buyer-seller", label: "Buyer & Seller guides" },
-  { id: "job-stories", label: "Job stories" },
+  { id: "buyer-seller", label: "Homeowner Education" },
+  { id: "cost", label: "Pricing & Cost Guides" },
+  { id: "job-stories", label: "Job Stories" },
   { id: "faq", label: "FAQs" },
-  { id: "reviews", label: "Reviews" },
+  { id: "reviews", label: "Reviews & Testimonials" },
 ];
 
 // ─── 1. HERO ──────────────────────────────────────────────────────────────────
@@ -293,49 +294,20 @@ function ResourcesDownloadSection() {
   );
 }
 
-// ─── 6. BUYER & SELLER GUIDES ─────────────────────────────────────────────────
-const PERSONA_DATA = {
-  buyer: {
-    label: "Buying a home",
-    headline: "Know what you're buying before you close",
-    subline: "Foundation issues can cost $4,000–$20,000 to fix. These guides help you identify risks, understand costs, and negotiate like a professional.",
-    featured: {
-      badge: "Most downloaded",
-      title: "Complete Buyer's Foundation Guide",
-      pages: "12 pages",
-      desc: "Everything you need before making an offer. Understand foundation types, common defects, repair costs, and how to negotiate effectively with sellers.",
-      topics: ["Foundation crack types & severity ratings", "What general inspectors typically miss", "Real repair cost ranges by issue type", "Negotiation scripts & offer reduction templates"],
-    },
-    guides: [
-      { title: "Pre-Offer Symptom Checklist", pages: "2 pages", desc: "Walk any home with confidence — identify red flags before your inspector does." },
-      { title: "Repair Cost Estimator Guide", pages: "5 pages", desc: "Real price ranges for every foundation and crawl space repair type in TN, AR, MS & MO." },
-      { title: "What Your Inspector Won't Tell You", pages: "4 pages", desc: "The gap between a home inspection and a structural assessment — and why it matters." },
-    ],
-  },
-  seller: {
-    label: "Selling a home",
-    headline: "Protect your sale price before you list",
-    subline: "Buyers' agents are trained to spot structural issues and use them to negotiate. Get ahead of it with the right information.",
-    featured: {
-      badge: "Top rated",
-      title: "Seller's Pre-Listing Repair Guide",
-      pages: "9 pages",
-      desc: "Know exactly what to fix, what to disclose, and how to price your home when structural issues are present. Maximize your net sale price.",
-      topics: ["Disclosure requirements by state (TN, AR, MS, MO)", "Fix vs. price reduction: a decision framework", "How buyers' agents view foundation issues", "Pre-sale inspection walkthrough checklist"],
-    },
-    guides: [
-      { title: "Disclosure Requirements by State", pages: "3 pages", desc: "What you're legally required to share in TN, AR, MS & MO when selling a home." },
-      { title: "Fix or Price Reduction?", pages: "4 pages", desc: "A clear decision framework when a buyer's inspector flags structural concerns." },
-      { title: "Maximize Sale Price Guide", pages: "5 pages", desc: "Which repairs return the most at closing — and which ones you can safely skip." },
-    ],
-  },
-};
+// ─── 6. HOMEOWNER EDUCATION ───────────────────────────────────────────────────
+// Buyer/seller transaction guides live on PricingPage.tsx (id="buyer-seller"
+// there) — this section is about living with and maintaining a home, not
+// closing a real-estate deal, so it doesn't duplicate that content.
+const EDUCATION_TOPICS = [
+  { icon: ShieldCheck, title: "Know the warning signs", desc: "Cracks, sticking doors, uneven floors — learn what's normal wear vs. a structural problem.", cta: "See problem signs", page: "problem-signs" },
+  { icon: HelpCircle, title: "What to expect from your inspection", desc: "A walkthrough of what our inspectors check, how long it takes, and what's in your report.", cta: "Our process", page: "our-difference#process" },
+  { icon: ClipboardCheck, title: "Home maintenance checklist", desc: "Simple seasonal habits that catch small issues before they become expensive ones.", cta: "Get the checklist", page: "resources#resources" },
+  { icon: FileText, title: "Common homeowner questions", desc: "Financing, warranties, timelines — answered plainly.", cta: "Read FAQs", page: "resources#faq" },
+];
 
-function BuyerSellerSection() {
-  const [persona, setPersona] = useState<"buyer" | "seller">("buyer");
+function BuyerSellerSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
-  const data = PERSONA_DATA[persona];
 
   return (
     <section id="buyer-seller" style={{ background: CREAM }} className="py-20 lg:py-28">
@@ -347,180 +319,44 @@ function BuyerSellerSection() {
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12"
+          className="mb-14"
         >
           <div className="flex items-center gap-3 mb-4">
             <div style={{ width: 28, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Buyer &amp; Seller</span>
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Homeowner Education</span>
           </div>
           <div className="flex flex-col lg:flex-row lg:items-end gap-6">
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4.5vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px", flex: 1 }}>
-              Guides for every<br />side of the table
+              Guides for every<br />stage of homeownership
             </h2>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, lineHeight: 1.7, maxWidth: 380 }}>
-              Whether you're buying or selling, structural issues at closing can make or break the deal. Know your position.
+              Buying or selling? See our <a href="#" onClick={(e) => { e.preventDefault(); onNavigate?.("pricing#buyer-seller"); }} style={{ color: B, textDecoration: "underline" }}>buyer &amp; seller guides</a>. Here, it's about knowing and maintaining the home you already have.
             </p>
           </div>
         </motion.div>
 
-        {/* ── Persona selector tabs ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="flex gap-3 mb-10"
-        >
-          {(["buyer", "seller"] as const).map((p) => {
-            const PersonaIcon = p === "buyer" ? Home : Tag;
-            return (
-              <button
-                key={p}
-                onClick={() => setPersona(p)}
-                className="relative px-6 py-3 flex items-center gap-2.5 transition-all"
-                style={{
-                  fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14,
-                  background: persona === p ? CHAR : "transparent",
-                  color: persona === p ? "#fff" : MUTED,
-                  border: `1.5px solid ${persona === p ? CHAR : "rgba(10,11,20,.15)"}`,
-                  cursor: "pointer", letterSpacing: 0.3,
-                }}
-              >
-                <PersonaIcon size={16} strokeWidth={2} />
-                {PERSONA_DATA[p].label}
-                {persona === p && (
-                  <motion.div
-                    layoutId="persona-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-[2px]"
-                    style={{ background: SAND }}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </motion.div>
-
-        {/* ── Context strip ── */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={persona + "-context"}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col lg:flex-row lg:items-center gap-4 mb-12 p-5"
-            style={{ background: "#fff", border: "1px solid rgba(10,11,20,.1)" }}
-          >
-            <div className="flex-1">
-              <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, marginBottom: 6 }}>{data.headline}</h3>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.6 }}>{data.subline}</p>
-            </div>
-            <button
-              onClick={openInspection}
-              className="inline-flex items-center gap-2 px-5 py-3 shrink-0 hover:opacity-90 transition-opacity"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff", border: "none", cursor: "pointer" }}
-            >
-              Free inspection first <ArrowRight size={13} />
-            </button>
-          </motion.div>
-        </AnimatePresence>
-
-        {/* ── Content: featured + side guides ── */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={persona}
-            initial={{ opacity: 0, x: persona === "buyer" ? -16 : 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: persona === "buyer" ? 16 : -16 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="grid grid-cols-1 lg:grid-cols-5 gap-5"
-          >
-            {/* Featured guide — 3/5 width */}
-            <div className="lg:col-span-3 flex flex-col" style={{ background: "#fff", border: "1px solid rgba(10,11,20,.1)" }}>
-              {/* Visual top */}
-              <div className="relative overflow-hidden flex items-center justify-center" style={{ height: 200, background: `linear-gradient(135deg, ${B}0F 0%, rgba(196,171,108,.1) 100%)`, borderBottom: "1px solid rgba(10,11,20,.08)" }}>
-                {/* Decorative document mockup */}
-                <div className="relative" style={{ width: 120, height: 155 }}>
-                  <div className="absolute inset-0" style={{ background: "#fff", borderRadius: 4, border: "1px solid rgba(10,11,20,.08)", boxShadow: "0 8px 32px rgba(10,11,20,.12)" }} />
-                  <div style={{ padding: "16px 14px" }}>
-                    <div style={{ height: 6, background: B, borderRadius: 2, marginBottom: 10, width: "70%" }} />
-                    {[100, 85, 90, 75, 65].map((w, i) => (
-                      <div key={i} style={{ height: 4, background: `rgba(10,11,20,${i === 0 ? .14 : .07})`, borderRadius: 2, marginBottom: 6, width: `${w}%` }} />
-                    ))}
-                    <div style={{ height: 1, background: "rgba(10,11,20,.08)", margin: "10px 0" }} />
-                    {[80, 70].map((w, i) => (
-                      <div key={i} style={{ height: 4, background: "rgba(10,11,20,.07)", borderRadius: 2, marginBottom: 6, width: `${w}%` }} />
-                    ))}
-                  </div>
+        {/* ── Topic cards ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {EDUCATION_TOPICS.map((t, i) => (
+            <Reveal key={t.title} delay={i * 0.07}>
+              <div className="flex flex-col h-full p-7" style={{ background: "#fff", border: "1px solid rgba(10,11,20,.1)" }}>
+                <div className="w-11 h-11 flex items-center justify-center mb-6" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.2)" }}>
+                  <t.icon size={20} color={B} strokeWidth={1.5} />
                 </div>
-                {/* Badge */}
-                <span style={{
-                  position: "absolute", top: 16, right: 16,
-                  fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9,
-                  color: DARK, letterSpacing: 2, textTransform: "uppercase",
-                  background: SAND, padding: "4px 10px",
-                }}>{data.featured.badge}</span>
-              </div>
-
-              {/* Content */}
-              <div className="flex flex-col flex-1 p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 2.5, textTransform: "uppercase", border: "1px solid rgba(196,171,108,.4)", padding: "3px 8px" }}>PDF</span>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{data.featured.pages}</span>
-                </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: CHAR, lineHeight: 1.2, marginBottom: 12 }}>
-                  {data.featured.title}
-                </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.7, marginBottom: 20 }}>
-                  {data.featured.desc}
-                </p>
-                {/* Topics */}
-                <ul className="flex flex-col gap-2.5 mb-8 flex-1">
-                  {data.featured.topics.map((t) => (
-                    <li key={t} className="flex items-start gap-2.5">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginTop: 2, shrink: 0 }}><path d="M20 6L9 17l-5-5" stroke={B} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#3D4152", lineHeight: 1.5 }}>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button className="inline-flex items-center gap-2 px-6 py-3.5 hover:opacity-90 transition-opacity self-start"
-                  style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", border: "none", cursor: "pointer", letterSpacing: 0.3 }}>
-                  <Download size={14} /> Download free guide
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: CHAR, lineHeight: 1.2, marginBottom: 10 }}>{t.title}</h3>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{t.desc}</p>
+                <button
+                  onClick={() => onNavigate?.(t.page)}
+                  className="group inline-flex items-center gap-1.5 self-start"
+                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                >
+                  {t.cta}
+                  <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5" color={SAND} />
                 </button>
               </div>
-            </div>
-
-            {/* Side guides — 2/5 width */}
-            <div className="lg:col-span-2 flex flex-col gap-4">
-              {data.guides.map((g, i) => (
-                <motion.div
-                  key={g.title}
-                  initial={{ opacity: 0, x: 16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex flex-col flex-1 p-6 group"
-                  style={{ background: "#fff", border: "1px solid rgba(10,11,20,.1)", cursor: "pointer", transition: "border-color .2s" }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(196,171,108,.4)")}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(10,11,20,.1)")}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <FileText size={15} color="#8A7238" strokeWidth={1.5} />
-                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 2, textTransform: "uppercase" }}>PDF</span>
-                    </div>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: MUTED }}>{g.pages}</span>
-                  </div>
-                  <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, lineHeight: 1.3, marginBottom: 8 }}>{g.title}</h4>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, lineHeight: 1.6, flex: 1, marginBottom: 16 }}>{g.desc}</p>
-                  <div className="flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                    <Download size={12} color={B} />
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B }}>Download</span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </AnimatePresence>
-
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -1041,9 +877,9 @@ export default function ResourcesPage({ onBack, onNavigate, scrollTo: initialSec
 
         <HeroSection />
         <GallerySection />
-        <CostGuideSection />
+        <BuyerSellerSection onNavigate={onNavigate} />
         <ResourcesDownloadSection />
-        <BuyerSellerSection />
+        <CostGuideSection />
         <JobStoriesSection onNavigate={onNavigate} />
         <FaqSection />
         <ReviewsSection onNavigate={onNavigate} />

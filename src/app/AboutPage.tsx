@@ -398,10 +398,10 @@ function PeopleSection() {
 
           {/* Prev arrow */}
           <button onClick={goPrev}
-            className="shrink-0 flex items-center justify-center transition-all hover:bg-white/10"
+            className="shrink-0 flex items-center justify-center transition-all hover:bg-black/5"
             style={{ width: 44, height: 44, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M19 12H5M11 6l-6 6 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M19 12H5M11 6l-6 6 6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
 
@@ -414,7 +414,7 @@ function PeopleSection() {
                   onClick={() => changeDept(dept)}>
                   <motion.span
                     animate={{
-                      color: isActive ? "#ffffff" : "rgba(10,11,20,.18)",
+                      color: isActive ? CHAR : "rgba(10,11,20,.28)",
                       scale: isActive ? 1 : 0.92,
                     }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
@@ -443,10 +443,10 @@ function PeopleSection() {
 
           {/* Next arrow */}
           <button onClick={goNext}
-            className="shrink-0 flex items-center justify-center transition-all hover:bg-white/10"
+            className="shrink-0 flex items-center justify-center transition-all hover:bg-black/5"
             style={{ width: 44, height: 44, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 12h14M13 6l6 6-6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>

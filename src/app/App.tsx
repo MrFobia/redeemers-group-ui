@@ -44,7 +44,7 @@ import imgSvcInsulation from "../assets/svc-insulation.jpg";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { openInspection } from "./components/InspectionModal";
 
-import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE } from "./theme";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_DARK } from "./theme";
 
 // ─── Fade-up scroll animation wrapper ─────────────────────────────────────────
 function Reveal({
@@ -188,7 +188,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
   const slide = SLIDES[current];
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 200px)", minHeight: 560 }}>
+    <section className="relative w-full overflow-hidden" style={{ height: "calc(100dvh - 200px)", minHeight: 760 }}>
       {/* Embla carousel */}
       <div ref={emblaRef} className="h-full overflow-hidden">
         <div className="flex h-full" style={{ touchAction: "pan-y" }}>
@@ -203,8 +203,13 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
         </div>
       </div>
 
-      {/* Main content — overlaid, left column */}
-      <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-14"
+      {/* Main content — overlaid, left column. justify-start (not center): on
+          short viewports (mobile landscape, short windows) the stacked
+          headline/subtitle/CTA content can be taller than the space left
+          after clearing the fixed header — centering would then push the
+          top of the text up past paddingTop and under the nav. Anchoring to
+          the top guarantees the header clearance always holds. */}
+      <div className="absolute inset-0 flex flex-col justify-start px-8 md:px-14"
         style={{ paddingTop: 168, paddingBottom: 120 }}>
         <div className="w-full max-w-full md:max-w-[58%] lg:max-w-[50%]">
 
@@ -555,13 +560,13 @@ const SIGNS = [
 
 function SignsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <section className="py-20 px-8 md:px-14" style={{ background: SURFACE.base }}>
+    <section className="py-20 px-8 md:px-14" style={{ background: DARK }}>
       <div className="max-w-[1440px] mx-auto flex flex-col gap-14">
         <Reveal>
-          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
+          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
             What are you dealing with?
           </p>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.8vw,62px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.8vw,62px)", color: ON_DARK.heading, lineHeight: 1.0, letterSpacing: "-1px" }}>
             What are you dealing with?
           </h2>
         </Reveal>
@@ -570,7 +575,7 @@ function SignsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
           {SIGNS.map((s, i) => (
             <Reveal key={s.cat} delay={i * 0.07}>
               <div onClick={() => onNavigate(`service/${s.slug}#signs`)} className="flex flex-col cursor-pointer group overflow-hidden"
-                style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+                style={{ background: CHAR, border: "1px solid rgba(255,255,255,.12)" }}>
                 {/* Photo first — homeowners pick their problem by sight. */}
                 <div className="relative overflow-hidden shrink-0" style={{ height: 150 }}>
                   <ImageWithFallback src={s.img} alt={s.label}

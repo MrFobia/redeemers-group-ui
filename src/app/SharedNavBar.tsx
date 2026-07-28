@@ -38,22 +38,18 @@ export const NAV_PAGE_MAP: Record<string, string> = {
 
 
 // ─── Resources Dropdown ───────────────────────────────────────────────────────
+// Exact order/labels from the approved sitemap: Project gallery, Homeowner
+// education, Pricing & Cost Guides, Job stories, FAQs, Reviews & testimonials,
+// News. "Downloadable resources" lives under Homeowner education on the
+// sitemap but is NOT a nav-level destination — it only surfaces once inside
+// the Resources page itself. Keep in sync with ResourcesPage.tsx's NAV_TABS.
 const RESOURCES_SECTIONS = [
-  { label: "Project gallery",    id: "gallery" },
-  { label: "Cost guide",         id: "cost" },
-  { label: "Buyer & Seller guides", id: "buyer-seller" },
-  { label: "Job stories",        id: "job-stories" },
-  { label: "FAQs",               id: "faq" },
-  { label: "Reviews",            id: "reviews" },
-];
-
-// NewsBlogPage has no anchor ids (client-side topic filter, not deep-linkable
-// sections) — these route to the page itself, same as Careers/Service Area below.
-const NEWS_SECTIONS = [
-  { label: "Latest articles" },
-  { label: "Foundation" },
-  { label: "Waterproofing" },
-  { label: "Crawl Space" },
+  { label: "Project gallery",        id: "gallery" },
+  { label: "Homeowner education",    id: "buyer-seller" },
+  { label: "Pricing & Cost Guides",  id: "cost" },
+  { label: "Job stories",            id: "job-stories" },
+  { label: "FAQs",                   id: "faq" },
+  { label: "Reviews & testimonials", id: "reviews" },
 ];
 
 // ─── Simple dropdown (used by every top-level nav item now) ───────────────────
@@ -86,7 +82,7 @@ function SimpleDropdown({ children, width = 260 }: { children: React.ReactNode; 
   );
 }
 
-function SimpleDropdownItem({ label, onClick }: { label: string; onClick: () => void }) {
+function SimpleDropdownItem({ label, onClick, indent }: { label: string; onClick: () => void; indent?: boolean }) {
   const [hover, setHover] = useState(false);
   return (
     <button
@@ -94,12 +90,13 @@ function SimpleDropdownItem({ label, onClick }: { label: string; onClick: () => 
       onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="w-full text-left px-4 py-2.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+      className="w-full text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
       style={{
-        fontFamily: "'Inter',sans-serif", fontSize: 13.5,
+        fontFamily: "'Inter',sans-serif", fontSize: indent ? 12.5 : 13.5,
         color: hover ? "#fff" : "rgba(255,255,255,.75)",
         background: hover ? "rgba(255,255,255,.06)" : "none",
         border: "none", cursor: "pointer",
+        padding: indent ? "8px 16px 8px 30px" : "10px 16px",
       }}
     >
       {label}
@@ -174,13 +171,10 @@ function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
     <SimpleDropdown>
       <SimpleDropdownLabel label="Resources" />
       {RESOURCES_SECTIONS.map((sec) => (
-        <SimpleDropdownItem key={sec.label} label={sec.label} onClick={() => onNavigate(`resources#${sec.id}`)} />
+        <SimpleDropdownItem key={sec.label} label={sec.label} indent={sec.indent} onClick={() => onNavigate(`resources#${sec.id}`)} />
       ))}
       <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
-      <SimpleDropdownLabel label="News / Blog" />
-      {NEWS_SECTIONS.map((sec) => (
-        <SimpleDropdownItem key={sec.label} label={sec.label} onClick={() => onNavigate("news-blog")} />
-      ))}
+      <SimpleDropdownItem label="News" onClick={() => onNavigate("news-blog")} />
     </SimpleDropdown>
   );
 }
@@ -193,13 +187,30 @@ const ABOUT_TABS = [
   { key: "contact" as const,      label: "Contact us",   page: "contact" },
 ];
 
+// Careers' own page subheader (culture, hiring process, open positions,
+// benefits) — surfaced here as a flyout so it's reachable from the nav,
+// same anchors CareersPage.tsx uses.
+const CAREERS_SECTIONS = [
+  { label: "Culture", id: "culture" },
+  { label: "Hiring process", id: "hiring-process" },
+  { label: "Open positions", id: "open-positions" },
+  { label: "Benefits", id: "benefits" },
+];
 
 function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <SimpleDropdown>
-      {ABOUT_TABS.map((tab) => (
-        <SimpleDropdownItem key={tab.key} label={tab.label} onClick={() => onNavigate(tab.page)} />
-      ))}
+      {ABOUT_TABS.map((tab) =>
+        tab.key === "careers" ? (
+          <FlyoutItem key={tab.key} label={tab.label} onClick={() => onNavigate(tab.page)}>
+            {CAREERS_SECTIONS.map((sec) => (
+              <SimpleDropdownItem key={sec.id} label={sec.label} onClick={() => onNavigate(`careers#${sec.id}`)} />
+            ))}
+          </FlyoutItem>
+        ) : (
+          <SimpleDropdownItem key={tab.key} label={tab.label} onClick={() => onNavigate(tab.page)} />
+        )
+      )}
     </SimpleDropdown>
   );
 }
@@ -216,6 +227,7 @@ const OUR_DIFFERENCE_SECTIONS = [
   { label: "Our pledge", id: "pledge" },
   { label: "News & awards", id: "news-awards" },
   { label: "Featured projects / case stories", id: "case-studies" },
+  { label: "Before & after", id: "before-after" },
   { label: "Referral program", id: "referral" },
   { label: "Love Well Initiative", id: "love-well" },
   { label: "Affiliations & certifications", id: "certifications" },
@@ -792,21 +804,21 @@ export default function SharedNavBar({
                   >
                     <MobileBackHeader title="Resources" onBack={() => setMobilePanel("root")} />
                     <div className="flex flex-col gap-1">
-                      <button
-                        onClick={() => handleNavigate("news-blog")}
-                        className="w-full py-3 pl-3 text-left"
-                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                        News / Blog
-                      </button>
                       {RESOURCES_SECTIONS.map((sec) => (
                         <button
                           key={sec.id}
                           onClick={() => handleNavigate(`resources#${sec.id}`)}
-                          className="w-full py-3 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                          className="w-full text-left"
+                          style={{ fontFamily: "'Inter',sans-serif", fontSize: sec.indent ? 13.5 : 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer", padding: sec.indent ? "10px 12px 10px 30px" : "12px 12px 12px 12px" }}>
                           {sec.label}
                         </button>
                       ))}
+                      <button
+                        onClick={() => handleNavigate("news-blog")}
+                        className="w-full py-3 pl-3 text-left"
+                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                        News
+                      </button>
                       <button
                         onClick={() => handleNavigate("resources")}
                         className="py-3 pl-3 text-left"
@@ -830,13 +842,23 @@ export default function SharedNavBar({
                     <MobileBackHeader title="About" onBack={() => setMobilePanel("root")} />
                     <div className="flex flex-col gap-1">
                       {ABOUT_TABS.map((tab) => (
-                        <button
-                          key={tab.key}
-                          onClick={() => handleNavigate(tab.page)}
-                          className="w-full py-3 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                          {tab.label}
-                        </button>
+                        <div key={tab.key} className="flex flex-col">
+                          <button
+                            onClick={() => handleNavigate(tab.page)}
+                            className="w-full py-3 pl-3 text-left"
+                            style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                            {tab.label}
+                          </button>
+                          {tab.key === "careers" && CAREERS_SECTIONS.map((sec) => (
+                            <button
+                              key={sec.id}
+                              onClick={() => handleNavigate(`careers#${sec.id}`)}
+                              className="w-full text-left"
+                              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(255,255,255,.55)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer", padding: "8px 12px 8px 30px" }}>
+                              {sec.label}
+                            </button>
+                          ))}
+                        </div>
                       ))}
                     </div>
                   </motion.div>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { openInspection } from "./components/InspectionModal";
 import { motion, useInView } from "motion/react";
-import { ChevronRight, ArrowRight, FileText, Download, MapPin } from "lucide-react";
+import { ChevronRight, ArrowRight, FileText, Download, MapPin, CreditCard, Percent, CalendarClock } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { FloatingSideNav } from "./components/FloatingSideNav";
@@ -35,6 +35,7 @@ const PRICING_TABS = [
   { id: "buyer-seller",    label: "Buyer & Seller Guides" },
   { id: "cost-by-service", label: "Cost by Service" },
   { id: "cost-by-city",    label: "Cost by City" },
+  { id: "financing",       label: "Financing" },
 ];
 
 // ─── 1. HERO ──────────────────────────────────────────────────────────────────
@@ -332,6 +333,60 @@ function CostByCitySection() {
   );
 }
 
+// ─── 5. FINANCING ─────────────────────────────────────────────────────────────
+const FINANCING_PERKS = [
+  { icon: Percent, title: "0% interest available", desc: "Qualified homeowners can spread repair costs over 12–18 months at 0% APR." },
+  { icon: CalendarClock, title: "Terms up to 10 years", desc: "Longer terms available for larger structural or waterproofing projects." },
+  { icon: CreditCard, title: "Same-day approval", desc: "Apply during your free inspection and know your options before we leave." },
+];
+
+function FinancingSection() {
+  return (
+    <section id="financing" style={{ background: CREAM }} className="py-20 lg:py-24">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="mb-14">
+          <div className="flex items-center gap-3 mb-4">
+            <span style={{ display: "block", width: 28, height: 2, background: B, flexShrink: 0 }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>
+              Financing
+            </span>
+          </div>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
+            Repair it now, pay over time
+          </h2>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.45)", lineHeight: 1.7, marginTop: 12, maxWidth: 540 }}>
+            Structural issues don't wait, and neither should you. Flexible plans make repairs affordable without draining savings.
+          </p>
+        </Reveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+          {FINANCING_PERKS.map((perk, i) => (
+            <Reveal key={perk.title} delay={i * 0.07}>
+              <div className="flex flex-col h-full p-7" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+                <div className="w-11 h-11 flex items-center justify-center mb-6" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.2)" }}>
+                  <perk.icon size={20} color={B} strokeWidth={1.5} />
+                </div>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: CHAR, lineHeight: 1.2, marginBottom: 10 }}>{perk.title}</h3>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal>
+          <button
+            onClick={openInspection}
+            className="inline-flex items-center gap-2 px-6 py-3.5 hover:opacity-90 transition-opacity"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}
+          >
+            Check my financing options <ArrowRight size={14} />
+          </button>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 // ─── CTA ──────────────────────────────────────────────────────────────────────
 function CtaSection() {
   return (
@@ -482,6 +537,7 @@ export default function PricingPage({ onBack, onNavigate }: { onBack: () => void
         <BuyerSellerSection />
         <CostByServiceSection />
         <CostByCitySection />
+        <FinancingSection />
         <CtaSection />
         <Footer onBack={onBack} />
       </div>

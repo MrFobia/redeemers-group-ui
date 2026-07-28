@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
-import { ChevronRight, ChevronLeft, ArrowRight, X, Gift, Heart } from "lucide-react";
+import { ChevronRight, ChevronLeft, ArrowRight, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import useEmblaCarousel from "embla-carousel-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -53,6 +53,7 @@ const NAV_TABS = [
   { id: "pledge", label: "Our pledge" },
   { id: "news-awards", label: "News & awards" },
   { id: "case-studies", label: "Featured projects / case stories" },
+  { id: "before-after", label: "Before & after" },
   { id: "referral", label: "Referral program" },
   { id: "love-well", label: "Love Well Initiative" },
   { id: "certifications", label: "Affiliations & certifications" },
@@ -963,6 +964,197 @@ function CaseStudiesSection() {
   );
 }
 
+// ─── 7b. BEFORE & AFTER — draggable comparison slider ────────────────────────
+function BeforeAfterSlider({ before, after, beforeLabel = "Before", afterLabel = "After" }: { before: string; after: string; beforeLabel?: string; afterLabel?: string }) {
+  const [pos, setPos] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
+
+  const updateFromClientX = useCallback((clientX: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const pct = ((clientX - rect.left) / rect.width) * 100;
+    setPos(Math.min(100, Math.max(0, pct)));
+  }, []);
+
+  useEffect(() => {
+    const handleMove = (e: PointerEvent) => {
+      if (!draggingRef.current) return;
+      updateFromClientX(e.clientX);
+    };
+    const handleUp = () => { draggingRef.current = false; };
+    window.addEventListener("pointermove", handleMove);
+    window.addEventListener("pointerup", handleUp);
+    return () => {
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+    };
+  }, [updateFromClientX]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative w-full overflow-hidden select-none"
+      style={{ aspectRatio: "4/3", cursor: "ew-resize", touchAction: "none" }}
+      onPointerDown={(e) => { e.stopPropagation(); draggingRef.current = true; updateFromClientX(e.clientX); }}
+      role="slider"
+      aria-label="Before and after comparison"
+      aria-valuenow={Math.round(pos)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+    >
+      {/* After — full image, base layer */}
+      <ImageWithFallback src={after} alt={afterLabel} className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+
+      {/* Before — clipped to the slider position */}
+      <div className="absolute inset-0 pointer-events-none" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
+        <ImageWithFallback src={before} alt={beforeLabel} className="absolute inset-0 w-full h-full object-cover" />
+      </div>
+
+      {/* Labels */}
+      <span className="absolute top-4 left-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(10,11,20,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{beforeLabel}</span>
+      <span className="absolute top-4 right-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(10,11,20,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{afterLabel}</span>
+
+      {/* Divider line */}
+      <div className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${pos}%`, width: 2, background: "#fff", transform: "translateX(-1px)", boxShadow: "0 0 10px rgba(0,0,0,.35)" }} />
+
+      {/* Drag handle */}
+      <div
+        className="absolute rounded-full flex items-center justify-center pointer-events-none"
+        style={{ left: `${pos}%`, top: "50%", width: 44, height: 44, transform: "translate(-50%,-50%)", background: "#fff", boxShadow: "0 4px 16px rgba(10,11,20,.35)" }}
+      >
+        <ChevronLeft size={13} color={CHAR} strokeWidth={2.5} style={{ marginRight: -5 }} />
+        <ChevronRight size={13} color={CHAR} strokeWidth={2.5} style={{ marginLeft: -5 }} />
+      </div>
+    </div>
+  );
+}
+
+const BEFORE_AFTER_PROJECTS = [
+  {
+    tag: "Concrete Services",
+    title: "Sunken driveway slab, lifted in an afternoon",
+    loc: "Bartlett, TN",
+    duration: "4 hours",
+    desc: "This slab had sunk nearly 3 inches at the joint, creating a trip hazard and pooling water against the foundation. PolyLevel foam injection raised it back to grade — no demolition, no mess.",
+    workDone: ["PolyLevel foam injection", "Slab releveled to grade", "Joint resealed against water intrusion"],
+    before: imgFloor03,
+    after: imgFloor01,
+  },
+  {
+    tag: "Crawl Space Repair",
+    title: "From damp and sagging to sealed and stable",
+    loc: "Southaven, MS",
+    duration: "2 days",
+    desc: "Standing water and exposed dirt had left this crawl space with active mold and a musty smell upstairs. Full encapsulation and a SmartJack system stopped the moisture and leveled the floor above.",
+    workDone: ["SmartJack floor support system", "Vapor barrier encapsulation", "Dehumidifier install"],
+    before: imgFloor02,
+    after: imgFloor04,
+  },
+  {
+    tag: "Foundation Repair",
+    title: "A stair-step crack, closed and stabilized",
+    loc: "Jonesboro, AR",
+    duration: "1 day",
+    desc: "A stair-step crack along the exterior block wall signaled active foundation settlement. Push piers driven to bedrock stopped the movement and closed the gap for good.",
+    workDone: ["6 push piers driven to refusal", "Crack sealed and waterproofed", "Lifetime transferable warranty"],
+    before: imgFloor01,
+    after: imgFloor03,
+  },
+];
+
+function BeforeAfterSection() {
+  // watchDrag off: the slide itself hosts a drag-to-compare slider, so the
+  // carousel only advances via the arrow buttons/dots — a swipe gesture would
+  // otherwise fight the before/after handle for the same pointer drag.
+  // loop off: Embla's loop wrap positions slides via transform rather than
+  // flex order, so the CSS `gap` between real slides doesn't carry over to
+  // the wrap seam (last slide butts against the cloned first with no space).
+  // With only a handful of cards, non-looping avoids that seam entirely.
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, watchDrag: false });
+  const [cur, setCur] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", () => setCur(emblaApi.selectedScrollSnap()));
+  }, [emblaApi]);
+
+  return (
+    <section id="before-after" style={{ background: SURFACE.base }} className="py-20 lg:py-28 overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-[2px] w-6" style={{ background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>
+                Before &amp; After
+              </span>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4.5vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
+              Drag to see the difference
+            </h2>
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => emblaApi?.scrollPrev()}
+              className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
+              style={{ border: `1.5px solid ${CHAR}` }}>
+              <ChevronLeft size={15} color={CHAR} strokeWidth={2} />
+            </button>
+            <button onClick={() => emblaApi?.scrollNext()}
+              className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
+              style={{ border: `1.5px solid ${CHAR}` }}>
+              <ChevronRight size={15} color={CHAR} strokeWidth={2} />
+            </button>
+          </div>
+        </Reveal>
+      </div>
+
+      <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
+        <div className="flex gap-8 ml-[max(0px,calc((100vw-1440px)/2))]">
+          {BEFORE_AFTER_PROJECTS.map((p) => (
+            <div key={p.title} className="shrink-0 w-[min(92vw,1160px)] grid grid-cols-1 lg:grid-cols-5 gap-0" style={{ background: "#fff", border: `1px solid ${ON_LIGHT.border}` }}>
+              <div className="lg:col-span-3">
+                <BeforeAfterSlider before={p.before} after={p.after} />
+              </div>
+              <div className="lg:col-span-2 flex flex-col justify-center p-8 lg:p-10">
+                <div className="inline-flex items-center px-2.5 py-1 mb-4 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)" }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{p.tag}</span>
+                </div>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: CHAR, lineHeight: 1.25, marginBottom: 10 }}>
+                  {p.title}
+                </h3>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, marginBottom: 16 }}>
+                  {p.loc} &middot; {p.duration}
+                </p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#3D4152", lineHeight: 1.7, marginBottom: 20 }}>
+                  {p.desc}
+                </p>
+                <ul className="flex flex-col gap-2.5">
+                  {p.workDone.map((w) => (
+                    <li key={w} className="flex items-start gap-2.5">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginTop: 2, flexShrink: 0 }}><path d="M20 6L9 17l-5-5" stroke={B} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "#3D4152", lineHeight: 1.5 }}>{w}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-center gap-2 mt-10 px-8">
+        {BEFORE_AFTER_PROJECTS.map((_, i) => (
+          <button key={i} onClick={() => emblaApi?.scrollTo(i)}
+            className="rounded-full transition-all duration-300"
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)", border: "none", cursor: "pointer", padding: 0 }} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ─── 8. NEWS & AWARDS (DARK) ─────────────────────────────────────────────────
 const PROJECT_STORIES = [
   {
@@ -1049,7 +1241,7 @@ const CERT_STATS = [
   { val: "20+", label: "Years certified" },
   { val: "8",   label: "Certifications held" },
   { val: "4.9", label: "Google rating" },
-  { val: "5",   label: "Industry affiliations" },
+  { val: "5",   label: "Awards" },
 ];
 
 // ─── Awards (sourced from redeemersgroup.com/about-us/awards.html) ──────────
@@ -1079,23 +1271,23 @@ function AwardCard({ award, onClick, clickable }: { award: Award; onClick: () =>
       className="shrink-0 flex flex-col gap-3"
       style={{ width: 190, cursor: clickable ? "pointer" : "default" }}
     >
-      <div className="relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: "1/1", background: CHAR, border: "1px solid rgba(255,255,255,.07)" }}>
+      <div className="relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: "1/1", background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
         {award.img ? (
           <ImageWithFallback src={award.img} alt={award.title} className="w-full h-full object-contain p-4" />
         ) : (
-          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND, letterSpacing: 0.5, textAlign: "center", padding: 12, lineHeight: 1.3 }}>
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: B, letterSpacing: 0.5, textAlign: "center", padding: 12, lineHeight: 1.3 }}>
             {award.org}
           </span>
         )}
         <div className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}>
-          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: SAND, letterSpacing: 1 }}>{award.year}</span>
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 1 }}>{award.year}</span>
         </div>
       </div>
       <div>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: "#fff", lineHeight: 1.4, marginBottom: 2 }}>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: CHAR, lineHeight: 1.4, marginBottom: 2 }}>
           {award.title.length > 48 ? award.title.slice(0, 48) + "…" : award.title}
         </p>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)" }}>{award.org}</p>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: MUTED }}>{award.org}</p>
       </div>
     </div>
   );
@@ -1200,8 +1392,8 @@ function AwardsCarousel() {
               style={{
                 fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 500,
                 background: yearFilter === y ? SAND : "transparent",
-                color: yearFilter === y ? DARK : "rgba(255,255,255,.55)",
-                border: `1.5px solid ${yearFilter === y ? SAND : "rgba(255,255,255,.15)"}`,
+                color: yearFilter === y ? DARK : MUTED,
+                border: `1.5px solid ${yearFilter === y ? SAND : ON_LIGHT.border}`,
                 cursor: "pointer",
               }}>
               {y}
@@ -1210,14 +1402,14 @@ function AwardsCarousel() {
         </div>
         <div className="flex gap-2 shrink-0">
           <button onClick={() => emblaApi?.scrollPrev()} aria-label="Previous awards"
-            className="w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
-            style={{ border: "1.5px solid rgba(255,255,255,.15)", background: "none", cursor: "pointer" }}>
-            <ChevronLeft size={15} color="rgba(255,255,255,.7)" />
+            className="w-9 h-9 flex items-center justify-center hover:bg-black/5 transition-colors"
+            style={{ border: `1.5px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
+            <ChevronLeft size={15} color={CHAR} />
           </button>
           <button onClick={() => emblaApi?.scrollNext()} aria-label="Next awards"
-            className="w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
-            style={{ border: "1.5px solid rgba(255,255,255,.15)", background: "none", cursor: "pointer" }}>
-            <ChevronRight size={15} color="rgba(255,255,255,.7)" />
+            className="w-9 h-9 flex items-center justify-center hover:bg-black/5 transition-colors"
+            style={{ border: `1.5px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
+            <ChevronRight size={15} color={CHAR} />
           </button>
         </div>
       </div>
@@ -1304,7 +1496,7 @@ function CertificationsSection() {
           {/* Industry affiliations — awards slider */}
           <Reveal delay={0.1}>
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase", marginBottom: 16 }}>
-              Industry affiliations
+              Awards
             </p>
             <AwardsCarousel />
           </Reveal>
@@ -1339,12 +1531,7 @@ function ReferralProgramSection() {
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, lineHeight: 1.75, maxWidth: 460, marginBottom: 32 }}>
               Send them our way. If they book a repair, you both get a $100 credit — no limit on how many neighbors you refer.
             </p>
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-11 h-11 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.08)", border: "1.5px dashed rgba(26,82,168,.35)" }}>
-                <Gift size={20} color={B} />
-              </div>
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR }}>$100 for you. $100 for them.</p>
-            </div>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, marginBottom: 32 }}>$100 for you. $100 for them.</p>
             <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-opacity hover:opacity-90"
               style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>
               Call to refer a neighbor
@@ -1375,19 +1562,17 @@ function LoveWellInitiativeSection() {
   return (
     <section id="love-well" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-stretch">
           <Reveal className="order-2 lg:order-1">
-            <div className="relative overflow-hidden" style={{ borderRadius: 2 }}>
-              <ImageWithFallback src={imgFloor02} alt="Love Well Initiative" className="w-full object-cover" style={{ height: 380 }} />
+            <div className="relative overflow-hidden h-full" style={{ borderRadius: 2, minHeight: 380 }}>
+              <ImageWithFallback src={imgFloor02} alt="Love Well Initiative" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.55) 0%,transparent 55%)" }} />
             </div>
           </Reveal>
 
           <Reveal delay={0.1} className="order-1 lg:order-2">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-9 h-9 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.12)", border: "1.5px dashed rgba(26,82,168,.5)" }}>
-                <Heart size={16} color={SAND} />
-              </div>
+              <div className="h-[2px] w-6" style={{ background: B }} />
               <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Love Well Initiative</span>
             </div>
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 20, maxWidth: 500 }}>
@@ -1555,6 +1740,7 @@ export default function OurDifferencePage({ onBack, onNavigate, scrollTo: initia
         <PledgeSection />
         <ProjectStoriesSection />
         <CaseStudiesSection />
+        <BeforeAfterSection />
         <ReferralProgramSection />
         <LoveWellInitiativeSection />
         <CertificationsSection />

@@ -52,7 +52,10 @@ export function FloatingSideNav({ tabs, active, onChange }: FloatingSideNavProps
                   fontFamily: "'Inter',sans-serif",
                   fontSize: 12,
                   fontWeight: isActive ? 600 : 500,
-                  color: isActive ? "#fff" : "rgba(255,255,255,.4)",
+                  color: NAVY,
+                  background: isActive ? "rgba(255,255,255,.9)" : "transparent",
+                  padding: isActive ? "3px 8px" : 0,
+                  boxShadow: isActive ? "0 2px 8px rgba(10,11,20,.15)" : "none",
                   opacity: isActive ? 1 : 0,
                   transform: isActive ? "translateX(0)" : "translateX(6px)",
                 }}
@@ -64,7 +67,8 @@ export function FloatingSideNav({ tabs, active, onChange }: FloatingSideNavProps
                 style={{
                   width: isActive ? 8 : 6,
                   height: isActive ? 8 : 6,
-                  background: isActive ? SAND : "rgba(255,255,255,.25)",
+                  background: isActive ? SAND : "rgba(140,140,150,.55)",
+                  boxShadow: isActive ? "none" : "0 0 0 1px rgba(255,255,255,.4)",
                 }}
               />
             </button>
