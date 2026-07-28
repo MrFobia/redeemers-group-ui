@@ -306,12 +306,12 @@ function CostSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: st
               ))}
             </div>
             <div className="flex items-center gap-4 flex-wrap">
-              <button onClick={() => onNavigate?.("resources#cost")} className="group inline-flex items-center justify-center gap-2 px-7 py-3.5"
+              <button onClick={() => onNavigate?.("pricing")} className="group inline-flex items-center justify-center gap-2 px-7 py-3.5"
                 style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
                 See full cost guide
                 <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
               </button>
-              <button onClick={() => onNavigate?.("resources#cost")} className="inline-flex items-center gap-2"
+              <button onClick={() => onNavigate?.("pricing")} className="inline-flex items-center gap-2"
                 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", padding: 0, cursor: "pointer" }}>
                 Financing options
                 <ArrowRight size={14} />
@@ -596,7 +596,7 @@ export default function ServicePage({ onBack, onNavigate, scrollTo, slug }: { on
           its internal anchors, so per the client's alternative it becomes a
           floating rail that follows the scroll instead of stacking under the header. */}
       <FloatingSideNav tabs={tabs} active={activeTab} onChange={scrollToSection} />
-      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

@@ -3,7 +3,7 @@ import { openInspection } from "./components/InspectionModal";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronRight, ChevronLeft, ArrowRight, Play, Download, FileText, X, ShieldCheck, ClipboardCheck, HelpCircle, MapPin, CreditCard, Percent, CalendarClock } from "lucide-react";
+import { ChevronRight, ChevronLeft, ArrowRight, Play, Download, FileText, X, ShieldCheck, ClipboardCheck, HelpCircle } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { FloatingSideNav } from "./components/FloatingSideNav";
@@ -80,214 +80,37 @@ function GallerySection() {
   return <ProjectGallery id="gallery" />;
 }
 
-// ─── 4. PRICING (Buyer/seller guides + Cost guides hub + Financing) ──────────
-// Moved off its own top-level page/nav slot per the approved sitemap — Pricing
-// now lives inside Resources as this "cost" anchor, wrapping three children:
-// Buyer/seller guides, Cost guides hub (cost by service + cost by city), and
-// Financing. Keep in sync with SharedNavBar.tsx's RESOURCES_SECTIONS.
-const TRANSACTION_GUIDES = [
-  { pages: "2 pages", title: "Symptom Checklist", desc: "Before your inspection — document every symptom you've noticed around your home." },
-  { pages: "5 pages", title: "Buyer & Seller Guide", desc: "What to look for in a foundation inspection before closing on a home." },
-  { pages: "3 pages", title: "Pre-Sale Inspection Guide", desc: "What sellers need to disclose and fix before listing to maximize value." },
-  { pages: "4 pages", title: "Negotiation Toolkit", desc: "Use repair estimates to negotiate price reductions when buying a home." },
-];
-
-const COST_BY_SERVICE = [
-  { title: "Crawl Space Repair", range: "$2,500 – $9,000", sub: "Varies by moisture damage & joist condition", desc: "Encapsulation, joist repair, and vapor barriers. Price depends on square footage and damage severity." },
-  { title: "Basement Waterproofing", range: "$3,000 – $14,000", sub: "Interior vs. exterior makes a difference", desc: "Drainage systems, sump pumps, and wall sealants. Exterior excavation adds cost." },
-  { title: "Foundation Repair", range: "$4,000 – $20,000+", sub: "Pier type and count change everything", desc: "Helical or push piers installed beneath your foundation. Complex jobs or multiple piers raise the total." },
-  { title: "Concrete Leveling", range: "$800 – $3,500", sub: "No two slabs are the same", desc: "PolyLevel foam injection raises sunken concrete quickly. Size, access, and void depth affect the final number." },
-  { title: "Mold Remediation", range: "$1,200 – $5,500", sub: "Depends on area affected and severity", desc: "Safe removal of mold growth in crawl spaces and basements, plus prevention treatments." },
-  { title: "Insulation Replacement", range: "$1,500 – $6,000", sub: "Improves comfort and energy efficiency", desc: "Crawl space insulation removal and replacement with closed-cell spray foam or rigid boards." },
-];
-
-const COST_BY_CITY = [
-  { city: "Memphis, TN", img: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800", range: "$2,800 – $18,000", note: "High clay soil drives foundation movement more than most TN cities." },
-  { city: "Nashville, TN", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800", range: "$3,200 – $20,000", note: "Variable soil conditions and older housing stock push average costs slightly higher." },
-  { city: "Jonesboro, AR", img: "https://images.unsplash.com/photo-1464082354059-27db6ce50048?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800", range: "$2,500 – $14,000", note: "Flat terrain reduces excavation costs; crawl space moisture is the most common issue." },
-  { city: "Little Rock, AR", img: "https://images.unsplash.com/photo-1549517045-bc93de075e53?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800", range: "$2,600 – $15,500", note: "Mixed soil types across the metro. Basement waterproofing is among the most common repairs." },
-  { city: "Jackson, MS", img: "https://images.unsplash.com/photo-1580216643062-cf460548a66a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800", range: "$2,400 – $13,500", note: "High humidity creates crawl space moisture issues nearly year-round. Encapsulation is most common." },
-  { city: "Chattanooga, TN", img: "https://images.unsplash.com/photo-1570149329479-2f7f2e92f2fc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800", range: "$2,700 – $16,000", note: "Hillside homes and limestone bedrock make foundation pier installation more complex." },
-];
-
-const FINANCING_PERKS = [
-  { icon: Percent, title: "0% interest available", desc: "Qualified homeowners can spread repair costs over 12–18 months at 0% APR." },
-  { icon: CalendarClock, title: "Terms up to 10 years", desc: "Longer terms available for larger structural or waterproofing projects." },
-  { icon: CreditCard, title: "Same-day approval", desc: "Apply during your free inspection and know your options before we leave." },
-];
-
-function SubEyebrow({ label }: { label: string }) {
+// ─── 4. PRICING (teaser) ──────────────────────────────────────────────────────
+// Pricing has too many modules of its own (buyer/seller guides, cost by
+// service, cost by city, financing) to live inline here without drowning the
+// rest of Resources — it's its own page (PricingPage.tsx), and this is the
+// single teaser module that sends visitors there. Keep in sync with
+// SharedNavBar.tsx's RESOURCES_SECTIONS.
+function CostGuideSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   return (
-    <div className="flex items-center gap-3 mb-4">
-      <div style={{ width: 28, height: 2, background: B }} />
-      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>{label}</span>
-    </div>
-  );
-}
-
-function CostGuideSection() {
-  return (
-    <div id="cost">
-      {/* Intro */}
-      <section style={{ background: CREAM }} className="pt-20 lg:pt-28 pb-12">
-        <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-          <Reveal>
-            <SubEyebrow label="Pricing" />
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4.5vw,58px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px", marginBottom: 16 }}>
-              Transparent pricing for every homeowner
-            </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED, lineHeight: 1.7, maxWidth: 640, marginBottom: 32 }}>
-              No hidden fees, no surprise quotes. Understand what structural repairs actually cost — broken down by service and by city — before we ever knock on your door.
-            </p>
-            <button onClick={openInspection} className="inline-flex items-center gap-3 px-8 py-4"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", border: "none", cursor: "pointer" }}>
-              Schedule Free Inspection
-              <ArrowRight size={16} />
-            </button>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Buyer & seller guides */}
-      <section style={{ background: CREAM }} className="pb-20 lg:pb-24">
-        <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-          <Reveal className="mb-10">
-            <SubEyebrow label="Buyer & seller guides" />
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.7, maxWidth: 520 }}>
-              Downloadable guides to help buyers and sellers navigate structural issues during a real estate transaction.
-            </p>
-          </Reveal>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {TRANSACTION_GUIDES.map((item, i) => (
-              <Reveal key={item.title} delay={i * 0.07}>
-                <div className="flex flex-col h-full p-7" style={{ background: SURFACE.panel }}>
-                  <div className="w-11 h-11 flex items-center justify-center shrink-0 mb-6" style={{ background: "rgba(255,255,255,.12)", border: "1px solid rgba(255,255,255,.2)" }}>
-                    <FileText size={20} color="#fff" strokeWidth={1.5} />
-                  </div>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 10 }}>
-                    PDF &middot; {item.pages}
-                  </span>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.2, marginBottom: 8 }}>{item.title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.6)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{item.desc}</p>
-                  <button className="inline-flex items-center gap-2 px-5 py-2.5 w-fit transition-opacity hover:opacity-85"
-                    style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, border: "none", cursor: "pointer" }}>
-                    <Download size={13} />
-                    Download
-                  </button>
-                </div>
-              </Reveal>
-            ))}
+    <section id="cost" style={{ background: SURFACE.panel }} className="py-20 lg:py-24">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+        <Reveal className="max-w-[640px]">
+          <div className="flex items-center gap-3 mb-4">
+            <div style={{ width: 28, height: 2, background: SAND }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Pricing</span>
           </div>
-        </div>
-      </section>
-
-      {/* Cost guides hub — cost by service */}
-      <section style={{ background: SURFACE.base }} className="py-20 lg:py-24">
-        <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-          <Reveal className="mb-14">
-            <SubEyebrow label="Cost guides hub · By service" />
-            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.2vw,40px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 12 }}>
-              What does it really cost?
-            </h3>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.7, maxWidth: 520 }}>
-              Typical ranges for TN, MS, and AR homeowners. Every home is different — your free inspection gives you an exact number.
-            </p>
-          </Reveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {COST_BY_SERVICE.map((card, i) => (
-              <Reveal key={card.title} delay={i * 0.07}>
-                <div className="flex flex-col h-full p-8" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
-                  <div className="inline-flex items-center px-2 py-0.5 mb-5 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.18)" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>Cost guide</span>
-                  </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: CHAR, lineHeight: 1.2, marginBottom: 6 }}>{card.title}</h3>
-                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.5vw,32px)", color: B, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 8 }}>{card.range}</p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, color: "rgba(10,11,20,.4)", marginBottom: 12 }}>{card.sub}</p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{card.desc}</p>
-                  <button className="group inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    Read full guide
-                    <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5" color={SAND} />
-                  </button>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Cost guides hub — cost by city */}
-      <section style={{ background: CREAM }} className="py-20 lg:py-24">
-        <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-          <Reveal className="mb-14">
-            <SubEyebrow label="Cost guides hub · By city" />
-            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.2vw,40px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 12 }}>
-              Local pricing for your market
-            </h3>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.7, maxWidth: 540 }}>
-              Repair costs differ by market due to soil type, local labor rates, and common damage patterns. Here's what homeowners in our service area actually pay.
-            </p>
-          </Reveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {COST_BY_CITY.map((item, i) => (
-              <Reveal key={item.city} delay={i * 0.07}>
-                <div className="flex flex-col overflow-hidden" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
-                  <div className="relative overflow-hidden shrink-0" style={{ height: 160 }}>
-                    <ImageWithFallback src={item.img} alt={item.city} className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.85) 0%, rgba(10,11,20,.15) 55%, rgba(10,11,20,0) 100%)" }} />
-                    <div className="absolute bottom-0 left-0 right-0 px-5 py-4 flex items-center gap-2">
-                      <MapPin size={14} color={SAND} />
-                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff" }}>{item.city}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col flex-1 p-6">
-                    <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2vw,30px)", color: B, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 8 }}>{item.range}</p>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{item.note}</p>
-                    <button className="group inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                      View {item.city} guide
-                      <ChevronRight size={15} className="transition-transform group-hover:translate-x-0.5" color={SAND} />
-                    </button>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Financing */}
-      <section style={{ background: SURFACE.base }} className="py-20 lg:py-24">
-        <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-          <Reveal className="mb-14">
-            <SubEyebrow label="Financing" />
-            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.2vw,40px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 12 }}>
-              Repair it now, pay over time
-            </h3>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.7, maxWidth: 540 }}>
-              Structural issues don't wait, and neither should you. Flexible plans make repairs affordable without draining savings.
-            </p>
-          </Reveal>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-            {FINANCING_PERKS.map((perk, i) => (
-              <Reveal key={perk.title} delay={i * 0.07}>
-                <div className="flex flex-col h-full p-7" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
-                  <div className="w-11 h-11 flex items-center justify-center mb-6" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.2)" }}>
-                    <perk.icon size={20} color={B} strokeWidth={1.5} />
-                  </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: CHAR, lineHeight: 1.2, marginBottom: 10 }}>{perk.title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-          <Reveal>
-            <button onClick={openInspection} className="inline-flex items-center gap-2 px-6 py-3.5 hover:opacity-90 transition-opacity"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
-              Check my financing options <ArrowRight size={14} />
-            </button>
-          </Reveal>
-        </div>
-      </section>
-    </div>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.6vw,46px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
+            Transparent pricing for every homeowner
+          </h2>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.6)", lineHeight: 1.7 }}>
+            Buyer &amp; seller guides, cost ranges by service and by city, and financing options — all broken down before we ever knock on your door.
+          </p>
+        </Reveal>
+        <Reveal delay={0.1} className="shrink-0">
+          <button onClick={() => onNavigate?.("pricing")} className="group inline-flex items-center gap-3 px-8 py-4"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", border: "none", cursor: "pointer" }}>
+            See pricing &amp; cost guides
+            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+          </button>
+        </Reveal>
+      </div>
+    </section>
   );
 }
 
@@ -940,7 +763,7 @@ export default function ResourcesPage({ onBack, onNavigate, scrollTo: initialSec
           scroll-position rail and the upfront dropdown list. */}
       <FloatingSideNav tabs={NAV_TABS} active={activeTab} onChange={scrollToSection} />
 
-      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
@@ -956,7 +779,7 @@ export default function ResourcesPage({ onBack, onNavigate, scrollTo: initialSec
         <GallerySection />
         <BuyerSellerSection onNavigate={onNavigate} />
         <ResourcesDownloadSection />
-        <CostGuideSection />
+        <CostGuideSection onNavigate={onNavigate} />
         <JobStoriesSection onNavigate={onNavigate} />
         <FaqSection />
         <ReviewsSection onNavigate={onNavigate} />

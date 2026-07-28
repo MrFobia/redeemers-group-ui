@@ -689,7 +689,7 @@ export default function BlogInnerPage({
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="Resources" />
       </div>
-      <div className="pt-[68px] md:pt-[111px]">
+      <div className="pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]">
         <HeroSection onBack={onBack} onNavigate={onNavigate} />
         <ArticleBody />
         <RelatedPostsSection />

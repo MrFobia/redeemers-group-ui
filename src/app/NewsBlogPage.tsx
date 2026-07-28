@@ -552,7 +552,7 @@ export default function NewsBlogPage({ onBack, onNavigate }: { onBack: () => voi
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="Resources" />
       </div>
-      <div className="pt-[68px] md:pt-[111px]">
+      <div className="pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]">
         <HeroSection onBack={onBack} onNavigate={onNavigate} />
         <FeaturedSection onNavigate={onNavigate} />
         <CategoryTabs active={activeCategory} onChange={setActiveCategory} />

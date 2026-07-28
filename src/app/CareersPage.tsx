@@ -904,7 +904,7 @@ export default function CareersPage({
           anchor ids, so this page follows the client's other approved option
           — a floating rail that follows scroll instead of a fixed bar. */}
       <FloatingSideNav tabs={PAGE_TABS} active={activeTab} onChange={scrollToSection} />
-      <div className="pt-[68px] md:pt-[111px]">
+      <div className="pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]">
         <HeroSection />
         <CultureSection />
         <EmployeeQuotesSection />

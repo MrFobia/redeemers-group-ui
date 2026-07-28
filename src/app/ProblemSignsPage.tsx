@@ -173,43 +173,27 @@ function HeroSection() {
         >
           What's going on with your home?
         </motion.h1>
-        {/* Actionable above the fold: tap a category, jump straight to it. No scroll required to know what to do.
-            Each tile carries its own real photo — high-contrast solid card body underneath, not text-over-photo. */}
+        {/* Actionable above the fold: tap a category's logo, jump straight to
+            it. No scroll required to know what to do. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="flex flex-wrap items-center gap-6 md:gap-10"
         >
-          {CATEGORIES.map((cat, i) => (
+          {CATEGORIES.map((cat) => (
             <a
               key={cat.id}
               href={`#ps-${cat.id}`}
               onClick={jumpTo(cat.id)}
-              className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1"
-              style={{ background: CHAR, border: "1.5px solid rgba(255,255,255,.1)" }}
+              className="group flex flex-col items-center gap-2.5 transition-transform duration-300 hover:-translate-y-1"
             >
-
-              {/* Photo block — real, high-contrast, no text laid over it */}
-              <div className="relative w-full overflow-hidden" style={{ height: 96 }}>
-                <ImageWithFallback
-                  src={cat.img}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(30,34,53,.95) 0%, rgba(30,34,53,.15) 100%)" }} />
-                <span className="absolute bottom-2 left-2 flex items-center justify-center" style={{ width: 22, height: 22, filter: "brightness(0) invert(1)" }}>
-                  <img src={cat.icon} alt="" className="w-full h-full object-contain" />
-                </span>
-              </div>
-
-              {/* Solid card body — full contrast, no photo behind text. Whole
-                  card is the link, so no separate "See signs" CTA row. */}
-              <div className="flex flex-col px-4 pt-3 pb-4">
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", lineHeight: 1.2 }}>
-                  {cat.title}
-                </span>
-              </div>
+              <span className="flex items-center justify-center" style={{ width: 40, height: 40, filter: "brightness(0) invert(1)", opacity: 0.85 }}>
+                <img src={cat.icon} alt="" className="w-full h-full object-contain" />
+              </span>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,.75)", lineHeight: 1.2, textAlign: "center" }}>
+                {cat.title}
+              </span>
             </a>
           ))}
         </motion.div>
@@ -637,7 +621,7 @@ export default function ProblemSignsPage({ onBack, onSignClick, onNavigate, scro
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Problem Signs" />
       </div>
 
-      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}
         <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
           <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">

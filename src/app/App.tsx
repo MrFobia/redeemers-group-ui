@@ -10,6 +10,7 @@ import ProblemSignsPage from "./ProblemSignsPage";
 import ProblemSignInnerPage from "./ProblemSignInnerPage";
 import OurDifferencePage from "./OurDifferencePage";
 import ResourcesPage from "./ResourcesPage";
+import PricingPage from "./PricingPage";
 import NewsBlogPage from "./NewsBlogPage";
 import BlogInnerPage from "./BlogInnerPage";
 import AboutPage from "./AboutPage";
@@ -209,7 +210,11 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
           top of the text up past paddingTop and under the nav. Anchoring to
           the top guarantees the header clearance always holds. */}
       <div className="absolute inset-0 flex flex-col justify-center sm:justify-start px-8 md:px-14 pt-24 pb-16 sm:pt-[168px] sm:pb-[120px]">
-        <div className="w-full max-w-full md:max-w-[58%] lg:max-w-[50%]">
+        {/* md/lg (laptop and below): widened to reach the same right edge as
+            the stats bar below ("hasta donde termina Lifetime"). xl+ keeps
+            the narrower 50% so the headline doesn't run under the floating
+            glassmorphism card on the right. */}
+        <div className="w-full max-w-full md:max-w-[76%] lg:max-w-[72%] xl:max-w-[50%]">
 
           {/* Eyebrow */}
           <motion.div
@@ -256,7 +261,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: .7, delay: .45 }}
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 400, fontSize: "clamp(14px, 1.6vw, 17px)", color: "rgba(255,255,255,.72)", lineHeight: 1.65, maxWidth: 480, marginBottom: "clamp(18px, 2.5vw, 28px)" }}
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 400, fontSize: "clamp(14px, 1.6vw, 17px)", color: "rgba(255,255,255,.72)", lineHeight: 1.65, maxWidth: 620, marginBottom: "clamp(18px, 2.5vw, 28px)" }}
           >
             {slide.sub}
           </motion.p>
@@ -1471,7 +1476,7 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const initPage = window.location.hash.replace("#", "") || "home";
-  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
+  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
@@ -1523,6 +1528,10 @@ export default function App() {
     return <ResourcesPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
   }
 
+  if (page === "pricing") {
+    return <PricingPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
+  }
+
   if (page === "news-blog") {
     return <NewsBlogPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
@@ -1569,7 +1578,7 @@ export default function App() {
 
   const KNOWN_PAGES = [
     "home", "service", "services-landing", "problem-signs", "problem-sign-inner",
-    "our-difference", "resources", "news-blog", "blog-inner", "about",
+    "our-difference", "resources", "pricing", "news-blog", "blog-inner", "about",
     "careers", "service-area", "reviews", "job-stories", "contact", "guiaestilos",
   ];
 

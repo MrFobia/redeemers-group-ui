@@ -203,7 +203,7 @@ export default function ServiceAreaPage({ onBack, onNavigate }: { onBack: () => 
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="About" />
       </div>
-      <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
         <PageHeroBanner
           image={imgServiceAreaHero}
           imageAlt="Redeemers crew stabilizing a home in the Mid-South"
