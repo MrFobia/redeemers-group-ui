@@ -274,8 +274,6 @@ function ProblemSignsDropdown({ onNavigate }: { onNavigate: (p: string) => void 
           ))}
         </FlyoutItem>
       ))}
-      <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
-      <SimpleDropdownItem label="All problem signs" onClick={() => onNavigate("problem-signs")} />
     </SimpleDropdown>
   );
 }
@@ -321,8 +319,6 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
       {MEGA_MENU_SERVICES.map((c) => (
         <SimpleDropdownItem key={c.slug} label={c.label} onClick={() => onNavigate(`service/${c.slug}`)} />
       ))}
-      <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
-      <SimpleDropdownItem label="All services" onClick={() => onNavigate("services-landing")} />
     </SimpleDropdown>
   );
 }
@@ -439,7 +435,7 @@ export default function SharedNavBar({
       >
         <div className="flex items-center justify-between px-8 md:px-14 py-3 gap-4 lg:gap-6">
           {/* Logo */}
-          <button onClick={() => handleNavigate("home")} className="h-11 lg:h-[52px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
+          <button onClick={() => handleNavigate("home")} className="h-16 lg:h-20 xl:h-24 shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
             <Logo light />
           </button>
 
@@ -461,7 +457,7 @@ export default function SharedNavBar({
                       aria-haspopup="menu"
                       aria-expanded={megaOpen}
                       onMouseEnter={() => { setMegaOpen(true); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                      onClick={() => { setMegaOpen((prev) => !prev); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      onClick={() => { setMegaOpen(false); handleNavigate("services-landing"); }}
                       className="flex items-center gap-1 transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
                       style={{
                         fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -521,7 +517,7 @@ export default function SharedNavBar({
                   <div key="Problem Signs" className="relative">
                     <button
                       onMouseEnter={() => { setSignsOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
-                      onClick={() => { setSignsOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); }}
+                      onClick={() => { setSignsOpen(false); handleNavigate("problem-signs"); }}
                       className="flex items-center gap-1 transition-colors whitespace-nowrap"
                       style={{
                         fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,

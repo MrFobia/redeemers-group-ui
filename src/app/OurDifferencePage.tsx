@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import { ChevronRight, ChevronLeft, ArrowRight, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
@@ -6,6 +7,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
+import { FloatingSideNav } from "./components/FloatingSideNav";
 import imgFloor01 from "../assets/floor-01.jpeg";
 import imgFloor02 from "../assets/floor-02.jpeg";
 import imgFloor03 from "../assets/floor-03.jpeg";
@@ -1031,49 +1033,257 @@ function BeforeAfterSlider({ before, after, beforeLabel = "Before", afterLabel =
   );
 }
 
+// ─── Before & after (sourced from redeemersgroup.com/about-us/before-after.html) ──
+const BEFORE_AFTER_STATS = [
+  { val: "377", label: "Total sets" },
+  { val: "134", label: "Concrete repair" },
+  { val: "101", label: "Crawl space repair" },
+  { val: "51",  label: "Concrete leveling" },
+  { val: "15",  label: "Basement waterproofing" },
+  { val: "12",  label: "Foundation repair" },
+];
+
 const BEFORE_AFTER_PROJECTS = [
   {
-    tag: "Concrete Services",
-    title: "Sunken driveway slab, lifted in an afternoon",
+    tag: "Concrete Repair",
+    title: "Extreme Concrete Repair in Bartlett, TN",
     loc: "Bartlett, TN",
-    duration: "4 hours",
-    desc: "This slab had sunk nearly 3 inches at the joint, creating a trip hazard and pooling water against the foundation. PolyLevel foam injection raised it back to grade — no demolition, no mess.",
-    workDone: ["PolyLevel foam injection", "Slab releveled to grade", "Joint resealed against water intrusion"],
-    before: imgFloor03,
-    after: imgFloor01,
+    desc: "Jennifer purchased a new home and was concerned about severe driveway damage with voids underneath. Specialist Dante inspected the property, and expert Brennan applied the 3-part protection system to lift, seal, and protect the concrete.",
+    workDone: ["PolyLevel foam injection to lift and level", "NexusPro joint sealant to divert water", "SealantPro surface protection"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/149664-before-image.jpeg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/149664-after-image.jpeg",
+  },
+  {
+    tag: "Concrete Repair",
+    title: "Amazing Sidewalk Repair in Bartlett, TN",
+    loc: "Bartlett, TN",
+    desc: "Paulette had a sunken sidewalk section — nearly 3 inches — creating a tripping hazard. Experts Dalton and Javier used the PolyLevel concrete injection system to lift and level the slab, then sealed the joints against water intrusion.",
+    workDone: ["PolyLevel injection to lift the slab", "NexusPro joint sealant", "Trip hazard eliminated the same day"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/668c0c6864da7_before2.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/668c0c69a0e17_after2.jpg",
   },
   {
     tag: "Crawl Space Repair",
-    title: "From damp and sagging to sealed and stable",
-    loc: "Southaven, MS",
-    duration: "2 days",
-    desc: "Standing water and exposed dirt had left this crawl space with active mold and a musty smell upstairs. Full encapsulation and a SmartJack system stopped the moisture and leveled the floor above.",
-    workDone: ["SmartJack floor support system", "Vapor barrier encapsulation", "Dehumidifier install"],
-    before: imgFloor02,
-    after: imgFloor04,
+    title: "Vapor Barrier System",
+    loc: "",
+    desc: "A dirt crawl space experiencing extreme moisture and constant flooding needed a way to control the conditions underneath the home. A full vapor barrier system was installed to seal the space from ground moisture.",
+    workDone: ["Vapor barrier installation", "Moisture sealed at the ground", "Crawl space conditions stabilized"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/57f5510269dd9_crawl.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/57f55104b6a94_finished.jpg",
   },
   {
     tag: "Foundation Repair",
-    title: "A stair-step crack, closed and stabilized",
-    loc: "Jonesboro, AR",
-    duration: "1 day",
-    desc: "A stair-step crack along the exterior block wall signaled active foundation settlement. Push piers driven to bedrock stopped the movement and closed the gap for good.",
-    workDone: ["6 push piers driven to refusal", "Crack sealed and waterproofed", "Lifetime transferable warranty"],
-    before: imgFloor01,
-    after: imgFloor03,
+    title: "Cracked Brick Wall",
+    loc: "",
+    desc: "Concrete and brick materials expanding and contracting at different rates left visible cracking in the wall. Push piers were installed to stabilize the foundation and close the gap.",
+    workDone: ["Push piers driven to stable bearing soil", "Wall stabilized and crack closed", "Foundation movement stopped"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/5824af43de08d_before.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/5824af40906cd_after.jpg",
+  },
+  {
+    tag: "Crawl Space Repair",
+    title: "Crawlspace Encapsulation",
+    loc: "",
+    desc: "A damp crawl space with falling, saturated insulation needed full encapsulation to stop the moisture problem at its source.",
+    workDone: ["Old, saturated insulation removed", "Full crawl space encapsulation installed", "Moisture problem resolved at the source"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/58824de3c4d8c_35446036-b109-4bd1-8887-2d6b0c59ab1f.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/58824de287500_22b187fd-2275-4224-9a4e-cee3402c9532.jpg",
+  },
+  {
+    tag: "Crawl Space Repair",
+    title: "Crawlspace Door",
+    loc: "",
+    desc: "The old crawl space access door had failed, leaving the opening damaged and exposed. It was replaced with a new sealed door built for the job.",
+    workDone: ["Damaged access door removed", "New insulated crawl space door installed", "Opening properly sealed"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/58d29ca057be6_ed68df6d-a24c-422f-af93-1c0e4c8bfabd.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/58d29c9f5007b_7287adcb-0d7f-488b-920a-55a420cbaa75.jpg",
+  },
+  {
+    tag: "Concrete Leveling",
+    title: "INCREDIBLE PolyLEVEL Job",
+    loc: "",
+    desc: "A slab had dropped 2¼ inches out of grade. Foreman Aaron Stevens' crew used PolyLevel injection to lift it back into place in a single visit.",
+    workDone: ["PolyLevel foam injection", "2¼\" of drop corrected", "Slab releveled to grade"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/5c0fffbf3c93a_screenshot20181210-123039gallery.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/5c0fffc1b59be_20181210123014.jpg",
+  },
+  {
+    tag: "Concrete Repair",
+    title: "New Looking Concrete after NexusPro Injection",
+    loc: "",
+    desc: "Weather damage on a hillside driveway had left the concrete cracked and worn. Foreman Shane Garrett's team used NexusPro injection to restore the surface and seal it against further damage.",
+    workDone: ["NexusPro joint and crack injection", "Driveway surface restored", "Sealed against future weather damage"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/5c1a67cdd5a65_20181217113628.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/5c1a67d72b580_20181218145353.jpg",
+  },
+  {
+    tag: "Crawl Space Repair",
+    title: "Crawl Space Restoration in Bolivar, TN",
+    loc: "Bolivar, TN",
+    desc: "James and Christy's water-saturated crawl space was at risk for mold and wood rot. A full encapsulation with LumberKote wood sealant stopped the moisture and protected the structure above.",
+    workDone: ["Full crawl space encapsulation", "LumberKote wood sealant applied", "Mold and rot risk eliminated"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/65382371944de_before.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/65382373d8cd6_after.jpg",
+  },
+  {
+    tag: "Foundation Repair",
+    title: "Foundation Repair in Cordova, TN",
+    loc: "Cordova, TN",
+    desc: "Keri's home had settled enough to crack exterior walls and block new flooring installation. A push pier system stabilized and lifted the foundation, while Thor helical ties and NexusPro closed and repaired the cracks.",
+    workDone: ["Push pier system installed", "Thor helical ties for crack repair", "NexusPro crack sealant applied"],
+    before: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/640a41220ddb4_before.jpg",
+    after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/640a412904fd5_after.jpg",
   },
 ];
+
+// This example dataset only holds 10 of the site's 377 real cases (see
+// BEFORE_AFTER_STATS). The grid + category filter + pager below are the
+// pattern to scale to the full set once all 377 are scraped into a JSON
+// file — swap BEFORE_AFTER_PROJECTS for that JSON and PAGE_SIZE stays 6,
+// matching the live site's page size.
+const BEFORE_AFTER_PAGE_SIZE = 6;
+const BEFORE_AFTER_CATEGORIES = ["All", ...Array.from(new Set(BEFORE_AFTER_PROJECTS.map((p) => p.tag)))];
+
+// Fullscreen gallery — opened from the "See all" button on the compact teaser
+// below. Keeps the filter + pager pattern out of the main page scroll so the
+// single-page "Our Difference" (9 anchor sections, per the client's Jul-24 QA
+// call — see OUR_DIFFERENCE_SECTIONS in SharedNavBar.tsx) doesn't grow taller
+// for this one section. Swap BEFORE_AFTER_PROJECTS for the full 377-item JSON
+// here once scraped; PAGE_SIZE stays 6, matching the live site's page size.
+function BeforeAfterGalleryModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [category, setCategory] = useState("All");
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", handler); document.body.style.overflow = ""; };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const filtered = category === "All" ? BEFORE_AFTER_PROJECTS : BEFORE_AFTER_PROJECTS.filter((p) => p.tag === category);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / BEFORE_AFTER_PAGE_SIZE));
+  const paged = filtered.slice(page * BEFORE_AFTER_PAGE_SIZE, page * BEFORE_AFTER_PAGE_SIZE + BEFORE_AFTER_PAGE_SIZE);
+
+  const selectCategory = (c: string) => { setCategory(c); setPage(0); };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      className="fixed inset-0 z-[200] overflow-y-auto rg-scroll-thin"
+      style={{ background: SURFACE.base }}
+    >
+      <div className="sticky top-0 z-10 flex items-center justify-between px-8 md:px-14 py-5" style={{ background: SURFACE.base, borderBottom: `1px solid ${ON_LIGHT.border}` }}>
+        <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2.2vw,28px)", color: CHAR }}>
+          All before &amp; after sets
+        </h2>
+        <button onClick={onClose} className="w-10 h-10 flex items-center justify-center hover:bg-black/5 transition-colors" style={{ border: `1.5px solid ${CHAR}`, background: "none", cursor: "pointer" }}>
+          <X size={16} color={CHAR} />
+        </button>
+      </div>
+
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px mb-10" style={{ background: "rgba(10,11,20,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
+          {BEFORE_AFTER_STATS.map((s) => (
+            <div key={s.label} className="flex flex-col items-center justify-center py-6 px-4 text-center" style={{ background: SURFACE.base }}>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.6vw,32px)", color: B, lineHeight: 1, marginBottom: 4 }}>
+                {s.val}
+              </p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.45)", letterSpacing: 0.5 }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2 mb-10">
+          {BEFORE_AFTER_CATEGORIES.map((c) => (
+            <button key={c} onClick={() => selectCategory(c)}
+              className="px-4 py-2 transition-colors"
+              style={{
+                fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer",
+                background: category === c ? B : "#fff",
+                color: category === c ? "#fff" : CHAR,
+                border: `1.5px solid ${category === c ? B : ON_LIGHT.border}`,
+              }}>
+              {c}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 gap-8">
+          {paged.map((p) => (
+            <div key={p.title} className="grid grid-cols-1 lg:grid-cols-5 gap-0" style={{ background: "#fff", border: `1px solid ${ON_LIGHT.border}` }}>
+              <div className="lg:col-span-3">
+                <BeforeAfterSlider before={p.before} after={p.after} />
+              </div>
+              <div className="lg:col-span-2 flex flex-col justify-center p-8 lg:p-10">
+                <div className="inline-flex items-center px-2.5 py-1 mb-4 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)" }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{p.tag}</span>
+                </div>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: CHAR, lineHeight: 1.25, marginBottom: 10 }}>
+                  {p.title}
+                </h3>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, marginBottom: 16 }}>
+                  {p.loc || p.tag}
+                </p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#3D4152", lineHeight: 1.7, marginBottom: 20 }}>
+                  {p.desc}
+                </p>
+                <ul className="flex flex-col gap-2.5">
+                  {p.workDone.map((w) => (
+                    <li key={w} className="flex items-start gap-2.5">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginTop: 2, flexShrink: 0 }}><path d="M20 6L9 17l-5-5" stroke={B} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "#3D4152", lineHeight: 1.5 }}>{w}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {pageCount > 1 && (
+          <div className="flex justify-center items-center gap-3 mt-12">
+            <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}
+              className="w-11 h-11 flex items-center justify-center transition-colors"
+              style={{ border: `1.5px solid ${CHAR}`, opacity: page === 0 ? 0.3 : 1, cursor: page === 0 ? "default" : "pointer", background: "none" }}>
+              <ChevronLeft size={15} color={CHAR} strokeWidth={2} />
+            </button>
+            {Array.from({ length: pageCount }, (_, i) => (
+              <button key={i} onClick={() => setPage(i)}
+                className="w-9 h-9 flex items-center justify-center transition-colors"
+                style={{
+                  fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer",
+                  background: page === i ? B : "none",
+                  color: page === i ? "#fff" : CHAR,
+                  border: `1.5px solid ${page === i ? B : ON_LIGHT.border}`,
+                }}>
+                {i + 1}
+              </button>
+            ))}
+            <button onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))} disabled={page === pageCount - 1}
+              className="w-11 h-11 flex items-center justify-center transition-colors"
+              style={{ border: `1.5px solid ${CHAR}`, opacity: page === pageCount - 1 ? 0.3 : 1, cursor: page === pageCount - 1 ? "default" : "pointer", background: "none" }}>
+              <ChevronRight size={15} color={CHAR} strokeWidth={2} />
+            </button>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
 
 function BeforeAfterSection() {
   // watchDrag off: the slide itself hosts a drag-to-compare slider, so the
   // carousel only advances via the arrow buttons/dots — a swipe gesture would
   // otherwise fight the before/after handle for the same pointer drag.
-  // loop off: Embla's loop wrap positions slides via transform rather than
-  // flex order, so the CSS `gap` between real slides doesn't carry over to
-  // the wrap seam (last slide butts against the cloned first with no space).
-  // With only a handful of cards, non-looping avoids that seam entirely.
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, watchDrag: false });
   const [cur, setCur] = useState(0);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const teaser = BEFORE_AFTER_PROJECTS.slice(0, 3);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -1083,7 +1293,7 @@ function BeforeAfterSection() {
   return (
     <section id="before-after" style={{ background: SURFACE.base }} className="py-20 lg:py-28 overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-4">
+        <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="h-[2px] w-6" style={{ background: B }} />
@@ -1095,24 +1305,32 @@ function BeforeAfterSection() {
               Drag to see the difference
             </h2>
           </div>
-          <div className="flex gap-3">
-            <button onClick={() => emblaApi?.scrollPrev()}
-              className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
-              style={{ border: `1.5px solid ${CHAR}` }}>
-              <ChevronLeft size={15} color={CHAR} strokeWidth={2} />
+          <div className="flex items-center gap-5">
+            <button onClick={() => setGalleryOpen(true)}
+              className="group inline-flex items-center gap-2 shrink-0"
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+              See all (377)
+              <ChevronRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </button>
-            <button onClick={() => emblaApi?.scrollNext()}
-              className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
-              style={{ border: `1.5px solid ${CHAR}` }}>
-              <ChevronRight size={15} color={CHAR} strokeWidth={2} />
-            </button>
+            <div className="flex gap-3">
+              <button onClick={() => emblaApi?.scrollPrev()}
+                className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
+                style={{ border: `1.5px solid ${CHAR}` }}>
+                <ChevronLeft size={15} color={CHAR} strokeWidth={2} />
+              </button>
+              <button onClick={() => emblaApi?.scrollNext()}
+                className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
+                style={{ border: `1.5px solid ${CHAR}` }}>
+                <ChevronRight size={15} color={CHAR} strokeWidth={2} />
+              </button>
+            </div>
           </div>
         </Reveal>
       </div>
 
       <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
         <div className="flex gap-8 ml-[max(0px,calc((100vw-1440px)/2))]">
-          {BEFORE_AFTER_PROJECTS.map((p) => (
+          {teaser.map((p) => (
             <div key={p.title} className="shrink-0 w-[min(92vw,1160px)] grid grid-cols-1 lg:grid-cols-5 gap-0" style={{ background: "#fff", border: `1px solid ${ON_LIGHT.border}` }}>
               <div className="lg:col-span-3">
                 <BeforeAfterSlider before={p.before} after={p.after} />
@@ -1125,7 +1343,7 @@ function BeforeAfterSection() {
                   {p.title}
                 </h3>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, marginBottom: 16 }}>
-                  {p.loc} &middot; {p.duration}
+                  {p.loc || p.tag}
                 </p>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#3D4152", lineHeight: 1.7, marginBottom: 20 }}>
                   {p.desc}
@@ -1145,12 +1363,16 @@ function BeforeAfterSection() {
       </div>
 
       <div className="flex justify-center gap-2 mt-10 px-8">
-        {BEFORE_AFTER_PROJECTS.map((_, i) => (
+        {teaser.map((_, i) => (
           <button key={i} onClick={() => emblaApi?.scrollTo(i)}
             className="rounded-full transition-all duration-300"
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)", border: "none", cursor: "pointer", padding: 0 }} />
         ))}
       </div>
+
+      <AnimatePresence>
+        <BeforeAfterGalleryModal open={galleryOpen} onClose={() => setGalleryOpen(false)} />
+      </AnimatePresence>
     </section>
   );
 }
@@ -1206,8 +1428,8 @@ function ProjectStoriesSection() {
                   <ImageWithFallback src={card.img} alt={card.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.5) 0%,transparent 60%)" }} />
-                  <div className="absolute top-4 left-4 px-3 py-1" style={{ background: "rgba(26,82,168,.15)", border: "1px solid rgba(26,82,168,.35)" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
+                  <div className="absolute top-4 left-4 px-3 py-1" style={{ background: "rgba(10,11,20,.7)", border: "1px solid rgba(196,171,108,.4)" }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
                   </div>
                 </div>
                 <div className="flex flex-col flex-1 p-7">
@@ -1241,7 +1463,7 @@ const CERT_STATS = [
   { val: "20+", label: "Years certified" },
   { val: "8",   label: "Certifications held" },
   { val: "4.9", label: "Google rating" },
-  { val: "5",   label: "Awards" },
+  { val: "88",  label: "Awards" },
 ];
 
 // ─── Awards (sourced from redeemersgroup.com/about-us/awards.html) ──────────
@@ -1249,17 +1471,93 @@ type Award = { title: string; org: string; year: string; img?: string; date?: st
 
 const AWARDS: Award[] = [
   { title: "Memphis Business Journal Small Business Awards", org: "Memphis Business Journal", year: "2026", date: "June 2, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6a202bc8c9060_small-business-awards.jpeg" },
-  { title: "Top Work Places, Top 3 Small Business", org: "Top Work Places", year: "2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/699c9437bfd18_image-12.jpg" },
-  { title: "2025 Best Evergreen Company", org: "Industry Recognition", year: "2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/69bc31ecc2ddc_image-8.jpg" },
-  { title: "Commercial Appeal Top Workplaces 2024", org: "Commercial Appeal", year: "2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/67a652585c968_img8180.jpg" },
-  { title: "#24 Foundation Dealer in the Supportworks Network", org: "Supportworks", year: "2025" },
-  { title: "#20 Concrete Dealer in the Supportworks Network", org: "Supportworks", year: "2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/680120502bd76_rgtop30concrete.png" },
-  { title: "Memphis Business Journal Best Places to Work", org: "Memphis Business Journal", year: "2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/699c9470a6058_image-13.jpg" },
-  { title: "Best Place To Work 2024", org: "Industry Recognition", year: "2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb00bad945f_redeemers-12.jpg" },
-  { title: "#47 Total Basement Systems Sales", org: "Contractor Nation", year: "2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb01d70bdfa_cn-47-sales.png" },
-  { title: "#18 for Total CleanSpace™ Sales", org: "Contractor Nation", year: "2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb019619b80_cn-18-sales.png" },
-  { title: "Contractor Nation Platinum Appointment Center Award", org: "Contractor Nation", year: "2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb01464e979_cc-platinum.png" },
-  { title: "Supportworks 2022 Most Improved by % Increase in Foundation Sales", org: "Supportworks", year: "2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/643f073826f24_img2862.jpeg" },
+  { title: "Top Work Places, Top 3 Small Business", org: "Top Work Places", year: "2026", date: "February 4, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/699c9437bfd18_image-12.jpg" },
+  { title: "2025 Best Evergreen Company", org: "Industry Recognition", year: "2026", date: "March 17, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/69bc31ecc2ddc_image-8.jpg" },
+  { title: "Commercial Appeal Top Workplaces 2024", org: "Commercial Appeal", year: "2025", date: "February 6, 2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/67a652585c968_img8180.jpg" },
+  { title: "#24 Foundation Dealer in the Supportworks Network", org: "Supportworks", year: "2025", date: "April 11, 2025" },
+  { title: "#20 Concrete Dealer in the Supportworks Network", org: "Supportworks", year: "2025", date: "April 11, 2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/680120502bd76_rgtop30concrete.png" },
+  { title: "Memphis Business Journal Best Places to Work", org: "Memphis Business Journal", year: "2025", date: "September 9, 2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/699c9470a6058_image-13.jpg" },
+  { title: "Best Place To Work 2024", org: "Industry Recognition", year: "2024", date: "September 10, 2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb00bad945f_redeemers-12.jpg" },
+  { title: "#47 Total Basement Systems Sales", org: "Contractor Nation", year: "2024", date: "September 21, 2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb01d70bdfa_cn-47-sales.png" },
+  { title: "#18 for Total CleanSpace™ Sales", org: "Contractor Nation", year: "2024", date: "September 28, 2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb019619b80_cn-18-sales.png" },
+  { title: "Contractor Nation Platinum Appointment Center Award", org: "Contractor Nation", year: "2024", date: "September 28, 2024", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb01464e979_cc-platinum.png" },
+  { title: "Supportworks 2022 Most Improved by % Increase in Foundation Sales", org: "Supportworks", year: "2023", date: "April 13, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/643f073826f24_img2862.jpeg" },
+  { title: "Supportworks 2022 Top 30 Dealer in Total Sales for Concrete Products", org: "Supportworks", year: "2023", date: "April 13, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/643f06326cfe0_img2860.jpeg" },
+  { title: "Supportworks 2022 Top 50 in Total Sales for Foundation Products", org: "Supportworks", year: "2023", date: "April 13, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/643f057ac402e_img2859.jpeg" },
+  { title: "2022 Watson Seal® Certified Dealer of the Year", org: "Watson Seal", year: "2023", date: "May 15, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6463d77e825e7_lumberkote-dealer-of-the-year.jpeg" },
+  { title: "Germantown Education Foundation 2023 Run for Education Crystal Sponsorship", org: "Germantown Education Foundation", year: "2023", date: "May 31, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6477a42c3e669_gef-sponsorship-award.png" },
+  { title: "BBB A+ Rating and Accreditation in Arkansas", org: "BBB", year: "2023", date: "July 1, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/64de4b43a9a33_img3741.jpg" },
+  { title: "Best Places to Work 2023", org: "Industry Recognition", year: "2023", date: "September 12, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6511ea84d29f8_award.jpg" },
+  { title: "Best Places to Work honoree", org: "Industry Recognition", year: "2022", date: "September 26, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6358548f5b0d7_img2180.jpg" },
+  { title: "Spirit Award by The Memphis Business Journal", org: "Memphis Business Journal", year: "2022", date: "September 26, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/635856168b853_32ac9ccd-d20e-409b-b78a-59d9d80d3998.jpg" },
+  { title: "Supportworks #20 Concrete Dealer 2021", org: "Supportworks", year: "2022", date: "April 7, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9aa198c09_sw-20-2021-concrete.png" },
+  { title: "Supportworks TOP TEN NexusPro Dealer 2021", org: "Supportworks", year: "2022", date: "April 7, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9b65e9076_sw-9-2021-nexus.png" },
+  { title: "Supportworks #35 Concrete Dealer 2021", org: "Supportworks", year: "2022", date: "April 7, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9bedb3b08_sw-35-2021-found-prod.png" },
+  { title: "Angi's List Super Service Award 2021", org: "Angi", year: "2022", date: "February 1, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/62470f1a76af3_angi-2021.png" },
+  { title: "Proud Member of the Collierville Chamber of Commerce", org: "Collierville Chamber of Commerce", year: "2022", date: "January 1, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e92d244f51_cvill-chamb-of-comm-member.png" },
+  { title: "Enerbank 2021 Rising Star", org: "Enerbank", year: "2022", date: "May 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/62828cd35fe53_rising-star-2021.png" },
+  { title: "BBB A+ Rating and Accreditation", org: "BBB", year: "2022", date: "May 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8391a47b0_bbb-accred-2020.png" },
+  { title: "Best Places to Work 2018", org: "Industry Recognition", year: "2022", date: "May 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7f2952595_bptw-by-mbj-2018.png" },
+  { title: "Small Business of the Year Honoree", org: "Industry Recognition", year: "2022", date: "September 6, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/635856b57b5bc_sba-logo-horizontal.jpg" },
+  { title: "Top 20 dealer in crawlspace encapsulation for 2021-2022", org: "Contractor Nation", year: "2022", date: "September 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6358538dd1ff7_img2181.jpg" },
+  { title: "Basement Systems Top 50 dealer 2021-2022 for waterproofing", org: "Basement Systems", year: "2022", date: "September 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/635852d8cd2f9_img2182.jpg" },
+  { title: "HomeAdvisor Elite Service Professional", org: "HomeAdvisor", year: "2021", date: "January 1, 2021" },
+  { title: "Basement Systems Dealer 2021 - top 50 in total sales", org: "Basement Systems", year: "2021", date: "June 1, 2021", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8b42a4299_cn-2021-45-totsales.png" },
+  { title: "BBB A+ Rating and Accreditation 2021", org: "BBB", year: "2021", date: "December 12, 2021", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e841ef24a8_bbb-accred-2021.png" },
+  { title: "Member of the West Tennessee Home Builders Association", org: "West Tennessee Home Builders Association", year: "2020", date: "January 1, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e93adf07ea_wtn-hba-rg-2020.png" },
+  { title: "Member of the Greater Memphis Chamber", org: "Greater Memphis Chamber", year: "2020", date: "January 31, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7f4849400_greater-mem-chamb-member.png" },
+  { title: "Basement Systems - ranked top twenty in 2020", org: "Basement Systems", year: "2020", date: "June 1, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8bda72beb_cn-2020-18-tot-sales.png" },
+  { title: "Supportworks #22 Concrete Dealer 2020", org: "Supportworks", year: "2020", date: "June 10, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e91c7c4336_sw-2020-22-conc-prod.png" },
+  { title: "Supportworks Top 50 Foundation Dealers 2020", org: "Supportworks", year: "2020", date: "June 12, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e923d485e9_sw-2020-40-found-div.png" },
+  { title: "HomeAdvisor Seal of Approval", org: "HomeAdvisor", year: "2020", date: "July 1, 2020" },
+  { title: "HopeWorks Employer of the Year 2020", org: "HopeWorks", year: "2020", date: "October 1, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e78dd219c6_2020-hopeworks-eer-of-the-year.png" },
+  { title: "Redeemers Group MAAR's Premier Sponsor of 2020", org: "MAAR", year: "2020", date: "November 1, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7ad23cf16_maar-prem-sponsor-2022.png" },
+  { title: "HomeAdvisor Top-Rated Professional", org: "HomeAdvisor", year: "2020", date: "December 1, 2020" },
+  { title: "2018 Angie's List Super Service Award", org: "Angie's List", year: "2019", date: "January 16, 2019", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7848a339b_angies-list-2018-supser-award.png" },
+  { title: "Supportworks Top 10 SmartJack Dealers 2019", org: "Supportworks", year: "2019", date: "April 12, 2019", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9016f0376_sw-2019-10-sj.png" },
+  { title: "Supportworks #29 Foundation Support Dealer", org: "Supportworks", year: "2019", date: "April 12, 2019", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8f39db8c2_sw-2019-29-found-div.png" },
+  { title: "Supportworks Top 20 Concrete Dealer 2019", org: "Supportworks", year: "2019", date: "April 12, 2019", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8d626dd2b_sw-2019-19-conc-prod.png" },
+  { title: "#10 Dealer in Total CleanSpace Sales", org: "Contractor Nation", year: "2019", date: "September 21, 2019", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e77e55c81f_cn-2019-10-totsales.png" },
+  { title: "#37 Dealer of Total Basement System Sales", org: "Contractor Nation", year: "2019", date: "September 21, 2019", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e781c02c81_cn-2019-37-totsales.png" },
+  { title: "Milestone Award - 10 years authorized dealer", org: "Contractor Nation", year: "2018", date: "January 1, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7b0a4d18e_cn-2018-10-yrs-auth-dealer.png" },
+  { title: "2018 MAAR Award", org: "MAAR", year: "2018", date: "February 1, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7a3d58bf6_maar-prem-spons-2018.png" },
+  { title: "CNLIVE 2018 Award", org: "CNLIVE", year: "2018", date: "March 1, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/5c0fe35aca2e9_img1259.jpg" },
+  { title: "Constant Contact All-Star Solution Provider", org: "Constant Contact", year: "2018", date: "March 14, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/5abe77a365f7f_screen-shot-2018-03-30-at-122222-pm.png" },
+  { title: "#1 increase in entire Supportworks network in 2017", org: "Supportworks", year: "2018", date: "April 12, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/5ad4fdfc8ba49_img2779.jpg" },
+  { title: "#22 in Supportworks network for 2017", org: "Supportworks", year: "2018", date: "April 12, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e796f63648_sw-2017-22-found-div.png" },
+  { title: "2018 Supportworks top 20 concrete dealer", org: "Supportworks", year: "2018", date: "April 15, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8cdccbbcf_sw-2018-19-conc-prod.png" },
+  { title: "Basement Systems - ranked #22 in 2018", org: "Basement Systems", year: "2018", date: "June 1, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e88fc55b55_cn-2018-22-totsales.png" },
+  { title: "Basement Systems - ranked #47", org: "Basement Systems", year: "2018", date: "June 1, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e885c5ccb5_bs-2018-47-totsales.png" },
+  { title: "Memphis Business Journal Pacesetter: 2018", org: "Memphis Business Journal", year: "2018", date: "September 18, 2018", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/5bb3e2482246a_acbj-48477logofinal.png" },
+  { title: "2017 Angie's List Super Service Award", org: "Angie's List", year: "2017", date: "December 22, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e792e65bb0_angies-list-2017-supser-award.png" },
+  { title: "Top 40 Under Forty", org: "Industry Recognition", year: "2017", date: "November 9, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e82a3a1a2a_40-under-40-coo-rg.png" },
+  { title: "Inc. 5000 Rankings", org: "Inc. 5000", year: "2017", date: "August 16, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/59a6f64f46be3_a0060707000011.jpg" },
+  { title: "Inc. 5000 - #17th fastest growing company", org: "Inc. 5000", year: "2017", date: "August 16, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/59a6f6b1b6f7d_a0060253000011.jpg" },
+  { title: "Small Business Awards Executive of the Year", org: "Memphis Business Journal", year: "2017", date: "May 18, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7c14dade4_mbj-sm-bus-award.png" },
+  { title: "Memphis Business Journal: 2017 Small Business Executive of the Year", org: "Memphis Business Journal", year: "2017", date: "May 2, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7dee50ed0_mbj-2017-sm-bus-award.png" },
+  { title: "Supportworks ranks Redeemers Group #44 for 2016", org: "Supportworks", year: "2017", date: "March 17, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/58d17af838f0e_dsc01989.jpg" },
+  { title: "Inc. 5000 - top construction company in the U.S.", org: "Inc. 5000", year: "2017", date: "August 16, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7b614b09a_inc-500-2017-fastest-growing-cos.png" },
+  { title: "2017 Memphis Business Journal Pacesetters Award", org: "Memphis Business Journal", year: "2017", date: "August 24, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7c43abece_mbj-pacesetters-2016.png" },
+  { title: "Ranked #43 in Basement System dealer network for waterproofing", org: "Basement Systems", year: "2017", date: "September 17, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7b8eb444f_bs-2017-43-tot-sales.png" },
+  { title: "Ranked #17 in The US and Canada for Cleanspace", org: "Contractor Nation", year: "2017", date: "September 17, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7bb1a4caf_cs-2017-17-totsales.png" },
+  { title: "One Million Square Foot Award", org: "Contractor Nation", year: "2017", date: "September 18, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7a0960861_cs-2017-1mil-sq-ft-installed.png" },
+  { title: "#3 fastest growing company in the Mid-South", org: "Industry Recognition", year: "2016", date: "September 30, 2016", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/57fd2a48ad706_img2178.png" },
+  { title: "Memphis Business Journal's Pacesetters Award", org: "Memphis Business Journal", year: "2016", date: "August 25, 2016", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/57bc8d4ca5d9d_mbjpacesetters-logo-2016.jpg" },
+  { title: "FINALIST - Memphis Business Journal Small Business of the Year", org: "Memphis Business Journal", year: "2016", date: "April 11, 2016", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/sba-logo-2016-cropped.jpg" },
+  { title: "2016 Foundation Supportworks Top 50 Sales", org: "Supportworks", year: "2016", date: "April 8, 2016", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e914583a80_sw-2018-44-tot-sales.png" },
+  { title: "Basement Systems - top 50 waterproofing companies", org: "Basement Systems", year: "2016", date: "August 17, 2016", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e779f9a4f5_bs-2016-50-totsales.png" },
+  { title: "Top 50 foundation repair companies in the world", org: "Industry Recognition", year: "2016", date: "August 17, 2016" },
+  { title: "Enerbank 2016 Rising Star", org: "Enerbank", year: "2016", date: "November 30, 2016", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e83231abb7_2016-enerbank-rising-star.png" },
+  { title: "Foundation Supportworks dealer - #40 spot", org: "Supportworks", year: "2015", date: "August 20, 2015", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/55815-up-close-award.jpg" },
+  { title: "Basement Systems - ranked #53 in Waterproofing", org: "Basement Systems", year: "2015", date: "June 12, 2015", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e87ca36f88_bs-2016-30-cleanspace.png" },
+  { title: "Basement Systems - ranked #66 in Waterproofing", org: "Basement Systems", year: "2015", date: "June 12, 2015", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8775a9df6_bs-2015-66-waterproof.png" },
+  { title: "Basement Systems - ranked #39 in CleanSpace", org: "Basement Systems", year: "2015", date: "June 12, 2015", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8706cf5c5_bs-2015-39-clenspace.png" },
+  { title: "Angie's List Super Service Award 2013 - Memphis Market", org: "Angie's List", year: "2014", date: "March 1, 2014", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7cdcac0c2_angies-list-2013-supser-award.png" },
+  { title: "Top 50 FSI Dealer for 2013/2014", org: "Supportworks", year: "2014", date: "August 14, 2014", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e81e7e774b_sw-2014-43-tot-sales.png" },
+  { title: "Basement Systems - ranked #53 in CleanSpace", org: "Basement Systems", year: "2014", date: "November 11, 2014", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e865e663da_bs-2014-53-bs.png" },
+  { title: "Basement Systems - ranked #38 in CleanSpace", org: "Basement Systems", year: "2013", date: "November 1, 2013", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e85db0eeeb_bs-2013-38-cleanspace.png" },
+  { title: "Basement Systems Milestone Award - 5 years authorized dealer", org: "Basement Systems", year: "2013", date: "December 31, 2013", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e84c614dba_bs-5-yr-dealer-awa.png" },
+  { title: "Supportworks - Certificate of Installment", org: "Supportworks", year: "2008", date: "January 1, 2008", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9332a7880_sw-cert-of-installment.png" },
 ];
 
 const AWARD_YEARS = ["All", ...Array.from(new Set(AWARDS.map((a) => a.year))).sort((a, b) => Number(b) - Number(a))];
@@ -1558,6 +1856,193 @@ function ReferralProgramSection() {
 
 // ─── LOVE WELL INITIATIVE (DARK) ─────────────────────────────────────────────
 // Added to match the approved sitemap — was missing from the built page entirely.
+// Real history of Love Well Initiative projects (redeemersgroup.com/about-us/
+// love-well-initiative.html) — a running log that grows every year, so it's
+// rendered as a scrollable carousel (same embla pattern as Testimonials/News &
+// Awards) rather than a fixed grid. Newest first; add new entries here as
+// they happen and the module keeps working unchanged.
+const LOVE_WELL_PROJECTS = [
+  {
+    year: "2018",
+    title: "Love Well 5K & Festival — Serenity Recovery Center",
+    desc: "Serenity Recovery Center runs a free program with very little funding. We made them the beneficiary of the 2018 Love Well 5K & Festival to help close that gap.",
+    cta: "Watch the story",
+    videoId: "QB1c_89RBgg",
+    img: imgFloor01,
+  },
+  {
+    year: "2017",
+    title: "Love Well 5K & Festival — Boys & Girls Club of Greater Memphis",
+    desc: "Each year the festival benefits a different Memphis-based charity. In 2017 that was the Boys & Girls Club of Greater Memphis.",
+    cta: "Watch the story",
+    videoId: "cp3ZBiioxpw",
+    img: imgFloor02,
+  },
+  {
+    year: "2017",
+    title: "Safe Families structural repair",
+    desc: "Extensive structural repairs, done at no cost, on a home being rehabbed into a Safe Families house — a safe living environment for mothers in transition.",
+    cta: "Watch the story",
+    videoId: "EH1G9dSnjZE",
+    img: imgFloor03,
+  },
+  {
+    year: "2016",
+    title: "Love Well 5K Run/Walk & Festival — Old Path Homeless Shelter",
+    desc: "A run/walk benefiting the Old Path Homeless Shelter for Women and Children in Memphis, open to individuals and teams.",
+    cta: "Watch the story",
+    videoId: "6OY1ki0FBUE",
+    img: imgFloor04,
+  },
+  {
+    year: "2016",
+    title: "Toss the Boss Challenge",
+    desc: "Our leadership took the plunge — literally — to raise support for orphans and vulnerable children around the world.",
+    cta: "See the challenge",
+    img: imgFloor01,
+  },
+  {
+    year: "2015",
+    title: "$10,000 structural repair gift — Old Path Homeless Shelter",
+    desc: "After a nomination process across several area charities, our team selected Old Path Homeless Shelter for Women and Children for a full, free structural repair.",
+    cta: "Read the story",
+    img: imgFloor02,
+  },
+];
+
+function LoveWellProjectsCarousel() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+  const [cur, setCur] = useState(0);
+  const [openVideo, setOpenVideo] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", () => setCur(emblaApi.selectedScrollSnap()));
+  }, [emblaApi]);
+
+  return (
+    <div className="mt-20 lg:mt-28">
+      <div className="flex items-end justify-between mb-8 gap-4 flex-wrap">
+        <div>
+          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10.5, color: B, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>
+            Where the giving has gone
+          </p>
+          <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.4vw,30px)", color: CHAR, letterSpacing: "-0.5px" }}>
+            Past Love Well projects
+          </h3>
+        </div>
+        <div className="flex gap-2 shrink-0">
+          <button onClick={() => emblaApi?.scrollPrev()} aria-label="Previous project"
+            className="w-10 h-10 flex items-center justify-center hover:bg-black/5 transition-colors"
+            style={{ border: `1.5px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
+            <ChevronLeft size={15} color={CHAR} />
+          </button>
+          <button onClick={() => emblaApi?.scrollNext()} aria-label="Next project"
+            className="w-10 h-10 flex items-center justify-center hover:bg-black/5 transition-colors"
+            style={{ border: `1.5px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
+            <ChevronRight size={15} color={CHAR} />
+          </button>
+        </div>
+      </div>
+
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex items-stretch gap-5">
+          {LOVE_WELL_PROJECTS.map((p) => (
+            <div key={p.title} className="shrink-0 w-[min(85vw,340px)] flex flex-col" style={{ background: "#fff", border: `1px solid ${ON_LIGHT.border}` }}>
+              <button
+                onClick={() => p.videoId && setOpenVideo(p.videoId)}
+                className="relative overflow-hidden shrink-0 group/thumb"
+                style={{ height: 160, border: "none", padding: 0, cursor: p.videoId ? "pointer" : "default" }}
+              >
+                <ImageWithFallback src={p.img} alt={p.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/thumb:scale-105" />
+                <span className="absolute top-3 left-3 px-2.5 py-1" style={{ background: "rgba(10,11,20,.7)", border: "1px solid rgba(196,171,108,.4)" }}>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 1.5 }}>{p.year}</span>
+                </span>
+                {p.videoId && (
+                  <>
+                    <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.25)" }} />
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="w-11 h-11 rounded-full flex items-center justify-center transition-transform group-hover/thumb:scale-110" style={{ background: B }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
+                      </span>
+                    </span>
+                  </>
+                )}
+              </button>
+              <div className="flex flex-col flex-1 p-6">
+                <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 16.5, color: CHAR, lineHeight: 1.3, marginBottom: 10 }}>
+                  {p.title}
+                </h4>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: MUTED, lineHeight: 1.65, flex: 1, marginBottom: 16 }}>
+                  {p.desc}
+                </p>
+                <button
+                  onClick={() => p.videoId && setOpenVideo(p.videoId)}
+                  className="group inline-flex items-center gap-1.5"
+                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: p.videoId ? "pointer" : "default", padding: 0 }}
+                >
+                  {p.cta}
+                  <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex gap-2 mt-6">
+        {LOVE_WELL_PROJECTS.map((_, i) => (
+          <button key={i} onClick={() => emblaApi?.scrollTo(i)}
+            className="rounded-full transition-all duration-300"
+            style={{ width: cur === i ? 20 : 7, height: 7, background: cur === i ? B : "rgba(10,11,20,.15)", border: "none", cursor: "pointer", padding: 0 }} />
+        ))}
+      </div>
+
+      {createPortal(
+        <AnimatePresence>
+          {openVideo && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10"
+              style={{ background: "rgba(0,0,0,.88)" }}
+              onClick={() => setOpenVideo(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="relative w-full"
+                style={{ maxWidth: 960 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setOpenVideo(null)}
+                  aria-label="Close video"
+                  className="absolute -top-11 right-0 w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
+                  style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.15)", cursor: "pointer" }}
+                >
+                  <X size={16} color="#fff" />
+                </button>
+                <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://www.youtube.com/embed/${openVideo}?autoplay=1`}
+                    title="Love Well Initiative video"
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                    style={{ border: "none" }}
+                  />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
+    </div>
+  );
+}
+
 function LoveWellInitiativeSection() {
   return (
     <section id="love-well" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
@@ -1579,7 +2064,7 @@ function LoveWellInitiativeSection() {
               Giving back to the neighborhoods we serve
             </h2>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.6)", lineHeight: 1.8, maxWidth: 480, marginBottom: 28 }}>
-              A structural problem doesn't wait for a family to be able to afford it. Through the Love Well Initiative, we set aside discounted and, in some cases, free repairs for qualifying families in underserved Memphis-area neighborhoods.
+              Launched in 2015, the Love Well Initiative is the umbrella for every community project we take on — discounted and, in some cases, fully free structural repairs for qualifying families and charitable organizations across the Memphis area.
             </p>
             <div className="grid grid-cols-2 gap-3 mb-8 max-w-md">
               {["Discounted repairs", "Qualifying families", "Underserved neighborhoods", "Community-first"].map((tag) => (
@@ -1588,13 +2073,22 @@ function LoveWellInitiativeSection() {
                 </div>
               ))}
             </div>
-            <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
-              style={{ border: `1.5px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>
-              See if you qualify
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
+                style={{ border: `1.5px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>
+                See if you qualify
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              </a>
+              <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:opacity-90"
+                style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
+                Nominate a charity
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              </a>
+            </div>
           </Reveal>
         </div>
+
+        <LoveWellProjectsCarousel />
       </div>
     </section>
   );
@@ -1688,6 +2182,18 @@ function Footer({ onBack }: { onBack: () => void }) {
 
 // ─── OurDifferencePage ────────────────────────────────────────────────────────
 export default function OurDifferencePage({ onBack, onNavigate, scrollTo: initialSection }: { onBack: () => void; onNavigate?: (p: string) => void; scrollTo?: string }) {
+  const [activeTab, setActiveTab] = useState(initialSection ?? NAV_TABS[0].id);
+
+  const scrollToSection = (id: string) => {
+    setActiveTab(id);
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = 145;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     if (initialSection) {
       const t = setTimeout(() => {
@@ -1703,18 +2209,31 @@ export default function OurDifferencePage({ onBack, onNavigate, scrollTo: initia
     window.scrollTo(0, 0);
   }, []);
 
+  // Track active tab on scroll — feeds the floating side rail.
+  useEffect(() => {
+    const sections = NAV_TABS.map((t) => document.getElementById(t.id)).filter(Boolean) as HTMLElement[];
+    const handler = () => {
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (window.scrollY + 160 >= sections[i].offsetTop) {
+          setActiveTab(NAV_TABS[i].id);
+          break;
+        }
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
 
   return (
     <>
-      {/* Client QA: a fixed horizontal section bar here read as a 3rd
-          competing nav layer (global menu + this bar + breadcrumb). The
-          "Our Difference" hover dropdown already surfaces all 9 anchors
-          before the user commits to a click, so this page keeps only the
-          global menu + breadcrumb for local orientation. */}
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
       </div>
+      {/* Floating rail mirrors the anchors already in the "Our Difference"
+          mega menu — added per request so deep pages have both an ambient
+          scroll-position rail and the upfront dropdown list. */}
+      <FloatingSideNav tabs={NAV_TABS} active={activeTab} onChange={scrollToSection} />
 
       <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}

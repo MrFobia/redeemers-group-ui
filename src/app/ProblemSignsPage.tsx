@@ -129,8 +129,6 @@ const CATEGORIES = [
   },
 ];
 
-const FILTERS = ["All", ...CATEGORIES.map((c) => c.filter)];
-
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 // Above-the-fold must be actionable, not just a photo + headline: client
 // feedback was explicit that landing on this page with nothing to click reads
@@ -149,10 +147,6 @@ function HeroSection() {
           category tile below carries its own real photo instead, at full
           contrast against a solid card. */}
       <BlueprintGrid opacity={0.05} />
-      <div
-        className="absolute pointer-events-none"
-        style={{ top: -120, right: -120, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(26,82,168,.25) 0%, transparent 70%)" }}
-      />
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-7 pb-9 lg:pt-9 lg:pb-10">
         <motion.p
           initial={{ opacity: 0, y: 16 }}
@@ -204,23 +198,16 @@ function HeroSection() {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(30,34,53,.95) 0%, rgba(30,34,53,.15) 100%)" }} />
-                <div
-                  className="absolute bottom-2 left-2 flex items-center justify-center w-8 h-8 shrink-0"
-                  style={{ background: "rgba(10,11,20,.85)", border: "1.5px solid rgba(196,171,108,.5)" }}
-                >
-                  <span className="flex items-center justify-center" style={{ width: 20, height: 20, filter: "brightness(0) invert(1)" }}>
-                    <img src={cat.icon} alt="" className="w-full h-full object-contain" />
-                  </span>
-                </div>
+                <span className="absolute bottom-2 left-2 flex items-center justify-center" style={{ width: 22, height: 22, filter: "brightness(0) invert(1)" }}>
+                  <img src={cat.icon} alt="" className="w-full h-full object-contain" />
+                </span>
               </div>
 
-              {/* Solid card body — full contrast, no photo behind text */}
-              <div className="flex flex-col gap-2 px-4 pt-3 pb-4">
+              {/* Solid card body — full contrast, no photo behind text. Whole
+                  card is the link, so no separate "See signs" CTA row. */}
+              <div className="flex flex-col px-4 pt-3 pb-4">
                 <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", lineHeight: 1.2 }}>
                   {cat.title}
-                </span>
-                <span className="flex items-center gap-1.5 transition-transform duration-200 group-hover:translate-x-1" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}>
-                  See signs <ArrowRight size={11} />
                 </span>
               </div>
             </a>
@@ -247,15 +234,10 @@ function CategoryHero({
   onNavigate?: (p: string) => void;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
-  const others = CATEGORIES.filter((c) => c.id !== cat.id);
 
   return (
     <section className="relative w-full overflow-hidden" style={{ background: DARK }}>
       <BlueprintGrid opacity={0.05} />
-      <div
-        className="absolute pointer-events-none"
-        style={{ top: -140, right: -120, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(26,82,168,.25) 0%, transparent 70%)" }}
-      />
 
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-8 pb-10 lg:pt-10 lg:pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
@@ -268,8 +250,7 @@ function CategoryHero({
             className="lg:col-span-4 lg:col-start-1 lg:row-start-1"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center justify-center w-10 h-10 shrink-0"
-                style={{ background: "rgba(10,11,20,.85)", border: `1.5px solid ${SAND}` }}>
+              <div className="flex items-center justify-center w-10 h-10 shrink-0">
                 <span className="flex items-center justify-center" style={{ width: 22, height: 22, filter: "brightness(0) invert(1)" }}>
                   <img src={cat.icon} alt="" className="w-full h-full object-contain" />
                 </span>
@@ -287,15 +268,22 @@ function CategoryHero({
               your home — you'll get what causes it and how it's repaired.
             </p>
 
+            <button
+              onClick={() => onNavigate?.(cat.page)}
+              className="group inline-flex items-center gap-2.5 px-5 py-3 transition-all hover:bg-white/5"
+              style={{ border: `1.5px solid ${SAND}`, background: "transparent", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13.5, color: "#fff" }}
+            >
+              See {cat.title} solutions
+              <ArrowRight size={14} color={SAND} className="transition-transform group-hover:translate-x-1" />
+            </button>
           </motion.div>
 
-          {/* Right: the category's actual signs — first thing on screen, and on
-              mobile they come before the CTA so the fold still shows content. */}
+          {/* Right: the category's actual signs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="lg:col-span-8 lg:col-start-5 lg:row-start-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3"
+            className="lg:col-span-8 lg:col-start-5 lg:row-start-1 grid grid-cols-1 sm:grid-cols-2 gap-3"
           >
             {cat.symptoms.map((symptom, i) => {
               const on = hovered === symptom;
@@ -305,62 +293,27 @@ function CategoryHero({
                   onClick={() => onSignClick?.(symptom)}
                   onMouseEnter={() => setHovered(symptom)}
                   onMouseLeave={() => setHovered(null)}
-                  className="group relative flex items-center gap-3 p-3 text-left transition-all duration-200"
+                  className="group relative flex flex-col text-left overflow-hidden transition-all duration-200"
                   style={{ background: CHAR, border: `1.5px solid ${on ? SAND : "rgba(255,255,255,.1)"}`, cursor: "pointer" }}
                 >
-                  <span className="relative overflow-hidden shrink-0" style={{ width: 58, height: 46 }}>
+                  <span className="relative overflow-hidden shrink-0 w-full" style={{ height: 130 }}>
                     <ImageWithFallback
                       src={getSymptomImage(symptom)}
                       alt={symptom}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-300"
                       style={{ transform: on ? "scale(1.08)" : "scale(1)" }}
                     />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.55) 0%, transparent 55%)" }} />
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block mt-0.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, lineHeight: 1.35, color: on ? "#fff" : "rgba(255,255,255,.78)", fontWeight: on ? 500 : 400 }}>
+                  <span className="flex items-center justify-between gap-3 px-4 py-3.5">
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, lineHeight: 1.35, color: on ? "#fff" : "rgba(255,255,255,.78)", fontWeight: on ? 500 : 400 }}>
                       {symptom}
                     </span>
+                    <ChevronRight size={15} color={on ? SAND : "rgba(255,255,255,.3)"} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
                   </span>
-                  <ChevronRight size={15} color={on ? SAND : "rgba(255,255,255,.3)"} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
                 </button>
               );
             })}
-          </motion.div>
-
-          {/* Actions + category switch — sits under the heading on desktop */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.18 }}
-            className="lg:col-span-4 lg:col-start-1 lg:row-start-2 lg:-mt-2"
-          >
-            <button
-              onClick={() => onNavigate?.(cat.page)}
-              className="group inline-flex items-center gap-2.5 px-5 py-3 transition-all hover:bg-white/5"
-              style={{ border: `1.5px solid ${SAND}`, background: "transparent", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13.5, color: "#fff" }}
-            >
-              See {cat.title} solutions
-              <ArrowRight size={14} color={SAND} className="transition-transform group-hover:translate-x-1" />
-            </button>
-
-            {/* Switch category without scrolling back up */}
-            <div className="mt-7 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,.1)" }}>
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,.4)", letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 10 }}>
-                Other categories
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {others.map((o) => (
-                  <button
-                    key={o.id}
-                    onClick={() => onNavigate?.(`problem-signs/${o.id}`)}
-                    className="transition-colors hover:text-white hover:border-white/30"
-                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(255,255,255,.7)", background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.12)", padding: "6px 12px", cursor: "pointer" }}
-                  >
-                    {o.title}
-                  </button>
-                ))}
-              </div>
-            </div>
           </motion.div>
 
         </div>
@@ -468,55 +421,23 @@ function CategoryCard({ cat, delay = 0, onSignClick, onNavigate }: { cat: typeof
 
 // ─── Browse Section ───────────────────────────────────────────────────────────
 function BrowseSection({ onSignClick, onNavigate, excludeId }: { onSignClick?: (label?: string) => void; onNavigate?: (p: string) => void; excludeId?: string }) {
-  const [activeFilter, setActiveFilter] = useState("All");
-
-  // On a category route the hero already carries that category in full, so the
-  // unfiltered grid below shows the remaining ones instead of repeating it.
-  // Picking its own chip brings the full card back.
-  const filtered = activeFilter === "All"
-    ? CATEGORIES.filter((c) => c.id !== excludeId)
-    : CATEGORIES.filter((c) => c.filter === activeFilter || c.filter === "All");
+  // On a category route the hero already carries that category in full, so
+  // this grid shows the remaining ones instead of repeating it. The hero's
+  // 4 tiles already act as the category filter, so there's no separate
+  // filter control here — just the full detail cards (with per-symptom
+  // lists the hero tiles don't carry).
+  const filtered = CATEGORIES.filter((c) => c.id !== excludeId);
 
   return (
     <section style={{ background: CREAM }} className="pt-10 pb-20 lg:pt-12 lg:pb-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        {/* No repeated "Browse by category" intro here — the hero already
-            states the page's purpose and shows these same 4 categories as
-            actionable tiles. Repeating title+icon+photo again immediately
-            below was flagged as content duplication; this section now goes
-            straight to the filter + the full detail cards (which carry the
-            per-symptom lists the hero tiles don't). */}
-        {excludeId && activeFilter === "All" && (
-          <Reveal className="text-center mb-6">
+        {excludeId && (
+          <Reveal className="text-center mb-10">
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: MUTED, letterSpacing: 3, textTransform: "uppercase" }}>
               Not what you're seeing? Browse the other categories
             </p>
           </Reveal>
         )}
-        <Reveal delay={0.05} className="flex items-center gap-2 flex-wrap mb-12 justify-center">
-          {FILTERS.map((f) => {
-            const active = activeFilter === f;
-            return (
-              <button
-                key={f}
-                onClick={() => setActiveFilter(f)}
-                className="relative transition-all duration-200 px-5 py-2.5"
-                style={{
-                  fontFamily: "'Articulat CF',sans-serif",
-                  fontWeight: 700,
-                  fontSize: 12,
-                  letterSpacing: 1.5,
-                  textTransform: "uppercase",
-                  color: active ? "#fff" : CHAR,
-                  background: active ? NAVY : "transparent",
-                  border: `1.5px solid ${active ? NAVY : "rgba(11,28,74,.2)"}`,
-                }}
-              >
-                {f}
-              </button>
-            );
-          })}
-        </Reveal>
 
         {/* Category Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-[1180px] mx-auto">

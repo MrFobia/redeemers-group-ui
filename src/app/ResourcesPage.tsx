@@ -6,6 +6,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ChevronRight, ChevronLeft, ArrowRight, Play, Download, FileText, X, ShieldCheck, ClipboardCheck, HelpCircle } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
+import { FloatingSideNav } from "./components/FloatingSideNav";
 import imgFloor01 from "../assets/floor-01.jpeg";
 import imgFloor03 from "../assets/floor-03.jpeg";
 import imgFloor04 from "../assets/floor-04.jpeg";
@@ -837,6 +838,18 @@ function Footer({ onBack }: { onBack: () => void }) {
 
 // ─── ResourcesPage ────────────────────────────────────────────────────────────
 export default function ResourcesPage({ onBack, onNavigate, scrollTo: initialSection }: { onBack: () => void; onNavigate?: (p: string) => void; scrollTo?: string }) {
+  const [activeTab, setActiveTab] = useState(initialSection ?? NAV_TABS[0].id);
+
+  const scrollToSection = (id: string) => {
+    setActiveTab(id);
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = 145;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     if (initialSection) {
       const attempt = () => {
@@ -852,16 +865,31 @@ export default function ResourcesPage({ onBack, onNavigate, scrollTo: initialSec
     }
   }, []);
 
+  // Track active tab on scroll — feeds the floating side rail.
+  useEffect(() => {
+    const sections = NAV_TABS.map((t) => document.getElementById(t.id)).filter(Boolean) as HTMLElement[];
+    const handler = () => {
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (window.scrollY + 160 >= sections[i].offsetTop) {
+          setActiveTab(NAV_TABS[i].id);
+          break;
+        }
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
   return (
     <>
-      {/* Client QA: fixed horizontal section bar read as a 3rd competing nav
-          layer. The "Resources" hover dropdown already surfaces the same
-          anchors before the click, so this page keeps only the global menu +
-          breadcrumb for local orientation. */}
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Resources" />
       </div>
+      {/* Floating rail mirrors the anchors already in the "Resources" mega
+          menu — added per request so deep pages have both an ambient
+          scroll-position rail and the upfront dropdown list. */}
+      <FloatingSideNav tabs={NAV_TABS} active={activeTab} onChange={scrollToSection} />
 
       <div className="w-full min-h-screen pt-[68px] md:pt-[111px]" style={{ background: SURFACE.base }}>
         {/* Breadcrumb */}

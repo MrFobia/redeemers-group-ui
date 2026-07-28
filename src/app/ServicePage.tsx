@@ -48,7 +48,7 @@ function HeroSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: st
         imageAlt={svc.name}
         eyebrow={svc.name}
         title={svc.heroHeadline}
-        minHeight={560}
+        minHeight={360}
       >
         <div className="flex items-center gap-4 flex-wrap">
           <button

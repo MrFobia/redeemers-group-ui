@@ -46,12 +46,6 @@ type JobType = {
   requirements: string[]; responsibilities: string[];
 };
 
-type ApplicationUpdate = { date: string; status: string; desc: string; };
-type ApplicationType = {
-  code: string; email: string; name: string; job: string;
-  status: number; updates: ApplicationUpdate[];
-};
-
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const MOCK_JOBS: JobType[] = [
   {
@@ -137,29 +131,6 @@ const MOCK_JOBS: JobType[] = [
       "Reconcile bank accounts and credit card statements monthly.",
       "Assist with weekly payroll processing and contractor billing.",
       "Provide administrative support for quarterly tax audits."
-    ]
-  }
-];
-
-const MOCK_APPLICATIONS: ApplicationType[] = [
-  {
-    code: "RG-7492", email: "candidate@example.com", name: "Alex Mercer",
-    job: "Foundation Repair Technician", status: 2,
-    updates: [
-      { date: "Jul 05, 2026", status: "Application Received",  desc: "We've received your application and it is currently being reviewed by our recruiting team." },
-      { date: "Jul 07, 2026", status: "Resume Screened",       desc: "Your qualifications match what we're looking for! Preparing next steps." },
-      { date: "Jul 08, 2026", status: "Interview Scheduled",   desc: "A phone screening has been scheduled. Check your inbox for the invitation link." },
-      { date: "Pending",      status: "On-Site Review & Offer", desc: "Complete the initial screen to move to on-site tour and potential offer." }
-    ]
-  },
-  {
-    code: "RG-9812", email: "test@test.com", name: "Jordan Lee",
-    job: "Customer Care Specialist", status: 0,
-    updates: [
-      { date: "Jul 08, 2026", status: "Application Received", desc: "We've received your application and it is currently being reviewed by our recruiting team." },
-      { date: "Pending",      status: "Phone Screen",         desc: "Pending initial resume review." },
-      { date: "Pending",      status: "On-site Interview",    desc: "Pending phone screening." },
-      { date: "Pending",      status: "Final Decision",       desc: "Pending interview completion." }
     ]
   }
 ];
@@ -431,6 +402,20 @@ function EmployeeQuotesSection() {
 }
 
 // ─── Hiring Process ───────────────────────────────────────────────────────────
+// 8-step hiring journey (the real roadmap ships as a graphic on the client's
+// site with no extractable text, so each of the original 4 steps was split
+// into its two natural halves rather than inventing new stages).
+const HIRING_STEPS = [
+  { step: "01", name: "Apply Online", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Select a position and fill out our quick 5-minute application form. Attach your resume or describe your experience." },
+  { step: "02", name: "Application Review", img: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Our talent team reviews every application and reaches out within 48 hours, whichever way it goes." },
+  { step: "03", name: "Recruiter Call", img: "https://images.unsplash.com/photo-1521791136064-7986c2920216?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "A 15-minute phone chat with our talent specialist to review your qualifications and expectations." },
+  { step: "04", name: "Skills & Background Check", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "A short skills assessment plus the standard background and driving record check for the role." },
+  { step: "05", name: "On-site Visit", img: "https://images.unsplash.com/photo-1573496130141-209d200cebd8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Visit our local office. Meet the team, see our facility, ask all the questions you have." },
+  { step: "06", name: "Team Interview", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Meet the crew lead or manager you'd work with directly and talk through what the day-to-day looks like." },
+  { step: "07", name: "Offer & Paperwork", img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Receive your offer, sign your paperwork, and complete onboarding — all before your first day." },
+  { step: "08", name: "Training & Get Started", img: "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Begin your paid training and certification program, then start on the job with your new crew." },
+];
+
 function HiringProcessSection() {
   return (
     <section id="hiring-process" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: SURFACE.alt }}>
@@ -462,19 +447,11 @@ function HiringProcessSection() {
         </Reveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 relative">
-          {/* Connecting line desktop */}
-          <div className="hidden md:block absolute top-[58px] left-[14%] right-[14%] z-0"
-            style={{ borderTop: "1px dashed rgba(26,82,168,.2)" }} />
-          {[
-            { step: "01", name: "Apply Online",    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Select a position and fill out our quick 5-minute application form. Attach your resume or describe your experience." },
-            { step: "02", name: "Recruiter Call",  img: "https://images.unsplash.com/photo-1553484771-689f780a5a05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "A 15-minute phone chat with our talent specialist to review your qualifications and expectations." },
-            { step: "03", name: "On-site Visit",   img: "https://images.unsplash.com/photo-1573496130141-209d200cebd8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Visit our local office. Meet the team, see our facility, ask all the questions you have." },
-            { step: "04", name: "Get Started",     img: "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400", desc: "Receive your offer, complete onboarding, and begin your paid training and certification program." },
-          ].map((item, i) => (
-            <Reveal key={item.step} delay={i * 0.1} className="relative z-10">
-              <div className="flex flex-col overflow-hidden" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
+          {HIRING_STEPS.map((item, i) => (
+            <Reveal key={item.step} delay={i * 0.06} className="relative z-10 h-full">
+              <div className="flex flex-col h-full overflow-hidden" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* Step image */}
-                <div className="relative overflow-hidden group" style={{ height: 160 }}>
+                <div className="relative overflow-hidden group shrink-0" style={{ height: 160 }}>
                   <ImageWithFallback src={item.img} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.85) 0%, rgba(10,11,20,.2) 60%, transparent 100%)" }} />
                   {/* Step badge */}
@@ -483,7 +460,7 @@ function HiringProcessSection() {
                     {item.step}
                   </div>
                 </div>
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-1">
                   <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: CHAR, marginBottom: 8 }}>{item.name}</h3>
                   <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.4)", lineHeight: 1.65 }}>{item.desc}</p>
                 </div>
@@ -504,7 +481,6 @@ function JobBoardSection() {
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [applySuccess, setApplySuccess]  = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
-  const [applications, setApplications] = useState<ApplicationType[]>(MOCK_APPLICATIONS);
 
   const [firstName,    setFirstName]    = useState("");
   const [lastName,     setLastName]     = useState("");
@@ -526,17 +502,6 @@ function JobBoardSection() {
     e.preventDefault();
     if (!firstName || !lastName || !email || !phone) return;
     const code = `RG-${Math.floor(1000 + Math.random() * 9000)}`;
-    const newApp: ApplicationType = {
-      code, email: email.toLowerCase(), name: `${firstName} ${lastName}`,
-      job: selectedJob?.title || "General Position", status: 0,
-      updates: [
-        { date: "Just now", status: "Application Received", desc: "Your application has been logged. Our recruiting specialist will contact you shortly." },
-        { date: "Pending",  status: "Phone Screen",         desc: "Pending initial resume review." },
-        { date: "Pending",  status: "On-site Interview",    desc: "Pending phone screening." },
-        { date: "Pending",  status: "Final Decision",       desc: "Pending interview completion." },
-      ]
-    };
-    setApplications(prev => [newApp, ...prev]);
     setGeneratedCode(code);
     setApplySuccess(true);
   };
@@ -544,10 +509,6 @@ function JobBoardSection() {
   const handleCloseSuccess = () => {
     setFirstName(""); setLastName(""); setEmail(""); setPhone(""); setExperience(""); setAttachedFile(null);
     setSelectedJob(null); setApplySuccess(false); setGeneratedCode(null); setShowApplyForm(false);
-    setTimeout(() => {
-      const el = document.getElementById("status-tracker");
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 150);
   };
 
   return (
@@ -762,12 +723,12 @@ function JobBoardSection() {
                   <div className="p-5 w-full max-w-xs" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                     <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(10,11,20,.35)", textTransform: "uppercase", letterSpacing: 1.5 }}>Your Application Code</span>
                     <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 28, color: B, marginTop: 4, letterSpacing: 2 }}>{generatedCode}</p>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.3)", marginTop: 4, display: "block" }}>Save this code to track your status below.</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.3)", marginTop: 4, display: "block" }}>Reference this code if you contact us about your application.</span>
                   </div>
                   <button onClick={handleCloseSuccess}
                     className="px-8 py-3.5 font-semibold text-white transition-opacity hover:opacity-85 mt-1"
                     style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 13, cursor: "pointer", border: "none" }}>
-                    Copy Code & Track Status
+                    Done
                   </button>
                 </div>
               )}
@@ -850,100 +811,8 @@ function BenefitsSection() {
             </Reveal>
           ))}
         </div>
-
-        {/* Application Tracker */}
-        <Reveal className="mt-16">
-          <div id="status-tracker" className="p-8 md:p-10" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
-            <StatusTracker applications={MOCK_APPLICATIONS} />
-          </div>
-        </Reveal>
       </div>
     </section>
-  );
-}
-
-// ─── Status Tracker ───────────────────────────────────────────────────────────
-function StatusTracker({ applications }: { applications: ApplicationType[] }) {
-  const [query,    setQuery]    = useState("");
-  const [result,   setResult]   = useState<ApplicationType | null>(null);
-  const [notFound, setNotFound] = useState(false);
-
-  const handleTrack = () => {
-    if (!query.trim()) return;
-    const clean = query.trim().toLowerCase();
-    const match = applications.find(a => a.code.toLowerCase() === clean || a.email.toLowerCase() === clean);
-    if (match) { setResult(match); setNotFound(false); }
-    else       { setResult(null);  setNotFound(true); }
-  };
-
-  return (
-    <div className="max-w-2xl">
-      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3, textTransform: "uppercase" }}>Track</span>
-      <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 24, color: CHAR, marginTop: 6, marginBottom: 10 }}>My Application Status</h3>
-      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)", lineHeight: 1.65, marginBottom: 20 }}>
-        Enter the email address you applied with, or your application code (e.g. <span style={{ color: B }}>RG-7492</span>).
-      </p>
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <input type="text" placeholder="Email or application code…" value={query} onChange={e => setQuery(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && handleTrack()}
-          className="flex-1 px-4 py-3 outline-none"
-          style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR }} />
-        <button onClick={handleTrack}
-          className="px-6 py-3 font-semibold text-white transition-opacity hover:opacity-85"
-          style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 13, cursor: "pointer", border: "none", flexShrink: 0 }}>
-          Track Status
-        </button>
-      </div>
-
-      <AnimatePresence mode="wait">
-        {result && (
-          <motion.div key={result.code} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.3 }} style={{ borderTop: "1px solid rgba(10,11,20,.08)", paddingTop: 24 }}>
-            <div className="flex justify-between items-start gap-4 mb-7">
-              <div>
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR }}>{result.name}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: B, marginTop: 3 }}>Applied for: {result.job}</p>
-              </div>
-              <span className="px-3 py-1 text-xs font-semibold" style={{ background: "rgba(26,82,168,.1)", border: `1.5px solid ${SAND}`, color: B }}>
-                Code: {result.code}
-              </span>
-            </div>
-            <div className="flex flex-col gap-6 pl-1">
-              {result.updates.map((update, idx) => {
-                const done = idx <= result.status;
-                return (
-                  <div key={update.status} className="flex gap-4 relative">
-                    {idx < result.updates.length - 1 && (
-                      <div className="absolute left-[13px] top-[26px] bottom-[-24px] w-[2px]"
-                        style={{ background: idx < result.status ? B : "rgba(10,11,20,.08)" }} />
-                    )}
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 z-10"
-                      style={{ background: done ? B : SURFACE.base, border: `2px solid ${done ? B : "rgba(10,11,20,.12)"}` }}>
-                      {done
-                        ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                        : <span style={{ fontSize: 10, color: "rgba(10,11,20,.25)", fontWeight: 700 }}>{idx + 1}</span>
-                      }
-                    </div>
-                    <div className="flex-1 pt-0.5">
-                      <div className="flex justify-between items-center gap-4">
-                        <h5 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: done ? "#fff" : "rgba(10,11,20,.25)" }}>{update.status}</h5>
-                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: done ? "rgba(10,11,20,.35)" : "rgba(10,11,20,.12)" }}>{update.date}</span>
-                      </div>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: done ? "rgba(10,11,20,.5)" : "rgba(10,11,20,.15)", marginTop: 3, lineHeight: 1.6 }}>{update.desc}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-        {notFound && (
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#f43f5e" }}>
-            No application found. Try "candidate@example.com" or code "RG-7492" as a demo.
-          </motion.p>
-        )}
-      </AnimatePresence>
-    </div>
   );
 }
 

@@ -7,9 +7,10 @@ import SharedNavBar from "./SharedNavBar";
 import { FloatingSideNav } from "./components/FloatingSideNav";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageHeroBanner } from "./components/PageHeroBanner";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
+import { B, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -41,65 +42,41 @@ const PRICING_TABS = [
 // ─── 1. HERO ──────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden" style={{ background: DARK, paddingTop: 80, paddingBottom: 88 }}>
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-10"
-        />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,11,20,0) 0%, rgba(10,11,20,.95) 100%)" }} />
+    <PageHeroBanner
+      image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600"
+      imageAlt=""
+      eyebrow="Pricing"
+      title="Transparent pricing for every homeowner"
+      lede="No hidden fees, no surprise quotes. Understand what structural repairs actually cost — broken down by service and by city — before we ever knock on your door."
+      minHeight={460}
+    >
+      <div className="flex items-center gap-4 flex-wrap mb-10">
+        <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden inline-flex items-center gap-3 px-8 py-4"
+          style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
+          Schedule Free Inspection
+          <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+        </a>
+        <a href="#cost-by-service" className="inline-flex items-center gap-2"
+          style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(255,255,255,.5)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
+          View cost guides
+        </a>
       </div>
 
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal>
-          <div className="flex items-center gap-3 mb-6">
-            <span style={{ display: "block", width: 32, height: 2, background: SAND, flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
-              Pricing
-            </span>
+      {/* Stats row */}
+      <div className="flex flex-wrap gap-0">
+        {[
+          { num: "$0",    label: "Inspection fee" },
+          { num: "48h",   label: "Avg. estimate turnaround" },
+          { num: "0%",    label: "Financing available" },
+        ].map(({ num, label }, i) => (
+          <div key={label} className="flex flex-col px-8 py-4"
+            style={{ borderLeft: i === 0 ? `2px solid ${SAND}` : "1px solid rgba(255,255,255,.07)", borderRight: i === 2 ? "1px solid rgba(255,255,255,.07)" : "none" }}>
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,36px)", color: "#fff", lineHeight: 1, letterSpacing: "-0.5px" }}>{num}</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)", letterSpacing: 1.5, textTransform: "uppercase", marginTop: 4 }}>{label}</span>
           </div>
-          <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(42px,5.5vw,80px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px", marginBottom: 20, maxWidth: 760 }}>
-            Transparent pricing<br />for every homeowner
-          </h1>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.5)", lineHeight: 1.7, maxWidth: 560, marginBottom: 40 }}>
-            No hidden fees, no surprise quotes. Understand what structural repairs actually cost — broken down by service and by city — before we ever knock on your door.
-          </p>
-          <div className="flex items-center gap-4 flex-wrap">
-            <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden inline-flex items-center gap-3 px-8 py-4"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>
-              Schedule Free Inspection
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-            </a>
-            <a href="#cost-by-service" className="inline-flex items-center gap-2"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(255,255,255,.5)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
-              View cost guides
-            </a>
-          </div>
-        </Reveal>
-
-        {/* Stats strip */}
-        <Reveal delay={0.15} className="mt-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(255,255,255,.06)" }}>
-            {[
-              { num: "$0",    label: "Inspection fee" },
-              { num: "48h",   label: "Avg. estimate turnaround" },
-              { num: "0%",    label: "Financing available" },
-              { num: "100%",  label: "Price-match guarantee" },
-            ].map((s) => (
-              <div key={s.label} className="flex flex-col items-center justify-center py-8 px-6 text-center" style={{ background: CHAR }}>
-                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,44px)", color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>
-                  {s.num}
-                </span>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.4)", marginTop: 6 }}>
-                  {s.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
+        ))}
       </div>
-    </section>
+    </PageHeroBanner>
   );
 }
 
@@ -135,26 +112,21 @@ function BuyerSellerSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {BUYER_SELLER_ITEMS.map((item, i) => (
             <Reveal key={item.title} delay={i * 0.07}>
-              <div className="flex flex-col h-full p-7" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-11 h-11 flex items-center justify-center shrink-0" style={{ background: "rgba(26,82,168,.2)", border: "1px solid rgba(26,82,168,.3)" }}>
-                    <FileText size={20} color={B} strokeWidth={1.5} />
-                  </div>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(10,11,20,.3)" }}>
-                    {item.pages}
-                  </span>
+              <div className="flex flex-col h-full p-7" style={{ background: SURFACE.panel }}>
+                <div className="w-11 h-11 flex items-center justify-center shrink-0 mb-6" style={{ background: "rgba(255,255,255,.12)", border: "1px solid rgba(255,255,255,.2)" }}>
+                  <FileText size={20} color="#fff" strokeWidth={1.5} />
                 </div>
-                <div className="inline-flex items-center px-2 py-0.5 mb-4 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)" }}>
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>PDF</span>
-                </div>
-                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: CHAR, lineHeight: 1.2, marginBottom: 8 }}>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 10 }}>
+                  PDF &middot; {item.pages}
+                </span>
+                <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.2, marginBottom: 8 }}>
                   {item.title}
                 </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.6)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
                   {item.desc}
                 </p>
                 <button className="inline-flex items-center gap-2 px-5 py-2.5 w-fit transition-opacity hover:opacity-85"
-                  style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff", border: "none", cursor: "pointer" }}>
+                  style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, border: "none", cursor: "pointer" }}>
                   <Download size={13} />
                   Download
                 </button>
@@ -302,10 +274,10 @@ function CostByCitySection() {
                 {/* City image */}
                 <div className="relative overflow-hidden shrink-0" style={{ height: 160 }}>
                   <ImageWithFallback src={item.img} alt={item.city} className="absolute inset-0 w-full h-full object-cover" />
-                  <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.45)" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.85) 0%, rgba(10,11,20,.15) 55%, rgba(10,11,20,0) 100%)" }} />
                   <div className="absolute bottom-0 left-0 right-0 px-5 py-4 flex items-center gap-2">
                     <MapPin size={14} color={SAND} />
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR }}>
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff" }}>
                       {item.city}
                     </span>
                   </div>

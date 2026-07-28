@@ -209,15 +209,14 @@ function DiagnosticSection() {
                 Also happening in your home?
               </p>
               <p style={{ fontFamily: INTER, fontSize: 13.5, color: MUTED, lineHeight: 1.6, marginBottom: 14 }}>
-                These travel with sagging floors — tap any to read that problem sign.
+                These travel with sagging floors — worth checking for before we arrive.
               </p>
               <div className="flex flex-wrap gap-2">
                 {RELATED_TAGS.map((tag) => (
-                  <button key={tag} className="group flex items-center gap-1.5 px-3 py-2 transition-all duration-200 hover:border-[rgba(26,82,168,.5)]"
-                    style={{ background: "#fff", border: `1px solid ${LINE}`, fontFamily: INTER, fontSize: 13, color: INK, cursor: "pointer" }}>
+                  <span key={tag} className="px-3 py-2"
+                    style={{ background: "rgba(10,11,20,.03)", border: `1px solid ${LINE_SOFT}`, fontFamily: INTER, fontSize: 13, color: INK }}>
                     {tag}
-                    <ChevronRight size={12} color={B} className="transition-transform group-hover:translate-x-0.5" />
-                  </button>
+                  </span>
                 ))}
               </div>
             </Reveal>
@@ -413,17 +412,10 @@ function SelfDiagnosisSection() {
             </div>
           </Reveal>
 
-          {/* Dominant action zone — cut corner references the steel angle
-              brackets used throughout the site's own repair photography. The
-              accent line sits outside the clipped box (as a sibling) so the
-              clip-path never slices through it. */}
+          {/* Dominant action zone */}
           <Reveal delay={0.1} className="lg:col-span-7">
             <div className="relative h-full">
-              <div className="absolute pointer-events-none" style={{
-                top: 0, right: 0, width: 74, height: 2, background: SAND,
-                transformOrigin: "100% 0%", transform: "rotate(45deg)",
-              }} />
-              <div className="relative h-full overflow-hidden" style={{ background: NAVY, clipPath: "polygon(0 0, calc(100% - 52px) 0, 100% 52px, 100% 100%, 0 100%)" }}>
+              <div className="relative h-full overflow-hidden" style={{ background: NAVY }}>
 
               <div className="px-8 md:px-12 py-10 lg:py-12 flex flex-col justify-center h-full">
                 <div className="flex items-center gap-2.5 mb-4">
@@ -731,19 +723,6 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
     <section style={{ background: SURFACE.base, borderBottom: `1px solid ${ON_LIGHT.hairline}` }} className="py-16 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
-        {/* Drawing-sheet header rule */}
-        <Reveal>
-          <div className="flex items-center justify-between pb-3 mb-12 lg:mb-16 flex-wrap gap-2"
-            style={{ borderBottom: "1px solid rgba(10,11,20,.12)" }}>
-            <span style={{ fontFamily: MONO, fontSize: 10.5, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
-              Section A–A · {mech.sheetTitle}
-            </span>
-            <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.3)", letterSpacing: 2, textTransform: "uppercase" }}>
-              {mech.sheetSystem}
-            </span>
-          </div>
-        </Reveal>
-
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-20">
 
           {/* ── Left: the explanation, drawn ── */}
@@ -767,13 +746,9 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
               </div>
             </Reveal>
 
-            {/* Good-news plate — steel-bracket cut corner, same motif as the urgency panel */}
+            {/* Good-news plate */}
             <Reveal delay={0.14}>
-              <div className="relative mt-10 px-7 py-6" style={{ background: NAVY, clipPath: "polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 0 100%)", maxWidth: 520 }}>
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" className="absolute top-0 right-0">
-                  <path d="M0 0h40v40" stroke={SAND} strokeWidth="1.2" />
-                  <path d="M11 0v11M0 11h11" stroke={SAND} strokeWidth="1.2" opacity="0.5" />
-                </svg>
+              <div className="relative mt-10 px-7 py-6" style={{ background: NAVY, maxWidth: 520 }}>
                 <p style={{ fontFamily: MONO, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>
                   {mech.repairable.label}
                 </p>
@@ -806,14 +781,6 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
                       className="group w-full text-left flex items-start gap-5 py-6 transition-colors duration-200"
                       style={{ background: "transparent", border: "none", cursor: "pointer" }}
                     >
-                      {/* Elevation tick — reads as a dimension leader, not a badge */}
-                      <span className="shrink-0 flex flex-col items-start pt-1" style={{ width: 66 }}>
-                        <span style={{ fontFamily: MONO, fontSize: 11, color: on ? B : "rgba(10,11,20,.38)", letterSpacing: 0.5, transition: "color .2s" }}>
-                          {cause.elev}
-                        </span>
-                        <span className="mt-2 h-px w-full" style={{ background: on ? B : "rgba(10,11,20,.15)", transition: "background .2s" }} />
-                      </span>
-
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-3 flex-wrap">
                           <span style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: on ? CHAR : "rgba(10,11,20,.72)", letterSpacing: "-0.4px", transition: "color .2s" }}>
@@ -841,7 +808,7 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
                       transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
                       style={{ overflow: "hidden" }}
                     >
-                      <div className="pb-7 pl-0 sm:pl-[86px]">
+                      <div className="pb-7">
                         <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(10,11,20,.6)", lineHeight: 1.7, marginBottom: 16, maxWidth: 460 }}>
                           {cause.desc}
                         </p>
@@ -867,12 +834,6 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
                 );
               })}
             </div>
-
-            <Reveal delay={0.12}>
-              <p className="mt-6" style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.28)", letterSpacing: 1.4, lineHeight: 1.7 }}>
-                {mech.footnote}
-              </p>
-            </Reveal>
           </Reveal>
         </div>
       </div>
@@ -1157,9 +1118,9 @@ export default function ProblemSignInnerPage({ onBack, onNavigate, slug }: { onB
         </div>
 
         <HeroSection sign={sign} />
+        <ExplainerSection sign={sign} />
         <DiagnosticSection />
         <SelfDiagnosisSection />
-        <ExplainerSection sign={sign} />
         <TestimonialsSection onNavigate={onNavigate} />
         <FaqSection />
         <CtaSection />
