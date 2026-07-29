@@ -399,7 +399,7 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
       </div>
 
       {/* Header height varies by breakpoint (announcement bar hides < md) */}
-      <div className="w-full min-h-screen pt-[123px] md:pt-[159px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[164px] md:pt-[198px] lg:pt-[214px] xl:pt-[230px]" style={{ background: SURFACE.base }}>
 
         {/* ── Breadcrumb ── */}
         <div style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }}>

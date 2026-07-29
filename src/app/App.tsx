@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
-import { Home, Hammer, BadgeCheck, ShieldCheck, Users, Leaf } from "lucide-react";
+import { Home, Hammer, BadgeCheck, ShieldCheck, Users, Leaf, X } from "lucide-react";
 import ServicePage from "./ServicePage";
 import { getSymptomImage } from "./data/services";
 import { getProblemSignByLabel } from "./data/problemSigns";
@@ -11,9 +12,14 @@ import ProblemSignInnerPage from "./ProblemSignInnerPage";
 import OurDifferencePage from "./OurDifferencePage";
 import ResourcesPage from "./ResourcesPage";
 import PricingPage from "./PricingPage";
+import AwardsPage from "./AwardsPage";
+import LoveWellPage from "./LoveWellPage";
+import BeforeAfterPage from "./BeforeAfterPage";
+import CaseStudiesPage from "./CaseStudiesPage";
 import NewsBlogPage from "./NewsBlogPage";
 import BlogInnerPage from "./BlogInnerPage";
 import AboutPage from "./AboutPage";
+import TeamPage from "./TeamPage";
 import CareersPage from "./CareersPage";
 import ServiceAreaPage from "./ServiceAreaPage";
 import GuiaEstilosPage from "./GuiaEstilosPage";
@@ -31,9 +37,8 @@ import imgRevThumb1 from "../assets/rev-thumb1.jpg";
 import imgRevThumb2 from "../assets/rev-thumb2.jpg";
 import imgRevThumb3 from "../assets/rev-thumb3.jpg";
 import imgRevAvatar from "../assets/rev-avatar.png";
-import imgCaseRanch from "../assets/case-ranch.jpg";
-import imgCaseDuplex from "../assets/case-duplex.jpg";
-import imgCaseTownhome from "../assets/case-townhome.jpg";
+import { CASE_STUDIES, type CaseStudy } from "./data/caseStudies";
+import { CaseStudiesGrid, CaseStudyModal } from "./components/CaseStudiesShowcase";
 import imgServiceAreaMap from "../assets/service-area-map.jpg";
 import imgSvcCrawlspace from "../assets/svc-crawlspace.jpg";
 import imgSvcFoundation from "../assets/svc-foundation.jpg";
@@ -102,7 +107,7 @@ const STATS = [
 ];
 
 // ─── Hero Slider ──────────────────────────────────────────────────────────────
-type HeadlineLine = string | [string, string]; // [white-part, gold-part]
+type HeadlineLine = string | [string, string, string?]; // [white-part, gold-part, white-suffix?]
 
 const SLIDES: {
   img: string;
@@ -117,7 +122,7 @@ const SLIDES: {
   {
     img: imgHeroBg,
     eyebrow: "Foundation & Structural Repair",
-    headline: ["Protecting Homes,", ["One ", "Foundation"], "at a Time."],
+    headline: ["Protecting Homes,", ["One ", "Foundation", " at a Time."]],
     sub: "Crawl space, basement waterproofing, foundation repair and concrete leveling — backed by a lifetime warranty.",
     cta: "Schedule Free Inspection",
     ctaAction: "modal",
@@ -203,18 +208,13 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
         </div>
       </div>
 
-      {/* Main content — overlaid, left column. justify-start (not center): on
-          short viewports (mobile landscape, short windows) the stacked
-          headline/subtitle/CTA content can be taller than the space left
-          after clearing the fixed header — centering would then push the
-          top of the text up past paddingTop and under the nav. Anchoring to
-          the top guarantees the header clearance always holds. */}
-      <div className="absolute inset-0 flex flex-col justify-center sm:justify-start px-8 md:px-14 pt-24 pb-16 sm:pt-[168px] sm:pb-[120px]">
+      {/* Main content — overlaid, left column, vertically centered. */}
+      <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-14 pt-24 pb-16 sm:pt-[168px] sm:pb-[120px]">
         {/* md/lg (laptop and below): widened to reach the same right edge as
             the stats bar below ("hasta donde termina Lifetime"). xl+ keeps
             the narrower 50% so the headline doesn't run under the floating
             glassmorphism card on the right. */}
-        <div className="w-full max-w-full md:max-w-[76%] lg:max-w-[72%] xl:max-w-[50%]">
+        <div className="w-full max-w-full md:max-w-[76%] lg:max-w-[72%] xl:max-w-[62%]">
 
           {/* Eyebrow */}
           <motion.div
@@ -249,7 +249,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
                 }}
               >
                 {Array.isArray(line) ? (
-                  <>{line[0]}<span style={{ color: SAND }}>{line[1]}</span></>
+                  <>{line[0]}<span style={{ color: SAND }}>{line[1]}</span>{line[2]}</>
                 ) : line}
               </motion.div>
             ))}
@@ -261,7 +261,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: .7, delay: .45 }}
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 400, fontSize: "clamp(14px, 1.6vw, 17px)", color: "rgba(255,255,255,.72)", lineHeight: 1.65, maxWidth: 620, marginBottom: "clamp(18px, 2.5vw, 28px)" }}
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 400, fontSize: "clamp(14px, 1.6vw, 17px)", color: "rgba(255,255,255,.72)", lineHeight: 1.65, maxWidth: 820, marginBottom: "clamp(18px, 2.5vw, 28px)" }}
           >
             {slide.sub}
           </motion.p>
@@ -312,8 +312,8 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
             {[
               { icon: "★", text: "4.9 Google" },
               { icon: "✓", text: "A+ BBB" },
-              { icon: "18+", text: "años" },
-              { icon: "∞", text: "Garantía" },
+              { icon: "18+", text: "years" },
+              { icon: "∞", text: "Warranty" },
             ].map((b) => (
               <div key={b.text} className="flex items-center gap-1.5 px-3 py-1.5"
                 style={{
@@ -438,6 +438,26 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
           </button>
         </div>
       </div>
+
+      {/* Scroll cue — bottom-right, invites the user past the fold */}
+      <button
+        onClick={() => window.scrollTo({ top: window.innerHeight - 120, behavior: "smooth" })}
+        aria-label="Scroll to see more"
+        className="hidden sm:flex absolute right-8 md:right-14 flex-col items-center gap-2 group"
+        style={{ bottom: 44, background: "none", border: "none", cursor: "pointer" }}
+      >
+        <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 11, color: "rgba(255,255,255,.55)", letterSpacing: 3, textTransform: "uppercase", writingMode: "vertical-rl" }}>
+          Scroll
+        </span>
+        <motion.span
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="flex items-center justify-center transition-colors group-hover:border-white/40"
+          style={{ width: 30, height: 30, borderRadius: "50%", border: "1px solid rgba(255,255,255,.3)" }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 9l7 7 7-7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </motion.span>
+      </button>
 
       {/* Bottom SAND progress bar */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ background: "rgba(255,255,255,.1)" }}>
@@ -832,6 +852,7 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgRevThumb1,
     avatar: imgRevAvatar,
+    videoId: "QB1c_89RBgg",
   },
   {
     quote: "The crew was excellent communicators and hard workers. Done well within the time given. My garage lintel looks brand new. Would I recommend Redeemers? Absolutely!",
@@ -840,6 +861,7 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgRevThumb2,
     avatar: imgRevAvatar,
+    videoId: "cp3ZBiioxpw",
   },
   {
     quote: "Walking in now, it's straight. I used to slip from side to side. I went into my bedroom — the closet door never closed before. I literally just closed it for the first time. Great job.",
@@ -848,12 +870,14 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgRevThumb3,
     avatar: imgRevAvatar,
+    videoId: "EH1G9dSnjZE",
   },
 ];
 
 function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [cur, setCur] = useState(0);
+  const [openVideo, setOpenVideo] = useState<string | null>(null);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -900,15 +924,19 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
           {TESTIMONIALS.map((t, i) => (
             <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.07)" }}>
               {/* Video / image thumb */}
-              <div className="relative" style={{ paddingBottom: "52%" }}>
+              <button
+                onClick={() => setOpenVideo(t.videoId)}
+                className="relative w-full"
+                style={{ padding: 0, paddingBottom: "52%", border: "none", cursor: "pointer" }}
+              >
                 <ImageWithFallback src={t.img as string} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
-                  <button className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  <span className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
-                  </button>
+                  </span>
                 </div>
-              </div>
+              </button>
               {/* Content */}
               <div className="p-8 flex flex-col flex-1">
                 {/* Stars */}
@@ -945,56 +973,57 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)" }} />
         ))}
       </div>
+
+      {createPortal(
+        <AnimatePresence>
+          {openVideo && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10"
+              style={{ background: "rgba(0,0,0,.88)" }}
+              onClick={() => setOpenVideo(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="relative w-full"
+                style={{ maxWidth: 960 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setOpenVideo(null)}
+                  aria-label="Close video"
+                  className="absolute -top-11 right-0 w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
+                  style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.15)", cursor: "pointer" }}
+                >
+                  <X size={16} color="#fff" />
+                </button>
+                <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://www.youtube.com/embed/${openVideo}?autoplay=1`}
+                    title="Customer review video"
+                    allow="autoplay; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                    style={{ border: "none" }}
+                  />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 }
 
-// ─── Case Studies (Photo Grid with Hover) ────────────────────────────────────
-const CASES = [
-  { tag: "Crawl Space", loc: "Memphis, TN", title: "East Memphis Ranch Home", desc: "SmartJack + full encapsulation. Done in 2 days.", img: imgCaseRanch, wide: true },
-  { tag: "Foundation", loc: "Memphis, TN", title: "Midtown Duplex", desc: "6 push piers. Clay soil corrected. Lifetime warranty.", img: imgCaseDuplex, wide: false },
-  { tag: "Concrete", loc: "Nashville, TN", title: "Nashville Townhome", desc: "Interior drainage + sump. Zero water in 3 years.", img: imgCaseTownhome, wide: false },
-];
+// ─── Case Studies (shared design — see components/CaseStudiesShowcase.tsx) ──
+function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
+  const [activeCard, setActiveCard] = useState<CaseStudy | null>(null);
+  const featured = CASE_STUDIES.slice(0, 3);
 
-function CaseCard({ c, i }: { c: typeof CASES[0]; i: number }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <Reveal delay={i * 0.1} className={i === 0 ? "lg:col-span-7" : "lg:col-span-5"}>
-      <div
-        className="relative overflow-hidden cursor-pointer"
-        style={{ height: i === 0 ? 520 : 248 }}
-        onMouseEnter={() => setHov(true)}
-        onMouseLeave={() => setHov(false)}
-      >
-        <ImageWithFallback src={c.img as string} alt={c.title}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
-          style={{ transform: hov ? "scale(1.06)" : "scale(1)" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.9) 0%,rgba(10,11,20,.2) 60%,transparent 100%)" }} />
-        <div className="absolute inset-0 transition-opacity duration-500"
-          style={{ background: `linear-gradient(0deg,${NAVY} 0%,rgba(26,82,168,.5) 100%)`, opacity: hov ? 1 : 0 }} />
-        <div className="absolute top-5 left-5 flex gap-2">
-          <span className="px-3 py-1" style={{ background: "rgba(196,171,108,.2)", border: "1px solid rgba(196,171,108,.35)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>{c.tag}</span>
-          <span className="px-3 py-1" style={{ background: "rgba(255,255,255,.1)", fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.65)" }}>{c.loc}</span>
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 p-6">
-          <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: i === 0 ? 28 : 20, color: "#fff", lineHeight: 1.2, marginBottom: 6 }}>{c.title}</h3>
-          <motion.p animate={{ opacity: hov ? 1 : 0, y: hov ? 0 : 10 }} transition={{ duration: .25 }}
-            style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)", marginBottom: 12 }}>
-            {c.desc}
-          </motion.p>
-          <motion.a href="#" animate={{ opacity: hov ? 1 : 0 }} transition={{ duration: .25, delay: .05 }}
-            className="inline-flex items-center gap-2"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-            Read story
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </motion.a>
-        </div>
-      </div>
-    </Reveal>
-  );
-}
-
-function CaseStudiesSection() {
   return (
     <section className="py-24 px-8 md:px-14" style={{ background: SURFACE.base }}>
       <div className="max-w-[1440px] mx-auto">
@@ -1007,141 +1036,29 @@ function CaseStudiesSection() {
               Real Homes, Real Results
             </h2>
           </div>
-          <a href="#" className="group inline-flex items-center gap-2 shrink-0"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, borderBottom: `1px solid ${B}`, paddingBottom: 2 }}>
+          <button onClick={() => onNavigate?.("case-studies")} className="group inline-flex items-center gap-2 shrink-0"
+            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", borderBottom: `1px solid ${B}`, paddingBottom: 2, cursor: "pointer" }}>
             View all projects
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-1">
               <path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </a>
+          </button>
         </Reveal>
-        <div className="flex flex-col gap-3">
 
-          {/* ── CASE 1 — Hero Split: stacks on mobile, side-by-side on desktop ── */}
-          <Reveal delay={0}>
-            <div className="relative flex flex-col lg:flex-row overflow-hidden lg:h-[580px]">
+        <CaseStudiesGrid items={featured} onOpen={setActiveCard} />
 
-              {/* Image — top on mobile, right on desktop */}
-              <div className="order-1 lg:order-2 relative lg:flex-1 overflow-hidden group h-56 sm:h-72 lg:h-full">
-                <ImageWithFallback src={CASES[0].img as string} alt={CASES[0].title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]" />
-              </div>
-
-              {/* Content panel — bottom on mobile, left on desktop */}
-              <div className="order-2 lg:order-1 relative flex flex-col justify-between w-full lg:w-[44%] lg:shrink-0 z-10 px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12"
-                style={{ background: "#053770" }}>
-
-                <div>
-                  <div className="flex items-center gap-3 mb-5 lg:mb-10">
-                    <span className="px-3 py-1" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>{CASES[0].tag}</span>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.45)" }}>{CASES[0].loc}</span>
-                    <span className="ml-auto hidden sm:inline" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 13, color: "rgba(255,255,255,.1)", letterSpacing: 2 }}>01</span>
-                  </div>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: "clamp(32px,5vw,72px)", color: "#fff", lineHeight: 0.93, letterSpacing: "-1px", textTransform: "uppercase", marginBottom: 16 }}>
-                    East<br />Memphis<br />Ranch<br />Home
-                  </h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.55)", lineHeight: 1.7 }}>
-                    {CASES[0].desc}
-                  </p>
-                </div>
-
-                <div className="mt-6 lg:mt-0">
-                  <div className="flex gap-6 lg:gap-10 mb-6 lg:mb-8 pt-5 lg:pt-7" style={{ borderTop: "1px solid rgba(255,255,255,.1)" }}>
-                    {[["2", "Days to\ncomplete"], ["100%", "Moisture\neliminated"], ["∞", "Lifetime\nwarranty"]].map(([val, label]) => (
-                      <div key={val + label}>
-                        <div style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: "clamp(22px,3vw,34px)", color: SAND, lineHeight: 1 }}>{val}</div>
-                        <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(255,255,255,.4)", marginTop: 4, lineHeight: 1.4, whiteSpace: "pre-line" }}>{label}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <a href="#" className="group inline-flex items-center gap-2"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-                    Read story
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          {/* ── ROW 2 — Cases 2 + 3: stack on mobile, side by side on desktop ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
-
-            {/* Case 2 — Photo top, blue panel bottom */}
-            <Reveal delay={0.1} className="sm:col-span-1 lg:col-span-7">
-              <div className="overflow-hidden group cursor-pointer flex flex-col h-[300px] sm:h-[340px] lg:h-[400px]">
-                {/* Photo */}
-                <div className="relative overflow-hidden flex-1">
-                  <ImageWithFallback src={CASES[1].img as string} alt={CASES[1].title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]" />
-                  <div className="absolute top-4 left-4 sm:top-5 sm:left-5 flex items-center gap-2 sm:gap-3">
-                    <span className="px-3 py-1" style={{ background: "rgba(255,255,255,.18)", border: "1px solid rgba(255,255,255,.35)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{CASES[1].tag}</span>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#fff" }}>{CASES[1].loc}</span>
-                  </div>
-                  <div className="hidden lg:block absolute top-2 right-4" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 110, color: "rgba(255,255,255,.05)", lineHeight: 1, letterSpacing: "-4px" }}>02</div>
-                </div>
-                {/* Blue content panel */}
-                <div className="shrink-0 px-6 py-5 lg:px-8 lg:py-6 flex flex-col gap-2" style={{ background: "#053770" }}>
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: "clamp(24px,3vw,42px)", color: "#fff", lineHeight: 0.95, textTransform: "uppercase", letterSpacing: "-0.5px" }}>{CASES[1].title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)" }}>{CASES[1].desc}</p>
-                  <a href="#" className="inline-flex items-center gap-2 group/link mt-1"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-                    Read story
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover/link:translate-x-1">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Case 3 — Navy split: image strip top, bold type bottom */}
-            <Reveal delay={0.2} className="sm:col-span-1 lg:col-span-5">
-              <div className="relative overflow-hidden group cursor-pointer flex flex-col h-[300px] sm:h-[340px] lg:h-[400px]" style={{ background: "#053770" }}>
-                {/* Image strip */}
-                <div className="relative overflow-hidden shrink-0 h-[48%]">
-                  <ImageWithFallback src={CASES[2].img as string} alt={CASES[2].title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]" />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="px-3 py-1" style={{ background: "rgba(255,255,255,.18)", border: "1px solid rgba(255,255,255,.35)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{CASES[2].tag}</span>
-                  </div>
-                  <div className="hidden lg:block absolute top-2 right-3" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 80, color: "rgba(255,255,255,.06)", lineHeight: 1 }}>03</div>
-                </div>
-                {/* Content */}
-                <div className="flex flex-col justify-between flex-1 px-5 py-4 sm:px-6 sm:py-5 lg:px-7 lg:py-6">
-                  <div>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.4)", display: "block", marginBottom: 4 }}>{CASES[2].loc}</span>
-                    <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: "clamp(22px,3vw,34px)", color: "#fff", lineHeight: 0.95, textTransform: "uppercase", letterSpacing: "-0.5px", marginBottom: 8 }}>{CASES[2].title}</h3>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", lineHeight: 1.6 }}>{CASES[2].desc}</p>
-                  </div>
-                  <a href="#" className="group/link inline-flex items-center gap-2"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
-                    Read story
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover/link:translate-x-1">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-
-        </div>
-
-        {/* View all projects CTA */}
         <div className="flex justify-center mt-14">
-          <a href="#" className="group inline-flex items-center gap-4 px-7 py-4"
-            style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 15, color: "#fff" }}>
+          <button onClick={() => onNavigate?.("case-studies")} className="group inline-flex items-center gap-4 px-7 py-4"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 15, color: "#fff", border: "none", cursor: "pointer" }}>
             View all projects
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
               <path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </a>
+          </button>
         </div>
-
       </div>
+
+      <CaseStudyModal card={activeCard} onOpenChange={(open) => !open && setActiveCard(null)} />
     </section>
   );
 }
@@ -1476,7 +1393,7 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const initPage = window.location.hash.replace("#", "") || "home";
-  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "news-blog" | "blog-inner" | "about" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
+  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "awards" | "love-well" | "before-after" | "case-studies" | "news-blog" | "blog-inner" | "about" | "team" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
@@ -1532,6 +1449,22 @@ export default function App() {
     return <PricingPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
 
+  if (page === "awards") {
+    return <AwardsPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
+  }
+
+  if (page === "love-well") {
+    return <LoveWellPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
+  }
+
+  if (page === "before-after") {
+    return <BeforeAfterPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
+  }
+
+  if (page === "case-studies") {
+    return <CaseStudiesPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
+  }
+
   if (page === "news-blog") {
     return <NewsBlogPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
@@ -1542,6 +1475,10 @@ export default function App() {
 
   if (page === "about") {
     return <AboutPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
+  }
+
+  if (page === "team") {
+    return <TeamPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
 
   if (page === "careers") {
@@ -1578,7 +1515,7 @@ export default function App() {
 
   const KNOWN_PAGES = [
     "home", "service", "services-landing", "problem-signs", "problem-sign-inner",
-    "our-difference", "resources", "pricing", "news-blog", "blog-inner", "about",
+    "our-difference", "resources", "pricing", "awards", "love-well", "before-after", "case-studies", "news-blog", "blog-inner", "about", "team",
     "careers", "service-area", "reviews", "job-stories", "contact", "guiaestilos",
   ];
 
@@ -1601,7 +1538,7 @@ export default function App() {
         <ServicesSection onNavigate={navigate} />
         <WhySection />
         <TestimonialsSection onNavigate={navigate} />
-        <CaseStudiesSection />
+        <CaseStudiesSection onNavigate={navigate} />
         <ServiceAreaSection />
         <CTASection />
         <Footer />

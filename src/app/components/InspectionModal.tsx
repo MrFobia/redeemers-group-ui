@@ -4,6 +4,7 @@ import { X, CheckCircle, Phone, Mail, MapPin, Clock, Wrench, ChevronRight, Chevr
 
 // ─── Brand Tokens ──────────────────────────────────────────────────────────────
 import { B, DARK, CHAR, SAND, MUTED, SURFACE } from "../theme";
+import { FORM_LABEL_STYLE, FORM_INPUT_STYLE } from "./formStyles";
 
 // ─── Global helper ─────────────────────────────────────────────────────────────
 export const openInspection = () =>
@@ -61,7 +62,7 @@ function Field({
 }: { label: string; required?: boolean; error?: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", color: "rgba(255,255,255,.45)" }}>
+      <label style={FORM_LABEL_STYLE}>
         {label}{required && <span style={{ color: SAND }}> *</span>}
       </label>
       {children}
@@ -70,16 +71,13 @@ function Field({
   );
 }
 
+// TextInput/PhoneInput/SelectInput below drive the focus border with local
+// state (borderColor) instead of FORM_INPUT_CLASS's focus: pseudo-class,
+// since select/prefixed inputs need the extra layout logic anyway — but they
+// share the same base look via FORM_INPUT_STYLE.
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,0.05)",
+  ...FORM_INPUT_STYLE,
   border: "1px solid rgba(255,255,255,0.10)",
-  borderRadius: 4,
-  padding: "10px 12px",
-  fontFamily: "'Inter',sans-serif",
-  fontSize: 14,
-  color: "#fff",
-  outline: "none",
-  width: "100%",
   transition: "border-color .15s",
 };
 
@@ -343,7 +341,6 @@ export function InspectionModal() {
               maxHeight: "calc(100vh - 32px)",
               background: DARK,
               border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 12,
               overflow: "hidden",
               display: "flex",
               flexDirection: "column",
@@ -372,7 +369,7 @@ export function InspectionModal() {
                         {step === 1 ? "Your information stays private. No spam, ever." : "Service available in TN, AR, MS & MO."}
                       </p>
                     </div>
-                    <button onClick={close} style={{ background: "rgba(255,255,255,0.06)", border: "none", borderRadius: 6, padding: 8, cursor: "pointer", color: "rgba(255,255,255,.5)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginLeft: 16 }}>
+                    <button onClick={close} style={{ background: "rgba(255,255,255,0.06)", border: "none", padding: 8, cursor: "pointer", color: "rgba(255,255,255,.5)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginLeft: 16 }}>
                       <X size={16} />
                     </button>
                   </div>

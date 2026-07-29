@@ -52,7 +52,7 @@ function HeroSection() {
     <section className="relative w-full overflow-hidden" style={{ minHeight: 420 }}>
       <ImageWithFallback
         src={imgFloor01}
-        alt="Homeowner education center"
+        alt="Resources"
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.94) 0%,rgba(10,11,20,0.75) 55%,rgba(10,11,20,0.5) 100%)" }} />
@@ -60,13 +60,13 @@ function HeroSection() {
         <Reveal>
           <div className="flex items-center gap-2 mb-5">
             <div className="w-5 h-[2px]" style={{ background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Education Center</span>
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Resources</span>
           </div>
           <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,5.5vw,80px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-2px", marginBottom: 20, maxWidth: 800 }}>
-            Homeowner education center
+            Everything you need, in one place
           </h1>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.6)", lineHeight: 1.75, maxWidth: 560 }}>
-            Cost guides, checklists, buyer/seller guides, and everything you need to make informed decisions about your home.
+            Project galleries, homeowner education, cost guides, job stories, FAQs, and reviews — everything you need to make informed decisions about your home.
           </p>
         </Reveal>
       </div>

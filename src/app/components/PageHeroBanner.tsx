@@ -87,7 +87,7 @@ export function PageHeroBanner({
               lineHeight: 1.02,
               letterSpacing: "-2px",
               whiteSpace: "pre-line",
-              marginBottom: lede ? 24 : 0,
+              marginBottom: lede ? 24 : children ? 32 : 0,
             }}
           >
             {title}

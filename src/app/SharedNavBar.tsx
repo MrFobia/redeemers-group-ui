@@ -42,11 +42,14 @@ export const NAV_PAGE_MAP: Record<string, string> = {
 // News. "Downloadable resources" lives under Homeowner education on the
 // sitemap but is NOT a nav-level destination — it only surfaces once inside
 // the Resources page itself. Keep in sync with ResourcesPage.tsx's NAV_TABS.
-const RESOURCES_SECTIONS = [
+// Entries marked `page` are their own top-level page (sitemap "interna") —
+// the nav jumps straight there instead of stopping at the Resources teaser
+// module first. Entries without `page` are anchors within Resources itself.
+const RESOURCES_SECTIONS: { label: string; id: string; page?: string; indent?: boolean }[] = [
   { label: "Project gallery",        id: "gallery" },
   { label: "Homeowner education",    id: "buyer-seller" },
   { label: "Pricing & Cost Guides",  id: "cost" },
-  { label: "Job stories",            id: "job-stories" },
+  { label: "Job stories",            id: "job-stories", page: "job-stories" },
   { label: "FAQs",                   id: "faq" },
   { label: "Reviews & testimonials", id: "reviews" },
 ];
@@ -170,7 +173,7 @@ function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
     <SimpleDropdown>
       <SimpleDropdownLabel label="Resources" />
       {RESOURCES_SECTIONS.map((sec) => (
-        <SimpleDropdownItem key={sec.label} label={sec.label} indent={sec.indent} onClick={() => onNavigate(`resources#${sec.id}`)} />
+        <SimpleDropdownItem key={sec.label} label={sec.label} indent={sec.indent} onClick={() => onNavigate(sec.page ?? `resources#${sec.id}`)} />
       ))}
       <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
       <SimpleDropdownItem label="News" onClick={() => onNavigate("news-blog")} />
@@ -219,24 +222,27 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 // many for a horizontal sub-nav, and their explicit preference is "a vertical
 // list view when you hover over the main navigation." Exact 9 labels/order
 // from the sitemap — keep in sync with OurDifferencePage.tsx's NAV_TABS.
-const OUR_DIFFERENCE_SECTIONS = [
-  { label: "Testimonials", id: "reviews" },
+// Entries marked `page` are their own top-level page (sitemap "interna") —
+// the nav jumps straight there instead of stopping at an Our Difference
+// anchor first. Entries without `page` are anchors within Our Difference.
+const OUR_DIFFERENCE_SECTIONS: { label: string; id: string; page?: string }[] = [
+  { label: "Testimonials", id: "reviews", page: "reviews" },
   { label: "What to expect", id: "process" },
   { label: "The Evergreen difference", id: "story" },
   { label: "Our pledge", id: "pledge" },
-  { label: "News & awards", id: "news-awards" },
-  { label: "Featured projects / case stories", id: "case-studies" },
-  { label: "Before & after", id: "before-after" },
+  { label: "News", id: "news-awards", page: "news-blog" },
+  { label: "Featured projects / case stories", id: "case-studies", page: "case-studies" },
+  { label: "Before & after", id: "before-after", page: "before-after" },
   { label: "Referral program", id: "referral" },
-  { label: "Love Well Initiative", id: "love-well" },
-  { label: "Affiliations & certifications", id: "certifications" },
+  { label: "Love Well Initiative", id: "love-well", page: "love-well" },
+  { label: "Awards", id: "certifications", page: "awards" },
 ];
 
 function OurDifferenceDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <SimpleDropdown width={290}>
       {OUR_DIFFERENCE_SECTIONS.map((sec) => (
-        <SimpleDropdownItem key={sec.id} label={sec.label} onClick={() => onNavigate(`our-difference#${sec.id}`)} />
+        <SimpleDropdownItem key={sec.id} label={sec.label} onClick={() => onNavigate(sec.page ?? `our-difference#${sec.id}`)} />
       ))}
     </SimpleDropdown>
   );
@@ -486,7 +492,7 @@ export default function SharedNavBar({
                   <div key="Resources" className="relative">
                     <button
                       onMouseEnter={() => { setResourcesOpen(true); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                      onClick={() => { setResourcesOpen((prev) => !prev); setMegaOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      onClick={() => { setResourcesOpen(false); handleNavigate("resources"); }}
                       className="flex items-center gap-1 transition-colors whitespace-nowrap"
                       style={{
                         fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -546,7 +552,7 @@ export default function SharedNavBar({
                   <div key="Our Difference" className="relative">
                     <button
                       onMouseEnter={() => { setOurDiffOpen(true); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
-                      onClick={() => { setOurDiffOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setAboutOpen(false); setSignsOpen(false); }}
+                      onClick={() => { setOurDiffOpen(false); handleNavigate("our-difference"); }}
                       className="flex items-center gap-1 transition-colors whitespace-nowrap"
                       style={{
                         fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -576,7 +582,7 @@ export default function SharedNavBar({
                   <div key="About" className="relative">
                     <button
                       onMouseEnter={() => { setAboutOpen(true); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
-                      onClick={() => { setAboutOpen((prev) => !prev); setMegaOpen(false); setResourcesOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
+                      onClick={() => { setAboutOpen(false); handleNavigate("about"); }}
                       className="flex items-center gap-1 transition-colors whitespace-nowrap"
                       style={{
                         fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
@@ -771,7 +777,7 @@ export default function SharedNavBar({
                       {RESOURCES_SECTIONS.map((sec) => (
                         <button
                           key={sec.id}
-                          onClick={() => handleNavigate(`resources#${sec.id}`)}
+                          onClick={() => handleNavigate(sec.page ?? `resources#${sec.id}`)}
                           className="w-full text-left"
                           style={{ fontFamily: "'Inter',sans-serif", fontSize: sec.indent ? 13.5 : 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer", padding: sec.indent ? "10px 12px 10px 30px" : "12px 12px 12px 12px" }}>
                           {sec.label}
@@ -842,7 +848,7 @@ export default function SharedNavBar({
                       {OUR_DIFFERENCE_SECTIONS.map((sec) => (
                         <button
                           key={sec.id}
-                          onClick={() => handleNavigate(`our-difference#${sec.id}`)}
+                          onClick={() => handleNavigate(sec.page ?? `our-difference#${sec.id}`)}
                           className="w-full py-3 pl-3 text-left"
                           style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
                           {sec.label}

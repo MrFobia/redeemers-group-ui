@@ -48,7 +48,8 @@ function HeroSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: st
         imageAlt={svc.name}
         eyebrow={svc.name}
         title={svc.heroHeadline}
-        minHeight={360}
+        lede={svc.heroLede}
+        minHeight={400}
       >
         <div className="flex items-center gap-4 flex-wrap">
           <button
@@ -154,8 +155,8 @@ function SolutionsSection({ svc }: { svc: ServiceDef }) {
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header */}
-        <Reveal className="mb-14">
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
+        <Reveal className="mb-16">
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
             <span style={{ display: "block", width: 32, height: 2, background: B, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>
               {svc.name}

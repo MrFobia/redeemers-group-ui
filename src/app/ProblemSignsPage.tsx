@@ -167,31 +167,36 @@ function HeroSection() {
             color: "#fff",
             lineHeight: 1.05,
             letterSpacing: "-1px",
-            marginBottom: 18,
+            marginBottom: 36,
             maxWidth: 720,
           }}
         >
           What's going on with your home?
         </motion.h1>
-        {/* Actionable above the fold: tap a category's logo, jump straight to
-            it. No scroll required to know what to do. */}
+        {/* Actionable above the fold: tap a category card, jump straight to
+            it. Full-width horizontal cards (not just bare icons) so they
+            read as clickable, with a hover state to confirm it. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-wrap items-center gap-6 md:gap-10"
+          className="grid grid-cols-2 md:grid-cols-4 border-t border-l"
+          style={{ borderColor: "rgba(255,255,255,.1)" }}
         >
           {CATEGORIES.map((cat) => (
             <a
               key={cat.id}
               href={`#ps-${cat.id}`}
               onClick={jumpTo(cat.id)}
-              className="group flex flex-col items-center gap-2.5 transition-transform duration-300 hover:-translate-y-1"
+              className="group flex items-center gap-3 px-5 py-4 border-r border-b transition-colors duration-200"
+              style={{ borderColor: "rgba(255,255,255,.1)", background: "rgba(255,255,255,.02)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,.07)"; e.currentTarget.style.borderColor = "rgba(196,171,108,.4)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,.02)"; e.currentTarget.style.borderColor = "rgba(255,255,255,.1)"; }}
             >
-              <span className="flex items-center justify-center" style={{ width: 40, height: 40, filter: "brightness(0) invert(1)", opacity: 0.85 }}>
+              <span className="flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110" style={{ width: 32, height: 32, filter: "brightness(0) invert(1)", opacity: 0.85 }}>
                 <img src={cat.icon} alt="" className="w-full h-full object-contain" />
               </span>
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,.75)", lineHeight: 1.2, textAlign: "center" }}>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "rgba(255,255,255,.85)", lineHeight: 1.2 }}>
                 {cat.title}
               </span>
             </a>
@@ -224,7 +229,7 @@ function CategoryHero({
       <BlueprintGrid opacity={0.05} />
 
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 pt-8 pb-10 lg:pt-10 lg:pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
 
           {/* Left: which category you're in, and what to do next */}
           <motion.div

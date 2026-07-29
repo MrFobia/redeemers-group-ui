@@ -38,6 +38,10 @@ export type ServiceDef = {
   iconImg: string | null;
   heroImg: string;
   heroHeadline: string;
+  /** Short line under the headline — states what the service is before the
+      page moves on to symptoms/solutions, so the hero reads as "here's the
+      service" rather than opening on a problem-signs question. */
+  heroLede: string;
   /** Sitemap: "Problem Signs" child. Empty for services with no symptom entry point. */
   symptoms: Symptom[];
   solutionsHeadline: string;
@@ -130,7 +134,8 @@ export const SERVICES: Record<string, ServiceDef> = {
     name: "Structural Repair",
     iconImg: iconFoundation,
     heroImg: imgFoundation,
-    heroHeadline: "Is your home showing\nthese signs?",
+    heroHeadline: "Structural Repair Built to Last",
+    heroLede: "Foundation stabilization, slab lifting, and wall reinforcement — engineered fixes for a home that's settling, cracking, or shifting, backed by a lifetime warranty.",
     symptoms: [
       { id: "s1", q: "Uneven, sloping, or bouncy floors", a: "Floors that slope or flex usually mean the structure below has lost support — settled footings, failing piers, or damaged joists. We stabilize the support system and lift the floor back toward level." , img: SYMPTOM_IMAGES["Uneven, sloping, or bouncy floors"] },
       { id: "s2", q: "Cracks in exterior or interior walls", a: "Stair-step cracks in brick and diagonal cracks above openings point to differential settlement. We anchor and stabilize the wall, then address the soil movement causing it." , img: SYMPTOM_IMAGES["Cracks in exterior or interior walls"] },
@@ -176,7 +181,8 @@ export const SERVICES: Record<string, ServiceDef> = {
     name: "Crawl Space Repair",
     iconImg: iconCrawlspace,
     heroImg: imgCrawlspace,
-    heroHeadline: "Is your home showing\nthese signs?",
+    heroHeadline: "Crawl Space Repair Done Right",
+    heroLede: "Joist repair, encapsulation, and moisture control that restore a firm, dry crawl space and stop the problem at its source — not just the symptoms.",
     symptoms: [
       { id: "s1", q: "My floors are sagging, bouncy, or buckling.", a: "This typically means the joists or support beams under your floor have lost strength or support. We repair or replace the failing members and re-support the span so the floor stops moving." , img: SYMPTOM_IMAGES["My floors are sagging, bouncy, or buckling."] },
       { id: "s2", q: "The baseboards have separated from the floor.", a: "A gap opening between baseboard and floor means the floor system is dropping away from the wall. It's a structural symptom, not a trim problem — we lift and re-support the floor first." , img: SYMPTOM_IMAGES["The baseboards have separated from the floor."] },
@@ -218,7 +224,8 @@ export const SERVICES: Record<string, ServiceDef> = {
     name: "Waterproofing",
     iconImg: iconWaterproofing,
     heroImg: imgWaterproofing,
-    heroHeadline: "Is water getting\ninto your home?",
+    heroHeadline: "Waterproofing That Keeps Water Out for Good",
+    heroLede: "Interior and exterior drainage systems engineered to permanently keep water out of your basement or crawl space — not just dry it out temporarily.",
     symptoms: [
       { id: "s1", q: "Water getting in to basement or other.", a: "Water entering through walls, joints, or the floor means hydrostatic pressure has found a path. Interior drainage plus a sump system gives that water somewhere to go before it reaches your living space." , img: SYMPTOM_IMAGES["Water getting in to basement or other."] },
       { id: "s2", q: "Water pooling around house.", a: "Standing water against the foundation is the source of most basement leaks. Exterior grading, drainage, and downspout management move it away before it can push inward." , img: SYMPTOM_IMAGES["Water pooling around house."] },
@@ -261,7 +268,8 @@ export const SERVICES: Record<string, ServiceDef> = {
     name: "Concrete Services",
     iconImg: iconConcrete,
     heroImg: imgConcrete,
-    heroHeadline: "Is your concrete\nsinking or cracking?",
+    heroHeadline: "Concrete Lifting & Leveling",
+    heroLede: "PolyLevel foam injection raises sunken driveways, walkways, and slabs back to grade in a single visit — no demolition, no full replacement.",
     symptoms: [
       { id: "s1", q: "Uneven concrete slabs", a: "Slabs that no longer sit flush with each other have settled over soft or washed-out soil. Lifting restores the original grade and removes the trip hazard." , img: SYMPTOM_IMAGES["Uneven concrete slabs"] },
       { id: "s2", q: "Sinking driveway, walkway, patio", a: "Exterior flatwork settles when the soil beneath compresses or erodes. We fill the void and raise the slab back to level — no tear-out required." , img: SYMPTOM_IMAGES["Sinking driveway, walkway, patio"] },
@@ -309,6 +317,7 @@ export const SERVICES: Record<string, ServiceDef> = {
     iconImg: null,
     heroImg: imgCaseDuplex,
     heroHeadline: "Structural repair for\ncommercial properties.",
+    heroLede: "Foundation stabilization, concrete lifting, and waterproofing for commercial buildings — scheduled around your operations, not the other way around.",
     symptoms: [],
     solutionsHeadline: "Commercial Solutions",
     solutions: [

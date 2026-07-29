@@ -11,6 +11,8 @@ import { AnnouncementBar } from "./components/AnnouncementBar";
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 import { PageHeroBanner } from "./components/PageHeroBanner";
+import { TeamMemberModal } from "./components/TeamMemberModal";
+import { DEPARTMENTS, TEAM_MEMBERS, type TeamMember } from "./data/team";
 import imgAboutHero from "../assets/svc-concrete.jpg";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -30,20 +32,6 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 
 
 // ─── Data ──────────────────────────────────────────────────────────────────────
-const DEPARTMENTS = ["Accounting", "Production", "Customer Care", "System Design", "Service"];
-
-const TEAM_MEMBERS = [
-  { name: "Christopher Lowrie", title: "Customer Care Manager",    dept: "Customer Care", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-  { name: "Stephen Kline",      title: "Account Manager",          dept: "Customer Care", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-  { name: "Brandon Hunt",       title: "Project Coordinator",      dept: "Production",    img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-  { name: "Catina McGowan",     title: "Customer Care Specialist",  dept: "Customer Care", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-  { name: "Kelsey Allen",       title: "Customer Care Specialist",  dept: "Customer Care", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-  { name: "Michael Kline",      title: "Customer Care Specialist",  dept: "Customer Care", img: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-  { name: "David Torres",       title: "Foundation Technician",    dept: "Service",       img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-  { name: "Sarah Mitchell",     title: "Accounting Lead",          dept: "Accounting",    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-  { name: "James Redmond",      title: "System Designer",          dept: "System Design", img: "https://images.unsplash.com/photo-1463453091185-61582044d556?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400" },
-];
-
 const PARTNERS = [
   { name: "National Association of Mold Remediators and Inspectors", abbr: "NAMRI", desc: "Certified standards for mold assessment and remediation in residential structures." },
   { name: "Apartment Association of Greater Memphis", abbr: "AAGM", desc: "Supporting multi-family housing professionals across the Greater Memphis region." },
@@ -86,224 +74,6 @@ const PAGE_TABS = [
   { id: "contact",     label: "Contact us"  },
   { id: "initiatives", label: "Initiatives" },
 ];
-
-const MODAL_REVIEWS = [
-  { quote: "Everything from start to finish was done very courteous and professional.", name: "Victoria E.", loc: "Memphis, TN" },
-  { quote: "The crew was excellent communicators and hard workers. Done well within the time given.", name: "Elizabeth N.", loc: "Collierville, TN" },
-  { quote: "Such a professional team. Made the whole process stress-free from start to finish.", name: "Melissa C.", loc: "Marked Tree, AR" },
-];
-
-const GALLERY_IMGS = [
-  "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
-  "https://images.unsplash.com/photo-1504307651254-35680f356dfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
-  "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
-  "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
-  "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
-  "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
-];
-
-// ─── Team Member Modal ─────────────────────────────────────────────────────────
-type TeamMember = typeof TEAM_MEMBERS[0];
-
-function TeamMemberModal({ member, onClose }: { member: TeamMember; onClose: () => void }) {
-  const [galleryRef, galleryApi] = useEmblaCarousel({ loop: true, slidesToScroll: 1 });
-  const [galCur, setGalCur] = useState(0);
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [onClose]);
-
-  useEffect(() => {
-    if (!galleryApi) return;
-    galleryApi.on("select", () => setGalCur(galleryApi.selectedScrollSnap()));
-  }, [galleryApi]);
-
-  const first = member.name.split(" ")[0];
-
-  return (
-    <div
-      className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto py-12 px-6"
-      style={{ background: "rgba(0,0,0,0.78)", backdropFilter: "blur(6px)" }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        className="fixed top-5 right-5 flex items-center justify-center transition-all hover:bg-white/10"
-        style={{ width: 40, height: 40, background: CHAR, border: "1px solid rgba(255,255,255,.15)", cursor: "pointer", zIndex: 201 }}
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-          <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-      </button>
-
-      {/* Modal card */}
-      <div
-        className="relative w-full flex flex-col my-auto"
-        style={{
-          maxWidth: 920,
-          background: DARK,
-          borderLeft: `2px solid ${SAND}`,
-          borderTop: "1px solid rgba(255,255,255,.07)",
-          borderRight: "1px solid rgba(255,255,255,.07)",
-          borderBottom: "1px solid rgba(255,255,255,.07)",
-          padding: 48,
-          gap: 36,
-          display: "flex",
-          flexDirection: "column",
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-
-        {/* Header — circular photo + name / title + dept chip */}
-        <div className="flex items-center gap-6">
-          <div className="shrink-0 rounded-full overflow-hidden" style={{ width: 120, height: 120, border: `2px solid ${SAND}`, boxSizing: "border-box" }}>
-            <ImageWithFallback src={member.img} alt={member.name} className="w-full h-full object-cover" />
-          </div>
-          <div className="flex flex-col gap-2">
-            {/* Dept eyebrow */}
-            <div className="flex items-center gap-2">
-              <div style={{ width: 16, height: 2, background: SAND, flexShrink: 0 }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>{member.dept}</span>
-            </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,3vw,36px)", color: "#fff", lineHeight: 1.1, letterSpacing: "-0.5px" }}>{member.name}</h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.5 }}>{member.title}</p>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div style={{ height: 1, background: "rgba(255,255,255,.07)" }} />
-
-        {/* Bio */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>
-            Say hello to {first}, one of the friendly faces at Redeemers Group! As a key member of our {member.dept} team, {first} brings energy, expertise, and a genuine commitment to every homeowner we serve.
-          </p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>
-            With a strong background in {member.dept.toLowerCase()} and a knack for building trust, {first} thrives on making sure every customer feels heard and valued — from the first call all the way to project completion.
-          </p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>
-            {first} chose Redeemers Group for the people and the culture — and stayed for the impact. Every repaired home is a family whose life gets a little better, and that keeps {first} motivated every single day.
-          </p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>
-            When not helping customers or making the office a better place, {first} enjoys the outdoors and spending time with family. And yes — there's definitely a soft spot for Reese's Peanut Butter Cups.
-          </p>
-        </div>
-
-        {/* Divider */}
-        <div style={{ height: 1, background: "rgba(255,255,255,.07)" }} />
-
-        {/* Reviews */}
-        <div>
-          {/* Section eyebrow */}
-          <div className="flex items-center gap-2 mb-5">
-            <div style={{ width: 16, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Customer Reviews</span>
-          </div>
-          <div className="flex items-end justify-between mb-5">
-            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.3px" }}>
-              What customers say about me
-            </h3>
-            <button
-              onClick={() => onNavigate("reviews")}
-              className="group inline-flex items-center gap-1.5 shrink-0"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}
-            >
-              Read all reviews
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5"><path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {MODAL_REVIEWS.map((r) => (
-              <div key={r.name} className="flex flex-col" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", padding: 24, gap: 14 }}>
-                <div className="flex gap-1">
-                  {Array.from({ length: 5 }).map((_, si) => (
-                    <svg key={si} width="14" height="14" viewBox="0 0 24 24" fill={SAND}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                  ))}
-                </div>
-                {/* Giant quote mark */}
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 40, color: `rgba(196,171,108,.2)`, lineHeight: 0.7, marginBottom: 4 }}>&ldquo;</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)", lineHeight: 1.7, flex: 1 }}>{r.quote}</p>
-                <div className="flex items-center gap-3 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}>
-                  <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center"
-                    style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.2)" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND }}>{r.name[0]}</span>
-                  </div>
-                  <div>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>{r.name}</p>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.35)" }}>{r.loc}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div style={{ height: 1, background: "rgba(255,255,255,.07)" }} />
-
-        {/* Photo Gallery */}
-        <div>
-          <div className="flex items-center gap-2 mb-5">
-            <div style={{ width: 16, height: 2, background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Gallery</span>
-          </div>
-          <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff", marginBottom: 20, lineHeight: 1.2, letterSpacing: "-0.3px" }}>
-            Photo gallery
-          </h3>
-          <div className="relative">
-            {/* Prev arrow */}
-            <button
-              onClick={() => galleryApi?.scrollPrev()}
-              className="absolute z-10 flex items-center justify-center -translate-y-1/2 transition-all hover:bg-white/10"
-              style={{ left: -18, top: "50%", width: 36, height: 36, background: CHAR, border: "1px solid rgba(255,255,255,.15)", cursor: "pointer" }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </button>
-            {/* Next arrow */}
-            <button
-              onClick={() => galleryApi?.scrollNext()}
-              className="absolute z-10 flex items-center justify-center -translate-y-1/2 transition-all hover:bg-white/10"
-              style={{ right: -18, top: "50%", width: 36, height: 36, background: CHAR, border: "1px solid rgba(255,255,255,.15)", cursor: "pointer" }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </button>
-
-            <div ref={galleryRef} className="overflow-hidden">
-              <div className="flex gap-3">
-                {GALLERY_IMGS.map((src, i) => (
-                  <div key={i} className="shrink-0 overflow-hidden" style={{ width: "calc((100% - 24px) / 3)", aspectRatio: "1/1" }}>
-                    <ImageWithFallback src={src} alt={`Gallery ${i + 1}`} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Dots */}
-            <div className="flex justify-center gap-2 mt-4">
-              {GALLERY_IMGS.map((_, i) => (
-                <button key={i} onClick={() => galleryApi?.scrollTo(i)}
-                  className="transition-all duration-300"
-                  style={{
-                    width: galCur === i ? 24 : 8, height: 8, borderRadius: 4, padding: 0, border: "none",
-                    background: galCur === i ? SAND : "rgba(255,255,255,.2)", cursor: "pointer",
-                  }} />
-              ))}
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
-}
 
 // ─── 1. HERO ──────────────────────────────────────────────────────────────────
 function HeroSection() {
@@ -351,7 +121,7 @@ const cardVariants = {
 };
 
 // ─── 3. PEOPLE ────────────────────────────────────────────────────────────────
-function PeopleSection() {
+function PeopleSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [activeDept, setActiveDept]     = useState("Customer Care");
   const [showAll, setShowAll]           = useState(false);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
@@ -383,14 +153,24 @@ function PeopleSection() {
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header */}
-        <Reveal className="mb-14 lg:mb-20">
-          <div className="flex items-center gap-2 mb-5">
-            <div style={{ width: 20, height: 2, background: B }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>People</span>
+        <Reveal className="mb-14 lg:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-5">
+              <div style={{ width: 20, height: 2, background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>People</span>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px" }}>
+              Meet our team
+            </h2>
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px" }}>
-            Meet our team
-          </h2>
+          {onNavigate && (
+            <button onClick={() => onNavigate("team")}
+              className="group inline-flex items-center gap-2 shrink-0"
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+              See all team members
+              <ChevronRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+          )}
         </Reveal>
 
         {/* ── Category filter — large horizontal selector ── */}
@@ -485,7 +265,7 @@ function PeopleSection() {
                       style={{ background: "linear-gradient(0deg, rgba(10,11,20,.85) 0%, rgba(26,82,168,.35) 100%)" }}
                     >
                       <span className="inline-flex items-center gap-1.5"
-                        style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B }}>
+                        style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
                         See profile
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                           <path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -522,7 +302,7 @@ function PeopleSection() {
       </div>
 
       {selectedMember && (
-        <TeamMemberModal member={selectedMember} onClose={() => setSelectedMember(null)} />
+        <TeamMemberModal member={selectedMember} onClose={() => setSelectedMember(null)} onNavigate={onNavigate} />
       )}
     </section>
   );
@@ -558,10 +338,10 @@ function BenefitsSection() {
             <div className="lg:w-[40%] shrink-0">
               <Reveal>
                 <div className="flex items-center gap-2 mb-4">
-                  <div style={{ width: 20, height: 2, background: B }} />
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Benefits</span>
+                  <div style={{ width: 20, height: 2, background: SAND }} />
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Benefits</span>
                 </div>
-                <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
+                <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px" }}>
                   Built on partnerships with proven experts
                 </h2>
               </Reveal>
@@ -570,7 +350,7 @@ function BenefitsSection() {
             {/* Right — body copy + carousel */}
             <div className="flex-1 flex flex-col min-w-0">
               <Reveal>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.65)", lineHeight: 1.75, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.65)", lineHeight: 1.75, marginBottom: 20 }}>
                   We work alongside manufacturers and organizations that share our standards for quality and integrity.
                 </p>
               </Reveal>
@@ -586,16 +366,16 @@ function BenefitsSection() {
                         width: "min(calc(100% - 32px), 320px)",
                         background: "rgba(10,11,20,0.55)",
                         backdropFilter: "blur(16px)",
-                        border: `1px solid ${ON_LIGHT.border}`,
+                        border: "1px solid rgba(255,255,255,.15)",
                       }}
                     >
                       {/* Icon / abbr box */}
                       <div className="w-12 h-12 flex items-center justify-center shrink-0"
-                        style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.25)" }}>
-                        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 10, color: B, letterSpacing: 1 }}>{p.abbr}</span>
+                        style={{ background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.35)" }}>
+                        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 10, color: SAND, letterSpacing: 1 }}>{p.abbr}</span>
                       </div>
-                      <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, lineHeight: 1.3 }}>{p.name}</p>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.55)", lineHeight: 1.65 }}>{p.desc}</p>
+                      <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", lineHeight: 1.3 }}>{p.name}</p>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.6)", lineHeight: 1.65 }}>{p.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -609,7 +389,7 @@ function BenefitsSection() {
                       className="transition-all duration-300"
                       style={{
                         width: cur === i ? 24 : 8, height: 8,
-                        background: cur === i ? B : "rgba(10,11,20,.25)",
+                        background: cur === i ? SAND : "rgba(255,255,255,.25)",
                         border: "none", cursor: "pointer", padding: 0, borderRadius: 4,
                       }} />
                   ))}
@@ -617,12 +397,12 @@ function BenefitsSection() {
                 <div className="flex gap-2 ml-auto">
                   <button onClick={() => emblaApi?.scrollPrev()}
                     className="flex items-center justify-center transition-all hover:bg-white/10"
-                    style={{ width: 38, height: 38, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
+                    style={{ width: 38, height: 38, border: "1px solid rgba(255,255,255,.2)", background: "none", cursor: "pointer" }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </button>
                   <button onClick={() => emblaApi?.scrollNext()}
                     className="flex items-center justify-center transition-all hover:bg-white/10"
-                    style={{ width: 38, height: 38, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
+                    style={{ width: 38, height: 38, border: "1px solid rgba(255,255,255,.2)", background: "none", cursor: "pointer" }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </button>
                 </div>
@@ -885,7 +665,7 @@ export default function AboutPage({ onBack, onNavigate, scrollTo: initialSection
       </div>
       <div className="pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]">
         <HeroSection />
-        <PeopleSection />
+        <PeopleSection onNavigate={onNavigate} />
         <BenefitsSection />
         <ContactSection />
         <InitiativesSection />

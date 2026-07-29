@@ -184,7 +184,7 @@ function IntroSection() {
             <p style={{ fontFamily: INTER, fontSize: 18, color: "rgba(10,11,20,.6)", lineHeight: 1.7 }}>
               From sagging floors to flooded basements — every problem has a permanent solution, backed by our lifetime warranty and 17 years of experience.
             </p>
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="flex flex-wrap gap-4 mt-12">
               {["Crawl Space", "Waterproofing", "Foundation", "Concrete"].map(s => (
                 <span key={s} style={{
                   padding: "6px 14px", background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.3)",
