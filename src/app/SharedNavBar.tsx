@@ -901,23 +901,27 @@ export default function SharedNavBar({
                       return (
                         <>
                           <MobileBackHeader title="Problem Signs" onBack={() => setMobilePanel("root")} />
-                          <div className="flex flex-col gap-2">
-                            {PROBLEM_SIGNS_CATEGORIES.map((c) => (
-                              <button
-                                key={c.id}
-                                onClick={() => setMobileCat(c.id)}
-                                className="relative w-full overflow-hidden text-left"
-                                style={{ height: 110, background: "none", border: "1px solid rgba(255,255,255,.08)", padding: 0, cursor: "pointer" }}>
-                                <img src={c.img} alt="" className="absolute inset-0 w-full h-full object-cover" />
-                                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.92) 0%, rgba(10,11,20,.3) 70%)" }} />
-                                <span className="absolute inset-x-0 bottom-0 p-3 flex items-center gap-2"
-                                  style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 15, color: "#fff" }}>
-                                  {c.iconImg && <img src={c.iconImg} alt="" style={{ width: 20, height: 20, objectFit: "contain", filter: "brightness(0) invert(1)" }} />}
-                                  {c.label}
-                                </span>
-                                <ChevronRight size={18} color="rgba(255,255,255,.7)" className="absolute right-3 bottom-3.5" />
-                              </button>
-                            ))}
+                          <div className="flex flex-col gap-1">
+                            {PROBLEM_SIGNS_CATEGORIES.map((c) => {
+                              const Icon = c.icon;
+                              return (
+                                <button
+                                  key={c.id}
+                                  onClick={() => setMobileCat(c.id)}
+                                  className="w-full flex items-center gap-3 py-3.5 pl-3 pr-2 text-left"
+                                  style={{ background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
+                                  <span className="flex items-center justify-center shrink-0" style={{ width: 24, height: 24 }}>
+                                    {c.iconImg
+                                      ? <img src={c.iconImg} alt="" className="w-full h-full object-contain" style={{ filter: "brightness(0) invert(1)" }} />
+                                      : <Icon size={22} color="#fff" strokeWidth={2} />}
+                                  </span>
+                                  <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff", fontWeight: 600 }}>
+                                    {c.label}
+                                  </span>
+                                  <ChevronRight size={18} color="rgba(255,255,255,.4)" />
+                                </button>
+                              );
+                            })}
                             <button
                               onClick={() => handleNavigate("problem-signs")}
                               className="py-3 pl-3 mt-1 text-left"
