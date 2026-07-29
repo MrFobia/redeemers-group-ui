@@ -21,6 +21,7 @@ import imgFloor04 from "../assets/floor-04.jpeg";
 import imgRevAvatar from "../assets/rev-avatar.png";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -1102,20 +1103,11 @@ export default function ProblemSignInnerPage({ onBack, onNavigate, slug }: { onB
       </div>
 
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
-        {/* Breadcrumb */}
-        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2 flex-wrap">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Problem Signs</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>{sign.label}</span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "Problem Signs", onClick: onBack },
+          { label: sign.label },
+        ]} />
 
         <HeroSection sign={sign} />
         <ExplainerSection sign={sign} />

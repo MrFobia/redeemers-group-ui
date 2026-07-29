@@ -6,6 +6,7 @@ import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -132,18 +133,12 @@ function HeroSection({ onBack, onNavigate }: { onBack: () => void; onNavigate: (
 
   return (
     <>
-      {/* Breadcrumb */}
-      <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-        <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2 flex-wrap">
-          <button onClick={onBack} style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)", background: "none", border: "none", cursor: "pointer", letterSpacing: 0.3 }} className="hover:opacity-70 transition-opacity">Home</button>
-          <ChevronRight size={12} color="rgba(255,255,255,.2)" />
-          <button onClick={() => onNavigate("resources")} style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)", background: "none", border: "none", cursor: "pointer", letterSpacing: 0.3 }} className="hover:opacity-70 transition-opacity">Resources</button>
-          <ChevronRight size={12} color="rgba(255,255,255,.2)" />
-          <button onClick={() => onNavigate("news-blog")} style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)", background: "none", border: "none", cursor: "pointer", letterSpacing: 0.3 }} className="hover:opacity-70 transition-opacity">Blog</button>
-          <ChevronRight size={12} color="rgba(255,255,255,.2)" />
-          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: SAND, fontWeight: 500, letterSpacing: 0.3 }}>Article</span>
-        </div>
-      </div>
+      <PageBreadcrumb items={[
+        { label: "Home", onClick: onBack },
+        { label: "Resources", onClick: () => onNavigate("resources") },
+        { label: "Blog", onClick: () => onNavigate("news-blog") },
+        { label: "Article" },
+      ]} />
 
       {/* Hero — dark editorial */}
       <section className="relative overflow-hidden" style={{ background: DARK, minHeight: 480 }}>

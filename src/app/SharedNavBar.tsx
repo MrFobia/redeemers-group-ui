@@ -106,17 +106,6 @@ function SimpleDropdownItem({ label, onClick, indent }: { label: string; onClick
   );
 }
 
-function SimpleDropdownLabel({ label }: { label: string }) {
-  return (
-    <p
-      className="px-4 pt-3 pb-1.5"
-      style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}
-    >
-      {label}
-    </p>
-  );
-}
-
 // Row with a nested flyout submenu (opens to the right on hover), same voice
 // as SimpleDropdownItem — used where a category has its own sub-list
 // (Services > symptoms, Problem Signs > symptoms) instead of a photo preview.
@@ -171,7 +160,6 @@ type ResourcesDropdownProps = {
 function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
   return (
     <SimpleDropdown>
-      <SimpleDropdownLabel label="Resources" />
       {RESOURCES_SECTIONS.map((sec) => (
         <SimpleDropdownItem key={sec.label} label={sec.label} indent={sec.indent} onClick={() => onNavigate(sec.page ?? `resources#${sec.id}`)} />
       ))}
@@ -230,7 +218,7 @@ const OUR_DIFFERENCE_SECTIONS: { label: string; id: string; page?: string }[] = 
   { label: "What to expect", id: "process" },
   { label: "The Evergreen difference", id: "story" },
   { label: "Our pledge", id: "pledge" },
-  { label: "News", id: "news-awards", page: "news-blog" },
+  { label: "News", id: "news-awards" },
   { label: "Featured projects / case stories", id: "case-studies", page: "case-studies" },
   { label: "Before & after", id: "before-after", page: "before-after" },
   { label: "Referral program", id: "referral" },
@@ -328,6 +316,43 @@ function MegaMenu({ onNavigate }: { onNavigate: (p: string) => void }) {
   );
 }
 
+// ─── Mobile drill-in list row ──────────────────────────────────────────────────
+// Single shared row style for every text-only drill-in panel (Resources,
+// About, Our Difference, Problem Signs sign list) — client QA: mobile menu
+// items looked different from each other in color/size across panels.
+// Top-level rows read as white/semibold (same voice as the Services/Problem
+// Signs icon rows) — indented sub-rows (Resources' PDF sub-items, Careers'
+// sub-sections, one sign inside a Problem Signs category) stay muted so the
+// hierarchy is visible without a second, disconnected color language.
+function MobileDrillItem({ label, onClick, indent }: { label: string; onClick: () => void; indent?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full text-left"
+      style={{
+        fontFamily: "'Inter',sans-serif", fontSize: indent ? 13.5 : 15, fontWeight: indent ? 400 : 600,
+        color: indent ? "rgba(255,255,255,.6)" : "#fff", background: "none", border: "none",
+        borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer",
+        padding: indent ? "10px 12px 10px 30px" : "12px 12px 12px 12px",
+      }}>
+      {label}
+    </button>
+  );
+}
+
+// Trailing gold "go to full page" link — same voice as Services/Problem
+// Signs' "All X →" links, reused everywhere a drill-in panel needs one.
+function MobileGoToLink({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="py-3 pl-3 mt-1 text-left"
+      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
+      {label}
+    </button>
+  );
+}
+
 // ─── Mobile drill-in back header ──────────────────────────────────────────────
 function MobileBackHeader({ title, onBack }: { title: string; onBack: () => void }) {
   return (
@@ -367,6 +392,9 @@ export default function SharedNavBar({
   // 5th service were unreachable, so a category now opens on its own screen.
   const [mobileCat, setMobileCat] = useState<string | null>(null);
   const openMobilePanel = (panel: typeof mobilePanel) => { setMobilePanel(panel); setMobileCat(null); };
+  // Careers used to dump its 4 sub-sections open under it permanently in the
+  // About drill-in — client QA: turn it into a collapsible dropdown instead.
+  const [careersExpanded, setCareersExpanded] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const servicesBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -749,15 +777,11 @@ export default function SharedNavBar({
                             <span className="flex-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "#fff", fontWeight: 600 }}>
                               {c.label}
                             </span>
+                            <ChevronRight size={18} color="rgba(255,255,255,.4)" />
                           </button>
                         );
                       })}
-                      <button
-                        onClick={() => handleNavigate("services-landing")}
-                        className="py-3 pl-3 mt-1 text-left"
-                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                        All services →
-                      </button>
+                      <MobileGoToLink label="All services →" onClick={() => handleNavigate("services-landing")} />
                     </div>
                   </motion.div>
                 )}
@@ -775,26 +799,10 @@ export default function SharedNavBar({
                     <MobileBackHeader title="Resources" onBack={() => setMobilePanel("root")} />
                     <div className="flex flex-col gap-1">
                       {RESOURCES_SECTIONS.map((sec) => (
-                        <button
-                          key={sec.id}
-                          onClick={() => handleNavigate(sec.page ?? `resources#${sec.id}`)}
-                          className="w-full text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: sec.indent ? 13.5 : 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer", padding: sec.indent ? "10px 12px 10px 30px" : "12px 12px 12px 12px" }}>
-                          {sec.label}
-                        </button>
+                        <MobileDrillItem key={sec.id} label={sec.label} indent={sec.indent} onClick={() => handleNavigate(sec.page ?? `resources#${sec.id}`)} />
                       ))}
-                      <button
-                        onClick={() => handleNavigate("news-blog")}
-                        className="w-full py-3 pl-3 text-left"
-                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                        News
-                      </button>
-                      <button
-                        onClick={() => handleNavigate("resources")}
-                        className="py-3 pl-3 text-left"
-                        style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                        Go to Resources →
-                      </button>
+                      <MobileDrillItem label="News" onClick={() => handleNavigate("news-blog")} />
+                      <MobileGoToLink label="Go to Resources →" onClick={() => handleNavigate("resources")} />
                     </div>
                   </motion.div>
                 )}
@@ -811,25 +819,35 @@ export default function SharedNavBar({
                   >
                     <MobileBackHeader title="About" onBack={() => setMobilePanel("root")} />
                     <div className="flex flex-col gap-1">
-                      {ABOUT_TABS.map((tab) => (
-                        <div key={tab.key} className="flex flex-col">
-                          <button
-                            onClick={() => handleNavigate(tab.page)}
-                            className="w-full py-3 pl-3 text-left"
-                            style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                            {tab.label}
-                          </button>
-                          {tab.key === "careers" && CAREERS_SECTIONS.map((sec) => (
-                            <button
-                              key={sec.id}
-                              onClick={() => handleNavigate(`careers#${sec.id}`)}
-                              className="w-full text-left"
-                              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(255,255,255,.55)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer", padding: "8px 12px 8px 30px" }}>
-                              {sec.label}
-                            </button>
-                          ))}
-                        </div>
-                      ))}
+                      {ABOUT_TABS.map((tab) =>
+                        tab.key === "careers" ? (
+                          <div key={tab.key} className="flex flex-col">
+                            <div className="w-full flex items-center" style={{ borderLeft: "2px solid rgba(255,255,255,.1)" }}>
+                              <button onClick={() => handleNavigate(tab.page)} className="flex-1 text-left"
+                                style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, fontWeight: 600, color: "#fff", background: "none", border: "none", cursor: "pointer", padding: "12px 12px 12px 12px" }}>
+                                {tab.label}
+                              </button>
+                              <button onClick={() => setCareersExpanded((v) => !v)} aria-label="Toggle Careers sections"
+                                className="shrink-0 flex items-center justify-center" style={{ width: 40, height: 40, background: "none", border: "none", cursor: "pointer" }}>
+                                <ChevronRight size={16} color="rgba(255,255,255,.5)"
+                                  style={{ transform: careersExpanded ? "rotate(90deg)" : "rotate(0deg)", transition: "transform .2s ease" }} />
+                              </button>
+                            </div>
+                            <AnimatePresence initial={false}>
+                              {careersExpanded && (
+                                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }} style={{ overflow: "hidden" }}>
+                                  {CAREERS_SECTIONS.map((sec) => (
+                                    <MobileDrillItem key={sec.id} label={sec.label} indent onClick={() => handleNavigate(`careers#${sec.id}`)} />
+                                  ))}
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        ) : (
+                          <MobileDrillItem key={tab.key} label={tab.label} onClick={() => handleNavigate(tab.page)} />
+                        )
+                      )}
                     </div>
                   </motion.div>
                 )}
@@ -846,14 +864,9 @@ export default function SharedNavBar({
                     <MobileBackHeader title="Our Difference" onBack={() => setMobilePanel("root")} />
                     <div className="flex flex-col gap-1">
                       {OUR_DIFFERENCE_SECTIONS.map((sec) => (
-                        <button
-                          key={sec.id}
-                          onClick={() => handleNavigate(sec.page ?? `our-difference#${sec.id}`)}
-                          className="w-full py-3 pl-3 text-left"
-                          style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                          {sec.label}
-                        </button>
+                        <MobileDrillItem key={sec.id} label={sec.label} onClick={() => handleNavigate(sec.page ?? `our-difference#${sec.id}`)} />
                       ))}
+                      <MobileGoToLink label="Go to Our Difference →" onClick={() => handleNavigate("our-difference")} />
                     </div>
                   </motion.div>
                 )}
@@ -879,20 +892,9 @@ export default function SharedNavBar({
                             <MobileBackHeader title={cat.label} onBack={() => setMobileCat(null)} />
                             <div className="flex flex-col gap-1">
                               {cat.signs.map((sign) => (
-                                <button
-                                  key={sign}
-                                  onClick={() => handleNavigate(signRoute(sign))}
-                                  className="w-full py-3 pl-3 text-left"
-                                  style={{ fontFamily: "'Inter',sans-serif", fontSize: 14.5, lineHeight: 1.35, color: "rgba(255,255,255,.75)", background: "none", border: "none", borderLeft: "2px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-                                  {sign}
-                                </button>
+                                <MobileDrillItem key={sign} label={sign} onClick={() => handleNavigate(signRoute(sign))} />
                               ))}
-                              <button
-                                onClick={() => handleNavigate(`problem-signs/${cat.id}`)}
-                                className="py-3 pl-3 mt-1 text-left"
-                                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                                All {cat.label} signs →
-                              </button>
+                              <MobileGoToLink label={`All ${cat.label} signs →`} onClick={() => handleNavigate(`problem-signs/${cat.id}`)} />
                             </div>
                           </>
                         );
@@ -922,12 +924,7 @@ export default function SharedNavBar({
                                 </button>
                               );
                             })}
-                            <button
-                              onClick={() => handleNavigate("problem-signs")}
-                              className="py-3 pl-3 mt-1 text-left"
-                              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 600, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-                              All problem signs →
-                            </button>
+                            <MobileGoToLink label="All problem signs →" onClick={() => handleNavigate("problem-signs")} />
                           </div>
                         </>
                       );

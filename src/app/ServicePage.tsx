@@ -9,6 +9,7 @@ import SharedNavBar from "./SharedNavBar";
 import { FloatingSideNav } from "./components/FloatingSideNav";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { ProjectGallery } from "./components/ProjectGallery";
 import { PageHeroBanner } from "./components/PageHeroBanner";
 
@@ -598,20 +599,11 @@ export default function ServicePage({ onBack, onNavigate, scrollTo, slug }: { on
           floating rail that follows the scroll instead of stacking under the header. */}
       <FloatingSideNav tabs={tabs} active={activeTab} onChange={scrollToSection} />
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
-        {/* Breadcrumb */}
-        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <button onClick={() => onNavigate?.("services-landing")}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Services</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>{svc.name}</span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "Services", onClick: () => onNavigate?.("services-landing") },
+          { label: svc.name },
+        ]} />
         <HeroSection svc={svc} onNavigate={onNavigate} />
         <SolutionsSection svc={svc} />
         <ProblemSignsSection svc={svc} onNavigate={onNavigate} />

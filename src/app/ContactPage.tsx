@@ -3,6 +3,7 @@ import { motion, useInView, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { Logo } from "./components/Logo";
 import {
   Phone, Mail, MapPin, Clock,
@@ -571,6 +572,11 @@ export default function ContactPage({
         <SharedNavBar onNavigate={onNavigate} active="About" />
       </div>
       <div className="pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]">
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "About", onClick: () => onNavigate("about") },
+          { label: "Contact us" },
+        ]} />
         <HeroSection />
         <ContactInfoSection />
         <LocationsMapSection />

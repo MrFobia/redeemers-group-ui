@@ -4,6 +4,7 @@ import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { FloatingSideNav } from "./components/FloatingSideNav";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { Logo } from "./components/Logo";
 import { openInspection } from "./components/InspectionModal";
 import { FORM_LABEL_STYLE, FORM_INPUT_STYLE, FORM_INPUT_CLASS } from "./components/formStyles";
@@ -909,6 +910,11 @@ export default function CareersPage({
           — a floating rail that follows scroll instead of a fixed bar. */}
       <FloatingSideNav tabs={PAGE_TABS} active={activeTab} onChange={scrollToSection} />
       <div className="pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]">
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "About", onClick: () => onNavigate("about") },
+          { label: "Careers" },
+        ]} />
         <HeroSection />
         <CultureSection />
         <EmployeeQuotesSection />

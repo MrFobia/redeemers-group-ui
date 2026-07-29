@@ -6,6 +6,7 @@ import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 
 import { B, DARK, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
@@ -151,15 +152,12 @@ function HeroSection({ onBack, onNavigate }: { onBack: () => void; onNavigate: (
       <div className="absolute inset-0" style={{ background: "linear-gradient(100deg,rgba(10,11,20,.97) 0%,rgba(10,11,20,.88) 50%,rgba(10,11,20,.45) 100%)" }} />
       <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
 
-      {/* Breadcrumb */}
-      <div className="relative z-10" style={{ borderBottom: "1px solid rgba(255,255,255,.08)" }}>
-        <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-          <button onClick={onBack} style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)", background: "none", border: "none", cursor: "pointer" }} className="hover:opacity-70 transition-opacity">Home</button>
-          <ChevronRight size={12} color="rgba(255,255,255,.2)" />
-          <button onClick={() => onNavigate("resources")} style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)", background: "none", border: "none", cursor: "pointer" }} className="hover:opacity-70 transition-opacity">Resources</button>
-          <ChevronRight size={12} color="rgba(255,255,255,.2)" />
-          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: SAND, fontWeight: 500 }}>News &amp; Blog</span>
-        </div>
+      <div className="relative z-10">
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "Resources", onClick: () => onNavigate("resources") },
+          { label: "News & Blog" },
+        ]} />
       </div>
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 pt-16 pb-20 lg:pt-20 lg:pb-28">

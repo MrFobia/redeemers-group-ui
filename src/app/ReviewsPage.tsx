@@ -3,6 +3,7 @@ import { motion, useInView, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight, ChevronDown, ArrowRight, Star, X, Play } from "lucide-react";
 import SharedNavBar from "./SharedNavBar";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { Logo } from "./components/Logo";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
@@ -347,89 +348,19 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
 
   return (
     <>
-      {/* Fixed header + filter bar flush */}
+      {/* Fixed header only — the filter bar used to live flush under here,
+          but it read as attached to the nav instead of scoped to the grid
+          below it. Client asked for it to sit right above "Showing N
+          reviews" instead, in normal flow. */}
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={nav} active="" />
-        <div style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.07)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-3">
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.4)", flexShrink: 0 }}>Filter by:</span>
-            <div className="flex items-center gap-3 overflow-x-auto" style={{ flex: 1 }}>
-              {SERVICE_FILTERS.map((f) => (
-                <button key={f} onClick={() => handleFilterChange(f)} className="flex-shrink-0 px-4 py-1.5 transition-colors"
-                  style={{
-                    fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
-                    background: activeFilter === f ? B : "transparent",
-                    color: activeFilter === f ? DARK : "rgba(10,11,20,.55)",
-                    border: `1.5px solid ${activeFilter === f ? B : "rgba(10,11,20,.15)"}`,
-                    borderRadius: 4, cursor: "pointer",
-                  }}>
-                  {f}
-                </button>
-              ))}
-            </div>
-            <div style={{ width: 1, height: 20, background: "rgba(10,11,20,.1)", flexShrink: 0, margin: "0 4px" }} />
-            <div className="flex-shrink-0" ref={areaRef}>
-              <button onClick={() => { setAreaPos(areaRef.current?.getBoundingClientRect() ?? null); setServiceAreaOpen(v => !v); setSymptomsOpen(false); }}
-                className="flex items-center gap-1.5 px-4 py-1.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
-                Service area <ChevronDown size={13} />
-              </button>
-            </div>
-            <div className="flex-shrink-0" ref={symptomsRef}>
-              <button onClick={() => { setSymptomsPos(symptomsRef.current?.getBoundingClientRect() ?? null); setSymptomsOpen(v => !v); setServiceAreaOpen(false); }}
-                className="flex items-center gap-1.5 px-4 py-1.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
-                All Symptoms <ChevronDown size={13} />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Fixed-positioned dropdowns — escape overflow clipping */}
-        {serviceAreaOpen && areaPos && (
-          <div style={{ position: "fixed", top: areaPos.bottom + 4, left: areaPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 160 }}>
-            {["Tennessee", "Arkansas", "Mississippi", "Missouri"].map((s) => (
-              <button key={s} onClick={() => setServiceAreaOpen(false)} className="w-full text-left px-4 py-2.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
-                onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
-                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-                {s}
-              </button>
-            ))}
-          </div>
-        )}
-        {symptomsOpen && symptomsPos && (
-          <div style={{ position: "fixed", top: symptomsPos.bottom + 4, left: symptomsPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 180 }}>
-            {["Cracked walls", "Uneven floors", "Wet basement", "Musty smell", "Sticking doors", "Sagging floor joists"].map((s) => (
-              <button key={s} onClick={() => setSymptomsOpen(false)} className="w-full text-left px-4 py-2.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
-                onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
-                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-                {s}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Header height varies by breakpoint (announcement bar hides < md) */}
-      <div className="w-full min-h-screen pt-[164px] md:pt-[198px] lg:pt-[214px] xl:pt-[230px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
 
-        {/* ── Breadcrumb ── */}
-        <div style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button
-              onClick={() => nav("home")}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.35)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-              className="hover:text-white/60 transition-colors"
-            >
-              Home
-            </button>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="rgba(10,11,20,.2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.55)" }}>All Reviews</span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[{ label: "Home", onClick: () => nav("home") }, { label: "All Reviews" }]} />
 
         {/* ── Hero ── */}
         <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }} className="py-20 lg:py-24">
@@ -459,6 +390,68 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
         {/* ── Review grid ── */}
         <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+
+            {/* Filter bar — scoped to this grid, not the fixed header */}
+            <div className="relative mb-8 pb-6" style={{ borderBottom: "1px solid rgba(10,11,20,.07)" }}>
+              <div className="flex items-center gap-3 flex-wrap">
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.4)", flexShrink: 0 }}>Filter by:</span>
+                <div className="flex items-center gap-3 overflow-x-auto" style={{ flex: 1 }}>
+                  {SERVICE_FILTERS.map((f) => (
+                    <button key={f} onClick={() => handleFilterChange(f)} className="flex-shrink-0 px-4 py-1.5 transition-colors"
+                      style={{
+                        fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
+                        background: activeFilter === f ? B : "transparent",
+                        color: activeFilter === f ? DARK : "rgba(10,11,20,.55)",
+                        border: `1.5px solid ${activeFilter === f ? B : "rgba(10,11,20,.15)"}`,
+                        borderRadius: 4, cursor: "pointer",
+                      }}>
+                      {f}
+                    </button>
+                  ))}
+                </div>
+                <div style={{ width: 1, height: 20, background: "rgba(10,11,20,.1)", flexShrink: 0, margin: "0 4px" }} />
+                <div className="flex-shrink-0" ref={areaRef}>
+                  <button onClick={() => { setAreaPos(areaRef.current?.getBoundingClientRect() ?? null); setServiceAreaOpen(v => !v); setSymptomsOpen(false); }}
+                    className="flex items-center gap-1.5 px-4 py-1.5"
+                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
+                    Service area <ChevronDown size={13} />
+                  </button>
+                </div>
+                <div className="flex-shrink-0" ref={symptomsRef}>
+                  <button onClick={() => { setSymptomsPos(symptomsRef.current?.getBoundingClientRect() ?? null); setSymptomsOpen(v => !v); setServiceAreaOpen(false); }}
+                    className="flex items-center gap-1.5 px-4 py-1.5"
+                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
+                    All Symptoms <ChevronDown size={13} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Fixed-positioned dropdowns — escape overflow clipping */}
+              {serviceAreaOpen && areaPos && (
+                <div style={{ position: "fixed", top: areaPos.bottom + 4, left: areaPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 160 }}>
+                  {["Tennessee", "Arkansas", "Mississippi", "Missouri"].map((s) => (
+                    <button key={s} onClick={() => setServiceAreaOpen(false)} className="w-full text-left px-4 py-2.5"
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {symptomsOpen && symptomsPos && (
+                <div style={{ position: "fixed", top: symptomsPos.bottom + 4, left: symptomsPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 180 }}>
+                  {["Cracked walls", "Uneven floors", "Wet basement", "Musty smell", "Sticking doors", "Sagging floor joists"].map((s) => (
+                    <button key={s} onClick={() => setSymptomsOpen(false)} className="w-full text-left px-4 py-2.5"
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <div className="flex items-center justify-between mb-10">
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.3)" }}>

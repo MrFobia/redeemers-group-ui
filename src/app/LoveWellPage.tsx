@@ -8,6 +8,7 @@ import SharedNavBar from "./SharedNavBar";
 import { PageHeroBanner } from "./components/PageHeroBanner";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { LOVE_WELL_PROJECTS, type LoveWellProject } from "./data/loveWellProjects";
 import imgFloor02 from "../assets/floor-02.jpeg";
 
@@ -257,19 +258,11 @@ export default function LoveWellPage({ onBack, onNavigate }: { onBack: () => voi
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
       </div>
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
-        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <button onClick={() => onNavigate?.("our-difference")}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Our Difference</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Love Well Initiative</span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "Our Difference", onClick: () => onNavigate?.("our-difference") },
+          { label: "Love Well Initiative" },
+        ]} />
 
         <PageHeroBanner
           image={imgFloor02}

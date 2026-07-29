@@ -33,6 +33,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const countyListRef = useRef<HTMLDivElement>(null);
+  const countyBrowserRef = useRef<HTMLDivElement>(null);
   const pendingScroll = useRef<string | null>(null);
 
   const results = useMemo(() => searchAreas(query), [query]);
@@ -109,6 +110,17 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
   const openCityBySlug = (slug: string) => {
     const city = CITY_BY_SLUG[slug];
     if (city) openCity(city);
+  };
+
+  /** Jump from the state panel's county list straight to that county's row in
+      the full browser below, expanded — this replaces the old "metro areas"
+      shortcut so every county (not just 3-4 headline picks) is one click away,
+      and cities like Memphis are only ever reached through their county. */
+  const openCountyFromPanel = (countyName: string) => {
+    const key = `${activeState}-${countyName}`;
+    pendingScroll.current = key;
+    setOpenCounty(key);
+    countyBrowserRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const selectCity = (city: CityRecord) => {
@@ -295,15 +307,18 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                 </div>
               </div>
 
-              {/* Metro areas */}
+              {/* Counties — every county in this state, one click from its full
+                  city list below. Replaces the old "metro areas" shortcut,
+                  which only surfaced 3-4 headline cities and let Memphis look
+                  like its own entry instead of living inside Shelby County. */}
               <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>
-                Metro areas
+                Counties ({counties.length})
               </p>
-              <div className="flex flex-col gap-1.5 mb-6">
-                {state.metros.map((metro) => (
+              <div className="flex flex-col gap-1.5 mb-6 overflow-y-auto rg-scroll-thin" style={{ maxHeight: 240 }}>
+                {counties.map((county) => (
                   <button
-                    key={metro.citySlug}
-                    onClick={() => openCityBySlug(metro.citySlug)}
+                    key={county.name}
+                    onClick={() => openCountyFromPanel(county.name)}
                     className="group flex items-center justify-between text-left px-3.5 py-2.5 transition-all hover:border-white/25"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontSize: 14,
@@ -313,8 +328,11 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                       cursor: "pointer",
                     }}
                   >
-                    {metro.label}
-                    <ChevronRight size={13} color={SAND} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span>{county.name} County</span>
+                    <span className="flex items-center gap-2 shrink-0">
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.3)" }}>{county.cities.length}</span>
+                      <ChevronRight size={13} color={SAND} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </span>
                   </button>
                 ))}
               </div>
@@ -404,7 +422,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
         </div>
 
         {/* ── Full county / city browser ── */}
-        <div className="mt-14">
+        <div className="mt-14" ref={countyBrowserRef}>
           <div className="flex items-center gap-3 mb-6">
             <span style={{ display: "block", width: 20, height: 2, background: B }} />
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>

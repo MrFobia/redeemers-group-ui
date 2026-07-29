@@ -7,6 +7,7 @@ import SharedNavBar from "./SharedNavBar";
 import { PageHeroBanner } from "./components/PageHeroBanner";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { TeamMemberModal } from "./components/TeamMemberModal";
 import { DEPARTMENTS, TEAM_MEMBERS, type TeamMember } from "./data/team";
 import imgAboutHero from "../assets/svc-concrete.jpg";
@@ -204,19 +205,11 @@ export default function TeamPage({ onBack, onNavigate }: { onBack: () => void; o
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="About" />
       </div>
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
-        <div style={{ background: "#0A0B14", borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <button onClick={() => onNavigate?.("about")}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">About</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Team</span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "About", onClick: () => onNavigate?.("about") },
+          { label: "Team" },
+        ]} />
 
         <PageHeroBanner
           image={imgAboutHero}

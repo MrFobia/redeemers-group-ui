@@ -7,6 +7,7 @@ import SharedNavBar from "./SharedNavBar";
 import useEmblaCarousel from "embla-carousel-react";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -655,15 +656,13 @@ export default function AboutPage({ onBack, onNavigate, scrollTo: initialSection
 
   return (
     <div className="w-full min-h-screen" style={{ background: SURFACE.base }}>
-      {/* Client QA: the About hover dropdown already lists these exact 4
-          anchors (People/Benefits/Initiatives/Contact us), so this page
-          keeps only the global menu + breadcrumb-equivalent hero, not a 3rd
-          fixed section bar. */}
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="About" />
       </div>
       <div className="pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]">
+        <PageBreadcrumb items={[{ label: "Home", onClick: onBack }, { label: "About" }]} />
+
         <HeroSection />
         <PeopleSection onNavigate={onNavigate} />
         <BenefitsSection />

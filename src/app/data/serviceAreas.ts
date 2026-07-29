@@ -29,8 +29,6 @@ export type StateInfo = {
   /** Where the map flies to when this state is selected. */
   center: LatLng;
   zoom: number;
-  /** Headline metro areas — each points at a real city in COUNTIES below. */
-  metros: { label: string; citySlug: string }[];
   services: string[];
 };
 
@@ -44,7 +42,6 @@ export const STATES: StateInfo[] = [
     tagline: "Home base. Memphis metro and West Tennessee, top to bottom.",
     polygon: [[36.50,-89.49], [36.50,-88.05], [36.61,-81.66], [36.30,-81.70], [35.90,-83.01], [35.50,-83.90], [35.20,-84.30], [35.00,-84.33], [35.00,-90.30], [35.40,-90.15], [35.80,-89.91], [36.20,-89.69]],
     center: [35.65, -89.20], zoom: 7,
-    metros: [{ label: "Memphis metro", citySlug: "memphis-tn" }, { label: "Jackson area", citySlug: "jackson-tn" }, { label: "Dyersburg", citySlug: "dyersburg-tn" }, { label: "Covington", citySlug: "covington-tn" }],
     services: ["Foundation repair", "Crawl space repair", "Waterproofing", "Concrete repair"],
   },
   {
@@ -53,7 +50,6 @@ export const STATES: StateInfo[] = [
     tagline: "Serving Little Rock, Jonesboro, and surrounding communities.",
     polygon: [[36.50,-94.62], [36.50,-90.15], [36.00,-90.15], [36.00,-89.69], [35.50,-90.20], [35.00,-90.30], [34.50,-90.60], [34.00,-90.90], [33.50,-91.10], [33.00,-91.20], [33.00,-94.04], [33.55,-94.04], [33.55,-94.47]],
     center: [34.90, -92.20], zoom: 7,
-    metros: [{ label: "Little Rock metro", citySlug: "little-rock-ar" }, { label: "Jonesboro", citySlug: "jonesboro-ar" }, { label: "Conway", citySlug: "conway-ar" }, { label: "West Memphis", citySlug: "west-memphis-ar" }],
     services: ["Foundation repair", "Crawl space repair", "Concrete repair"],
   },
   {
@@ -62,7 +58,6 @@ export const STATES: StateInfo[] = [
     tagline: "DeSoto County south through the Delta and into the Golden Triangle.",
     polygon: [[35.00,-90.30], [35.00,-88.20], [34.00,-88.20], [33.00,-88.40], [32.00,-88.40], [31.00,-88.40], [30.69,-88.44], [30.19,-89.30], [30.19,-89.59], [31.00,-89.69], [31.00,-91.60], [31.50,-91.50], [32.00,-91.20], [32.50,-91.10], [33.00,-91.20], [33.50,-91.10], [34.00,-90.90], [34.50,-90.60]],
     center: [33.60, -89.60], zoom: 7,
-    metros: [{ label: "Southaven / DeSoto", citySlug: "southaven-ms" }, { label: "Oxford", citySlug: "oxford-ms" }, { label: "Tupelo", citySlug: "tupelo-ms" }, { label: "Columbus", citySlug: "columbus-ms" }],
     services: ["Crawl space repair", "Waterproofing", "Mold prevention"],
   },
   {
@@ -71,7 +66,6 @@ export const STATES: StateInfo[] = [
     tagline: "The Bootheel — Dunklin and Pemiscot counties.",
     polygon: [[40.57,-95.77], [40.57,-91.70], [40.40,-91.40], [39.70,-91.10], [38.90,-90.20], [38.00,-89.91], [37.00,-89.40], [36.50,-89.49], [36.20,-89.59], [36.00,-89.69], [36.00,-90.15], [36.50,-90.15], [36.50,-94.62], [39.01,-94.62], [39.10,-94.91], [39.99,-95.30]],
     center: [36.20, -89.90], zoom: 9,
-    metros: [{ label: "Kennett", citySlug: "kennett-mo" }, { label: "Caruthersville", citySlug: "caruthersville-mo" }, { label: "Hayti", citySlug: "hayti-mo" }, { label: "Steele", citySlug: "steele-mo" }],
     services: ["Foundation repair", "Crawl space repair"],
   },
 ];

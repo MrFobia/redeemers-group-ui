@@ -7,18 +7,20 @@ import SharedNavBar from "./SharedNavBar";
 import { PageHeroBanner } from "./components/PageHeroBanner";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import imgFloor03 from "../assets/floor-03.jpeg";
 
 import { B, DARK, CHAR, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
-function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+function Reveal({ children, delay = 0, className = "", style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <motion.div ref={ref} initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}>
+      className={className}
+      style={style}>
       {children}
     </motion.div>
   );
@@ -367,19 +369,11 @@ export default function BeforeAfterPage({ onBack, onNavigate }: { onBack: () => 
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
       </div>
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
-        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <button onClick={() => onNavigate?.("our-difference")}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Our Difference</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Before &amp; After</span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "Our Difference", onClick: () => onNavigate?.("our-difference") },
+          { label: "Before & After" },
+        ]} />
 
         <PageHeroBanner
           image={imgFloor03}

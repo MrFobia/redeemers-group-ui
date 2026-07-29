@@ -12,6 +12,7 @@ import imgFloor03 from "../assets/floor-03.jpeg";
 import imgFloor04 from "../assets/floor-04.jpeg";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { ProjectGallery } from "./components/ProjectGallery";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
@@ -764,16 +765,7 @@ export default function ResourcesPage({ onBack, onNavigate, scrollTo: initialSec
       <FloatingSideNav tabs={NAV_TABS} active={activeTab} onChange={scrollToSection} />
 
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
-        {/* Breadcrumb */}
-        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Resources</span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[{ label: "Home", onClick: onBack }, { label: "Resources" }]} />
 
         <HeroSection />
         <GallerySection />

@@ -6,6 +6,7 @@ import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { ServiceAreaExplorer } from "./components/ServiceAreaExplorer";
 import { PageHeroBanner } from "./components/PageHeroBanner";
 import imgServiceAreaHero from "../assets/case-duplex.jpg";
@@ -204,6 +205,11 @@ export default function ServiceAreaPage({ onBack, onNavigate }: { onBack: () => 
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="About" />
       </div>
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "About", onClick: () => onNavigate?.("about") },
+          { label: "Service Area" },
+        ]} />
         <PageHeroBanner
           image={imgServiceAreaHero}
           imageAlt="Redeemers crew stabilizing a home in the Mid-South"

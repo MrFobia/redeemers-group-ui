@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import SharedNavBar from "./SharedNavBar";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import { AnnouncementBar } from "./components/AnnouncementBar";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { SERVICES as SERVICE_DEFS } from "./data/services";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
@@ -22,8 +23,8 @@ function Footer({ onBack }: { onBack: () => void }) {
     { head: "Contact",   links: ["1-833-584-1049", "info@redeemersgroup.com", "Schedule Inspection", "Customer Portal"] },
   ];
   return (
-    <footer style={{ background: SURFACE.footer, borderTop: "1px solid rgba(255,255,255,.07)", padding: "64px 56px 40px" }}>
-      <div className="max-w-[1280px] mx-auto">
+    <footer style={{ background: SURFACE.footer, borderTop: "1px solid rgba(255,255,255,.07)" }} className="pt-16 pb-10 px-8 md:px-14">
+      <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
           {cols.map(col => (
             <div key={col.head}>
@@ -169,14 +170,14 @@ const SERVICES = {
 
 function IntroSection() {
   return (
-    <section style={{ background: SURFACE.base, padding: "96px 56px 80px" }}>
-      <div className="max-w-[1280px] mx-auto">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start lg:items-center">
+    <section style={{ background: SURFACE.base }} className="py-12 lg:py-16">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 items-start lg:items-center">
           <div className="flex-1">
-            <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 20 }}>
+            <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
               Services
             </p>
-            <h1 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(36px,4.5vw,64px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", margin: 0 }}>
+            <h1 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", margin: 0 }}>
               What can we<br />help you fix?
             </h1>
           </div>
@@ -184,7 +185,7 @@ function IntroSection() {
             <p style={{ fontFamily: INTER, fontSize: 18, color: "rgba(10,11,20,.6)", lineHeight: 1.7 }}>
               From sagging floors to flooded basements — every problem has a permanent solution, backed by our lifetime warranty and 17 years of experience.
             </p>
-            <div className="flex flex-wrap gap-4 mt-12">
+            <div className="flex flex-wrap gap-4 mt-8">
               {["Crawl Space", "Waterproofing", "Foundation", "Concrete"].map(s => (
                 <span key={s} style={{
                   padding: "6px 14px", background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.3)",
@@ -213,8 +214,8 @@ const CARD_SLUGS = {
 
 function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <section style={{ background: SURFACE.alt, padding: "96px 56px 96px" }}>
-      <div className="max-w-[1280px] mx-auto">
+    <section style={{ background: SURFACE.alt }} className="py-16 lg:py-20">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header */}
         <div className="text-center mb-16">
@@ -386,8 +387,8 @@ function TrustBar() {
     { num: "Lifetime", label: "Warranty" },
   ];
   return (
-    <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(10,11,20,.06)", borderBottom: "1px solid rgba(10,11,20,.06)", padding: "40px 56px" }}>
-      <div className="max-w-[1280px] mx-auto">
+    <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(10,11,20,.06)", borderBottom: "1px solid rgba(10,11,20,.06)" }} className="py-8 px-8 md:px-14">
+      <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map(s => (
             <div key={s.label} className="text-center">
@@ -407,7 +408,7 @@ function TrustBar() {
 
 function CTASection() {
   return (
-    <section style={{ background: "#00519F", padding: "96px 56px", position: "relative", overflow: "hidden" }}>
+    <section style={{ background: "#00519F", position: "relative", overflow: "hidden" }} className="py-16 lg:py-20 px-8 md:px-14">
       {/* Ghost text */}
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
         <p style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(80px,12vw,160px)", color: "rgba(255,255,255,0.03)", lineHeight: 1, letterSpacing: "-4px", userSelect: "none", whiteSpace: "nowrap" }}>
@@ -455,20 +456,7 @@ export default function ServicesLandingPage({
       </div>
 
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
-        {/* Breadcrumb */}
-        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: INTER, fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">
-              Home
-            </button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: INTER, fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>
-              Services
-            </span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[{ label: "Home", onClick: onBack }, { label: "Services" }]} />
 
         <IntroSection />
         <TrustBar />

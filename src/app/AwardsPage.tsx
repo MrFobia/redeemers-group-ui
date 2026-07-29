@@ -1,15 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "motion/react";
-import { ChevronRight, ArrowRight, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Award as AwardIcon, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
 import { PageHeroBanner } from "./components/PageHeroBanner";
+import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import imgFloor02 from "../assets/floor-02.jpeg";
 
-import { B, DARK, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
+import { B, DARK, NAVY, CHAR, SAND, MUTED, SURFACE, ON_LIGHT, ON_DARK } from "./theme";
 
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -123,10 +124,21 @@ const AWARDS: Award[] = [
 
 const AWARD_YEARS = ["All", ...Array.from(new Set(AWARDS.map((a) => a.year))).sort((a, b) => Number(b) - Number(a))];
 
+// Derived — never fabricated: counted straight off the AWARDS list above.
+const YEAR_NUMS = AWARDS.map((a) => Number(a.year));
+const AWARDS_SINCE_YEAR = Math.min(...YEAR_NUMS);
+const AWARDS_ORG_COUNT = new Set(AWARDS.map((a) => a.org)).size;
+const FEATURED_AWARDS = AWARDS.slice(0, 3);
+
 function AwardCard({ award, onClick }: { award: Award; onClick: () => void }) {
   return (
     <div onClick={onClick} className="flex flex-col gap-3 cursor-pointer group">
-      <div className="relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: "1/1", background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+      <div className="relative overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:-translate-y-1"
+        style={{ aspectRatio: "1/1", background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 0 0 rgba(10,11,20,0)" }}
+        onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 16px 32px rgba(10,11,20,.12)")}
+        onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "0 0 0 rgba(10,11,20,0)")}
+      >
+        <div className="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" style={{ background: SAND }} />
         {award.img ? (
           <ImageWithFallback src={award.img} alt={award.title} className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
         ) : (
@@ -145,6 +157,72 @@ function AwardCard({ award, onClick }: { award: Award; onClick: () => void }) {
         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: MUTED }}>{award.org}</p>
       </div>
     </div>
+  );
+}
+
+// ─── Featured strip — the 3 most recent recognitions, larger treatment ──────
+function FeaturedAwardsSection({ onOpen }: { onOpen: (a: Award) => void }) {
+  return (
+    <section style={{ background: DARK }} className="py-16 lg:py-20">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="flex items-end justify-between gap-6 mb-10 flex-wrap">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-5 h-[2px]" style={{ background: SAND }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Most Recent</span>
+            </div>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.2vw,42px)", color: "#fff", letterSpacing: "-1px", lineHeight: 1.05 }}>
+              Latest recognition
+            </h2>
+          </div>
+          <div className="flex items-center gap-8">
+            <div>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: "#fff", lineHeight: 1 }}>{AWARDS.length}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: ON_DARK.muted, letterSpacing: 0.5 }}>Total awards</p>
+            </div>
+            <div>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: "#fff", lineHeight: 1 }}>{AWARDS_ORG_COUNT}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: ON_DARK.muted, letterSpacing: 0.5 }}>Awarding bodies</p>
+            </div>
+            <div>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: "#fff", lineHeight: 1 }}>{AWARDS_SINCE_YEAR}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: ON_DARK.muted, letterSpacing: 0.5 }}>Recognized since</p>
+            </div>
+          </div>
+        </Reveal>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {FEATURED_AWARDS.map((award, i) => (
+            <Reveal key={award.title} delay={i * 0.08}>
+              <button onClick={() => onOpen(award)}
+                className="w-full text-left flex flex-col gap-0 group transition-all"
+                style={{ background: "rgba(255,255,255,.03)", border: `1px solid ${ON_DARK.border}`, cursor: "pointer" }}>
+                <div className="relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: "16/10", background: "rgba(255,255,255,.04)" }}>
+                  {award.img ? (
+                    <ImageWithFallback src={award.img} alt={award.title} className="w-full h-full object-contain p-8 transition-transform duration-300 group-hover:scale-105" />
+                  ) : (
+                    <AwardIcon size={40} color={SAND} strokeWidth={1.4} />
+                  )}
+                </div>
+                <div className="p-6 flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 1.5 }}>{award.year}</span>
+                    <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,.25)" }} />
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: ON_DARK.muted }}>{award.org}</span>
+                  </div>
+                  <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", lineHeight: 1.3 }}>
+                    {award.title}
+                  </p>
+                  <span className="inline-flex items-center gap-1.5 mt-1" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: SAND }}>
+                    View details <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
+                </div>
+              </button>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -223,38 +301,63 @@ function AwardModal({ award, onClose }: { award: Award | null; onClose: () => vo
   );
 }
 
-function AwardsGridSection() {
+function AwardsGridSection({ onOpen }: { onOpen: (a: Award) => void }) {
   const [yearFilter, setYearFilter] = useState("All");
-  const [openAward, setOpenAward] = useState<Award | null>(null);
-  const filtered = yearFilter === "All" ? AWARDS : AWARDS.filter((a) => a.year === yearFilter);
+
+  // "All" reads as a ledger — one section per year, newest first, so 90+
+  // entries don't dump into one undifferentiated wall of cards. Picking a
+  // single year just narrows the ledger to that one section.
+  const groups = (yearFilter === "All" ? AWARD_YEARS.slice(1) : [yearFilter]).map((year) => ({
+    year,
+    items: AWARDS.filter((a) => a.year === year),
+  }));
 
   return (
     <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="flex items-center gap-2 flex-wrap mb-12">
-          {AWARD_YEARS.map((y) => (
-            <button key={y} onClick={() => setYearFilter(y)} className="px-3.5 py-2 transition-all"
-              style={{
-                fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
-                background: yearFilter === y ? SAND : "transparent",
-                color: yearFilter === y ? DARK : MUTED,
-                border: `1.5px solid ${yearFilter === y ? SAND : ON_LIGHT.border}`,
-                cursor: "pointer",
-              }}>
-              {y}
-            </button>
-          ))}
+        <Reveal className="flex items-center gap-2 flex-wrap mb-16">
+          {AWARD_YEARS.map((y) => {
+            const count = y === "All" ? AWARDS.length : AWARDS.filter((a) => a.year === y).length;
+            const active = yearFilter === y;
+            return (
+              <button key={y} onClick={() => setYearFilter(y)} className="inline-flex items-center gap-1.5 px-3.5 py-2 transition-all"
+                style={{
+                  fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
+                  background: active ? SAND : "transparent",
+                  color: active ? DARK : MUTED,
+                  border: `1.5px solid ${active ? SAND : ON_LIGHT.border}`,
+                  cursor: "pointer",
+                }}>
+                {y}
+                <span style={{ fontSize: 11, opacity: 0.6 }}>{count}</span>
+              </button>
+            );
+          })}
         </Reveal>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-10">
-          {filtered.map((award, i) => (
-            <Reveal key={award.title} delay={(i % 12) * 0.03}>
-              <AwardCard award={award} onClick={() => setOpenAward(award)} />
-            </Reveal>
+        <div className="flex flex-col gap-16">
+          {groups.map((group) => (
+            <div key={group.year}>
+              <Reveal className="flex items-baseline gap-4 mb-8">
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,40px)", color: CHAR, letterSpacing: "-1px" }}>
+                  {group.year}
+                </span>
+                <div className="flex-1" style={{ height: 1, background: ON_LIGHT.border }} />
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED, whiteSpace: "nowrap" }}>
+                  {group.items.length} {group.items.length === 1 ? "award" : "awards"}
+                </span>
+              </Reveal>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-10">
+                {group.items.map((award, i) => (
+                  <Reveal key={award.title} delay={(i % 12) * 0.03}>
+                    <AwardCard award={award} onClick={() => onOpen(award)} />
+                  </Reveal>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
-
-        {openAward && <AwardModal award={openAward} onClose={() => setOpenAward(null)} />}
       </div>
     </section>
   );
@@ -322,6 +425,8 @@ function Footer({ onBack }: { onBack: () => void }) {
 
 // ─── AwardsPage ───────────────────────────────────────────────────────────────
 export default function AwardsPage({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (p: string) => void }) {
+  const [openAward, setOpenAward] = useState<Award | null>(null);
+
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-[100]">
@@ -329,30 +434,31 @@ export default function AwardsPage({ onBack, onNavigate }: { onBack: () => void;
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
       </div>
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
-        <div style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-          <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-3 flex items-center gap-2">
-            <button onClick={onBack}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Home</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <button onClick={() => onNavigate?.("our-difference")}
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.5)", background: "none", border: "none", cursor: "pointer" }}
-              className="hover:text-white transition-colors">Our Difference</button>
-            <ChevronRight size={14} color="rgba(255,255,255,.3)" />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.9)", fontWeight: 600 }}>Awards</span>
-          </div>
-        </div>
+        <PageBreadcrumb items={[
+          { label: "Home", onClick: onBack },
+          { label: "Our Difference", onClick: () => onNavigate?.("our-difference") },
+          { label: "Awards" },
+        ]} />
 
         <PageHeroBanner
           image={imgFloor02}
           imageAlt="Redeemers Group award recognition"
           eyebrow="Awards"
           title="Awards & Recognition"
-          lede={`${AWARDS.length} industry awards and affiliations earned since 2008.`}
-          minHeight={260}
-        />
+          lede={`Since ${AWARDS_SINCE_YEAR}, ${AWARDS_ORG_COUNT} different organizations have recognized the work — ${AWARDS.length} awards and counting.`}
+          minHeight={340}
+        >
+          <button onClick={openInspection}
+            className="inline-flex items-center gap-2 px-6 py-3.5 hover:opacity-90 transition-opacity"
+            style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "#fff", border: "none", cursor: "pointer", letterSpacing: 0.3 }}>
+            Get Your Free Inspection <ArrowRight size={14} />
+          </button>
+        </PageHeroBanner>
 
-        <AwardsGridSection />
+        <FeaturedAwardsSection onOpen={setOpenAward} />
+        <AwardsGridSection onOpen={setOpenAward} />
+
+        {openAward && <AwardModal award={openAward} onClose={() => setOpenAward(null)} />}
 
         <Footer onBack={onBack} />
       </div>
