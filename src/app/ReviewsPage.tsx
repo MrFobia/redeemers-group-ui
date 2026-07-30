@@ -228,13 +228,13 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
                 <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.4)", flexShrink: 0 }}>Filter by:</span>
                 <div className="flex items-center gap-3 overflow-x-auto" style={{ flex: 1 }}>
                   {SERVICE_FILTERS.map((f) => (
-                    <button key={f} onClick={() => handleFilterChange(f)} className="flex-shrink-0 px-4 py-1.5 transition-colors"
+                    <button key={f} onClick={() => handleFilterChange(f)} className="flex-shrink-0 px-4 py-2 transition-all"
                       style={{
                         fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
                         background: activeFilter === f ? B : "transparent",
-                        color: activeFilter === f ? DARK : "rgba(10,11,20,.55)",
-                        border: `1.5px solid ${activeFilter === f ? B : "rgba(10,11,20,.15)"}`,
-                        borderRadius: 4, cursor: "pointer",
+                        color: activeFilter === f ? "#fff" : MUTED,
+                        border: `1.5px solid ${activeFilter === f ? B : ON_LIGHT.border}`,
+                        cursor: "pointer",
                       }}>
                       {f}
                     </button>

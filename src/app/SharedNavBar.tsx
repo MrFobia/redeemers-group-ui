@@ -208,8 +208,9 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 // ─── Our Difference Dropdown ──────────────────────────────────────────────────
 // Client QA call (Jul 24): "Our difference" has 9 items on the sitemap, too
 // many for a horizontal sub-nav, and their explicit preference is "a vertical
-// list view when you hover over the main navigation." Exact 9 labels/order
-// from the sitemap — keep in sync with OurDifferencePage.tsx's NAV_TABS.
+// list view when you hover over the main navigation." Order from the
+// sitemap — keep in sync with OurDifferencePage.tsx's NAV_TABS. News
+// section removed per client request.
 // Entries marked `page` are their own top-level page (sitemap "interna") —
 // the nav jumps straight there instead of stopping at an Our Difference
 // anchor first. Entries without `page` are anchors within Our Difference.
@@ -218,7 +219,6 @@ const OUR_DIFFERENCE_SECTIONS: { label: string; id: string; page?: string }[] = 
   { label: "What to expect", id: "process" },
   { label: "The Evergreen difference", id: "story" },
   { label: "Our pledge", id: "pledge" },
-  { label: "News", id: "news-awards" },
   { label: "Featured projects / case stories", id: "case-studies", page: "case-studies" },
   { label: "Before & after", id: "before-after", page: "before-after" },
   { label: "Referral program", id: "referral" },

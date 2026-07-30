@@ -226,12 +226,12 @@ function CategoryTabs({ active, onChange }: { active: string; onChange: (c: stri
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 flex items-center gap-2 py-3" style={{ scrollbarWidth: "none" }}>
         {CATEGORIES.map((cat) => (
           <button key={cat} onClick={() => onChange(cat)}
-            className="shrink-0 px-4 py-1.5 transition-all duration-150 whitespace-nowrap"
+            className="shrink-0 px-4 py-2 transition-all whitespace-nowrap"
             style={{
-              fontFamily: "'Inter',sans-serif", fontWeight: active === cat ? 600 : 400, fontSize: 12,
-              color: active === cat ? "#fff" : ON_LIGHT.body,
+              fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
+              color: active === cat ? "#fff" : MUTED,
               background: active === cat ? B : "transparent",
-              border: `1px solid ${active === cat ? B : ON_LIGHT.border}`,
+              border: `1.5px solid ${active === cat ? B : ON_LIGHT.border}`,
               cursor: "pointer",
             }}>
             {cat}

@@ -448,8 +448,8 @@ function CostSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: st
 }
 
 // ─── Project Gallery ──────────────────────────────────────────────────────────
-function GallerySection() {
-  return <ProjectGallery id="gallery" />;
+function GallerySection({ onNavigate }: { onNavigate?: (p: string) => void }) {
+  return <ProjectGallery id="gallery" onNavigate={onNavigate} />;
 }
 
 // ─── FAQ Section ──────────────────────────────────────────────────────────────
@@ -700,7 +700,7 @@ export default function ServicePage({ onBack, onNavigate, scrollTo, slug }: { on
         <SolutionsSection svc={svc} />
         <ProblemSignsSection svc={svc} onNavigate={onNavigate} />
         <CostSection svc={svc} onNavigate={onNavigate} />
-        <GallerySection />
+        <GallerySection onNavigate={onNavigate} />
         <FaqSection svc={svc} onNavigate={onNavigate} />
         <CtaBanner svc={svc} />
         <Footer onBack={onBack} />

@@ -12,7 +12,7 @@ import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { LOVE_WELL_PROJECTS, type LoveWellProject } from "./data/loveWellProjects";
 import imgFloor02 from "../assets/floor-02.jpeg";
 
-import { B, DARK, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
+import { B, CHAR, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -162,12 +162,12 @@ function ProjectsGridSection() {
 
         <Reveal className="flex items-center gap-2 flex-wrap mb-12">
           {LOVE_WELL_YEARS.map((y) => (
-            <button key={y} onClick={() => setYearFilter(y)} className="px-3.5 py-2 transition-all"
+            <button key={y} onClick={() => setYearFilter(y)} className="px-4 py-2 transition-all"
               style={{
                 fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
-                background: yearFilter === y ? SAND : "transparent",
-                color: yearFilter === y ? DARK : MUTED,
-                border: `1.5px solid ${yearFilter === y ? SAND : ON_LIGHT.border}`,
+                background: yearFilter === y ? B : "transparent",
+                color: yearFilter === y ? "#fff" : MUTED,
+                border: `1.5px solid ${yearFilter === y ? B : ON_LIGHT.border}`,
                 cursor: "pointer",
               }}>
               {y}

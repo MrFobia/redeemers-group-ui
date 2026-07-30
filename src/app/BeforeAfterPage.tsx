@@ -225,11 +225,11 @@ function BeforeAfterGridSection() {
         <Reveal delay={0.05} className="flex flex-wrap gap-2 mb-10">
           {CATEGORIES.map((c) => (
             <button key={c} onClick={() => selectCategory(c)}
-              className="px-4 py-2 transition-colors"
+              className="px-4 py-2 transition-all"
               style={{
-                fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, cursor: "pointer",
-                background: category === c ? B : "#fff",
-                color: category === c ? "#fff" : CHAR,
+                fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, cursor: "pointer",
+                background: category === c ? B : "transparent",
+                color: category === c ? "#fff" : MUTED,
                 border: `1.5px solid ${category === c ? B : ON_LIGHT.border}`,
               }}>
               {c}

@@ -397,13 +397,24 @@ function GalleryCard({ item, index, onClick, featured = false }: {
 }
 
 // ─── ProjectGallery (shared component) ───────────────────────────────────────
-export function ProjectGallery({ id = "gallery", darkBg = true }: { id?: string; darkBg?: boolean }) {
+// `limit` caps how many cards render before the special 6-slot masonry
+// layout (featured + side + bottom row) runs out of slots — pass none (or
+// Infinity) for the standalone "all projects" page, where every match should
+// show instead of teasing 6 and dead-ending.
+export function ProjectGallery({ id = "gallery", darkBg = true, limit = 6, onNavigate }: { id?: string; darkBg?: boolean; limit?: number; onNavigate?: (p: string) => void }) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const titleInView = useInView(titleRef, { once: true });
 
   const filtered = activeCategory === "All" ? GALLERY_ITEMS : GALLERY_ITEMS.filter(i => i.category === activeCategory);
+  const visible = filtered.slice(0, limit);
+  // The featured masonry layout below only has 6 hardcoded slots, so
+  // "overflow" is whatever's left after those 6 — not after `limit`. On the
+  // teaser (limit=6) that's the same set filtered() already trimmed to nothing
+  // extra; on the full page (limit=Infinity) this is what makes items 7+
+  // actually render instead of silently vanishing.
+  const overflow = visible.slice(6);
 
   const bg = darkBg ? DARK : DARK;
 
@@ -458,10 +469,10 @@ export function ProjectGallery({ id = "gallery", darkBg = true }: { id?: string;
               className="px-4 py-2 transition-all"
               style={{
                 fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
-                background: activeCategory === cat ? SAND : "transparent",
-                color: activeCategory === cat ? DARK : "rgba(255,255,255,.45)",
-                border: `1.5px solid ${activeCategory === cat ? SAND : "rgba(255,255,255,.14)"}`,
-                borderRadius: 4, cursor: "pointer",
+                background: activeCategory === cat ? B : "transparent",
+                color: activeCategory === cat ? "#fff" : "rgba(255,255,255,.45)",
+                border: `1.5px solid ${activeCategory === cat ? B : "rgba(255,255,255,.14)"}`,
+                cursor: "pointer",
               }}
             >
               {cat}
@@ -478,24 +489,37 @@ export function ProjectGallery({ id = "gallery", darkBg = true }: { id?: string;
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
-            {filtered.length > 0 && (
+            {visible.length > 0 && (
               <div className="grid grid-cols-3 gap-3" style={{ gridAutoRows: "280px" }}>
                 {/* Featured card — first item, spans 2 cols + 2 rows */}
                 <div className="col-span-2 row-span-2">
-                  <GalleryCard item={filtered[0]} index={0} featured onClick={() => setLightboxIdx(0)} />
+                  <GalleryCard item={visible[0]} index={0} featured onClick={() => setLightboxIdx(0)} />
                 </div>
 
                 {/* Side cards */}
-                {filtered.slice(1, 3).map((item, i) => (
+                {visible.slice(1, 3).map((item, i) => (
                   <div key={item.label + i}>
                     <GalleryCard item={item} index={i + 1} onClick={() => setLightboxIdx(i + 1)} />
                   </div>
                 ))}
 
                 {/* Bottom row — remaining cards */}
-                {filtered.slice(3, 6).map((item, i) => (
+                {visible.slice(3, 6).map((item, i) => (
                   <div key={item.label + i}>
                     <GalleryCard item={item} index={i + 3} onClick={() => setLightboxIdx(i + 3)} />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Everything past the featured 6-slot layout — plain uniform
+                grid, only reached from the standalone "all projects" page
+                (limit={Infinity}). */}
+            {overflow.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3" style={{ gridAutoRows: "280px" }}>
+                {overflow.map((item, i) => (
+                  <div key={item.label + i}>
+                    <GalleryCard item={item} index={i + 6} onClick={() => setLightboxIdx(i + 6)} />
                   </div>
                 ))}
               </div>
@@ -509,23 +533,25 @@ export function ProjectGallery({ id = "gallery", darkBg = true }: { id?: string;
           </motion.div>
         </AnimatePresence>
 
-        {/* Bottom: view all CTA */}
-        <motion.div
-          className="flex items-center justify-between mt-10 pt-8"
-          style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}
-          initial={{ opacity: 0 }}
-          animate={titleInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.3)" }}>
-            Showing {Math.min(filtered.length, 6)} of {filtered.length} projects
-          </p>
-          <button className="group inline-flex items-center gap-2"
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer" }}>
-            View all projects
-            <ArrowUpRight size={14} color={SAND} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </button>
-        </motion.div>
+        {/* Bottom: view all CTA — only on the teaser (limited) view. The
+            standalone all-projects page IS this state, so it has nothing
+            to link onward to. Previously this button had no onClick at
+            all and used a different link style than the rest of the site. */}
+        {Number.isFinite(limit) && (
+          <div
+            className="flex items-center justify-between mt-10 pt-8"
+            style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}
+          >
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.3)" }}>
+              Showing {visible.length} of {filtered.length} projects
+            </p>
+            <button onClick={() => onNavigate?.("project-gallery")} className="group inline-flex items-center gap-1.5"
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+              View all projects
+              <ChevronRight size={14} color={SAND} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Project modal */}

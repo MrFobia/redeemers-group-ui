@@ -961,18 +961,23 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
 }
 
 // ─── FAQ Section ──────────────────────────────────────────────────────────────
+// Unified with ServicePage.tsx / ResourcesPage.tsx's FaqSection — this used to
+// be a third, different design (boxed accordion items, square rotating "+"
+// button) instead of the site's single plain-divider-row pattern.
 function FaqSection() {
   const [open, setOpen] = useState<string>("");
   return (
-    <section style={{ background: SURFACE.base }} className="py-20 lg:py-28">
+    <section style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-6 h-[1px]" style={{ background: B }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>FAQs</span>
-            <div className="w-6 h-[1px]" style={{ background: B }} />
+            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", margin: 0 }}>
+              FAQs
+            </p>
+            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
             Sagging floors frequently asked questions
           </h2>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED }}>
@@ -989,27 +994,28 @@ function FaqSection() {
           `}</style>
           <AccordionPrimitive.Root type="single" value={open} onValueChange={(v) => setOpen(v)} collapsible>
             {FAQS.map((faq, i) => (
-              <AccordionPrimitive.Item key={i} value={String(i)} className="mb-3 overflow-hidden"
-                style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+              <AccordionPrimitive.Item key={i} value={String(i)}
+                className="overflow-hidden"
+                style={{ borderBottom: "1px solid rgba(10,11,20,.1)" }}>
                 <AccordionPrimitive.Header>
                   <AccordionPrimitive.Trigger
-                    className="w-full flex items-center justify-between px-6 py-5 text-left group"
-                    style={{ background: "none", border: "none", cursor: "pointer" }}>
+                    className="w-full flex items-center gap-5 text-left group transition-colors"
+                    style={{ background: "none", border: "none", cursor: "pointer", padding: "22px 0" }}
+                  >
                     <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 17, color: CHAR, flex: 1, paddingRight: 16, lineHeight: 1.4 }}>
                       {faq.q}
                     </span>
                     <div className="shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-200 group-data-[state=open]:rotate-45"
-                      style={{ border: `1.5px solid ${open === String(i) ? B : "rgba(10,11,20,.2)"}`, color: open === String(i) ? B : MUTED }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                      style={{ color: open === String(i) ? B : MUTED }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                       </svg>
                     </div>
                   </AccordionPrimitive.Trigger>
                 </AccordionPrimitive.Header>
                 <AccordionPrimitive.Content className="overflow-hidden rdx-content">
-                  <div className="px-6 pb-6 pt-1">
-                    <div className="h-px mb-4" style={{ background: "rgba(10,11,20,.06)" }} />
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.6)", lineHeight: 1.8 }}>{faq.a}</p>
+                  <div className="pb-6" style={{ paddingLeft: 42, paddingRight: 40 }}>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, lineHeight: 1.8 }}>{faq.a}</p>
                   </div>
                 </AccordionPrimitive.Content>
               </AccordionPrimitive.Item>

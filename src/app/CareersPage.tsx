@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
-import { B, DARK, NAVY, CHAR, SAND, CREAM, SURFACE, ON_LIGHT } from "./theme";
+import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
 import { PageHeroBanner } from "./components/PageHeroBanner";
 import imgCareersHero from "../assets/svc-foundation.jpg";
 
@@ -542,8 +542,14 @@ function JobBoardSection() {
           <div className="flex gap-2 flex-wrap mt-6">
             {DEPTS.map(dept => (
               <button key={dept} onClick={() => setSelectedDept(dept)}
-                className="px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all"
-                style={{ background: selectedDept === dept ? B : "rgba(10,11,20,.05)", border: `1px solid ${selectedDept === dept ? B : "rgba(10,11,20,.1)"}`, color: selectedDept === dept ? "#fff" : "rgba(10,11,20,.6)", cursor: "pointer" }}>
+                className="px-4 py-2 whitespace-nowrap transition-all"
+                style={{
+                  fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
+                  background: selectedDept === dept ? B : "transparent",
+                  color: selectedDept === dept ? "#fff" : MUTED,
+                  border: `1.5px solid ${selectedDept === dept ? B : ON_LIGHT.border}`,
+                  cursor: "pointer",
+                }}>
                 {dept}
               </button>
             ))}

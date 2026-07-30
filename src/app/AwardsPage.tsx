@@ -320,12 +320,12 @@ function AwardsGridSection({ onOpen }: { onOpen: (a: Award) => void }) {
             const count = y === "All" ? AWARDS.length : AWARDS.filter((a) => a.year === y).length;
             const active = yearFilter === y;
             return (
-              <button key={y} onClick={() => setYearFilter(y)} className="inline-flex items-center gap-1.5 px-3.5 py-2 transition-all"
+              <button key={y} onClick={() => setYearFilter(y)} className="inline-flex items-center gap-1.5 px-4 py-2 transition-all"
                 style={{
                   fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
-                  background: active ? SAND : "transparent",
-                  color: active ? DARK : MUTED,
-                  border: `1.5px solid ${active ? SAND : ON_LIGHT.border}`,
+                  background: active ? B : "transparent",
+                  color: active ? "#fff" : MUTED,
+                  border: `1.5px solid ${active ? B : ON_LIGHT.border}`,
                   cursor: "pointer",
                 }}>
                 {y}

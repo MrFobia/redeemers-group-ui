@@ -57,7 +57,6 @@ const NAV_TABS = [
   { id: "process", label: "What to expect" },
   { id: "story", label: "The Evergreen difference" },
   { id: "pledge", label: "Our pledge" },
-  { id: "news-awards", label: "News" },
   { id: "case-studies", label: "Featured projects / case stories" },
   { id: "before-after", label: "Before & after" },
   { id: "referral", label: "Referral program" },
@@ -206,7 +205,10 @@ function ProcessSection() {
 }
 
 // ─── 4. STORY (DARK) ─────────────────────────────────────────────────────────
-function StorySection() {
+// Client QA: this section only led to "Contact Us" — the Evergreen module
+// needs its own interna where the 7Ps, what certification means, and the
+// video/awards live, not just this origin-story paragraph.
+function StorySection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   return (
     <section id="story" style={{ background: SURFACE.alt }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
@@ -227,11 +229,18 @@ function StorySection() {
                 So he got certified, hired locally, and built the company he wished existed: one that treats every Memphis homeowner the way you'd want a neighbor treated. Privately owned, community rooted, no franchise overhead passing costs to you.
               </p>
             </div>
-            <a href="#" className="group mt-8 inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
-              style={{ border: `1.5px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>
-              Contact Us
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </a>
+            <div className="flex items-center gap-4 flex-wrap mt-8">
+              <button onClick={() => onNavigate?.("evergreen")} className="group inline-flex items-center gap-2 px-7 py-4 transition-all"
+                style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
+                What Is Evergreen?
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              </button>
+              <a href="#" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
+                style={{ border: `1.5px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>
+                Contact Us
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              </a>
+            </div>
           </Reveal>
 
           <Reveal delay={0.1} className="flex flex-col gap-6">
@@ -885,80 +894,6 @@ function BeforeAfterSection({ onNavigate }: { onNavigate?: (p: string) => void }
   );
 }
 
-// ─── 8. NEWS & AWARDS (DARK) ─────────────────────────────────────────────────
-const PROJECT_STORIES = [
-  {
-    title: "East Memphis — 3-bed ranch",
-    desc: "Homeowner noticed soft spots in the floor. Inspection revealed 6 broken joists and active mold. Full SmartJack system + encapsulation. Job complete in 2 days.",
-    img: imgFloor02,
-    tag: "Crawl Space",
-  },
-  {
-    title: "Midtown — duplex rental",
-    desc: "Tenant reported sticking doors and visible wall cracks. Clay soil movement confirmed. 6 push piers installed. Tenants stayed in place during work.",
-    img: imgFloor01,
-    tag: "Foundation",
-  },
-  {
-    title: "Germantown — pool deck",
-    desc: "Pool deck had sunk 3 inches on one side. PolyLevel injection lifted and leveled in 4 hours. No demolition, no mess, same-day use.",
-    img: imgFloor03,
-    tag: "Concrete",
-  },
-];
-
-function ProjectStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
-  return (
-    <section id="news-awards" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-5 h-[2px]" style={{ background: B }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>News</span>
-            </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
-              News
-            </h2>
-          </div>
-          <button className="group inline-flex items-center gap-2 shrink-0"
-            onClick={() => onNavigate?.("news-blog")}
-            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-            See all (436)
-            <ChevronRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-          </button>
-        </Reveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {PROJECT_STORIES.map((card, i) => (
-            <Reveal key={card.title} delay={i * 0.08}>
-              <div className="flex flex-col h-full" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
-                <div className="relative overflow-hidden group" style={{ aspectRatio: "3/2" }}>
-                  <ImageWithFallback src={card.img} alt={card.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.5) 0%,transparent 60%)" }} />
-                  <div className="absolute top-4 left-4 px-3 py-1" style={{ background: "rgba(10,11,20,.7)", border: "1px solid rgba(196,171,108,.4)" }}>
-                    <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
-                  </div>
-                </div>
-                <div className="flex flex-col flex-1 p-7">
-                  <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: CHAR, lineHeight: 1.2, marginBottom: 10 }}>{card.title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.55)", lineHeight: 1.7, flex: 1, marginBottom: 16 }}>{card.desc}</p>
-                  <button className="group inline-flex items-center gap-1.5"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    Read full story
-                    <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-                  </button>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ─── 9. CERTIFICATIONS ───────────────────────────────────────────────────────
 const CERT_CHIPS = [
   { label: "BBB Accredited",     icon: "★" },
@@ -1387,16 +1322,15 @@ export default function OurDifferencePage({ onBack, onNavigate, scrollTo: initia
         <PageBreadcrumb items={[{ label: "Home", onClick: onBack }, { label: "Our Difference" }]} />
 
         {/* Order matches the approved sitemap: Testimonials, What to expect,
-            Evergreen difference, Our pledge, News & awards, Featured projects/
-            case stories, Referral program, Love Well Initiative, Affiliations
-            & certifications. */}
+            Evergreen difference, Our pledge, Featured projects/case stories,
+            Referral program, Love Well Initiative, Affiliations &
+            certifications. News section removed per client request. */}
         <HeroSection />
         <TrustBar />
         <TestimonialsSection onNavigate={onNavigate} />
         <ProcessSection />
-        <StorySection />
+        <StorySection onNavigate={onNavigate} />
         <PledgeSection />
-        <ProjectStoriesSection onNavigate={onNavigate} />
         <CaseStudiesSection onNavigate={onNavigate} />
         <BeforeAfterSection onNavigate={onNavigate} />
         <ReferralProgramSection />

@@ -11,6 +11,8 @@ import { getProblemSignByLabel } from "./data/problemSigns";
 import ProblemSignsPage from "./ProblemSignsPage";
 import ProblemSignInnerPage from "./ProblemSignInnerPage";
 import OurDifferencePage from "./OurDifferencePage";
+import EvergreenPage from "./EvergreenPage";
+import ProjectGalleryPage from "./ProjectGalleryPage";
 import ResourcesPage from "./ResourcesPage";
 import PricingPage from "./PricingPage";
 import AwardsPage from "./AwardsPage";
@@ -1360,7 +1362,7 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const initPage = window.location.hash.replace("#", "") || "home";
-  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "resources" | "pricing" | "awards" | "love-well" | "before-after" | "case-studies" | "news-blog" | "blog-inner" | "about" | "team" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
+  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "evergreen" | "project-gallery" | "resources" | "pricing" | "awards" | "love-well" | "before-after" | "case-studies" | "news-blog" | "blog-inner" | "about" | "team" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
@@ -1406,6 +1408,14 @@ export default function App() {
 
   if (page === "our-difference") {
     return <OurDifferencePage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
+  }
+
+  if (page === "evergreen") {
+    return <EvergreenPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
+  }
+
+  if (page === "project-gallery") {
+    return <ProjectGalleryPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
 
   if (page === "resources") {
@@ -1482,7 +1492,7 @@ export default function App() {
 
   const KNOWN_PAGES = [
     "home", "service", "services-landing", "problem-signs", "problem-sign-inner",
-    "our-difference", "resources", "pricing", "awards", "love-well", "before-after", "case-studies", "news-blog", "blog-inner", "about", "team",
+    "our-difference", "evergreen", "project-gallery", "resources", "pricing", "awards", "love-well", "before-after", "case-studies", "news-blog", "blog-inner", "about", "team",
     "careers", "service-area", "reviews", "job-stories", "contact", "guiaestilos",
   ];
 

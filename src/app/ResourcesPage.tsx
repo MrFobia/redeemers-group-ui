@@ -79,8 +79,8 @@ function HeroSection() {
 
 
 // ─── 3. PROJECT GALLERY ───────────────────────────────────────────────────────
-function GallerySection() {
-  return <ProjectGallery id="gallery" />;
+function GallerySection({ onNavigate }: { onNavigate?: (p: string) => void }) {
+  return <ProjectGallery id="gallery" onNavigate={onNavigate} />;
 }
 
 // ─── 4. PRICING (teaser) ──────────────────────────────────────────────────────
@@ -429,52 +429,41 @@ function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void })
 }
 
 // ─── 8. FAQ ───────────────────────────────────────────────────────────────────
-const FAQ_FILTERS = ["All", "Crawl Space", "Basement", "Foundation", "Concrete", "Commercial"];
 const FAQS = [
-  { q: "How long does crawl space repair take?", a: "Most repairs take 1–2 days. Encapsulation on larger spaces may take 2–3 days. We'll give you a specific timeline during your inspection.", cat: "Crawl Space" },
-  { q: "Do you offer financing?", a: "Yes. We work with trusted lenders to make repairs affordable. Flexible terms and competitive rates are available for qualified homeowners.", cat: "All" },
-  { q: "What areas do you serve?", a: "We serve communities across Tennessee, Arkansas, Mississippi, and Missouri — including Memphis, Nashville, Jackson, Southaven, Little Rock, Jonesboro, Springfield, and Cape Girardeau.", cat: "All" },
-  { q: "Are your installers certified?", a: "Every installer is trained and certified in our methods. We stand behind their work with a lifetime transferable warranty.", cat: "All" },
-  { q: "Is a sagging floor a structural emergency?", a: "Not always immediately, but it should be inspected soon. The underlying cause will continue to worsen over time. Early action saves money.", cat: "Crawl Space" },
-  { q: "How much does basement waterproofing cost?", a: "Interior waterproofing typically runs $3,000–$10,000 depending on square footage and system type. Exterior waterproofing is more involved. We give a free written quote after inspection.", cat: "Basement" },
-  { q: "How are push piers installed?", a: "We drive steel piers through unstable soil to bedrock, then lift and stabilize the foundation. Most installations take 1 day and require no major excavation.", cat: "Foundation" },
-  { q: "Will my homeowner's insurance cover this?", a: "Coverage depends on your policy and the cause of damage. We'll provide detailed documentation to help with your claim where applicable.", cat: "All" },
+  { q: "How long does crawl space repair take?", a: "Most repairs take 1–2 days. Encapsulation on larger spaces may take 2–3 days. We'll give you a specific timeline during your inspection." },
+  { q: "Do you offer financing?", a: "Yes. We work with trusted lenders to make repairs affordable. Flexible terms and competitive rates are available for qualified homeowners." },
+  { q: "What areas do you serve?", a: "We serve communities across Tennessee, Arkansas, Mississippi, and Missouri — including Memphis, Nashville, Jackson, Southaven, Little Rock, Jonesboro, Springfield, and Cape Girardeau." },
+  { q: "Are your installers certified?", a: "Every installer is trained and certified in our methods. We stand behind their work with a lifetime transferable warranty." },
+  { q: "Is a sagging floor a structural emergency?", a: "Not always immediately, but it should be inspected soon. The underlying cause will continue to worsen over time. Early action saves money." },
+  { q: "How much does basement waterproofing cost?", a: "Interior waterproofing typically runs $3,000–$10,000 depending on square footage and system type. Exterior waterproofing is more involved. We give a free written quote after inspection." },
+  { q: "How are push piers installed?", a: "We drive steel piers through unstable soil to bedrock, then lift and stabilize the foundation. Most installations take 1 day and require no major excavation." },
+  { q: "Will my homeowner's insurance cover this?", a: "Coverage depends on your policy and the cause of damage. We'll provide detailed documentation to help with your claim where applicable." },
 ];
 
+// Unified with ServicePage.tsx / ProblemSignInnerPage.tsx's FaqSection — this
+// used to be a third variant with a category-filter pill row above the
+// accordion. Client QA: only one FAQ design should exist site-wide, so the
+// filtering feature was dropped rather than kept as a one-off difference.
 function FaqSection() {
   const [open, setOpen] = useState<string>("");
-  const [activeFilter, setActiveFilter] = useState("All");
-
-  const filtered = FAQS.filter((f) => activeFilter === "All" || f.cat === activeFilter || f.cat === "All");
 
   return (
     <section id="faq" style={{ background: CREAM }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="text-center mb-12">
+        <Reveal className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-5 h-[2px]" style={{ background: SAND }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>FAQs</span>
-            <div className="w-5 h-[2px]" style={{ background: SAND }} />
+            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", margin: 0 }}>
+              FAQs
+            </p>
+            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
             Frequently asked questions
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED }}>Find answers about our services and process</p>
-        </Reveal>
-
-        {/* Filter pills */}
-        <Reveal delay={0.05} className="flex items-center gap-2 flex-wrap justify-center mb-12">
-          {FAQ_FILTERS.map((f) => (
-            <button key={f} onClick={() => { setActiveFilter(f); setOpen(""); }}
-              className="transition-all duration-200 px-5 py-2"
-              style={{
-                fontFamily: "'Inter',sans-serif", fontWeight: activeFilter === f ? 600 : 400, fontSize: 14,
-                color: activeFilter === f ? "#fff" : MUTED,
-                background: activeFilter === f ? B : "transparent",
-                border: `1.5px solid ${activeFilter === f ? B : "rgba(10,11,20,.15)"}`,
-                cursor: "pointer",
-              }}>{f}</button>
-          ))}
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: MUTED }}>
+            Find answers about our services and process
+          </p>
         </Reveal>
 
         <div className="max-w-[768px] mx-auto">
@@ -485,17 +474,23 @@ function FaqSection() {
             [data-state=closed].rfaq { animation: rFaqUp 0.16s ease-in; }
           `}</style>
           <AccordionPrimitive.Root type="single" value={open} onValueChange={setOpen} collapsible>
-            {filtered.map((faq, i) => (
-              <AccordionPrimitive.Item key={i} value={String(i)} className="overflow-hidden"
+            {FAQS.map((faq, i) => (
+              <AccordionPrimitive.Item key={i} value={String(i)}
+                className="overflow-hidden"
                 style={{ borderBottom: "1px solid rgba(10,11,20,.1)" }}>
                 <AccordionPrimitive.Header>
                   <AccordionPrimitive.Trigger
-                    className="w-full flex items-center gap-5 text-left group"
-                    style={{ background: "none", border: "none", cursor: "pointer", padding: "22px 0" }}>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 16, color: CHAR, flex: 1, paddingRight: 16, lineHeight: 1.4 }}>{faq.q}</span>
+                    className="w-full flex items-center gap-5 text-left group transition-colors"
+                    style={{ background: "none", border: "none", cursor: "pointer", padding: "22px 0" }}
+                  >
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 17, color: CHAR, flex: 1, paddingRight: 16, lineHeight: 1.4 }}>
+                      {faq.q}
+                    </span>
                     <div className="shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-200 group-data-[state=open]:rotate-45"
                       style={{ color: open === String(i) ? B : MUTED }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
                     </div>
                   </AccordionPrimitive.Trigger>
                 </AccordionPrimitive.Header>
@@ -785,7 +780,7 @@ export default function ResourcesPage({ onBack, onNavigate, scrollTo: initialSec
         <PageBreadcrumb items={[{ label: "Home", onClick: onBack }, { label: "Resources" }]} />
 
         <HeroSection />
-        <GallerySection />
+        <GallerySection onNavigate={onNavigate} />
         <BuyerSellerSection onNavigate={onNavigate} />
         <ResourcesDownloadSection />
         <CostGuideSection onNavigate={onNavigate} />
