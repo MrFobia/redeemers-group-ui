@@ -228,10 +228,14 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
             glassmorphism card on the right. */}
         <div className="w-full max-w-full md:max-w-[76%] lg:max-w-[72%] xl:max-w-[62%]">
 
-          {/* Headline */}
-          <div className="overflow-hidden mb-4 md:mb-5">
+          {/* Headline — the page's one <h1>. It was rendering as a plain div
+              (no real heading in the DOM at all) at a size roughly tied with
+              the section h2s below (28–56px vs. up to 64–72px elsewhere) —
+              the hero's headline read smaller than the content it introduces.
+              Sized past every h2 on the page at both ends of its clamp. */}
+          <h1 className="overflow-hidden mb-4 md:mb-5" style={{ margin: 0 }}>
             {slide.headline.map((line, li) => (
-              <motion.div
+              <motion.span
                 key={`h-${current}-${li}`}
                 initial={{ opacity: 0, y: 60 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -240,18 +244,18 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
                 style={{
                   fontFamily: "'Articulat CF',sans-serif",
                   fontWeight: 800,
-                  fontSize: "clamp(28px, 4vw, 56px)",
+                  fontSize: "clamp(36px, 6vw, 80px)",
                   color: "#fff",
-                  lineHeight: 1.08,
-                  letterSpacing: "-1px",
+                  lineHeight: 1.04,
+                  letterSpacing: "-1.5px",
                 }}
               >
                 {Array.isArray(line) ? (
                   <>{line[0]}<span style={{ color: SAND }}>{line[1]}</span>{line[2]}</>
                 ) : line}
-              </motion.div>
+              </motion.span>
             ))}
-          </div>
+          </h1>
 
           {/* Subtitle */}
           <motion.p
