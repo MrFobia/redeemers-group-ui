@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, useInView } from "motion/react";
+import { motion, useInView, AnimatePresence } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronRight, Link2, Linkedin, Twitter, Facebook } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
@@ -7,6 +7,8 @@ import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
+import { ReviewModal } from "./components/ReviewModal";
+import imgRevAvatar from "../assets/rev-avatar.png";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -102,16 +104,19 @@ const REVIEWS = [
     quote: "Joe was very thorough with explaining everything. I called 4 other companies — they quoted cheaper, but Redeemers gave me confidence in the long-term solution.",
     name: "Victoria E.", loc: "Memphis, TN", stars: 5,
     img: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
+    avatar: imgRevAvatar, service: "Crawl Space", date: "March 2026",
   },
   {
     quote: "The crew was excellent communicators and hard workers. Done well within the time given. My garage lintel looks brand new. Would I recommend Redeemers? Absolutely!",
     name: "Elizabeth N.", loc: "Collierville, TN", stars: 5,
     img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
+    avatar: imgRevAvatar, service: "Foundation", date: "February 2026",
   },
   {
     quote: "Walking in now, it's straight. The closet door never closed before — I literally just closed it for the first time. Great job.",
     name: "Melissa & Russell C.", loc: "Marked Tree, AR", stars: 5,
     img: "https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=600",
+    avatar: imgRevAvatar, service: "Concrete", date: "January 2026",
   },
 ];
 
@@ -479,6 +484,7 @@ function JobStoriesSection() {
 function RelatedReviewsSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
   const [cur, setCur] = useState(0);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
@@ -518,13 +524,13 @@ function RelatedReviewsSection() {
 
       <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
         <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
-          {REVIEWS.map((r) => (
+          {REVIEWS.map((r, i) => (
             <div key={r.name} className="shrink-0 w-[min(85vw,500px)] flex flex-col"
               style={{ background: CREAM, border: "1px solid rgba(0,0,0,.07)" }}>
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={r.img} alt={r.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.4)" }}>
-                  <button className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
+                  <button onClick={() => setSelectedIdx(i)} className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
                   </button>
@@ -561,6 +567,17 @@ function RelatedReviewsSection() {
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)", border: "none", cursor: "pointer", borderRadius: 4 }} />
         ))}
       </div>
+
+      <AnimatePresence>
+        {selectedIdx !== null && (
+          <ReviewModal
+            review={REVIEWS[selectedIdx]}
+            onClose={() => setSelectedIdx(null)}
+            onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + REVIEWS.length) % REVIEWS.length : null)}
+            onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % REVIEWS.length : null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

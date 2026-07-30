@@ -111,7 +111,6 @@ export default function CaseStudiesPage({ onBack, onNavigate }: { onBack: () => 
           eyebrow="Case Studies"
           title="Real Homes, Real Results"
           lede={`${CASE_STUDIES.length} in-depth project stories — commitments we put in writing, not just talking points. Click any card for the full story.`}
-          minHeight={260}
         />
 
         <CaseStudiesGridSection />

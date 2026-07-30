@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, useInView } from "motion/react";
+import { motion, useInView, AnimatePresence } from "motion/react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
@@ -22,6 +22,7 @@ import imgRevAvatar from "../assets/rev-avatar.png";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
+import { ReviewModal } from "./components/ReviewModal";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -57,6 +58,8 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgFloor01,
     avatar: imgRevAvatar,
+    service: "Crawl Space",
+    date: "March 2026",
   },
   {
     quote: "The crew was excellent communicators and hard workers. Done well within the time given. My garage lintel looks brand new. Would I recommend Redeemers? Absolutely!",
@@ -65,6 +68,8 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgFloor03,
     avatar: imgRevAvatar,
+    service: "Foundation",
+    date: "February 2026",
   },
   {
     quote: "Walking in now, it's straight. I used to slip from side to side. I went into my bedroom — the closet door never closed before. I literally just closed it for the first time. Great job.",
@@ -73,6 +78,8 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgFloor04,
     avatar: imgRevAvatar,
+    service: "Concrete",
+    date: "January 2026",
   },
 ];
 
@@ -846,6 +853,7 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
 function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [cur, setCur] = useState(0);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -889,13 +897,13 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
 
       <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
         <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
-          {TESTIMONIALS.map((t) => (
+          {TESTIMONIALS.map((t, i) => (
             <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.07)" }}>
               {/* Image thumb */}
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
-                  <button className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  <button onClick={() => setSelectedIdx(i)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
                   </button>
@@ -937,6 +945,17 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)" }} />
         ))}
       </div>
+
+      <AnimatePresence>
+        {selectedIdx !== null && (
+          <ReviewModal
+            review={TESTIMONIALS[selectedIdx]}
+            onClose={() => setSelectedIdx(null)}
+            onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length : null)}
+            onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % TESTIMONIALS.length : null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

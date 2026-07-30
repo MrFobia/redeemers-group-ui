@@ -85,7 +85,6 @@ function HeroSection() {
       eyebrow="About"
       title="We believe every family deserves a safe, stable home."
       lede="Redeemers Group was founded not just to repair homes — but to restore peace of mind for families across the mid-South. Since 2008, we've served over 12,000 homeowners with engineered, warrantied solutions."
-      minHeight={560}
     >
       {/* Stats row */}
       <div className="flex flex-wrap gap-0">

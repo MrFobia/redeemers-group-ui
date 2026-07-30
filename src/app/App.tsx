@@ -3,7 +3,8 @@ import { createPortal } from "react-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
-import { Home, Hammer, BadgeCheck, ShieldCheck, Users, Leaf, X } from "lucide-react";
+import { Home, Hammer, BadgeCheck, ShieldCheck, Users, Leaf } from "lucide-react";
+import { ReviewModal } from "./components/ReviewModal";
 import ServicePage from "./ServicePage";
 import { getSymptomImage } from "./data/services";
 import { getProblemSignByLabel } from "./data/problemSigns";
@@ -192,8 +193,19 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
 
   const slide = SLIDES[current];
 
+  // Height must stay a definite `h-*`, not `min-h-*` — the slides and nav
+  // beneath rely on `h-full` percentage-height children to resolve against
+  // it; a min-height-only parent leaves that chain with no definite height
+  // to resolve against and the background collapses to invisible. A vh-based
+  // clamp has the same failure mode from the other side: on a short mobile
+  // viewport it shrinks below what the headline+subtitle+CTA actually need,
+  // and the centered content block gets clipped top and bottom. So this
+  // stays plain per-breakpoint px — but finer-grained than a flat mobile/
+  // desktop split: the floating glass card only exists at xl+, so md/lg
+  // don't need the full desktop height either and were sitting on a lot of
+  // dead space at those widths.
   return (
-    <section className="relative w-full overflow-hidden h-[calc(100dvh-110px)] min-h-[560px] md:h-[calc(100dvh-200px)] md:min-h-[760px]">
+    <section className="relative w-full overflow-hidden h-[600px] sm:h-[640px] md:h-[660px] lg:h-[700px] xl:h-[740px]">
       {/* Embla carousel */}
       <div ref={emblaRef} className="h-full overflow-hidden">
         <div className="flex h-full" style={{ touchAction: "pan-y" }}>
@@ -209,26 +221,12 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
       </div>
 
       {/* Main content — overlaid, left column, vertically centered. */}
-      <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-14 pt-24 pb-16 sm:pt-[168px] sm:pb-[120px]">
+      <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-14 pt-[110px] pb-14 md:pt-[125px] md:pb-16 lg:pt-[135px] lg:pb-20">
         {/* md/lg (laptop and below): widened to reach the same right edge as
             the stats bar below ("hasta donde termina Lifetime"). xl+ keeps
             the narrower 50% so the headline doesn't run under the floating
             glassmorphism card on the right. */}
         <div className="w-full max-w-full md:max-w-[76%] lg:max-w-[72%] xl:max-w-[62%]">
-
-          {/* Eyebrow */}
-          <motion.div
-            key={`eyebrow-${current}`}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: .6, delay: .1 }}
-            className="flex items-center gap-3 mb-3 md:mb-5"
-          >
-            <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
-              {slide.eyebrow}
-            </span>
-          </motion.div>
 
           {/* Headline */}
           <div className="overflow-hidden mb-4 md:mb-5">
@@ -242,7 +240,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
                 style={{
                   fontFamily: "'Articulat CF',sans-serif",
                   fontWeight: 800,
-                  fontSize: "clamp(30px, 4.8vw, 72px)",
+                  fontSize: "clamp(28px, 4vw, 56px)",
                   color: "#fff",
                   lineHeight: 1.08,
                   letterSpacing: "-1px",
@@ -286,19 +284,6 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
               style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 14, color: "rgba(255,255,255,.65)", borderBottom: "1px solid rgba(255,255,255,.25)", paddingBottom: 2 }}>
               or call (901) 555-0100
             </a>
-          </motion.div>
-
-          {/* Financing badge — sm+ */}
-          <motion.div
-            key={`fin-${current}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: .6, delay: .75 }}
-            className="hidden sm:flex items-center gap-2 w-fit"
-            style={{ background: "rgba(196,171,108,.2)", border: "1px solid #C4AB6C", padding: "8px 14px" }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke={SAND} strokeWidth="2" strokeLinecap="round" /></svg>
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#fff" }}>Financing from $79/month · 0% for qualified homeowners</span>
           </motion.div>
 
           {/* Mobile credibility strip — hidden sm+ */}
@@ -364,7 +349,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
           // Centring lives on `top`/`marginTop`, not `transform` — motion owns
           // transform here for the slide-in and would drop a translate we set.
           top: "50%",
-          marginTop: -206,
+          marginTop: -150,
           right: "5%",
           width: "clamp(300px, 26vw, 400px)",
           background: "rgba(255,255,255,.18)",
@@ -416,8 +401,11 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
         </div>
       </motion.div>
 
-      {/* Mobile controls — dots + arrows (hidden on lg where card controls show) */}
-      <div className="absolute lg:hidden left-8 flex items-center gap-5" style={{ bottom: 28 }}>
+      {/* Mobile controls — dots + arrows. Hidden from md up: the stats bar
+          takes that same bottom-left corner starting at md (see below), and
+          the two were stacking on top of each other on tablet-width screens.
+          The desktop card's own dots/arrows pick back up at xl. */}
+      <div className="absolute md:hidden left-8 flex items-center gap-5" style={{ bottom: 28 }}>
         <div className="flex items-center gap-2">
           {SLIDES.map((_, i) => (
             <button key={i} onClick={() => goTo(i)} aria-label={`Go to slide ${i + 1}`}
@@ -852,7 +840,8 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgRevThumb1,
     avatar: imgRevAvatar,
-    videoId: "QB1c_89RBgg",
+    service: "Crawl Space",
+    date: "March 2026",
   },
   {
     quote: "The crew was excellent communicators and hard workers. Done well within the time given. My garage lintel looks brand new. Would I recommend Redeemers? Absolutely!",
@@ -861,7 +850,8 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgRevThumb2,
     avatar: imgRevAvatar,
-    videoId: "cp3ZBiioxpw",
+    service: "Foundation",
+    date: "February 2026",
   },
   {
     quote: "Walking in now, it's straight. I used to slip from side to side. I went into my bedroom — the closet door never closed before. I literally just closed it for the first time. Great job.",
@@ -870,14 +860,15 @@ const TESTIMONIALS = [
     stars: 5,
     img: imgRevThumb3,
     avatar: imgRevAvatar,
-    videoId: "EH1G9dSnjZE",
+    service: "Concrete",
+    date: "January 2026",
   },
 ];
 
 function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [cur, setCur] = useState(0);
-  const [openVideo, setOpenVideo] = useState<string | null>(null);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -925,7 +916,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
             <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.07)" }}>
               {/* Video / image thumb */}
               <button
-                onClick={() => setOpenVideo(t.videoId)}
+                onClick={() => setSelectedIdx(i)}
                 className="relative w-full"
                 style={{ padding: 0, paddingBottom: "52%", border: "none", cursor: "pointer" }}
               >
@@ -976,41 +967,13 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
 
       {createPortal(
         <AnimatePresence>
-          {openVideo && (
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10"
-              style={{ background: "rgba(0,0,0,.88)" }}
-              onClick={() => setOpenVideo(null)}
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="relative w-full"
-                style={{ maxWidth: 960 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  onClick={() => setOpenVideo(null)}
-                  aria-label="Close video"
-                  className="absolute -top-11 right-0 w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
-                  style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.15)", cursor: "pointer" }}
-                >
-                  <X size={16} color="#fff" />
-                </button>
-                <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src={`https://www.youtube.com/embed/${openVideo}?autoplay=1`}
-                    title="Customer review video"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                    style={{ border: "none" }}
-                  />
-                </div>
-              </motion.div>
-            </motion.div>
+          {selectedIdx !== null && (
+            <ReviewModal
+              review={TESTIMONIALS[selectedIdx]}
+              onClose={() => setSelectedIdx(null)}
+              onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length : null)}
+              onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % TESTIMONIALS.length : null)}
+            />
           )}
         </AnimatePresence>,
         document.body

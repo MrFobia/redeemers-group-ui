@@ -270,7 +270,6 @@ export default function LoveWellPage({ onBack, onNavigate }: { onBack: () => voi
           eyebrow="Love Well Initiative"
           title="Giving back to the neighborhoods we serve"
           lede={`${LOVE_WELL_PROJECTS.length} community projects and counting — discounted and, in some cases, fully free structural repairs for qualifying families and charities across the Memphis area.`}
-          minHeight={320}
         />
 
         <IntroSection />

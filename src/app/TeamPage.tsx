@@ -217,7 +217,6 @@ export default function TeamPage({ onBack, onNavigate }: { onBack: () => void; o
           eyebrow="People"
           title="Meet our team"
           lede={`${TEAM_MEMBERS.length} people across Accounting, Production, Customer Care, System Design, and Service — the crew behind every job.`}
-          minHeight={260}
         />
 
         <TeamGridSection onNavigate={onNavigate} />

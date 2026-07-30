@@ -9,7 +9,7 @@ export function AnnouncementBar() {
       <div className="flex items-center gap-2">
         <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: SAND }} />
         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: SAND }}>
-          40 inspections booked this week
+          13+ payment options
         </p>
       </div>
     </div>

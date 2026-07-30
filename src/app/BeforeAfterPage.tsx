@@ -381,7 +381,6 @@ export default function BeforeAfterPage({ onBack, onNavigate }: { onBack: () => 
           eyebrow="Before & After"
           title="Drag to see the difference"
           lede="377 real before-and-after sets — filter by service to see the exact work done."
-          minHeight={260}
         />
 
         <BeforeAfterGridSection />

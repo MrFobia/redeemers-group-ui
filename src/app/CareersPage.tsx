@@ -193,7 +193,6 @@ function HeroSection() {
       eyebrow="Careers at Redeemers"
       title={<>Life is short.<br />Work somewhere <span style={{ color: SAND }}>awesome.</span></>}
       lede="We don't just repair foundations — we build futures. Join a family-owned team that's been protecting homes across the Mid-South for over 18 years."
-      minHeight={600}
       contentMaxWidth={1000}
     >
       <div className="flex flex-wrap gap-3 mb-12">

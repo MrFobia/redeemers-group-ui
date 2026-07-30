@@ -85,7 +85,6 @@ function HeroSection() {
       eyebrow="Pricing"
       title="Transparent pricing for every homeowner"
       lede="No hidden fees, no surprise quotes. Understand what structural repairs actually cost — broken down by service and by city — before we ever knock on your door."
-      minHeight={460}
     >
       <div className="flex items-center gap-4 flex-wrap mb-10">
         <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden inline-flex items-center gap-3 px-8 py-4"

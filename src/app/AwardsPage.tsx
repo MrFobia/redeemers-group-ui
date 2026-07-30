@@ -446,7 +446,6 @@ export default function AwardsPage({ onBack, onNavigate }: { onBack: () => void;
           eyebrow="Awards"
           title="Awards & Recognition"
           lede={`Since ${AWARDS_SINCE_YEAR}, ${AWARDS_ORG_COUNT} different organizations have recognized the work — ${AWARDS.length} awards and counting.`}
-          minHeight={340}
         >
           <button onClick={openInspection}
             className="inline-flex items-center gap-2 px-6 py-3.5 hover:opacity-90 transition-opacity"

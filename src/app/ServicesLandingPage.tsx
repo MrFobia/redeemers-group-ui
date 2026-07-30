@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { motion } from "motion/react";
 import { openInspection } from "./components/InspectionModal";
 import { ChevronRight } from "lucide-react";
 import SharedNavBar from "./SharedNavBar";
@@ -69,62 +70,6 @@ function CategoryBadge({ label }: { label: string }) {
   );
 }
 
-function SymptomChips({ items }: { items: string[] }) {
-  return (
-    <div>
-      <p style={{ fontFamily: INTER, fontSize: 10, color: MUTED, letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>
-        Common Symptoms
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {items.map(s => (
-          <span key={s} style={{
-            padding: "4px 12px",
-            background: ON_LIGHT.wash, border: `1px solid ${ON_LIGHT.border}`,
-            fontFamily: INTER, fontSize: 12, color: ON_LIGHT.body,
-          }}>
-            {s}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function CardCTAs({ onNavigate }: { onNavigate: () => void }) { // slug-bound by caller
-  return (
-    <div className="flex items-center gap-6">
-      <button
-        onClick={onNavigate}
-        style={{ display: "inline-flex", alignItems: "center", gap: 10, background: B, fontFamily: INTER, fontWeight: 600, fontSize: 14, color: WHITE, padding: "12px 22px", border: "none", cursor: "pointer" }}
-        className="hover:opacity-90 transition-opacity"
-      >
-        Free inspection
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-      </button>
-      <button
-        onClick={onNavigate}
-        style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontFamily: INTER, fontWeight: 600, fontSize: 13, color: B, padding: 0 }}
-        className="hover:opacity-80 transition-opacity"
-      >
-        View more
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-      </button>
-    </div>
-  );
-}
-
-function ExploreLink({ onNavigate }: { onNavigate: () => void }) {
-  return (
-    <button
-      onClick={onNavigate}
-      style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontFamily: INTER, fontWeight: 600, fontSize: 13, color: B, padding: 0 }}
-      className="hover:opacity-80 transition-opacity"
-    >
-      Explore service
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-    </button>
-  );
-}
 
 // ─── Service data ─────────────────────────────────────────────────────────────
 const SERVICES = {
@@ -212,167 +157,154 @@ const CARD_SLUGS = {
   commercial: "commercial-services",
 } as const;
 
-function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }) {
+// Compact scan tile — one per service line, text only. Client QA (Rosie +
+// Paula): the earlier full-width row version forced a long scroll before a
+// homeowner could see all five options, which defeats the "that's not me...
+// that's me" scan — it has to land in one glance. A 3-column grid puts all
+// five on screen together instead of stacked one under the other; body and
+// symptom list are trimmed to what fits a short tile (2-line clamp, top 2
+// symptoms) — "View more" still leads to the full list on the detail page.
+// The photo isn't gone — it floats near the cursor on hover
+// (HoverImagePreview) instead of living in the tile.
+function ServiceRow({
+  category, title, body, symptoms, onNavigate, onHover, active,
+}: {
+  category: string; title: string; body: string; symptoms?: string[]; onNavigate: () => void; onHover: () => void; active: boolean;
+}) {
+  // Client QA: the tile only offered "Free inspection" — which actually
+  // navigated to the service page rather than opening the inspection modal,
+  // and gave homeowners no way to just read about the service first. Now the
+  // whole tile still navigates on click (browsing gesture), but the two
+  // bottom links are real and distinct: "Free inspection" opens the modal,
+  // "View service" is the explicit link to the detail page. Both stop
+  // propagation so they don't double-fire the tile's own onClick.
   return (
-    <section style={{ background: SURFACE.alt }} className="py-16 lg:py-20">
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onNavigate}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onNavigate(); }}
+      onMouseEnter={onHover}
+      onFocus={onHover}
+      className="group flex flex-col h-full text-left transition-colors"
+      style={{ padding: "22px 22px 20px", minHeight: 210, border: `1px solid ${ON_LIGHT.border}`, background: active ? ON_LIGHT.wash : SURFACE.base, cursor: "pointer" }}
+    >
+      <div style={{ marginBottom: 10 }}>
+        <CategoryBadge label={category} />
+      </div>
+      <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: 20, color: CHAR, lineHeight: 1.2, letterSpacing: "-0.3px", marginBottom: 8, whiteSpace: "pre-line" }}>
+        {title}
+      </h3>
+      <p style={{
+        fontFamily: INTER, fontSize: 14, color: MUTED, lineHeight: 1.55, marginBottom: symptoms ? 12 : 0,
+        display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
+      }}>
+        {body}
+      </p>
+      {symptoms && (
+        <div className="flex flex-wrap gap-1.5" style={{ marginBottom: 16 }}>
+          {symptoms.slice(0, 2).map((s) => (
+            <span key={s} style={{ padding: "3px 10px", background: ON_LIGHT.wash, border: `1px solid ${ON_LIGHT.border}`, fontFamily: INTER, fontSize: 11, color: ON_LIGHT.body }}>
+              {s}
+            </span>
+          ))}
+          {symptoms.length > 2 && (
+            <span style={{ padding: "3px 10px", fontFamily: INTER, fontSize: 11, color: MUTED }}>+{symptoms.length - 2} more</span>
+          )}
+        </div>
+      )}
+      <div className="mt-auto flex items-center gap-4 flex-wrap">
+        {symptoms && (
+          <button
+            onClick={(e) => { e.stopPropagation(); openInspection(); }}
+            style={{ fontFamily: INTER, fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", padding: 0, cursor: "pointer" }}
+          >
+            Free inspection
+          </button>
+        )}
+        <button
+          onClick={(e) => { e.stopPropagation(); onNavigate(); }}
+          className="group/link inline-flex items-center gap-1.5"
+          style={{ fontFamily: INTER, fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", padding: 0, cursor: "pointer" }}
+        >
+          {symptoms ? "View service" : "Explore service"}
+          <ChevronRight size={14} color={B} className="transition-transform group-hover/link:translate-x-0.5" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Pinned panel that fills the empty space beside the (narrower) grid, and
+// crossfades to whichever tile is hovered/focused. Client QA: a floating
+// cursor-follow preview left that space blank — the photo belongs in it.
+function ServiceImagePanel({ items, active }: { items: { img: string; alt: string }[]; active: number }) {
+  return (
+    <div className="hidden lg:block relative flex-1 overflow-hidden">
+      {items.map((it, i) => (
+        <motion.div
+          key={it.alt}
+          className="absolute inset-0"
+          initial={false}
+          animate={{ opacity: active === i ? 1 : 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+        >
+          <ImageWithFallback src={it.img} alt={it.alt} className="absolute inset-0 w-full h-full object-cover" />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+const HANDLE_ROWS = [
+  { key: "crawlSpace", alt: "Crawl space repair" },
+  { key: "waterproofing", alt: "Waterproofing" },
+  { key: "foundation", alt: "Foundation repair" },
+  { key: "concrete", alt: "Concrete services" },
+  { key: "commercial", alt: "Commercial services" },
+] as const;
+
+function WhatWeHandleSection({ onNavigate }: { onNavigate: (p: string) => void }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  return (
+    <section style={{ background: SURFACE.alt }} className="py-14 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header */}
-        <div className="text-center mb-16">
-          <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 16 }}>
-            Solutions
+        <div className="text-center mb-10">
+          <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 14 }}>
+            Common Problems
           </p>
-          <h2 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
+          <h2 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(28px,3.4vw,46px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
             What we handle
           </h2>
-          <p style={{ fontFamily: INTER, fontSize: 17, color: MUTED, lineHeight: 1.6 }}>
-            Every home needs different care — here's what we specialize in.
+          <p style={{ fontFamily: INTER, fontSize: 16, color: MUTED, lineHeight: 1.6 }}>
+            Every home needs different care — find what matches yours.
           </p>
         </div>
 
-        {/* Bento grid row 1: 2 columns */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-6">
-
-          {/* Left column */}
-          <div className="flex flex-col gap-6 flex-1">
-
-            {/* Card A — Crawl Space (tall, content + image) */}
-            <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-              <div style={{ padding: "40px 40px 32px" }}>
-                <div style={{ marginBottom: 20 }}>
-                  <CategoryBadge label={SERVICES.crawlSpace.category} />
-                </div>
-                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 16, whiteSpace: "pre-line" }}>
-                  {SERVICES.crawlSpace.title}
-                </h3>
-                <p style={{ fontFamily: INTER, fontSize: 15, color: MUTED, lineHeight: 1.65, marginBottom: 28 }}>
-                  {SERVICES.crawlSpace.body}
-                </p>
-                <div style={{ marginBottom: 28 }}>
-                  <SymptomChips items={SERVICES.crawlSpace.symptoms} />
-                </div>
-                <CardCTAs onNavigate={() => onNavigate(`service/${CARD_SLUGS.crawlSpace}`)} />
-              </div>
-              <div style={{ height: 320, flexShrink: 0, position: "relative" }}>
-                <ImageWithFallback
-                  src={SERVICES.crawlSpace.img}
-                  alt="Crawl space repair"
-                  className="absolute inset-0 w-full h-full object-cover"
+        <div className="flex flex-col lg:flex-row gap-8 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:max-w-[680px] shrink-0">
+            {HANDLE_ROWS.map((row, i) => {
+              const s = SERVICES[row.key];
+              return (
+                <ServiceRow
+                  key={row.key}
+                  category={s.category}
+                  title={s.title}
+                  body={s.body}
+                  symptoms={"symptoms" in s ? s.symptoms : undefined}
+                  onNavigate={() => onNavigate(`service/${CARD_SLUGS[row.key]}`)}
+                  active={activeIdx === i}
+                  onHover={() => setActiveIdx(i)}
                 />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(30,34,53,0.7) 0%, transparent 40%)" }} />
-              </div>
-            </div>
-
-            {/* Card B — Concrete (horizontal: image left, content right) */}
-            <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", minHeight: 280 }}>
-              <div style={{ width: 220, flexShrink: 0, position: "relative" }} className="hidden md:block">
-                <ImageWithFallback
-                  src={SERVICES.concrete.img}
-                  alt="Concrete services"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div style={{ position: "absolute", inset: 0, background: "rgba(10,11,20,0.3)" }} />
-              </div>
-              <div style={{ flex: 1, padding: "32px 32px" }}>
-                <div style={{ marginBottom: 16 }}>
-                  <CategoryBadge label={SERVICES.concrete.category} />
-                </div>
-                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,30px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 12, whiteSpace: "pre-line" }}>
-                  {SERVICES.concrete.title}
-                </h3>
-                <div style={{ marginBottom: 20 }}>
-                  <SymptomChips items={SERVICES.concrete.symptoms} />
-                </div>
-                <CardCTAs onNavigate={() => onNavigate(`service/${CARD_SLUGS.concrete}`)} />
-              </div>
-            </div>
-
+              );
+            })}
           </div>
-
-          {/* Right column */}
-          <div className="flex flex-col gap-6 flex-1">
-
-            {/* Card C — Waterproofing (horizontal: image left, content right) */}
-            <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", minHeight: 280 }}>
-              <div style={{ width: 220, flexShrink: 0, position: "relative" }} className="hidden md:block">
-                <ImageWithFallback
-                  src={SERVICES.waterproofing.img}
-                  alt="Waterproofing"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div style={{ position: "absolute", inset: 0, background: "rgba(10,11,20,0.3)" }} />
-              </div>
-              <div style={{ flex: 1, padding: "32px 32px" }}>
-                <div style={{ marginBottom: 16 }}>
-                  <CategoryBadge label={SERVICES.waterproofing.category} />
-                </div>
-                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,30px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 12, whiteSpace: "pre-line" }}>
-                  {SERVICES.waterproofing.title}
-                </h3>
-                <div style={{ marginBottom: 20 }}>
-                  <SymptomChips items={SERVICES.waterproofing.symptoms} />
-                </div>
-                <CardCTAs onNavigate={() => onNavigate(`service/${CARD_SLUGS.waterproofing}`)} />
-              </div>
-            </div>
-
-            {/* Card D — Foundation (tall, content + image) */}
-            <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", flexDirection: "column", flex: 1 }}>
-              <div style={{ padding: "40px 40px 32px" }}>
-                <div style={{ marginBottom: 20 }}>
-                  <CategoryBadge label={SERVICES.foundation.category} />
-                </div>
-                <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(28px,3vw,42px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 16, whiteSpace: "pre-line" }}>
-                  {SERVICES.foundation.title}
-                </h3>
-                <p style={{ fontFamily: INTER, fontSize: 15, color: MUTED, lineHeight: 1.65, marginBottom: 28 }}>
-                  {SERVICES.foundation.body}
-                </p>
-                <div style={{ marginBottom: 28 }}>
-                  <SymptomChips items={SERVICES.foundation.symptoms} />
-                </div>
-                <CardCTAs onNavigate={() => onNavigate(`service/${CARD_SLUGS.foundation}`)} />
-              </div>
-              <div style={{ height: 280, flexShrink: 0, position: "relative" }}>
-                <ImageWithFallback
-                  src={SERVICES.foundation.img}
-                  alt="Foundation repair"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(30,34,53,0.7) 0%, transparent 40%)" }} />
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Bento grid row 2: Commercial — the sitemap's fifth and last service.
-            "Mold Prevention" used to sit here; it is not a top-level service in
-            the sitemap (it lives under Crawl Space Repair), so it was removed. */}
-        <div className="flex flex-col lg:flex-row gap-6">
-
-          {/* Card F — Commercial (content left, image right) */}
-          <div style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, overflow: "hidden", display: "flex", flex: 1, minHeight: 340 }}>
-            <div style={{ flex: 1, padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 20 }}>
-              <CategoryBadge label={SERVICES.commercial.category} />
-              <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.2vw,32px)", color: CHAR, lineHeight: 1.15, letterSpacing: "-0.5px", margin: 0 }}>
-                {SERVICES.commercial.title}
-              </h3>
-              <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(10,11,20,.6)", lineHeight: 1.65, margin: 0 }}>
-                {SERVICES.commercial.body}
-              </p>
-              <ExploreLink onNavigate={() => onNavigate(`service/${CARD_SLUGS.commercial}`)} />
-            </div>
-            <div style={{ flex: 1, position: "relative" }} className="hidden md:block">
-              <ImageWithFallback
-                src={SERVICES.commercial.img}
-                alt="Commercial services"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div style={{ position: "absolute", inset: 0, background: "rgba(11,28,74,0.5)" }} />
-            </div>
-          </div>
-
+          <ServiceImagePanel
+            items={HANDLE_ROWS.map((row) => ({ img: SERVICES[row.key].img, alt: row.alt }))}
+            active={activeIdx}
+          />
         </div>
       </div>
     </section>

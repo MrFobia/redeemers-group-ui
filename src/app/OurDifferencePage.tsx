@@ -15,6 +15,7 @@ import imgRevAvatar from "../assets/rev-avatar.png";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
+import { ReviewModal } from "./components/ReviewModal";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT, ON_DARK } from "./theme";
@@ -67,24 +68,24 @@ const NAV_TABS = [
 // ─── 1. HERO (DARK) ───────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: 560 }}>
+    <section className="relative w-full overflow-hidden min-h-[320px] md:min-h-[360px] lg:min-h-[400px]">
       <ImageWithFallback
         src={imgFloor04}
         alt="Our Difference" className="absolute inset-0 w-full h-full object-cover" />
       <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.92) 0%,rgba(10,11,20,0.68) 55%,rgba(10,11,20,0.40) 100%)" }} />
       <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
-      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-36">
+      <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-10 md:py-12 min-h-[320px] md:min-h-[360px] lg:min-h-[400px] flex flex-col justify-center">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex items-center gap-2 mb-5">
+          className="flex items-center gap-2 mb-4 md:mb-6">
           <div className="w-5 h-[2px]" style={{ background: SAND }} />
           <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Difference</span>
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,64px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1.5px", marginBottom: 24, maxWidth: 760 }}>
+          style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4.4vw,60px)", color: "#fff", lineHeight: 1.02, letterSpacing: "-2px", marginBottom: 18, maxWidth: 760 }}>
           Why families choose Redeemers Group
         </motion.h1>
         <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }}
-          style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.6)", lineHeight: 1.75, maxWidth: 540, marginBottom: 44 }}>
+          style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(14px,1.3vw,17px)", color: "rgba(255,255,255,.6)", lineHeight: 1.7, maxWidth: 540, marginBottom: 24 }}>
           From our first call to your final follow-up, here is what sets us apart.
         </motion.p>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}
@@ -430,22 +431,26 @@ const TESTIMONIALS = [
     quote: "Joe was very thorough with explaining everything and even came back a second time to clarify. I called 3 or 4 other companies — while they did quote cheaper prices, I wasn't convinced their solutions were a long-term fix. Redeemers gave me confidence.",
     name: "Victoria E.", loc: "Memphis, TN", stars: 5,
     img: imgFloor01, avatar: imgRevAvatar,
+    service: "Crawl Space", date: "March 2026",
   },
   {
     quote: "The crew was excellent communicators and hard workers. Done well within the time given. My garage lintel looks brand new. Would I recommend Redeemers? Absolutely! Very professional company.",
     name: "Elizabeth N.", loc: "Collierville, TN", stars: 5,
     img: imgFloor03, avatar: imgRevAvatar,
+    service: "Foundation", date: "February 2026",
   },
   {
     quote: "Walking in now, it's straight. I used to slip from side to side. I went into my bedroom — the closet door never closed before. I literally just closed it for the first time. Great job.",
     name: "Melissa & Russell C.", loc: "Marked Tree, AR", stars: 5,
     img: imgFloor04, avatar: imgRevAvatar,
+    service: "Concrete", date: "January 2026",
   },
 ];
 
 function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [cur, setCur] = useState(0);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -489,12 +494,12 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
 
       <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
         <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
-          {TESTIMONIALS.map((t) => (
+          {TESTIMONIALS.map((t, i) => (
             <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.07)" }}>
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
-                  <button className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  <button onClick={() => setSelectedIdx(i)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
                   </button>
@@ -532,6 +537,17 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)", border: "none", cursor: "pointer", padding: 0 }} />
         ))}
       </div>
+
+      <AnimatePresence>
+        {selectedIdx !== null && (
+          <ReviewModal
+            review={TESTIMONIALS[selectedIdx]}
+            onClose={() => setSelectedIdx(null)}
+            onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length : null)}
+            onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % TESTIMONIALS.length : null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

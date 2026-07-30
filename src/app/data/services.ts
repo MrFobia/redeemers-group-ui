@@ -45,7 +45,15 @@ export type ServiceDef = {
   /** Sitemap: "Problem Signs" child. Empty for services with no symptom entry point. */
   symptoms: Symptom[];
   solutionsHeadline: string;
+  /** Short line under the headline, only rendered in "compact" layout — states
+      the scan criteria (what/where) instead of a sales pitch. */
+  solutionsIntro?: string;
   solutions: Solution[];
+  /** "grid" (default): sales-card grid, each item is a distinct repair method.
+   *  "compact": scannable vertical list — use when the items are really
+   *  problem-type/location categories (not solutions) and the goal is fast
+   *  "that's not me / that's me" recognition rather than pitching a method. */
+  solutionsLayout?: "grid" | "compact";
   /** Sitemap: "Cost guide" child. null = service has no cost guide node. */
   cost: { headline: string; intro: string; ranges: CostRange[]; calloutLabel: string; calloutValue: string } | null;
   faqs: Faq[];
@@ -145,12 +153,18 @@ export const SERVICES: Record<string, ServiceDef> = {
       { id: "s6", q: "Cracks above garage door", a: "The header above a garage opening carries a long span with little support. Lintel repair restores that carrying capacity and closes the crack path." , img: SYMPTOM_IMAGES["Cracks above garage door"] },
       { id: "s7", q: "Sinking Slab", a: "A slab that has dropped is sitting over voided or compressed soil. We fill the void and lift the slab back to grade, then seal the joints against water re-entry." , img: SYMPTOM_IMAGES["Sinking Slab"] },
     ],
-    solutionsHeadline: "Structural Solutions",
+    // Client QA (Rosie): these four are problem-type/location categories —
+    // "what kind of movement, where on the house" — not solutions. Copy and
+    // layout below frame them at that level; the sitemap's item titles stay
+    // verbatim, the surrounding eyebrow/headline/blurb do the reframing.
+    solutionsHeadline: "What Type of Problem Are You Seeing?",
+    solutionsIntro: "Same underlying issue shows up differently depending on where it's happening. Find the one that matches your home.",
+    solutionsLayout: "compact",
     solutions: [
-      { title: "Slab Repair", blurb: "Settled and cracked slabs get lifted back to grade and re-supported, so the floor above stops moving and the cracks stop spreading.", img: imgFoundation },
-      { title: "Crawlspace / Joist Repair", blurb: "Damaged joists and failing piers under the home are repaired or replaced to restore a firm, level floor and stop the bounce at its source.", img: imgCrawlspace },
-      { title: "Garage Lintel Repair", blurb: "The steel lintel over your garage opening carries a long span. We replace or reinforce it so the brick above stops cracking and shifting.", img: imgFloor2 },
-      { title: "Wall Stabilization", blurb: "Wall anchors and carbon fiber reinforcement stop bowing and leaning foundation walls, holding them against the soil pressure that moved them.", img: imgFloor1 },
+      { title: "Slab Repair", blurb: "A slab that's cracked, sunk, or sitting unevenly against the rest of the floor.", img: imgFoundation },
+      { title: "Crawlspace / Joist Repair", blurb: "Floors that sag, bounce, or feel soft underfoot when you walk across them.", img: imgCrawlspace },
+      { title: "Garage Lintel Repair", blurb: "Cracking or shifting brick directly above the garage door opening.", img: imgFloor2 },
+      { title: "Wall Stabilization", blurb: "A foundation wall that's bowing inward, leaning, or visibly out of plumb.", img: imgFloor1 },
     ],
     cost: {
       headline: "How much does structural repair cost?",
@@ -189,6 +203,7 @@ export const SERVICES: Record<string, ServiceDef> = {
       { id: "s3", q: "My doors won't close properly", a: "When the floor system settles, door frames rack out of square and stop latching. Correcting the support below brings the openings back into alignment." , img: SYMPTOM_IMAGES["My doors won't close properly"] },
     ],
     solutionsHeadline: "Crawl Space Solutions",
+    solutionsLayout: "compact",
     solutions: [
       { title: "Floor Joist Replacement", blurb: "Joists too far gone to save are fully replaced, restoring the original structural capacity of the floor system above your crawl space.", img: imgFloor1 },
       { title: "Floor Joist Repair/Stabilization", blurb: "When joists are sound but losing support, we sister them and add support beams to stop the flex and restore a firm, level floor.", img: imgFloor3 },
@@ -235,6 +250,7 @@ export const SERVICES: Record<string, ServiceDef> = {
       { id: "s6", q: "Standing water in crawlspace", a: "Water sitting in a crawl space rots framing and feeds mold above it. Drainage, a sump, and encapsulation keep the space dry permanently." , img: SYMPTOM_IMAGES["Standing water in crawlspace"] },
     ],
     solutionsHeadline: "Waterproofing Solutions",
+    solutionsLayout: "compact",
     solutions: [
       { title: "Interior Solutions", blurb: "Interior drainage channels, sump pump systems, and vapor barriers capture water at the wall and floor joint and discharge it away from the home.", img: imgWaterproofing },
       { title: "Exterior Solutions", blurb: "Exterior membranes, footing drains, grading, and downspout extensions keep water away from the foundation before it ever reaches the wall.", img: imgFloor4 },
@@ -279,6 +295,7 @@ export const SERVICES: Record<string, ServiceDef> = {
       { id: "s6", q: "Ugly concrete", a: "Sound but stained, spalled, or dated concrete doesn't need replacing. Resurfacing and decorative finishes restore the look at a fraction of the cost." , img: SYMPTOM_IMAGES["Ugly concrete"] },
     ],
     solutionsHeadline: "Concrete Solutions",
+    solutionsLayout: "compact",
     solutions: [
       { title: "Lifting & Leveling", blurb: "Polyurethane injection fills the void under a settled slab and raises it back to grade in a single visit — no demolition, no replacement.", img: imgConcrete },
       { title: "Crack & Joint Repair", blurb: "Cracks and control joints get cleaned and sealed so water stops reaching the sub-base and washing out the support underneath.", img: imgFloor2 },
@@ -320,6 +337,7 @@ export const SERVICES: Record<string, ServiceDef> = {
     heroLede: "Foundation stabilization, concrete lifting, and waterproofing for commercial buildings — scheduled around your operations, not the other way around.",
     symptoms: [],
     solutionsHeadline: "Commercial Solutions",
+    solutionsLayout: "compact",
     solutions: [
       { title: "Structural", blurb: "Foundation stabilization, underpinning, and wall reinforcement for commercial buildings — scheduled around your operations, not the other way around.", img: imgFoundation },
       { title: "Concrete Lifting/Leveling", blurb: "Warehouse floors, loading docks, and parking areas lifted back to grade with minimal downtime and no demolition.", img: imgConcrete },

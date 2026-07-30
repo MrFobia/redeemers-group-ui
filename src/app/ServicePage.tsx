@@ -18,7 +18,7 @@ import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./th
 
 
 // ─── Scroll-reveal wrapper ────────────────────────────────────────────────────
-function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+function Reveal({ children, delay = 0, className = "", style, onMouseLeave }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties; onMouseLeave?: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
@@ -28,6 +28,8 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
+      style={style}
+      onMouseLeave={onMouseLeave}
     >
       {children}
     </motion.div>
@@ -50,7 +52,7 @@ function HeroSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: st
         eyebrow={svc.name}
         title={svc.heroHeadline}
         lede={svc.heroLede}
-        minHeight={400}
+        align="end"
       >
         <div className="flex items-center gap-4 flex-wrap">
           <button
@@ -148,48 +150,138 @@ function packRows(solutions: Solution[]): Solution[][] {
   return rows;
 }
 
+// Compact tile — text only, no thumbnail. Client QA (Rosie + Paula): the
+// single-column version forced a long scroll before a homeowner could even
+// see all four options, defeating the "that's not me, that's not me,
+// that's me" scan. A 2-column grid puts every item on screen together
+// instead of one under the other. The photo isn't gone — it lives in the
+// pinned panel that fills the empty space to the right of the grid, and
+// swaps to whichever tile is hovered.
+function CompactSolutionRow({ sol, active, onHover }: { sol: Solution; active: boolean; onHover: () => void }) {
+  return (
+    <button
+      onClick={() => openInspection()}
+      onMouseEnter={onHover}
+      onFocus={onHover}
+      className="group w-full h-full flex flex-col justify-center text-left transition-colors"
+      style={{
+        padding: "26px 24px",
+        minHeight: 168,
+        border: `1px solid ${ON_LIGHT.border}`,
+        background: active ? ON_LIGHT.wash : SURFACE.base,
+        cursor: "pointer",
+      }}
+    >
+      <div className="flex items-start gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2.5 flex-wrap" style={{ marginBottom: 8 }}>
+            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 19, color: CHAR, lineHeight: 1.25, margin: 0 }}>
+              {sol.title}
+            </h3>
+            {sol.note && (
+              <span className="inline-flex items-center px-2 py-0.5"
+                style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 600, color: B, background: "rgba(26,82,168,.07)", border: "1px solid rgba(26,82,168,.22)", letterSpacing: ".3px" }}>
+                {sol.note}
+              </span>
+            )}
+          </div>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.6, margin: 0 }}>
+            {sol.blurb}
+          </p>
+        </div>
+        <ChevronRight size={18} color={active ? B : MUTED} className="shrink-0 mt-1 transition-transform group-hover:translate-x-1" />
+      </div>
+    </button>
+  );
+}
+
+// Pinned panel that fills the empty space beside the (intentionally
+// narrower) grid, and crossfades to whichever tile is hovered/focused.
+// Client QA: a floating cursor-follow preview left that space blank — the
+// photo belongs in it, not chasing the mouse.
+function ImagePreviewPanel({ solutions, active }: { solutions: Solution[]; active: number }) {
+  return (
+    <div className="hidden lg:block relative flex-1 overflow-hidden">
+      {solutions.map((sol, i) => (
+        <motion.div
+          key={sol.title}
+          className="absolute inset-0"
+          initial={false}
+          animate={{ opacity: active === i ? 1 : 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+        >
+          <ImageWithFallback src={sol.img} alt={sol.title} className="absolute inset-0 w-full h-full object-cover" />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 function SolutionsSection({ svc }: { svc: ServiceDef }) {
-  const rows = packRows(svc.solutions);
+  const compact = svc.solutionsLayout === "compact";
+  const rows = compact ? [] : packRows(svc.solutions);
+  const [activeIdx, setActiveIdx] = useState(0);
 
   return (
-    <section id="solutions" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
+    <section id="solutions" style={{ background: SURFACE.base }} className={compact ? "py-14 lg:py-20" : "py-20 lg:py-28"}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* Section header */}
-        <Reveal className="mb-16">
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <Reveal className={compact ? "mb-8" : "mb-16"}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: compact ? 14 : 20 }}>
             <span style={{ display: "block", width: 32, height: 2, background: B, flexShrink: 0 }} />
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>
               {svc.name}
             </span>
           </div>
-          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,58px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", margin: 0 }}>
+          <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: compact ? "clamp(28px,3.2vw,42px)" : "clamp(36px,4vw,58px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", margin: compact ? "0 0 10px" : 0 }}>
             {svc.solutionsHeadline}
           </h2>
+          {compact && svc.solutionsIntro && (
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: MUTED, maxWidth: 620, margin: 0 }}>
+              {svc.solutionsIntro}
+            </p>
+          )}
         </Reveal>
 
-        <div className="flex flex-col" style={{ gap: 20 }}>
-          {rows.map((row, ri) => (
-            <Reveal key={row[0].title} delay={ri * 0.08}>
-              {row.length === 3 && (
-                <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20 }}>
-                  <SolutionCard sol={row[0]} size="lg" />
-                  <div className="flex flex-col" style={{ gap: 20 }}>
-                    <SolutionCard sol={row[1]} size="sm" />
-                    <SolutionCard sol={row[2]} size="sm" />
+        {compact ? (
+          <Reveal className="flex flex-col lg:flex-row gap-8 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:max-w-[620px] shrink-0">
+              {svc.solutions.map((sol, i) => (
+                <CompactSolutionRow
+                  key={sol.title}
+                  sol={sol}
+                  active={activeIdx === i}
+                  onHover={() => setActiveIdx(i)}
+                />
+              ))}
+            </div>
+            <ImagePreviewPanel solutions={svc.solutions} active={activeIdx} />
+          </Reveal>
+        ) : (
+          <div className="flex flex-col" style={{ gap: 20 }}>
+            {rows.map((row, ri) => (
+              <Reveal key={row[0].title} delay={ri * 0.08}>
+                {row.length === 3 && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20 }}>
+                    <SolutionCard sol={row[0]} size="lg" />
+                    <div className="flex flex-col" style={{ gap: 20 }}>
+                      <SolutionCard sol={row[1]} size="sm" />
+                      <SolutionCard sol={row[2]} size="sm" />
+                    </div>
                   </div>
-                </div>
-              )}
-              {row.length === 2 && (
-                <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20 }}>
-                  <SolutionCard sol={row[0]} size="lg" />
-                  <SolutionCard sol={row[1]} size="lg" />
-                </div>
-              )}
-              {row.length === 1 && <SolutionCard sol={row[0]} size="wide" />}
-            </Reveal>
-          ))}
-        </div>
+                )}
+                {row.length === 2 && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20 }}>
+                    <SolutionCard sol={row[0]} size="lg" />
+                    <SolutionCard sol={row[1]} size="lg" />
+                  </div>
+                )}
+                {row.length === 1 && <SolutionCard sol={row[0]} size="wide" />}
+              </Reveal>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
