@@ -216,12 +216,14 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 // anchor first. Entries without `page` are anchors within Our Difference.
 const OUR_DIFFERENCE_SECTIONS: { label: string; id: string; page?: string }[] = [
   { label: "Testimonials", id: "reviews", page: "reviews" },
-  { label: "What to expect", id: "process" },
+  // Hidden from the nav per client request (Aug 10) — the sections still exist
+  // on OurDifferencePage, they just aren't linked from the menu:
+  // { label: "What to expect", id: "process" },
+  // { label: "Our pledge", id: "pledge" },
+  // { label: "Referral program", id: "referral" },
   { label: "The Evergreen difference", id: "story" },
-  { label: "Our pledge", id: "pledge" },
   { label: "Featured projects / case stories", id: "case-studies", page: "case-studies" },
   { label: "Before & after", id: "before-after", page: "before-after" },
-  { label: "Referral program", id: "referral" },
   { label: "Love Well Initiative", id: "love-well", page: "love-well" },
   { label: "Awards", id: "certifications", page: "awards" },
 ];
