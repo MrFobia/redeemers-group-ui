@@ -173,8 +173,10 @@ function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
 }
 
 // ─── About Dropdown ───────────────────────────────────────────────────────────
+// Client request (Aug 10): drop the "About" row — it repeated the nav item it
+// hangs off. Clicking the "About" trigger already goes to the page on desktop,
+// and the mobile panel keeps a "Go to About →" link for the same reason.
 const ABOUT_TABS = [
-  { key: "about" as const,        label: "About",        page: "about" },
   { key: "careers" as const,      label: "Careers",      page: "careers" },
   { key: "service-area" as const, label: "Service Area", page: "service-area" },
   { key: "contact" as const,      label: "Contact us",   page: "contact" },
@@ -853,6 +855,7 @@ export default function SharedNavBar({
                           <MobileDrillItem key={tab.key} label={tab.label} onClick={() => handleNavigate(tab.page)} />
                         )
                       )}
+                      <MobileGoToLink label="Go to About →" onClick={() => handleNavigate("about")} />
                     </div>
                   </motion.div>
                 )}
