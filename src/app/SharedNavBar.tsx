@@ -45,13 +45,17 @@ export const NAV_PAGE_MAP: Record<string, string> = {
 // Entries marked `page` are their own top-level page (sitemap "interna") —
 // the nav jumps straight there instead of stopping at the Resources teaser
 // module first. Entries without `page` are anchors within Resources itself.
+// Client request (Aug 10): hide the entries that only drop you on an anchor
+// inside the Resources page — the menu should offer real destinations (their
+// own interna) like Job stories and News. The anchored sections still live on
+// the Resources page, they just aren't listed in the nav.
 const RESOURCES_SECTIONS: { label: string; id: string; page?: string; indent?: boolean }[] = [
-  { label: "Project gallery",        id: "gallery" },
-  { label: "Homeowner education",    id: "buyer-seller" },
-  { label: "Pricing & Cost Guides",  id: "cost" },
+  // { label: "Project gallery",        id: "gallery" },
+  // { label: "Homeowner education",    id: "buyer-seller" },
+  // { label: "Pricing & Cost Guides",  id: "cost" },
   { label: "Job stories",            id: "job-stories", page: "job-stories" },
-  { label: "FAQs",                   id: "faq" },
-  { label: "Reviews & testimonials", id: "reviews" },
+  // { label: "FAQs",                   id: "faq" },
+  // { label: "Reviews & testimonials", id: "reviews" },
 ];
 
 // ─── Simple dropdown (used by every top-level nav item now) ───────────────────
@@ -163,7 +167,6 @@ function ResourcesDropdown({ onNavigate }: ResourcesDropdownProps) {
       {RESOURCES_SECTIONS.map((sec) => (
         <SimpleDropdownItem key={sec.label} label={sec.label} indent={sec.indent} onClick={() => onNavigate(sec.page ?? `resources#${sec.id}`)} />
       ))}
-      <div className="my-2 mx-4 h-px" style={{ background: "rgba(255,255,255,.08)" }} />
       <SimpleDropdownItem label="News" onClick={() => onNavigate("news-blog")} />
     </SimpleDropdown>
   );
