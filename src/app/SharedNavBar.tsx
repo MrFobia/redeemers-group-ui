@@ -226,7 +226,9 @@ const OUR_DIFFERENCE_SECTIONS: { label: string; id: string; page?: string }[] = 
   // { label: "What to expect", id: "process" },
   // { label: "Our pledge", id: "pledge" },
   // { label: "Referral program", id: "referral" },
-  { label: "The Evergreen difference", id: "story" },
+  // Client request (Aug 10): this goes to the Evergreen interna now, not the
+  // story anchor on Our Difference.
+  { label: "The Evergreen difference", id: "story", page: "evergreen" },
   { label: "Featured projects / case stories", id: "case-studies", page: "case-studies" },
   { label: "Before & after", id: "before-after", page: "before-after" },
   { label: "Love Well Initiative", id: "love-well", page: "love-well" },

@@ -13,14 +13,14 @@ import imgFloor04 from "../assets/floor-04.jpeg";
 
 import { B, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
-function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+function Reveal({ children, delay = 0, className = "", style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <motion.div ref={ref} initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}>
+      className={className} style={style}>
       {children}
     </motion.div>
   );
@@ -73,11 +73,15 @@ const SEVEN_PS: { name: string; definition: string; impact: string }[] = [
   },
 ];
 
-// TODO(content): the client's brief for this section ("What Does It Mean
-// When a Company is Certified Evergreen?") pointed to text to reuse but the
-// message cut off before it arrived — this paragraph is a safe placeholder
-// draft, not final client copy. Swap it out once the client sends the text.
-const CERTIFIED_MEANING = "Certified Evergreen recognizes companies that put these seven principles into practice — not just onto a mission statement. It's an outside look at how the business is actually run: purpose-driven, privately held, and built to operate this way for the long run, not a label a company gives itself.";
+// Section 3 of the client's brief: "What Does It Mean When a Company is
+// Certified Evergreen?" Definition and criteria follow the Tugboat Institute's
+// own Certified Evergreen page; the closing line about what it means for a
+// homeowner is written copy, pending client sign-off.
+const CERTIFIED_MEANING = [
+  "Certified Evergreen is a rigorous process that validates a private company's commitment to long-term growth and success, assessed against the Evergreen 7Ps® principles. It isn't a label a company gives itself — the assessment looks at a company's values, its practices, and its people-focused culture.",
+  "Certified companies prioritize sustained growth over quick profits, put Purpose and People First, and are held to continuous improvement and a positive impact on their community. In short, the certification tells you a business is built to last.",
+  "For a homeowner, that's the part that matters: a warranty is only as good as the company standing behind it in ten years, and this is an outside body confirming Redeemers is built to still be here.",
+];
 
 // TODO(content): client asked for 2 awards on this page as a visual element,
 // without specifying which two. These are the closest matches already in the
@@ -211,9 +215,11 @@ function CertifiedSection() {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
               What certification actually means
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.6)", lineHeight: 1.8 }}>
-              {CERTIFIED_MEANING}
-            </p>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.6)", lineHeight: 1.8 }}>
+              {CERTIFIED_MEANING.map((para, i) => (
+                <p key={i} style={{ marginBottom: i < CERTIFIED_MEANING.length - 1 ? 18 : 0 }}>{para}</p>
+              ))}
+            </div>
           </Reveal>
         </div>
       </div>
