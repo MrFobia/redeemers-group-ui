@@ -1,33 +1,46 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, useInView, AnimatePresence } from "motion/react";
-import { ChevronRight, ArrowRight, X } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
-import { PageHeroBanner } from "./components/PageHeroBanner";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
-import { LOVE_WELL_PROJECTS, type LoveWellProject } from "./data/loveWellProjects";
+import { LOVE_WELL_PROJECTS, LOVE_WELL_START_YEAR, type LoveWellProject } from "./data/loveWellProjects";
 import imgFloor02 from "../assets/floor-02.jpeg";
+import imgLoveWellLogo from "../assets/love-well-logo.jpg";
 
-import { B, CHAR, MUTED, SURFACE, ON_LIGHT } from "./theme";
+import { B, SAND, CHAR, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
-function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+function Reveal({ children, delay = 0, className = "", style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <motion.div ref={ref} initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}>
+      className={className} style={style}>
       {children}
     </motion.div>
   );
 }
 
-const LOVE_WELL_YEARS = ["All", ...Array.from(new Set(LOVE_WELL_PROJECTS.map((p) => p.year))).sort((a, b) => Number(b) - Number(a))];
+// Client QA (Aug 10): "There will be projects done for 11 years, so we need to
+// be able to filter on every year back to 2015" — so the filter is built from
+// the calendar, not from the projects we happen to have logged. Years with
+// nothing logged yet are still selectable and show an empty state.
+const LOVE_WELL_YEARS = [
+  "All",
+  ...Array.from({ length: new Date().getFullYear() - LOVE_WELL_START_YEAR + 1 }, (_, i) =>
+    String(new Date().getFullYear() - i)
+  ),
+];
+
+const FEATURED_PROJECT =
+  LOVE_WELL_PROJECTS.find((p) => p.featured) ??
+  [...LOVE_WELL_PROJECTS].sort((a, b) => Number(b.year) - Number(a.year))[0];
 
 function ProjectCard({ project, onClick }: { project: LoveWellProject; onClick: () => void }) {
   return (
@@ -58,18 +71,23 @@ function ProjectCard({ project, onClick }: { project: LoveWellProject; onClick: 
   );
 }
 
-function VideoModal({ videoId, onClose }: { videoId: string | null; onClose: () => void }) {
+// Client QA (Aug 10): "when I click on what is listed as a project, I cannot
+// get back to the LWI page (or anywhere on the website)" — the old modal only
+// opened for projects that had a video, and its only way out was a small dark
+// X floating above the player. Now every project opens the same panel, and the
+// way back is a labelled button that names where it returns you.
+function ProjectModal({ project, onClose }: { project: LoveWellProject | null; onClose: () => void }) {
   useEffect(() => {
-    if (!videoId) return;
+    if (!project) return;
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handler);
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", handler); document.body.style.overflow = ""; };
-  }, [videoId, onClose]);
+  }, [project, onClose]);
 
   return createPortal(
     <AnimatePresence>
-      {videoId && (
+      {project && (
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
@@ -80,27 +98,48 @@ function VideoModal({ videoId, onClose }: { videoId: string | null; onClose: () 
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full"
-            style={{ maxWidth: 960 }}
+            className="relative w-full overflow-y-auto"
+            style={{ maxWidth: 960, maxHeight: "calc(100vh - 80px)" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={onClose}
-              aria-label="Close video"
-              className="absolute -top-11 right-0 w-9 h-9 flex items-center justify-center hover:bg-white/10 transition-colors"
-              style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.15)", cursor: "pointer" }}
-            >
-              <X size={16} color="#fff" />
-            </button>
-            <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                title="Love Well Initiative video"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-                style={{ border: "none" }}
-              />
+            <div className="flex items-center justify-between gap-4 mb-3">
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10.5, color: SAND, letterSpacing: 3, textTransform: "uppercase" }}>
+                Love Well Initiative · {project.year}
+              </span>
+              <button
+                onClick={onClose}
+                className="inline-flex items-center gap-2 px-4 py-2.5 hover:bg-white/15 transition-colors"
+                style={{ background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.28)", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}
+              >
+                <X size={15} color="#fff" />
+                Back to Love Well Initiative
+              </button>
+            </div>
+
+            {project.videoId ? (
+              <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src={`https://www.youtube.com/embed/${project.videoId}?autoplay=1`}
+                  title={project.title}
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                  style={{ border: "none" }}
+                />
+              </div>
+            ) : (
+              <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
+                <ImageWithFallback src={project.img} alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
+              </div>
+            )}
+
+            <div className="pt-5" style={{ maxWidth: 720 }}>
+              <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(19px,2vw,25px)", color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 10 }}>
+                {project.title}
+              </h3>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.66)", lineHeight: 1.75 }}>
+                {project.desc}
+              </p>
             </div>
           </motion.div>
         </motion.div>
@@ -110,32 +149,81 @@ function VideoModal({ videoId, onClose }: { videoId: string | null; onClose: () 
   );
 }
 
-function IntroSection() {
+// ─── HERO ─────────────────────────────────────────────────────────────────────
+// Client QA (Aug 10): "The LWI logo should be prominent on the page. I would
+// suggest on the right side of the page centered with the large text." The
+// logo artwork is a JPEG with a white background, so it sits on a white card
+// rather than being dropped straight onto the dark banner.
+function LoveWellHero() {
   return (
-    <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
+    <section className="relative overflow-hidden" style={{ background: "#0A0B14" }}>
+      <div className="absolute inset-0">
+        <ImageWithFallback src={imgFloor02} alt="Love Well Initiative" className="w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(10,11,20,0.95) 0%, rgba(10,11,20,0.88) 46%, rgba(11,28,74,0.72) 100%)" }} />
+      </div>
+      <div className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px)",
+          backgroundSize: "80px 80px",
+        }} />
+
+      <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-14 md:py-16 min-h-[320px] md:min-h-[400px] lg:min-h-[440px] flex items-center">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
+          <div style={{ maxWidth: 720 }}>
+            <div className="flex items-center gap-3 mb-4 md:mb-6">
+              <div style={{ width: 24, height: 2, background: SAND, flexShrink: 0 }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
+                Love Well Initiative
+              </span>
+            </div>
+            <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4.4vw,60px)", color: "#fff", lineHeight: 1.02, letterSpacing: "-2px" }}>
+              Giving back to the neighborhoods we serve
+            </h1>
+          </div>
+
+          <div className="flex lg:justify-end">
+            <div className="flex items-center justify-center px-8 py-7 md:px-12 md:py-10" style={{ background: "#fff" }}>
+              <img
+                src={imgLoveWellLogo}
+                alt="Love Well Initiative logo"
+                className="block w-[220px] md:w-[300px] lg:w-[340px] h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── INTRO ────────────────────────────────────────────────────────────────────
+// Client QA (Aug 10): the initiative "is not centered around nominations for
+// free structural repairs" — so this block explains what Love Well is and the
+// nomination CTAs are gone. The projects, not the application process, are the
+// point of the page.
+function IntroSection() {
+  const stats = [
+    { k: "2015", v: "First Love Well project" },
+    { k: String(new Date().getFullYear() - LOVE_WELL_START_YEAR + 1), v: "Years of giving" },
+    { k: `${LOVE_WELL_PROJECTS.length}+`, v: "Community projects" },
+  ];
+  return (
+    <section style={{ background: SURFACE.alt }} className="py-16 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="max-w-2xl">
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.6)", lineHeight: 1.8, marginBottom: 28 }}>
-            Launched in 2015, the Love Well Initiative is the umbrella for every community project we take on — discounted and, in some cases, fully free structural repairs for qualifying families and charitable organizations across the Memphis area.
+        <Reveal className="max-w-3xl">
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(16px,1.4vw,19px)", color: "rgba(10,11,20,.68)", lineHeight: 1.8, marginBottom: 20 }}>
+            The Love Well Initiative is how Redeemers shows up for the Memphis area beyond the jobs we&rsquo;re hired for. Since 2015 it has been the umbrella for everything our team gives back — the annual Love Well 5K &amp; Festival benefiting a different local charity each year, hands-on work for shelters and family homes, and structural repairs donated where they change what a building can be used for.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-            {["Discounted repairs", "Qualifying families", "Underserved neighborhoods", "Community-first"].map((tag) => (
-              <div key={tag} className="px-4 py-3" style={{ background: "rgba(10,11,20,.04)", border: `1px solid ${ON_LIGHT.border}` }}>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", fontWeight: 500 }}>{tag}</span>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.55)", lineHeight: 1.8 }}>
+            Every year adds another project to the list. Below is the work itself — start with the featured story, then browse the full history by year.
+          </p>
+          <div className="flex flex-wrap gap-x-12 gap-y-6 mt-10">
+            {stats.map((s) => (
+              <div key={s.v}>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: CHAR, letterSpacing: "-1px", lineHeight: 1 }}>{s.k}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, marginTop: 6 }}>{s.v}</p>
               </div>
             ))}
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
-              style={{ border: `1.5px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>
-              See if you qualify
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </a>
-            <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:opacity-90"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
-              Nominate a charity
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </a>
           </div>
         </Reveal>
       </div>
@@ -143,15 +231,66 @@ function IntroSection() {
   );
 }
 
-function ProjectsGridSection() {
+// ─── FEATURED PROJECT ─────────────────────────────────────────────────────────
+// Client QA (Aug 10): "One featured that sits right where it turns white, and
+// then the gallery right below it. I don't want the featured one to be so big
+// that it's hard to tell there's a lot more to see." Hence the half-width
+// image and the tight bottom padding — the gallery starts inside the fold.
+function FeaturedProjectSection({ onOpen }: { onOpen: (p: LoveWellProject) => void }) {
+  const project = FEATURED_PROJECT;
+  if (!project) return null;
+  return (
+    <section style={{ background: SURFACE.base }} className="pt-16 lg:pt-20 pb-10 lg:pb-12">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="mb-8">
+          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10.5, color: B, letterSpacing: 3, textTransform: "uppercase" }}>
+            Featured project
+          </p>
+        </Reveal>
+        <Reveal className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <button onClick={() => onOpen(project)} className="group relative block w-full overflow-hidden p-0"
+            style={{ aspectRatio: "16/10", border: `1px solid ${ON_LIGHT.border}`, background: SURFACE.alt, cursor: "pointer" }}>
+            <ImageWithFallback src={project.img} alt={project.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+            <span className="absolute inset-0" style={{ background: "rgba(10,11,20,.28)" }} />
+            {project.videoId && (
+              <span className="absolute inset-0 flex items-center justify-center">
+                <span className="w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover:scale-110" style={{ background: B }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
+                </span>
+              </span>
+            )}
+          </button>
+
+          <div>
+            <span className="inline-block px-2.5 py-1 mb-4" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#8A7238", letterSpacing: 1.5 }}>{project.year}</span>
+            </span>
+            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.6vw,36px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 14 }}>
+              {project.title}
+            </h2>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.62)", lineHeight: 1.8, marginBottom: 22 }}>
+              {project.desc}
+            </p>
+            <button onClick={() => onOpen(project)} className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:opacity-90"
+              style={{ background: B, border: "none", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", cursor: "pointer" }}>
+              {project.cta}
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            </button>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function ProjectsGridSection({ onOpen }: { onOpen: (p: LoveWellProject) => void }) {
   const [yearFilter, setYearFilter] = useState("All");
-  const [openVideo, setOpenVideo] = useState<string | null>(null);
   const filtered = yearFilter === "All" ? LOVE_WELL_PROJECTS : LOVE_WELL_PROJECTS.filter((p) => p.year === yearFilter);
 
   return (
-    <section style={{ background: SURFACE.alt }} className="py-16 lg:py-20">
+    <section style={{ background: SURFACE.base }} className="pb-20 lg:pb-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="mb-10">
+        <Reveal className="pt-10 mb-8" style={{ borderTop: `1px solid ${ON_LIGHT.hairline}` }}>
           <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10.5, color: B, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>
             Where the giving has gone
           </p>
@@ -160,7 +299,7 @@ function ProjectsGridSection() {
           </h3>
         </Reveal>
 
-        <Reveal className="flex items-center gap-2 flex-wrap mb-12">
+        <Reveal className="flex items-center gap-2 flex-wrap mb-10">
           {LOVE_WELL_YEARS.map((y) => (
             <button key={y} onClick={() => setYearFilter(y)} className="px-4 py-2 transition-all"
               style={{
@@ -175,15 +314,26 @@ function ProjectsGridSection() {
           ))}
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
-          {filtered.map((project, i) => (
-            <Reveal key={project.title} delay={(i % 9) * 0.04}>
-              <ProjectCard project={project} onClick={() => project.videoId && setOpenVideo(project.videoId)} />
-            </Reveal>
-          ))}
-        </div>
-
-        <VideoModal videoId={openVideo} onClose={() => setOpenVideo(null)} />
+        {filtered.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+            {filtered.map((project, i) => (
+              <Reveal key={project.title} delay={(i % 9) * 0.04}>
+                <ProjectCard project={project} onClick={() => onOpen(project)} />
+              </Reveal>
+            ))}
+          </div>
+        ) : (
+          <div className="px-8 py-14 text-center" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: MUTED, marginBottom: 14 }}>
+              No Love Well projects logged for {yearFilter} yet.
+            </p>
+            <button onClick={() => setYearFilter("All")} className="inline-flex items-center gap-2"
+              style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, padding: 0 }}>
+              See every year
+              <ArrowRight size={14} />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -251,6 +401,7 @@ function Footer({ onBack }: { onBack: () => void }) {
 
 // ─── LoveWellPage ─────────────────────────────────────────────────────────────
 export default function LoveWellPage({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (p: string) => void }) {
+  const [openProject, setOpenProject] = useState<LoveWellProject | null>(null);
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-[100]">
@@ -264,16 +415,13 @@ export default function LoveWellPage({ onBack, onNavigate }: { onBack: () => voi
           { label: "Love Well Initiative" },
         ]} />
 
-        <PageHeroBanner
-          image={imgFloor02}
-          imageAlt="Love Well Initiative"
-          eyebrow="Love Well Initiative"
-          title="Giving back to the neighborhoods we serve"
-          lede={`${LOVE_WELL_PROJECTS.length} community projects and counting — discounted and, in some cases, fully free structural repairs for qualifying families and charities across the Memphis area.`}
-        />
+        <LoveWellHero />
 
         <IntroSection />
-        <ProjectsGridSection />
+        <FeaturedProjectSection onOpen={setOpenProject} />
+        <ProjectsGridSection onOpen={setOpenProject} />
+
+        <ProjectModal project={openProject} onClose={() => setOpenProject(null)} />
 
         <Footer onBack={onBack} />
       </div>

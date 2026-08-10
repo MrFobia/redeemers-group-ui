@@ -15,7 +15,15 @@ export type LoveWellProject = {
   cta: string;
   videoId?: string;
   img: string;
+  /** The one project pulled out above the gallery on the Love Well page.
+   *  Exactly one entry should carry this — the page falls back to the most
+   *  recent project if none does. */
+  featured?: boolean;
 };
+
+/** Love Well started in 2015; the year filter runs from here to the current
+ *  year so every season is selectable even before it has projects logged. */
+export const LOVE_WELL_START_YEAR = 2015;
 
 export const LOVE_WELL_PROJECTS: LoveWellProject[] = [
   {
@@ -25,6 +33,7 @@ export const LOVE_WELL_PROJECTS: LoveWellProject[] = [
     cta: "Watch the story",
     videoId: "QB1c_89RBgg",
     img: imgFloor01,
+    featured: true,
   },
   {
     year: "2017",

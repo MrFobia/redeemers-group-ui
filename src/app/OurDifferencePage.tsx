@@ -1107,26 +1107,26 @@ function LoveWellInitiativeSection({ onNavigate }: { onNavigate?: (p: string) =>
               <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </button>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.6)", lineHeight: 1.8, maxWidth: 480, marginBottom: 28 }}>
-              Launched in 2015, the Love Well Initiative is the umbrella for every community project we take on — discounted and, in some cases, fully free structural repairs for qualifying families and charitable organizations across the Memphis area.
+              Since 2015, the Love Well Initiative has been the umbrella for everything our team gives back to the Memphis area — the annual Love Well 5K &amp; Festival benefiting a different local charity each year, hands-on work for shelters and family homes, and donated structural repairs.
             </p>
+            {/* Client QA (Aug 10): the initiative "is not centered around
+                nominations for free structural repairs" — the projects are the
+                point, so the tags and the CTA point at the work, not at an
+                application process. */}
             <div className="grid grid-cols-2 gap-3 mb-8 max-w-md">
-              {["Discounted repairs", "Qualifying families", "Underserved neighborhoods", "Community-first"].map((tag) => (
+              {["Love Well 5K & Festival", "Shelters & family homes", "Donated structural repairs", "A new project every year"].map((tag) => (
                 <div key={tag} className="px-4 py-3" style={{ background: "rgba(10,11,20,.04)", border: `1px solid ${ON_LIGHT.border}` }}>
                   <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", fontWeight: 500 }}>{tag}</span>
                 </div>
               ))}
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:border-white/40"
-                style={{ border: `1.5px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>
-                See if you qualify
+              <button onClick={() => onNavigate?.("love-well")}
+                className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:opacity-90"
+                style={{ background: B, border: "none", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
+                See every Love Well project
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-              </a>
-              <a href="tel:+18335841049" className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:opacity-90"
-                style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff" }}>
-                Nominate a charity
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-              </a>
+              </button>
             </div>
           </Reveal>
         </div>

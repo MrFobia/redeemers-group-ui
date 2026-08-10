@@ -555,24 +555,20 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                 style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}
               >
                 Read all reviews
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5"><path d="M5 12h14M13 6l6 6-6 6" stroke={SAND} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5"><path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </button>
             )}
           </div>
           <div className="flex gap-3">
-            <button onClick={scrollPrev}
-              className="w-11 h-11 flex items-center justify-center transition-colors"
-              style={{ border: `1px solid ${ON_LIGHT.border}`, background: "transparent" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.08)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <button onClick={scrollPrev} aria-label="Previous review"
+              className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
+              style={{ border: `1.5px solid ${CHAR}`, background: "transparent", cursor: "pointer" }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
-            <button onClick={scrollNext}
-              className="w-11 h-11 flex items-center justify-center transition-colors"
-              style={{ border: `1px solid ${ON_LIGHT.border}`, background: "transparent" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.08)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <button onClick={scrollNext} aria-label="Next review"
+              className="w-11 h-11 flex items-center justify-center hover:bg-black/10 transition-colors"
+              style={{ border: `1.5px solid ${CHAR}`, background: "transparent", cursor: "pointer" }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
           </div>
         </Reveal>
