@@ -89,13 +89,19 @@ function BeforeAfterSlider({ before, after, beforeLabel = "Before", afterLabel =
 // as a fullscreen modal from a teaser carousel on Our Difference. Rosie's QA
 // flagged that pattern: sitemap says dedicated page, so it's a page, reached
 // by simple navigation instead of a lightbox.
-const BEFORE_AFTER_STATS = [
-  { val: "377", label: "Total sets" },
-  { val: "134", label: "Concrete repair" },
-  { val: "101", label: "Crawl space repair" },
-  { val: "51",  label: "Concrete leveling" },
-  { val: "15",  label: "Basement waterproofing" },
-  { val: "12",  label: "Foundation repair" },
+//
+// Client QA (client, before/after interna): the big stat boxes and the small
+// filter pills were two separate, redundant controls — only the pills were
+// clickable. Fix: the stat boxes ARE the filter now (one control, name reads
+// first, count second) and the small pill row is gone. Kept to 4 service
+// categories + "All" so they line up with the site's actual service names —
+// "Basement waterproofing" dropped since no sample project uses that tag yet.
+const BEFORE_AFTER_STATS: { tag: string; val: string; label: string }[] = [
+  { tag: "All",               val: "377", label: "Total sets" },
+  { tag: "Concrete Repair",   val: "134", label: "Concrete repair" },
+  { tag: "Crawl Space Repair",val: "101", label: "Crawl space repair" },
+  { tag: "Concrete Leveling", val: "51",  label: "Concrete leveling" },
+  { tag: "Foundation Repair", val: "12",  label: "Foundation repair" },
 ];
 
 const BEFORE_AFTER_PROJECTS = [
@@ -196,7 +202,6 @@ const BEFORE_AFTER_PROJECTS = [
 // set once all 377 are scraped into a JSON file — swap BEFORE_AFTER_PROJECTS
 // for that JSON and PAGE_SIZE stays 6, matching the live site's page size.
 const PAGE_SIZE = 6;
-const CATEGORIES = ["All", ...Array.from(new Set(BEFORE_AFTER_PROJECTS.map((p) => p.tag)))];
 
 function BeforeAfterGridSection() {
   const [category, setCategory] = useState("All");
@@ -209,32 +214,31 @@ function BeforeAfterGridSection() {
   const selectCategory = (c: string) => { setCategory(c); setPage(0); };
 
   return (
-    <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
+    <section style={{ background: SURFACE.base }} className="pt-6 pb-16 lg:pt-8 lg:pb-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px mb-10" style={{ background: "rgba(10,11,20,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
-          {BEFORE_AFTER_STATS.map((s) => (
-            <div key={s.label} className="flex flex-col items-center justify-center py-6 px-4 text-center" style={{ background: SURFACE.base }}>
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.6vw,32px)", color: B, lineHeight: 1, marginBottom: 4 }}>
-                {s.val}
-              </p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.45)", letterSpacing: 0.5 }}>{s.label}</p>
-            </div>
-          ))}
-        </Reveal>
-
-        <Reveal delay={0.05} className="flex flex-wrap gap-2 mb-10">
-          {CATEGORIES.map((c) => (
-            <button key={c} onClick={() => selectCategory(c)}
-              className="px-4 py-2 transition-all"
-              style={{
-                fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, cursor: "pointer",
-                background: category === c ? B : "transparent",
-                color: category === c ? "#fff" : MUTED,
-                border: `1.5px solid ${category === c ? B : ON_LIGHT.border}`,
-              }}>
-              {c}
-            </button>
-          ))}
+        {/* Stat boxes double as the filter — the small pill row that used to
+            sit below them is gone. Service name reads first (bold, blue),
+            count is the secondary line, ~25% shorter than the old boxes. */}
+        <Reveal className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px mb-10" style={{ background: "rgba(10,11,20,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
+          {BEFORE_AFTER_STATS.map((s) => {
+            const active = category === s.tag;
+            return (
+              <button
+                key={s.tag}
+                onClick={() => selectCategory(s.tag)}
+                className="flex flex-col items-center justify-center py-4 px-3 text-center transition-colors cursor-pointer"
+                style={{ background: active ? B : SURFACE.base }}
+                aria-pressed={active}
+              >
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(13px,1.15vw,15px)", color: active ? "#fff" : B, lineHeight: 1.25, marginBottom: 3 }}>
+                  {s.label}
+                </p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: active ? "rgba(255,255,255,.75)" : "rgba(10,11,20,.45)", letterSpacing: 0.5 }}>
+                  {s.val} {s.tag === "All" ? "total" : "sets"}
+                </p>
+              </button>
+            );
+          })}
         </Reveal>
 
         <div className="grid grid-cols-1 gap-8">
