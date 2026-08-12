@@ -93,20 +93,27 @@ function BeforeAfterSlider({ before, after, beforeLabel = "Before", afterLabel =
 // Client QA (client, before/after interna): the big stat boxes and the small
 // filter pills were two separate, redundant controls — only the pills were
 // clickable. Fix: the stat boxes ARE the filter now (one control, name reads
-// first, count second) and the small pill row is gone. Kept to 4 service
-// categories + "All" so they line up with the site's actual service names —
-// "Basement waterproofing" dropped since no sample project uses that tag yet.
+// first, count second) and the small pill row is gone.
+//
+// Client QA (11-ago-2026): the original scrape's tags (Concrete Repair,
+// Concrete Leveling, Foundation Repair, Crawl Space Repair) were their own
+// mini-taxonomy — not the site's 5 real services (see SERVICE_ORDER in
+// data/services.ts). Remapped so filters match the services we actually
+// sell: Concrete Repair + Concrete Leveling roll up into "Concrete
+// Services", Foundation Repair rolls up into "Structural Repair", Crawl
+// Space Repair matches as-is. "Waterproofing" has no sample project yet so
+// it's left out of this tile row (would filter to an empty grid) — add it
+// back once a waterproofing before/after set is in BEFORE_AFTER_PROJECTS.
 const BEFORE_AFTER_STATS: { tag: string; val: string; label: string }[] = [
-  { tag: "All",               val: "377", label: "Total sets" },
-  { tag: "Concrete Repair",   val: "134", label: "Concrete repair" },
-  { tag: "Crawl Space Repair",val: "101", label: "Crawl space repair" },
-  { tag: "Concrete Leveling", val: "51",  label: "Concrete leveling" },
-  { tag: "Foundation Repair", val: "12",  label: "Foundation repair" },
+  { tag: "All",                val: "377", label: "Total sets" },
+  { tag: "Concrete Services",  val: "185", label: "Concrete services" },
+  { tag: "Crawl Space Repair", val: "101", label: "Crawl space repair" },
+  { tag: "Structural Repair",  val: "12",  label: "Structural repair" },
 ];
 
 const BEFORE_AFTER_PROJECTS = [
   {
-    tag: "Concrete Repair",
+    tag: "Concrete Services",
     title: "Extreme Concrete Repair in Bartlett, TN",
     loc: "Bartlett, TN",
     desc: "Jennifer purchased a new home and was concerned about severe driveway damage with voids underneath. Specialist Dante inspected the property, and expert Brennan applied the 3-part protection system to lift, seal, and protect the concrete.",
@@ -115,7 +122,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/149664-after-image.jpeg",
   },
   {
-    tag: "Concrete Repair",
+    tag: "Concrete Services",
     title: "Amazing Sidewalk Repair in Bartlett, TN",
     loc: "Bartlett, TN",
     desc: "Paulette had a sunken sidewalk section — nearly 3 inches — creating a tripping hazard. Experts Dalton and Javier used the PolyLevel concrete injection system to lift and level the slab, then sealed the joints against water intrusion.",
@@ -133,7 +140,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/57f55104b6a94_finished.jpg",
   },
   {
-    tag: "Foundation Repair",
+    tag: "Structural Repair",
     title: "Cracked Brick Wall",
     loc: "",
     desc: "Concrete and brick materials expanding and contracting at different rates left visible cracking in the wall. Push piers were installed to stabilize the foundation and close the gap.",
@@ -160,7 +167,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/58d29c9f5007b_7287adcb-0d7f-488b-920a-55a420cbaa75.jpg",
   },
   {
-    tag: "Concrete Leveling",
+    tag: "Concrete Services",
     title: "INCREDIBLE PolyLEVEL Job",
     loc: "",
     desc: "A slab had dropped 2¼ inches out of grade. Foreman Aaron Stevens' crew used PolyLevel injection to lift it back into place in a single visit.",
@@ -169,7 +176,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/5c0fffc1b59be_20181210123014.jpg",
   },
   {
-    tag: "Concrete Repair",
+    tag: "Concrete Services",
     title: "New Looking Concrete after NexusPro Injection",
     loc: "",
     desc: "Weather damage on a hillside driveway had left the concrete cracked and worn. Foreman Shane Garrett's team used NexusPro injection to restore the surface and seal it against further damage.",
@@ -187,7 +194,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/65382373d8cd6_after.jpg",
   },
   {
-    tag: "Foundation Repair",
+    tag: "Structural Repair",
     title: "Foundation Repair in Cordova, TN",
     loc: "Cordova, TN",
     desc: "Keri's home had settled enough to crack exterior walls and block new flooring installation. A push pier system stabilized and lifted the foundation, while Thor helical ties and NexusPro closed and repaired the cracks.",
@@ -219,7 +226,7 @@ function BeforeAfterGridSection() {
         {/* Stat boxes double as the filter — the small pill row that used to
             sit below them is gone. Service name reads first (bold, blue),
             count is the secondary line, ~25% shorter than the old boxes. */}
-        <Reveal className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px mb-10" style={{ background: "rgba(10,11,20,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
+        <Reveal className="grid grid-cols-2 lg:grid-cols-4 gap-px mb-10" style={{ background: "rgba(10,11,20,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
           {BEFORE_AFTER_STATS.map((s) => {
             const active = category === s.tag;
             return (
