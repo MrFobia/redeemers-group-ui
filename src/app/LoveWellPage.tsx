@@ -47,8 +47,12 @@ function ProjectCard({ project, onClick }: { project: LoveWellProject; onClick: 
     <div onClick={onClick} className="flex flex-col gap-3 cursor-pointer group">
       <div className="relative overflow-hidden" style={{ aspectRatio: "16/10", background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
         <ImageWithFallback src={project.img} alt={project.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-        <span className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}>
-          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 1 }}>{project.year}</span>
+        {/* Client QA: the sand-tinted chip read fine on white but disappeared
+            over a photo — same low-contrast trap as the reviews carousel
+            arrows. Solid dark chip + white text, like the Before/After
+            labels elsewhere, so it holds up over any image. */}
+        <span className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(10,11,20,.7)" }}>
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#fff", letterSpacing: 1 }}>{project.year}</span>
         </span>
         {project.videoId && (
           <>
