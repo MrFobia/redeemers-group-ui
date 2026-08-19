@@ -21,14 +21,19 @@ const imgEvergreenForest = "https://images.unsplash.com/photo-1441974231531-c622
 // Real Certified Evergreen emblem (Tugboat Institute), sent by the client.
 const imgCertifiedEvergreen = "https://cdn.treehouseinternetgroup.com/cms_images/218/Certified%20Evergreen.jpg";
 
-function Reveal({ children, delay = 0, className = "", style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
+// TEST DATA (Aug 19): placeholder YouTube id so the video lightbox previews
+// as a working embed. Neutral public sample (Google's Big Buck Bunny
+// trailer) — not the client's actual video, which hasn't come in yet.
+const TEST_VIDEO_ID = "aqz-KE-bpKQ";
+
+function Reveal({ children, delay = 0, className = "", style, onClick }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties; onClick?: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <motion.div ref={ref} initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className} style={style}>
+      className={className} style={style} onClick={onClick}>
       {children}
     </motion.div>
   );
@@ -45,13 +50,11 @@ function Reveal({ children, delay = 0, className = "", style }: { children: Reac
 // "we will have to write this content") — draft, pending client sign-off.
 // Client QA (Aug 19): "Under each principle section, I'd like to be able to
 // link to things where appropriate. For example, if we wanted to link to a
-// Best Places to Work award under People First." `link` is that hook.
-// TEST DATA (Aug 19): client asked for a placeholder link on every principle
-// so all 7 preview the pattern in a walkthrough, even without a confirmed
-// real destination for each yet — labels/pages below are best-guess
-// placeholders (existing pages only, nothing fabricated), not final copy.
-// Swap each `link` for the client's actual pick once she sends one per
-// principle; delete any she doesn't want linked.
+// Best Places to Work award under People First." `link` is that hook —
+// populated for People First per the client's own example; test links on the
+// other six were tried and pulled back out, so they stay unlinked until
+// there's a real destination worth pointing to ("where appropriate" — not
+// every principle needs one).
 const SEVEN_PS: { name: string; definition: string; impact: string; link?: { label: string; page: string } }[] = [
   {
     name: "Purpose",
@@ -62,7 +65,6 @@ const SEVEN_PS: { name: string; definition: string; impact: string; link?: { lab
     name: "Perseverance",
     definition: "Having the ambition and the resilience to overcome obstacles and keep pursuing the purpose indefinitely into the future.",
     impact: "We're not building to flip. The lifetime warranty only means something if we're still around to honor it decades from now.",
-    link: { label: "See real homeowner stories (TEST LINK)", page: "case-studies" },
   },
   {
     name: "People First",
@@ -74,25 +76,21 @@ const SEVEN_PS: { name: string; definition: string; impact: string; link?: { lab
     name: "Private",
     definition: "Taking advantage of the ability of closely held private companies to have a longer-term view, greater confidentiality around strategies, and more operating flexibility than public or exit-oriented businesses.",
     impact: "No private-equity owner pushing quarterly targets down to your estimate. We can make the right call for your home, not the right call for a shareholder report.",
-    link: { label: "Meet the team (TEST LINK)", page: "team" },
   },
   {
     name: "Profit",
     definition: "Not mistaking profit as the purpose of the business; but recognizing it is essential to survival and independence, and the most accurate measure of customer value delivered.",
     impact: "Profit funds the warranty, the training, and the next generation of the business — it's a result of doing right by you, not the reason we show up.",
-    link: { label: "See our financing options (TEST LINK)", page: "pricing" },
   },
   {
     name: "Paced Growth",
     definition: "Having the discipline to focus on long-term strategy, balance short-term and long-term performance, and grow steadily and consistently from year to year.",
     impact: "We'd rather grow slow and keep the standard than grow fast and start cutting corners on materials, training, or crew quality.",
-    link: { label: "Browse our project history (TEST LINK)", page: "case-studies" },
   },
   {
     name: "Pragmatic Innovation",
     definition: "Embracing a continuous-improvement process built around taking capital-efficient, calculated risks to innovate creatively within constraints.",
     impact: "New methods and materials get adopted once they're proven to hold up — not because they're trendy.",
-    link: { label: "See our methods & materials (TEST LINK)", page: "resources" },
   },
 ];
 
@@ -301,11 +299,20 @@ function CertifiedSection() {
               <X size={15} color="#fff" />
               Close
             </button>
-            <div className="w-full flex flex-col items-center justify-center gap-3 text-center" style={{ aspectRatio: "16/9", background: "#111", border: "1px solid rgba(255,255,255,.12)" }}>
-              <Play size={32} color={SAND} />
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.6)", maxWidth: 360 }}>
-                Video pending from the client — this lightbox is wired to embed it as soon as the file/link comes in.
-              </p>
+            {/* TEST DATA (Aug 19): "put a test link on the video to see the
+                lightbox" — embedding a neutral public sample video (Google's
+                Big Buck Bunny trailer) just to preview the embed, not the
+                client's actual content. Swap `TEST_VIDEO_ID` for the real
+                YouTube id once the client sends their Evergreen video. */}
+            <div className="relative w-full" style={{ aspectRatio: "16/9", background: "#000" }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={`https://www.youtube.com/embed/${TEST_VIDEO_ID}?autoplay=1`}
+                title="What being Evergreen means to us (test video)"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+                style={{ border: "none" }}
+              />
             </div>
           </div>
         </div>
