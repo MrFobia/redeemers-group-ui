@@ -377,12 +377,15 @@ export default function BeforeAfterPage({ onBack, onNavigate }: { onBack: () => 
     <>
       <div className="fixed top-0 left-0 right-0 z-[100]">
         <AnnouncementBar />
-        <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
+        <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Resources" />
       </div>
       <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
+        {/* Client QA (Aug 19): this page moved from Our Difference to
+            Resources in the nav — the breadcrumb had been left pointing at
+            its old parent. */}
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
-          { label: "Our Difference", onClick: () => onNavigate?.("our-difference") },
+          { label: "Resources", onClick: () => onNavigate?.("resources") },
           { label: "Before & After" },
         ]} />
 

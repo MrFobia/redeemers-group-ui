@@ -49,13 +49,17 @@ export const NAV_PAGE_MAP: Record<string, string> = {
 // inside the Resources page — the menu should offer real destinations (their
 // own interna) like Job stories and News. The anchored sections still live on
 // the Resources page, they just aren't listed in the nav.
+// Client request (Aug 19): "Before & after photos" and "Featured projects"
+// move here from Our Difference. Per the sitemap, Job Stories and Case
+// Studies/Featured Projects are redundant — one option, not two — so the old
+// separate "Job stories" entry is gone; "Featured Projects" now covers both
+// and still targets the case-studies interna (no page content was deleted,
+// JobStoriesPage just isn't its own nav destination anymore). This is also
+// the "projects section under Resources" that Our Difference's "Our Work"
+// entry links to — see OUR_DIFFERENCE_SECTIONS below.
 const RESOURCES_SECTIONS: { label: string; id: string; page?: string; indent?: boolean }[] = [
-  // { label: "Project gallery",        id: "gallery" },
-  // { label: "Homeowner education",    id: "buyer-seller" },
-  // { label: "Pricing & Cost Guides",  id: "cost" },
-  { label: "Job stories",            id: "job-stories", page: "job-stories" },
-  // { label: "FAQs",                   id: "faq" },
-  // { label: "Reviews & testimonials", id: "reviews" },
+  { label: "Featured Projects",      id: "case-studies",  page: "case-studies" },
+  { label: "Before & After",         id: "before-after",  page: "before-after" },
 ];
 
 // ─── Simple dropdown (used by every top-level nav item now) ───────────────────
@@ -219,20 +223,23 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 // Entries marked `page` are their own top-level page (sitemap "interna") —
 // the nav jumps straight there instead of stopping at an Our Difference
 // anchor first. Entries without `page` are anchors within Our Difference.
+// Client request (Aug 19): exact order + renames. "Before & after" and
+// "Featured projects" moved out to Resources (see RESOURCES_SECTIONS above),
+// replaced here by "Our Work", which points at that same case-studies
+// destination — the client's own words: "Our Work (linking to projects
+// section under Resources)". "Our Purpose" (ex "Our pledge") and "What to
+// Expect" come back into the nav — the client noted they were missing only
+// because that page isn't finished yet, not because they should stay hidden;
+// both still point at their OurDifferencePage anchor until they get their own
+// interna, same pattern as "Our Purpose" had before.
 const OUR_DIFFERENCE_SECTIONS: { label: string; id: string; page?: string }[] = [
-  { label: "Testimonials", id: "reviews", page: "reviews" },
-  // Hidden from the nav per client request (Aug 10) — the sections still exist
-  // on OurDifferencePage, they just aren't linked from the menu:
-  // { label: "What to expect", id: "process" },
-  // { label: "Our pledge", id: "pledge" },
-  // { label: "Referral program", id: "referral" },
-  // Client request (Aug 10): this goes to the Evergreen interna now, not the
-  // story anchor on Our Difference.
-  { label: "The Evergreen difference", id: "story", page: "evergreen" },
-  { label: "Featured projects / case stories", id: "case-studies", page: "case-studies" },
-  { label: "Before & after", id: "before-after", page: "before-after" },
-  { label: "Love Well Initiative", id: "love-well", page: "love-well" },
+  { label: "Certified Evergreen", id: "story", page: "evergreen" },
+  { label: "Our Purpose", id: "pledge" },
+  { label: "What to Expect", id: "process" },
+  { label: "Reviews & Testimonials", id: "reviews", page: "reviews" },
   { label: "Awards", id: "certifications", page: "awards" },
+  { label: "Our Work", id: "case-studies", page: "case-studies" },
+  { label: "The Love Well Initiative", id: "love-well", page: "love-well" },
 ];
 
 function OurDifferenceDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
@@ -676,14 +683,31 @@ export default function SharedNavBar({
             </button>
           </div>
 
-          {/* Mobile hamburger */}
-          <button className="lg:hidden p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); openMobilePanel("root"); }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              {mobileOpen
-                ? <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
-                : <path d="M3 7h18M3 12h18M3 17h18" stroke="white" strokeWidth="1.8" strokeLinecap="round" />}
-            </svg>
-          </button>
+          {/* Mobile: Free Inspection + hamburger, side by side. Client QA
+              (Aug 19): on mobile the desktop "Free Inspection" button
+              disappears entirely (it's `hidden lg:flex`), so every page's own
+              CTA ended up doing double duty — client flagged this looking at
+              the Evergreen page: "the free inspection buttons seem off in
+              placement, can one be placed under the hamburger instead?" This
+              is that button, always reachable from the header, so page
+              content only needs its own single CTA further down, not one
+              stacked right at the top competing with the header. */}
+          {/* Grouped in one flex item — the parent row is `justify-between`,
+              so as two separate children the button drifted to the row's
+              center instead of sitting next to the hamburger. */}
+          <div className="lg:hidden flex items-center gap-2 shrink-0">
+            <button onClick={openInspection} className="px-3 py-2 font-semibold text-white transition-opacity hover:opacity-85 whitespace-nowrap"
+              style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: ".2px", border: "none", cursor: "pointer" }}>
+              Free Inspection
+            </button>
+            <button className="p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); openMobilePanel("root"); }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                {mobileOpen
+                  ? <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+                  : <path d="M3 7h18M3 12h18M3 17h18" stroke="white" strokeWidth="1.8" strokeLinecap="round" />}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile menu — full-screen overlay, drill-in to a 2nd screen for
