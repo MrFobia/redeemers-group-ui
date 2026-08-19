@@ -223,22 +223,19 @@ function AboutDropdown({ onNavigate }: { onNavigate: (p: string) => void }) {
 // Entries marked `page` are their own top-level page (sitemap "interna") —
 // the nav jumps straight there instead of stopping at an Our Difference
 // anchor first. Entries without `page` are anchors within Our Difference.
-// Client request (Aug 19): exact order + renames. "Before & after" and
-// "Featured projects" moved out to Resources (see RESOURCES_SECTIONS above),
-// replaced here by "Our Work", which points at that same case-studies
-// destination — the client's own words: "Our Work (linking to projects
-// section under Resources)". "Our Purpose" (ex "Our pledge") and "What to
-// Expect" come back into the nav — the client noted they were missing only
-// because that page isn't finished yet, not because they should stay hidden;
-// both still point at their OurDifferencePage anchor until they get their own
-// interna, same pattern as "Our Purpose" had before.
+// Client request (Aug 19): "Before & after" and "Featured projects" moved out
+// to Resources (see RESOURCES_SECTIONS above). "Our Purpose" and "What to
+// Expect" briefly came back in as anchor-only entries, then the client asked
+// to pull anchor entries back out — same "menu should offer real
+// destinations, not stop at an anchor" rule as the Aug 10 note above. "Our
+// Work" (which duplicated the Resources "Featured Projects" destination) is
+// dropped too, per client request. The two anchor sections still exist on
+// OurDifferencePage — they just aren't linked from the menu until they get
+// their own interna.
 const OUR_DIFFERENCE_SECTIONS: { label: string; id: string; page?: string }[] = [
   { label: "Certified Evergreen", id: "story", page: "evergreen" },
-  { label: "Our Purpose", id: "pledge" },
-  { label: "What to Expect", id: "process" },
   { label: "Reviews & Testimonials", id: "reviews", page: "reviews" },
   { label: "Awards", id: "certifications", page: "awards" },
-  { label: "Our Work", id: "case-studies", page: "case-studies" },
   { label: "The Love Well Initiative", id: "love-well", page: "love-well" },
 ];
 
