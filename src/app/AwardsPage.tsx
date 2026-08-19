@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "motion/react";
-import { ArrowRight, ArrowUpRight, Award as AwardIcon, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Award as AwardIcon, Newspaper, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
@@ -29,7 +29,12 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 // This is its own page per the approved sitemap ("interna") — it used to be
 // a small carousel buried inside the Certifications module on Our Difference,
 // which read as inconsistent with the sitemap's dedicated Awards node.
-type Award = { title: string; org: string; year: string; img?: string; date?: string };
+// Client QA (Aug 19): "would like the awards to be clickable where there are
+// news articles associated with them" (example: Small Business of the Year).
+// `articleUrl` is the hook for that — set once Rosie sends the real links, one
+// per award that has a published article. Nothing in AWARDS below has one yet,
+// so nothing shows the article affordance until she sends the list.
+type Award = { title: string; org: string; year: string; img?: string; date?: string; articleUrl?: string };
 
 const AWARDS: Award[] = [
   { title: "Memphis Business Journal Small Business Awards", org: "Memphis Business Journal", year: "2026", date: "June 2, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6a202bc8c9060_small-business-awards.jpeg" },
@@ -149,6 +154,11 @@ function AwardCard({ award, onClick }: { award: Award; onClick: () => void }) {
         <div className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}>
           <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 1 }}>{award.year}</span>
         </div>
+        {award.articleUrl && (
+          <div className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center" style={{ background: B }} title="News article available">
+            <Newspaper size={12} color="#fff" />
+          </div>
+        )}
       </div>
       <div>
         <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: CHAR, lineHeight: 1.4, marginBottom: 2 }}>
@@ -289,6 +299,14 @@ function AwardModal({ award, onClose }: { award: Award | null; onClose: () => vo
 
             <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "auto 0 20px" }} />
 
+            {award.articleUrl && (
+              <a href={award.articleUrl} target="_blank" rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 mb-3 hover:opacity-90 transition-opacity w-full"
+                style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.18)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "#fff", letterSpacing: 0.3 }}>
+                Read the News Article <ArrowUpRight size={14} />
+              </a>
+            )}
+
             <button onClick={() => { onClose(); openInspection(); }}
               className="inline-flex items-center gap-2 px-6 py-3 hover:opacity-90 transition-opacity w-full justify-center"
               style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "#fff", border: "none", cursor: "pointer", letterSpacing: 0.3 }}>
@@ -298,6 +316,66 @@ function AwardModal({ award, onClose }: { award: Award | null; onClose: () => vo
         </div>
       </motion.div>
     </motion.div>
+  );
+}
+
+// Client QA (Aug 19): "filter by buttons seem generic ... would prefer the
+// banner example from the tradeshow banner screenshot instead of the basic
+// boxes" — a flag/ribbon shape (flat left edge, pointed right edge), not a
+// plain rounded pill. Color follows the client's rule: white/blue on light
+// sections (high contrast), sand/white/light-blue on dark sections. Built
+// once here so it can be reused anywhere else on the site with the same
+// "generic filter button" complaint.
+function FlagFilterButton({ label, count, active, onClick, tone = "light" }: {
+  label: string; count?: number; active: boolean; onClick: () => void; tone?: "light" | "dark";
+}) {
+  const point = 12;
+  const activeBg = tone === "light" ? B : SAND;
+  const activeFg = tone === "light" ? "#fff" : DARK;
+  const idleFg = tone === "light" ? B : "#fff";
+  const idleBorder = tone === "light" ? B : "rgba(255,255,255,.4)";
+  // Section this filter sits on — the inner layer's fill has to match it so
+  // the "border" ring reads correctly. Only light/white (SURFACE.base) is
+  // wired today since that's the one section using this so far.
+  const surfaceBg = SURFACE.base;
+  const bw = 1.5; // border thickness
+  const labelNode = (
+    <>
+      {label}
+      {count !== undefined && <span style={{ opacity: 0.65, fontWeight: 600 }}>{count}</span>}
+    </>
+  );
+  const textStyle: React.CSSProperties = { fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 12.5, letterSpacing: 0.3 };
+
+  if (active) {
+    return (
+      <button onClick={onClick} className="inline-flex items-center gap-1.5 transition-all"
+        style={{ ...textStyle, padding: `9px ${point + 16}px 9px 16px`, background: activeBg, color: activeFg, border: "none",
+          clipPath: `polygon(0 0, calc(100% - ${point}px) 0, 100% 50%, calc(100% - ${point}px) 100%, 0 100%)`, cursor: "pointer" }}>
+        {labelNode}
+      </button>
+    );
+  }
+
+  // Client QA (Aug 19): "adjust the flags" — on iPad/Safari, a plain
+  // `border` combined with `clip-path` doesn't clip the border to the
+  // pointed shape; it leaves a full rectangle plus a stray notch mark
+  // instead of a clean flag outline. Fix: two stacked solid-fill shapes
+  // instead of a stroked one — clip-path on a flat fill has no such bug.
+  // Outer layer is the border color; inner layer is inset by `bw` and
+  // filled with the section's own background, leaving only a thin ring
+  // of the outer color showing — a "border" with no `border` property.
+  return (
+    <button onClick={onClick} className="relative inline-flex items-stretch transition-all" style={{ border: "none", background: "none", padding: 0, cursor: "pointer" }}>
+      <span className="absolute inset-0" style={{ background: idleBorder, clipPath: `polygon(0 0, calc(100% - ${point}px) 0, 100% 50%, calc(100% - ${point}px) 100%, 0 100%)` }} />
+      <span className="relative inline-flex items-center gap-1.5" style={{
+        ...textStyle, margin: bw, padding: `${9 - bw}px ${point + 16 - bw}px ${9 - bw}px ${16 - bw}px`,
+        background: surfaceBg, color: idleFg,
+        clipPath: `polygon(0 0, calc(100% - ${point - bw}px) 0, 100% 50%, calc(100% - ${point - bw}px) 100%, 0 100%)`,
+      }}>
+        {labelNode}
+      </span>
+    </button>
   );
 }
 
@@ -315,22 +393,11 @@ function AwardsGridSection({ onOpen }: { onOpen: (a: Award) => void }) {
   return (
     <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <Reveal className="flex items-center gap-2 flex-wrap mb-16">
+        <Reveal className="flex items-center gap-3 flex-wrap mb-16">
           {AWARD_YEARS.map((y) => {
             const count = y === "All" ? AWARDS.length : AWARDS.filter((a) => a.year === y).length;
-            const active = yearFilter === y;
             return (
-              <button key={y} onClick={() => setYearFilter(y)} className="inline-flex items-center gap-1.5 px-4 py-2 transition-all"
-                style={{
-                  fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
-                  background: active ? B : "transparent",
-                  color: active ? "#fff" : MUTED,
-                  border: `1.5px solid ${active ? B : ON_LIGHT.border}`,
-                  cursor: "pointer",
-                }}>
-                {y}
-                <span style={{ fontSize: 11, opacity: 0.6 }}>{count}</span>
-              </button>
+              <FlagFilterButton key={y} label={y} count={count} active={yearFilter === y} onClick={() => setYearFilter(y)} tone="light" />
             );
           })}
         </Reveal>
