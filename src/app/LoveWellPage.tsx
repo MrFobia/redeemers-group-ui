@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, useInView, AnimatePresence } from "motion/react";
-import { ArrowRight, X } from "lucide-react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { ArrowRight, X, Calendar, MapPin, Clock } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
@@ -12,7 +13,7 @@ import { LOVE_WELL_PROJECTS, LOVE_WELL_START_YEAR, type LoveWellProject } from "
 import imgFloor02 from "../assets/floor-02.jpeg";
 import imgLoveWellLogo from "../assets/love-well-logo.jpg";
 
-import { B, SAND, CHAR, MUTED, SURFACE, ON_LIGHT } from "./theme";
+import { B, SAND, CHAR, MUTED, SURFACE, ON_LIGHT, DARK } from "./theme";
 
 function Reveal({ children, delay = 0, className = "", style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -41,6 +42,42 @@ const LOVE_WELL_YEARS = [
 const FEATURED_PROJECT =
   LOVE_WELL_PROJECTS.find((p) => p.featured) ??
   [...LOVE_WELL_PROJECTS].sort((a, b) => Number(b.year) - Number(a.year))[0];
+
+// ─── UPCOMING EVENTS ────────────────────────────────────────────────────────
+// Client QA (Aug 19): "a full calendar doesn't make sense yet — clickable text
+// that links out or opens an expanded window like the case studies." Placeholder
+// entry below stands in until Rosie sends the real upcoming-events list; each
+// item opens the same detail-panel pattern as the project cards, or — if an
+// `href` is set — navigates straight to that page/site instead.
+// Client QA (Aug 19): "can we add an image so it's not just text, plus an
+// address and a time." `img`, `address`, `time` are optional — an event can
+// still run text-only until there's a real photo/time for it.
+type LoveWellEvent = {
+  id: string;
+  title: string;
+  date: string;
+  time?: string;
+  location: string;
+  address?: string;
+  desc: string;
+  img?: string;
+  href?: string;
+};
+
+// TEST DATA (Aug 19): time/address below are placeholders to preview the new
+// layout — not real values. Swap for Rosie's actual 5K details before launch.
+const LOVE_WELL_EVENTS: LoveWellEvent[] = [
+  {
+    id: "5k-festival",
+    title: "Love Well 5K & Festival",
+    date: "Saturday, October 17, 2026",
+    time: "8:00 AM – 12:00 PM",
+    location: "Memphis, TN",
+    address: "4145 Walnut Grove Rd, Memphis, TN 38117 (TEST DATA)",
+    desc: "Our annual 5K and festival, benefiting a different local charity each year. Registration and the full route open closer to the date — check back here or follow Redeemers on social for the announcement.",
+    img: imgFloor02,
+  },
+];
 
 function ProjectCard({ project, onClick }: { project: LoveWellProject; onClick: () => void }) {
   return (
@@ -153,12 +190,102 @@ function ProjectModal({ project, onClose }: { project: LoveWellProject | null; o
   );
 }
 
+// Client feedback (Aug 19): the first pass built this as a one-off dark
+// full-bleed panel, which didn't match the site's actual generic modal — the
+// Radix Dialog used everywhere else (CaseStudyModal in CaseStudiesShowcase.tsx:
+// white card, centered, circular dark close button, uppercase tag chip). This
+// is that same shell, just without the image carousel a case study needs —
+// "the expanded window the client asked for" reuses the site's real pattern.
+function EventModal({ event, onClose }: { event: LoveWellEvent | null; onClose: () => void }) {
+  return (
+    <DialogPrimitive.Root open={!!event} onOpenChange={(open) => !open && onClose()}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50" style={{ background: "rgba(10,11,20,.78)" }} />
+        <DialogPrimitive.Content
+          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,640px)] max-h-[92vh] overflow-y-auto rg-scroll-thin"
+          style={{ background: "#fff" }}
+          aria-describedby={undefined}
+        >
+          {event && (
+            <div className="relative">
+              <DialogPrimitive.Close
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}
+              >
+                <X size={18} color="#fff" />
+              </DialogPrimitive.Close>
+
+              {/* Client QA (Aug 19): "add an image so it's not just text" —
+                  same 16/9 photo band CaseStudyModal opens with, just without
+                  the carousel (one event = one photo, not a gallery). */}
+              {event.img && (
+                <div className="relative w-full" style={{ aspectRatio: "16/9", background: DARK }}>
+                  <ImageWithFallback src={event.img} alt={event.title} className="absolute inset-0 w-full h-full object-cover" />
+                </div>
+              )}
+
+              <div className="p-8 md:p-10">
+                <div className="flex items-center gap-3 mb-5 flex-wrap">
+                  <span className="px-3 py-1" style={{ background: "rgba(26,82,168,.08)", border: `1px solid rgba(26,82,168,.2)`, fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
+                    Upcoming Event
+                  </span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{event.date} · {event.location}</span>
+                </div>
+
+                <DialogPrimitive.Title style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,3vw,32px)", color: CHAR, letterSpacing: "-0.5px", marginBottom: 16 }}>
+                  {event.title}
+                </DialogPrimitive.Title>
+
+                {/* Client QA (Aug 19): "plus an address and a time" — only
+                    shows once Rosie sends the real ones; no placeholder
+                    values invented for either. */}
+                {(event.address || event.time) && (
+                  <div className="flex flex-col gap-2 mb-6 pb-6" style={{ borderBottom: `1px solid ${ON_LIGHT.border}` }}>
+                    {event.address && (
+                      <div className="flex items-center gap-2">
+                        <MapPin size={15} color={B} className="shrink-0" />
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR }}>{event.address}</span>
+                      </div>
+                    )}
+                    {event.time && (
+                      <div className="flex items-center gap-2">
+                        <Clock size={15} color={B} className="shrink-0" />
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR }}>{event.time}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#444", lineHeight: 1.75 }}>
+                  {event.desc}
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
+  );
+}
+
 // ─── HERO ─────────────────────────────────────────────────────────────────────
-// Client QA (Aug 10): "The LWI logo should be prominent on the page. I would
-// suggest on the right side of the page centered with the large text." The
-// logo artwork is a JPEG with a white background, so it sits on a white card
-// rather than being dropped straight onto the dark banner.
+// Client QA (Aug 19): the white logo card read as generic, and the "Giving
+// back..." headline duplicated what the stats already say better. Now the
+// stats sit where the headline was, the sand eyebrow carries the client's
+// "18+ years..." line instead of restating the page title (the breadcrumb
+// above already says "Love Well Initiative"), and the logo moves off its
+// white card to become a soft watermark behind the stats — same "photo behind
+// the content" pattern the rest of the site's hero banners use, just with the
+// LWI mark standing in for a photo. The logo JPEG still has a white background
+// (see loveWellProjects/logo asset note), so it's faded via a radial mask
+// rather than dropped in at full opacity — ask Rosie for a transparent PNG to
+// sharpen this further.
 function LoveWellHero() {
+  const stats = [
+    { k: "2015", v: "First Love Well project" },
+    { k: String(new Date().getFullYear() - LOVE_WELL_START_YEAR + 1), v: "Years of giving" },
+    { k: `${LOVE_WELL_PROJECTS.length}+`, v: "Community projects" },
+  ];
   return (
     <section className="relative overflow-hidden" style={{ background: "#0A0B14" }}>
       <div className="absolute inset-0">
@@ -171,28 +298,41 @@ function LoveWellHero() {
           backgroundSize: "80px 80px",
         }} />
 
+      {/* LWI logo watermark, behind the stats — replaces the white logo card */}
+      <img
+        src={imgLoveWellLogo}
+        alt=""
+        aria-hidden="true"
+        className="hidden md:block absolute pointer-events-none select-none"
+        style={{
+          right: "4%",
+          top: "50%",
+          transform: "translateY(-50%)",
+          width: "40%",
+          maxWidth: 460,
+          opacity: 0.16,
+          mixBlendMode: "screen",
+          WebkitMaskImage: "radial-gradient(closest-side, rgba(0,0,0,.9) 0%, rgba(0,0,0,.5) 60%, transparent 100%)",
+          maskImage: "radial-gradient(closest-side, rgba(0,0,0,.9) 0%, rgba(0,0,0,.5) 60%, transparent 100%)",
+        }}
+      />
+
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-14 md:py-16 min-h-[320px] md:min-h-[400px] lg:min-h-[440px] flex items-center">
-        <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
-          <div style={{ maxWidth: 720 }}>
-            <div className="flex items-center gap-3 mb-4 md:mb-6">
-              <div style={{ width: 24, height: 2, background: SAND, flexShrink: 0 }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
-                Love Well Initiative
-              </span>
-            </div>
-            <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4.4vw,60px)", color: "#fff", lineHeight: 1.02, letterSpacing: "-2px" }}>
-              Giving back to the neighborhoods we serve
-            </h1>
+        <div style={{ maxWidth: 760 }}>
+          <div className="flex items-center gap-3 mb-4 md:mb-6">
+            <div style={{ width: 24, height: 2, background: SAND, flexShrink: 0 }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>
+              18+ years of investing in the community we call home
+            </span>
           </div>
 
-          <div className="flex lg:justify-end">
-            <div className="flex items-center justify-center px-8 py-7 md:px-12 md:py-10" style={{ background: "#fff" }}>
-              <img
-                src={imgLoveWellLogo}
-                alt="Love Well Initiative logo"
-                className="block w-[220px] md:w-[300px] lg:w-[340px] h-auto"
-              />
-            </div>
+          <div className="flex flex-wrap gap-x-14 gap-y-8">
+            {stats.map((s) => (
+              <div key={s.v}>
+                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,68px)", color: "#fff", letterSpacing: "-2px", lineHeight: 1 }}>{s.k}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.66)", marginTop: 8 }}>{s.v}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -205,12 +345,11 @@ function LoveWellHero() {
 // free structural repairs" — so this block explains what Love Well is and the
 // nomination CTAs are gone. The projects, not the application process, are the
 // point of the page.
-function IntroSection() {
-  const stats = [
-    { k: "2015", v: "First Love Well project" },
-    { k: String(new Date().getFullYear() - LOVE_WELL_START_YEAR + 1), v: "Years of giving" },
-    { k: `${LOVE_WELL_PROJECTS.length}+`, v: "Community projects" },
-  ];
+// Client QA (Aug 19): stats moved up into the hero, so this section's old
+// stat row is now "Upcoming Events" — clickable text (no full calendar yet)
+// that opens the same expanded-panel pattern as the case studies, or jumps
+// straight to an external/internal page when an event has a link.
+function IntroSection({ onOpenEvent }: { onOpenEvent: (e: LoveWellEvent) => void }) {
   return (
     <section style={{ background: SURFACE.alt }} className="py-16 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
@@ -221,13 +360,35 @@ function IntroSection() {
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.55)", lineHeight: 1.8 }}>
             Every year adds another project to the list. Below is the work itself — start with the featured story, then browse the full history by year.
           </p>
-          <div className="flex flex-wrap gap-x-12 gap-y-6 mt-10">
-            {stats.map((s) => (
-              <div key={s.v}>
-                <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: CHAR, letterSpacing: "-1px", lineHeight: 1 }}>{s.k}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, marginTop: 6 }}>{s.v}</p>
-              </div>
-            ))}
+
+          <div className="mt-10 pt-9" style={{ borderTop: `1px solid ${ON_LIGHT.border}` }}>
+            <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10.5, color: B, letterSpacing: 3, textTransform: "uppercase", marginBottom: 16 }}>
+              Upcoming Events
+            </p>
+            <div className="flex flex-col gap-3">
+              {LOVE_WELL_EVENTS.map((event) => {
+                const content = (
+                  <>
+                    <Calendar size={17} color={B} className="shrink-0" style={{ marginTop: 2 }} />
+                    <span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 15, color: CHAR }}>{event.title}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, marginLeft: 8 }}>{event.date} · {event.location}</span>
+                    </span>
+                    <ArrowRight size={15} color={B} className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ marginTop: 2 }} />
+                  </>
+                );
+                const sharedStyle: React.CSSProperties = { fontFamily: "'Inter',sans-serif", cursor: "pointer" };
+                return event.href ? (
+                  <a key={event.id} href={event.href} target="_blank" rel="noreferrer" className="group flex items-start gap-3" style={sharedStyle}>
+                    {content}
+                  </a>
+                ) : (
+                  <button key={event.id} onClick={() => onOpenEvent(event)} className="group flex items-start gap-3 text-left" style={{ ...sharedStyle, background: "none", border: "none", padding: 0 }}>
+                    {content}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </Reveal>
       </div>
@@ -406,6 +567,7 @@ function Footer({ onBack }: { onBack: () => void }) {
 // ─── LoveWellPage ─────────────────────────────────────────────────────────────
 export default function LoveWellPage({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (p: string) => void }) {
   const [openProject, setOpenProject] = useState<LoveWellProject | null>(null);
+  const [openEvent, setOpenEvent] = useState<LoveWellEvent | null>(null);
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-[100]">
@@ -421,11 +583,12 @@ export default function LoveWellPage({ onBack, onNavigate }: { onBack: () => voi
 
         <LoveWellHero />
 
-        <IntroSection />
+        <IntroSection onOpenEvent={setOpenEvent} />
         <FeaturedProjectSection onOpen={setOpenProject} />
         <ProjectsGridSection onOpen={setOpenProject} />
 
         <ProjectModal project={openProject} onClose={() => setOpenProject(null)} />
+        <EventModal event={openEvent} onClose={() => setOpenEvent(null)} />
 
         <Footer onBack={onBack} />
       </div>
