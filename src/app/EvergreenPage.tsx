@@ -1,17 +1,25 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
-import { ArrowRight, Play, Award as AwardIcon } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Play, X } from "lucide-react";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
-import { PageHeroBanner } from "./components/PageHeroBanner";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
-import imgFloor03 from "../assets/floor-03.jpeg";
 import imgFloor04 from "../assets/floor-04.jpeg";
 
 import { B, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
+
+// Client QA (Aug 19): "The background image should be one of a forest of
+// continuous evergreen trees." No forest photo exists in the asset library
+// yet, so this is a stock placeholder in the same style as the other stock
+// fill-ins already on the site (About, Careers, Job Stories, …) — swap for
+// Redeemers' own photography if/when they send one.
+const imgEvergreenForest = "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1800";
+
+// Real Certified Evergreen emblem (Tugboat Institute), sent by the client.
+const imgCertifiedEvergreen = "https://cdn.treehouseinternetgroup.com/cms_images/218/Certified%20Evergreen.jpg";
 
 function Reveal({ children, delay = 0, className = "", style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -35,41 +43,57 @@ function Reveal({ children, delay = 0, className = "", style }: { children: Reac
 // (tugboatinstitute.com/what-is-evergreen/), per the client's source. The
 // "why this matters for you" line under each one is written copy (client:
 // "we will have to write this content") — draft, pending client sign-off.
-const SEVEN_PS: { name: string; definition: string; impact: string }[] = [
+// Client QA (Aug 19): "Under each principle section, I'd like to be able to
+// link to things where appropriate. For example, if we wanted to link to a
+// Best Places to Work award under People First." `link` is that hook.
+// TEST DATA (Aug 19): client asked for a placeholder link on every principle
+// so all 7 preview the pattern in a walkthrough, even without a confirmed
+// real destination for each yet — labels/pages below are best-guess
+// placeholders (existing pages only, nothing fabricated), not final copy.
+// Swap each `link` for the client's actual pick once she sends one per
+// principle; delete any she doesn't want linked.
+const SEVEN_PS: { name: string; definition: string; impact: string; link?: { label: string; page: string } }[] = [
   {
     name: "Purpose",
     definition: "Having a compelling reason for existing – a North Star above all else.",
     impact: "Every job ties back to why the company exists: protecting the homes people have built their lives around — not hitting a sales quota.",
+    link: { label: "Read our story (TEST LINK)", page: "our-difference#pledge" },
   },
   {
     name: "Perseverance",
     definition: "Having the ambition and the resilience to overcome obstacles and keep pursuing the purpose indefinitely into the future.",
     impact: "We're not building to flip. The lifetime warranty only means something if we're still around to honor it decades from now.",
+    link: { label: "See real homeowner stories (TEST LINK)", page: "case-studies" },
   },
   {
     name: "People First",
     definition: "Engaging a workforce of talented associates who excel as a team and are motivated by the purpose and the culture, as well as by total compensation, in the belief that, by taking care of them, they will take care of the customers, suppliers, partners, communities, and their families.",
     impact: "Take care of the crew and they take care of your home. Low turnover means the technician at your door has done this hundreds of times, not dozens.",
+    link: { label: "See our Best Places to Work award", page: "awards" },
   },
   {
     name: "Private",
     definition: "Taking advantage of the ability of closely held private companies to have a longer-term view, greater confidentiality around strategies, and more operating flexibility than public or exit-oriented businesses.",
     impact: "No private-equity owner pushing quarterly targets down to your estimate. We can make the right call for your home, not the right call for a shareholder report.",
+    link: { label: "Meet the team (TEST LINK)", page: "team" },
   },
   {
     name: "Profit",
     definition: "Not mistaking profit as the purpose of the business; but recognizing it is essential to survival and independence, and the most accurate measure of customer value delivered.",
     impact: "Profit funds the warranty, the training, and the next generation of the business — it's a result of doing right by you, not the reason we show up.",
+    link: { label: "See our financing options (TEST LINK)", page: "pricing" },
   },
   {
     name: "Paced Growth",
     definition: "Having the discipline to focus on long-term strategy, balance short-term and long-term performance, and grow steadily and consistently from year to year.",
     impact: "We'd rather grow slow and keep the standard than grow fast and start cutting corners on materials, training, or crew quality.",
+    link: { label: "Browse our project history (TEST LINK)", page: "case-studies" },
   },
   {
     name: "Pragmatic Innovation",
     definition: "Embracing a continuous-improvement process built around taking capital-efficient, calculated risks to innovate creatively within constraints.",
     impact: "New methods and materials get adopted once they're proven to hold up — not because they're trendy.",
+    link: { label: "See our methods & materials (TEST LINK)", page: "resources" },
   },
 ];
 
@@ -92,47 +116,68 @@ const FEATURED_AWARDS = [
   { title: "Best Place To Work 2024", org: "Industry Recognition", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/66fb00bad945f_redeemers-12.jpg" },
 ];
 
-// ─── 1. What Is Evergreen ─────────────────────────────────────────────────────
-function WhatIsSection() {
+// ─── 1. Hero ──────────────────────────────────────────────────────────────────
+// Client QA (Aug 19): the old dark PageHeroBanner ("What Is Evergreen?" title +
+// generic lede) and the section right under it ("A business built to last, not
+// to be sold") said the same thing twice — client: "the first section seems
+// redundant." Fix folds them into one: the dark banner stays (client: "keeping
+// the dark background"), but its content is now the "business built to last"
+// copy that used to live below, its background becomes the evergreen-forest
+// photo instead of a job-site photo, and the Certified Evergreen emblem — the
+// client's "belongs at the very top of the page" — leads the section. Only one
+// CTA now, where there used to be two stacked ones between this banner and the
+// section below.
+function HeroSection() {
   return (
-    <section id="what-is" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          <Reveal>
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-5 h-[2px]" style={{ background: B }} />
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>What is Evergreen?</span>
-            </div>
-            <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
-              A business built to last, not to be sold
-            </h2>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.6)", lineHeight: 1.8 }}>
-              <p style={{ marginBottom: 18 }}>
-                Evergreen isn't a marketing label — it's a business philosophy from the Tugboat Institute, a global community of privately held companies built to endure for generations rather than be optimized for a quick exit.
-              </p>
-              <p>
-                Evergreen companies choose purpose over a sale, and long-term thinking over quarterly targets. Redeemers Group is one of them — which is why the same crew, the same standards, and the same warranty are still here years after the work is done.
-              </p>
-            </div>
-            <button onClick={() => openInspection()} className="group mt-8 inline-flex items-center gap-2 px-7 py-4 transition-all"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
-              Schedule Free Inspection
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </button>
-          </Reveal>
+    <section className="relative overflow-hidden" style={{ background: "#0A0B14" }}>
+      <div className="absolute inset-0">
+        <ImageWithFallback src={imgEvergreenForest} alt="A forest of evergreen trees" className="w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(10,11,20,0.94) 0%, rgba(10,11,20,0.85) 46%, rgba(11,28,74,0.6) 100%)" }} />
+      </div>
+      <div className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px)",
+          backgroundSize: "80px 80px",
+        }} />
 
-          <Reveal delay={0.1} className="relative overflow-hidden" style={{ borderRadius: 2 }}>
-            <ImageWithFallback src={imgFloor03} alt="Redeemers team on site" className="w-full object-cover" style={{ height: 460 }} />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.5) 0%,transparent 55%)" }} />
-          </Reveal>
-        </div>
+      <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-20 md:py-24 lg:py-28">
+        <Reveal style={{ maxWidth: 720 }}>
+          {/* Certified Evergreen emblem — real Tugboat Institute mark, sent by
+              the client. Its own artwork has a white background (like the
+              Love Well logo), so it sits on a white card instead of being
+              dropped straight onto the dark hero. */}
+          <div className="inline-flex items-center justify-center mb-8 px-5 py-4" style={{ background: "#fff" }}>
+            <img src={imgCertifiedEvergreen} alt="Certified Evergreen" className="block h-[64px] md:h-[76px] w-auto" />
+          </div>
+
+          <div className="flex items-center gap-2 mb-5">
+            <div className="w-5 h-[2px]" style={{ background: SAND }} />
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase" }}>Our Difference · Evergreen</span>
+          </div>
+          <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4.4vw,58px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1.5px", marginBottom: 24 }}>
+            A business built to last, not to be sold
+          </h1>
+          <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(255,255,255,.7)", lineHeight: 1.8 }}>
+            <p style={{ marginBottom: 18 }}>
+              Evergreen isn't a marketing label — it's a business philosophy from the Tugboat Institute, a global community of privately held companies built to endure for generations rather than be optimized for a quick exit.
+            </p>
+            <p>
+              Evergreen companies choose purpose over a sale, and long-term thinking over quarterly targets. Redeemers Group is one of them — which is why the same crew, the same standards, and the same warranty are still here years after the work is done.
+            </p>
+          </div>
+          <button onClick={() => openInspection()} className="group mt-8 inline-flex items-center gap-2 px-7 py-4 transition-all"
+            style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
+            Schedule Free Inspection
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+          </button>
+        </Reveal>
       </div>
     </section>
   );
 }
 
 // ─── 2. The 7Ps ───────────────────────────────────────────────────────────────
-function SevenPsSection() {
+function SevenPsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
     <section id="seven-ps" style={{ background: SURFACE.alt }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
@@ -175,9 +220,16 @@ function SevenPsSection() {
                 <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 6 }}>
                   What it means for you
                 </p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: CHAR, lineHeight: 1.65 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: CHAR, lineHeight: 1.65, marginBottom: p.link ? 10 : 0 }}>
                   {p.impact}
                 </p>
+                {p.link && (
+                  <button onClick={() => onNavigate(p.link!.page)} className="group inline-flex items-center gap-1.5"
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    {p.link.label}
+                    <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </button>
+                )}
               </div>
             </div>
           ))}
@@ -188,26 +240,22 @@ function SevenPsSection() {
 }
 
 // ─── 3. Certified Evergreen ───────────────────────────────────────────────────
+// Client QA (Aug 19): the emblem moved to the very top of the page (see
+// HeroSection), which freed up this section's old text+emblem slot — and the
+// client separately flagged that the video block felt "put there because
+// why not," isolated in its own section with nothing to do with what was
+// around it. Fix for both: the video now fills that freed-up slot, paired
+// with the certification copy it's actually about (client's own video title
+// is literally "What being Evergreen means to us" — that's the same claim
+// this text is making). One section, one idea, instead of two disconnected
+// ones.
 function CertifiedSection() {
+  const [videoOpen, setVideoOpen] = useState(false);
   return (
     <section id="certified" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          {/* Emblem — TODO(asset): client flagged they still need to send a
-              high-quality file for the Certified Evergreen emblem. Bordered
-              placeholder holds the spot instead of a fake/stock badge. */}
-          <Reveal delay={0.1} className="order-2 lg:order-1">
-            <div className="flex items-center justify-center" style={{ height: 340, background: SURFACE.alt, border: `1px dashed ${ON_LIGHT.border}` }}>
-              <div className="flex flex-col items-center gap-3 text-center px-8">
-                <AwardIcon size={40} color={SAND} strokeWidth={1.4} />
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, lineHeight: 1.6 }}>
-                  Certified Evergreen emblem<br />— pending high-res file from client
-                </p>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal className="order-1 lg:order-2">
+          <Reveal>
             <div className="flex items-center gap-2 mb-5">
               <div className="w-5 h-[2px]" style={{ background: B }} />
               <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Certified Evergreen</span>
@@ -221,27 +269,13 @@ function CertifiedSection() {
               ))}
             </div>
           </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-// ─── 4. Video + Awards strip ──────────────────────────────────────────────────
-// Client: "these are just items that can visually spice up the page — video,
-// 2 awards, Certified Evergreen emblem." Emblem lives with the certification
-// copy above (it's the visual for that claim); video + awards get their own
-// closing strip so the page doesn't end on a wall of text.
-function VideoAwardsSection() {
-  return (
-    <section id="video-awards" style={{ background: SURFACE.alt }} className="py-20 lg:py-28">
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Video placeholder — TODO(asset): client hasn't sent the video
-              file yet. Play-button overlay on a still marks the spot. */}
-          <Reveal className="relative overflow-hidden group cursor-pointer" style={{ minHeight: 320 }}>
-            <ImageWithFallback src={imgFloor04} alt="Evergreen story video" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.45)" }} />
+          {/* Video, TODO(asset): file hasn't come in from the client yet —
+              lightbox is wired to embed it as soon as it does (same pattern
+              LoveWellPage/CaseStudiesShowcase use for theirs). */}
+          <Reveal delay={0.1} className="relative overflow-hidden group cursor-pointer" style={{ aspectRatio: "4/3" }} onClick={() => setVideoOpen(true)}>
+            <ImageWithFallback src={imgFloor04} alt="What being Evergreen means to us" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.4)" }} />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
                 style={{ background: "rgba(255,255,255,.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,.35)" }}>
@@ -249,27 +283,57 @@ function VideoAwardsSection() {
               </div>
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-6">
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 12, color: SAND, letterSpacing: 2, textTransform: "uppercase", marginBottom: 4 }}>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 2, textTransform: "uppercase", marginBottom: 4 }}>
                 Watch
               </p>
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: "#fff" }}>
+              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(18px,2vw,22px)", color: "#fff", letterSpacing: "-0.3px" }}>
                 What being Evergreen means to us
               </p>
             </div>
           </Reveal>
+        </div>
+      </div>
 
-          {/* 2 featured awards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {FEATURED_AWARDS.map((award, i) => (
-              <Reveal key={award.title} delay={i * 0.1} className="flex flex-col h-full">
-                <div className="relative overflow-hidden flex-1" style={{ border: `1px solid ${ON_LIGHT.border}`, minHeight: 260 }}>
-                  <ImageWithFallback src={award.img} alt={award.title} className="absolute inset-0 w-full h-full object-cover" />
-                </div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: CHAR, marginTop: 12, lineHeight: 1.4 }}>{award.title}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{award.org}</p>
-              </Reveal>
-            ))}
+      {videoOpen && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10" style={{ background: "rgba(0,0,0,.88)" }} onClick={() => setVideoOpen(false)}>
+          <div className="relative w-full flex flex-col items-center gap-4" style={{ maxWidth: 900 }} onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setVideoOpen(false)} className="self-end inline-flex items-center gap-2 px-4 py-2.5 hover:bg-white/15 transition-colors"
+              style={{ background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.28)", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>
+              <X size={15} color="#fff" />
+              Close
+            </button>
+            <div className="w-full flex flex-col items-center justify-center gap-3 text-center" style={{ aspectRatio: "16/9", background: "#111", border: "1px solid rgba(255,255,255,.12)" }}>
+              <Play size={32} color={SAND} />
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.6)", maxWidth: 360 }}>
+                Video pending from the client — this lightbox is wired to embed it as soon as the file/link comes in.
+              </p>
+            </div>
           </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ─── 5. Awards strip ──────────────────────────────────────────────────────────
+function AwardsStripSection() {
+  return (
+    <section id="awards-strip" style={{ background: SURFACE.base }} className="py-20 lg:py-28">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+        <Reveal className="flex items-center gap-2 mb-10">
+          <div className="w-5 h-[2px]" style={{ background: B }} />
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 4, textTransform: "uppercase" }}>Recognition</span>
+        </Reveal>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6" style={{ maxWidth: 780 }}>
+          {FEATURED_AWARDS.map((award, i) => (
+            <Reveal key={award.title} delay={i * 0.1} className="flex flex-col h-full">
+              <div className="relative overflow-hidden flex-1" style={{ border: `1px solid ${ON_LIGHT.border}`, minHeight: 220 }}>
+                <ImageWithFallback src={award.img} alt={award.title} className="absolute inset-0 w-full h-full object-cover" />
+              </div>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: CHAR, marginTop: 12, lineHeight: 1.4 }}>{award.title}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{award.org}</p>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
@@ -359,24 +423,10 @@ export default function EvergreenPage({ onBack, onNavigate }: { onBack: () => vo
           { label: "Evergreen" },
         ]} />
 
-        <PageHeroBanner
-          image={imgFloor03}
-          imageAlt="Redeemers Group — Evergreen certified"
-          eyebrow="Our Difference"
-          title="What Is Evergreen?"
-          lede="A business philosophy built on seven principles, and the reason Redeemers Group is still standing behind every job it's ever done."
-        >
-          <button onClick={() => openInspection()}
-            className="inline-flex items-center gap-2 px-6 py-3.5 hover:opacity-90 transition-opacity"
-            style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "#fff", border: "none", cursor: "pointer", letterSpacing: 0.3 }}>
-            Get Your Free Inspection <ArrowRight size={14} />
-          </button>
-        </PageHeroBanner>
-
-        <WhatIsSection />
-        <SevenPsSection />
+        <HeroSection />
+        <SevenPsSection onNavigate={onNavigate ?? (() => onBack())} />
         <CertifiedSection />
-        <VideoAwardsSection />
+        <AwardsStripSection />
         <CtaBanner />
 
         <Footer onBack={onBack} />
