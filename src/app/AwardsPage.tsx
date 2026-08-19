@@ -31,13 +31,15 @@ function Reveal({ children, delay = 0, className = "" }: { children: React.React
 // which read as inconsistent with the sitemap's dedicated Awards node.
 // Client QA (Aug 19): "would like the awards to be clickable where there are
 // news articles associated with them" (example: Small Business of the Year).
-// `articleUrl` is the hook for that — set once Rosie sends the real links, one
-// per award that has a published article. Nothing in AWARDS below has one yet,
-// so nothing shows the article affordance until she sends the list.
+// `articleUrl` is the hook for that. TEST DATA (Aug 19): 3 awards below got a
+// placeholder articleUrl on example.com — a domain reserved for
+// documentation/testing (IANA), not a real news outlet — so the badge + modal
+// link preview without pointing at a fabricated "real" article. Swap for
+// Rosie's actual links once she sends the list of which awards have one.
 type Award = { title: string; org: string; year: string; img?: string; date?: string; articleUrl?: string };
 
 const AWARDS: Award[] = [
-  { title: "Memphis Business Journal Small Business Awards", org: "Memphis Business Journal", year: "2026", date: "June 2, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6a202bc8c9060_small-business-awards.jpeg" },
+  { title: "Memphis Business Journal Small Business Awards", org: "Memphis Business Journal", year: "2026", date: "June 2, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6a202bc8c9060_small-business-awards.jpeg", articleUrl: "https://example.com/test-article/mbj-small-business-awards-2026" },
   { title: "Top Work Places, Top 3 Small Business", org: "Top Work Places", year: "2026", date: "February 4, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/699c9437bfd18_image-12.jpg" },
   { title: "2025 Best Evergreen Company", org: "Industry Recognition", year: "2026", date: "March 17, 2026", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/69bc31ecc2ddc_image-8.jpg" },
   { title: "Commercial Appeal Top Workplaces 2024", org: "Commercial Appeal", year: "2025", date: "February 6, 2025", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/67a652585c968_img8180.jpg" },
@@ -56,7 +58,7 @@ const AWARDS: Award[] = [
   { title: "BBB A+ Rating and Accreditation in Arkansas", org: "BBB", year: "2023", date: "July 1, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/64de4b43a9a33_img3741.jpg" },
   { title: "Best Places to Work 2023", org: "Industry Recognition", year: "2023", date: "September 12, 2023", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6511ea84d29f8_award.jpg" },
   { title: "Best Places to Work honoree", org: "Industry Recognition", year: "2022", date: "September 26, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6358548f5b0d7_img2180.jpg" },
-  { title: "Spirit Award by The Memphis Business Journal", org: "Memphis Business Journal", year: "2022", date: "September 26, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/635856168b853_32ac9ccd-d20e-409b-b78a-59d9d80d3998.jpg" },
+  { title: "Spirit Award by The Memphis Business Journal", org: "Memphis Business Journal", year: "2022", date: "September 26, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/635856168b853_32ac9ccd-d20e-409b-b78a-59d9d80d3998.jpg", articleUrl: "https://example.com/test-article/mbj-spirit-award-2022" },
   { title: "Supportworks #20 Concrete Dealer 2021", org: "Supportworks", year: "2022", date: "April 7, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9aa198c09_sw-20-2021-concrete.png" },
   { title: "Supportworks TOP TEN NexusPro Dealer 2021", org: "Supportworks", year: "2022", date: "April 7, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9b65e9076_sw-9-2021-nexus.png" },
   { title: "Supportworks #35 Concrete Dealer 2021", org: "Supportworks", year: "2022", date: "April 7, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9bedb3b08_sw-35-2021-found-prod.png" },
@@ -65,7 +67,7 @@ const AWARDS: Award[] = [
   { title: "Enerbank 2021 Rising Star", org: "Enerbank", year: "2022", date: "May 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/62828cd35fe53_rising-star-2021.png" },
   { title: "BBB A+ Rating and Accreditation", org: "BBB", year: "2022", date: "May 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e8391a47b0_bbb-accred-2020.png" },
   { title: "Best Places to Work 2018", org: "Industry Recognition", year: "2022", date: "May 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7f2952595_bptw-by-mbj-2018.png" },
-  { title: "Small Business of the Year Honoree", org: "Industry Recognition", year: "2022", date: "September 6, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/635856b57b5bc_sba-logo-horizontal.jpg" },
+  { title: "Small Business of the Year Honoree", org: "Industry Recognition", year: "2022", date: "September 6, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/635856b57b5bc_sba-logo-horizontal.jpg", articleUrl: "https://example.com/test-article/small-business-of-the-year-2022" },
   { title: "Top 20 dealer in crawlspace encapsulation for 2021-2022", org: "Contractor Nation", year: "2022", date: "September 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/6358538dd1ff7_img2181.jpg" },
   { title: "Basement Systems Top 50 dealer 2021-2022 for waterproofing", org: "Basement Systems", year: "2022", date: "September 16, 2022", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/635852d8cd2f9_img2182.jpg" },
   { title: "HomeAdvisor Elite Service Professional", org: "HomeAdvisor", year: "2021", date: "January 1, 2021" },
