@@ -57,7 +57,6 @@ const SEVEN_PS: { name: string; definition: string; impact: string; link?: { lab
     name: "Purpose",
     definition: "Having a compelling reason for existing – a North Star above all else.",
     impact: "Every job ties back to why the company exists: protecting the homes people have built their lives around — not hitting a sales quota.",
-    link: { label: "Read our story (TEST LINK)", page: "our-difference#pledge" },
   },
   {
     name: "Perseverance",
