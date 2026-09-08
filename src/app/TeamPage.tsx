@@ -73,7 +73,7 @@ function TeamGridSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                     fontFamily: "'Articulat CF',sans-serif", fontWeight: 800,
                     fontSize: "clamp(14px, 1.6vw, 24px)", lineHeight: 1.1,
                     letterSpacing: "-0.5px", whiteSpace: "nowrap",
-                    color: isActive ? CHAR : "rgba(10,11,20,.28)",
+                    color: isActive ? CHAR : "rgba(62,60,73,.28)",
                     transition: "color 0.3s ease",
                   }}>
                     {dept}
@@ -108,20 +108,20 @@ function TeamGridSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
                   transition={{ duration: 0.25 }}
-                  style={{ background: "linear-gradient(0deg, rgba(10,11,20,.85) 0%, rgba(26,82,168,.35) 100%)" }}
+                  style={{ background: "linear-gradient(0deg, rgba(62,60,73,.85) 0%, rgba(0,80,159,.35) 100%)" }}
                 >
                   <span className="inline-flex items-center gap-1.5"
-                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#C4AB6C" }}>
+                    style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#D8CBA5" }}>
                     See profile
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                      <path d="M5 12h14M13 6l6 6-6 6" stroke="#C4AB6C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke="#D8CBA5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
                 </motion.div>
               </div>
               <div className="flex flex-col items-center gap-1 text-center w-full">
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: CHAR, lineHeight: 1.3 }}>{m.name}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.4)" }}>{m.title}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.4)" }}>{m.title}</p>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: B, letterSpacing: 1, textTransform: "uppercase", marginTop: 2 }}>{m.dept}</p>
               </div>
             </Reveal>

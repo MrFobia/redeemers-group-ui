@@ -36,10 +36,10 @@ function HeroCase({ c, num, onOpen }: { c: CaseStudy; num: number; onOpen: () =>
         </div>
 
         <div className="order-2 lg:order-1 relative flex flex-col justify-between w-full lg:w-[44%] lg:shrink-0 z-10 px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12"
-          style={{ background: "#053770" }}>
+          style={{ background: "#003771" }}>
           <div>
             <div className="flex items-center gap-3 mb-5 lg:mb-10">
-              <span className="px-3 py-1" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>{c.tag}</span>
+              <span className="px-3 py-1" style={{ background: "rgba(216,203,165,.18)", border: "1px solid rgba(216,203,165,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>{c.tag}</span>
               <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.45)" }}>{c.loc}</span>
               <span className="ml-auto hidden sm:inline" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 13, color: "rgba(255,255,255,.1)", letterSpacing: 2 }}>{String(num).padStart(2, "0")}</span>
             </div>
@@ -87,7 +87,7 @@ function MediumCaseA({ c, num, onOpen }: { c: CaseStudy; num: number; onOpen: ()
         </div>
         <div className="hidden lg:block absolute top-2 right-4" style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 110, color: "rgba(255,255,255,.05)", lineHeight: 1, letterSpacing: "-4px" }}>{String(num).padStart(2, "0")}</div>
       </div>
-      <div className="shrink-0 px-6 py-5 lg:px-8 lg:py-6 flex flex-col gap-2" style={{ background: "#053770" }}>
+      <div className="shrink-0 px-6 py-5 lg:px-8 lg:py-6 flex flex-col gap-2" style={{ background: "#003771" }}>
         <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: "clamp(24px,3vw,42px)", color: "#fff", lineHeight: 0.95, textTransform: "uppercase", letterSpacing: "-0.5px" }}>{c.title}</h3>
         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.7)" }}>{c.desc}</p>
         <span className="inline-flex items-center gap-2 group/link mt-1"
@@ -105,7 +105,7 @@ function MediumCaseA({ c, num, onOpen }: { c: CaseStudy; num: number; onOpen: ()
 // Navy card, image strip on top, bold type below — the narrower (5-col) half.
 function MediumCaseB({ c, num, onOpen }: { c: CaseStudy; num: number; onOpen: () => void }) {
   return (
-    <div className="relative overflow-hidden group cursor-pointer flex flex-col h-[300px] sm:h-[340px] lg:h-[400px]" style={{ background: "#053770" }} onClick={onOpen}>
+    <div className="relative overflow-hidden group cursor-pointer flex flex-col h-[300px] sm:h-[340px] lg:h-[400px]" style={{ background: "#003771" }} onClick={onOpen}>
       <div className="relative overflow-hidden shrink-0 h-[48%]">
         <ImageWithFallback src={c.img} alt={c.title}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]" />
@@ -146,7 +146,7 @@ export function CaseStudyModal({ card, onOpenChange }: { card: CaseStudy | null;
   return (
     <DialogPrimitive.Root open={!!card} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50" style={{ background: "rgba(10,11,20,.78)" }} />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50" style={{ background: "rgba(62,60,73,.78)" }} />
         <DialogPrimitive.Content
           className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,980px)] max-h-[92vh] overflow-y-auto rg-scroll-thin"
           style={{ background: "#fff" }}
@@ -156,7 +156,7 @@ export function CaseStudyModal({ card, onOpenChange }: { card: CaseStudy | null;
             <div className="relative">
               <DialogPrimitive.Close
                 className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}
+                style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}
               >
                 <X size={18} color="#fff" />
               </DialogPrimitive.Close>
@@ -166,17 +166,17 @@ export function CaseStudyModal({ card, onOpenChange }: { card: CaseStudy | null;
                   {card.gallery.map((slide, i) => (
                     <div key={i} className="relative shrink-0 w-full" style={{ aspectRatio: "16/9" }}>
                       <ImageWithFallback src={slide.img} alt={slide.caption} className="absolute inset-0 w-full h-full object-cover" />
-                      <div className="absolute bottom-0 left-0 right-0 px-6 py-4" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.85) 0%, rgba(10,11,20,0) 100%)" }}>
+                      <div className="absolute bottom-0 left-0 right-0 px-6 py-4" style={{ background: "linear-gradient(0deg, rgba(62,60,73,.85) 0%, rgba(62,60,73,0) 100%)" }}>
                         <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.85)" }}>{slide.caption}</span>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <button onClick={() => emblaApi?.scrollPrev()} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}>
+                <button onClick={() => emblaApi?.scrollPrev()} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 </button>
-                <button onClick={() => emblaApi?.scrollNext()} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}>
+                <button onClick={() => emblaApi?.scrollNext()} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 </button>
 
@@ -191,7 +191,7 @@ export function CaseStudyModal({ card, onOpenChange }: { card: CaseStudy | null;
 
               <div className="p-8 md:p-10">
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="px-3 py-1" style={{ background: "rgba(26,82,168,.08)", border: `1px solid rgba(26,82,168,.2)`, fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
+                  <span className="px-3 py-1" style={{ background: "rgba(0,80,159,.08)", border: `1px solid rgba(0,80,159,.2)`, fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
                   <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{card.loc}</span>
                 </div>
                 <DialogPrimitive.Title style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,3vw,32px)", color: CHAR, letterSpacing: "-0.5px", marginBottom: 20 }}>
@@ -200,11 +200,11 @@ export function CaseStudyModal({ card, onOpenChange }: { card: CaseStudy | null;
 
                 <div className="flex flex-col gap-4 mb-8">
                   {card.story.map((p, i) => (
-                    <p key={i} style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#444", lineHeight: 1.75 }}>{p}</p>
+                    <p key={i} style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.80)", lineHeight: 1.75 }}>{p}</p>
                   ))}
                 </div>
 
-                <div className="flex gap-8 mb-8 pt-6" style={{ borderTop: "1px solid rgba(0,0,0,.08)" }}>
+                <div className="flex gap-8 mb-8 pt-6" style={{ borderTop: "1px solid rgba(62,60,73,.08)" }}>
                   {card.stats.map(([val, label]) => (
                     <div key={val + label}>
                       <div style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: B, lineHeight: 1 }}>{val}</div>
@@ -289,14 +289,14 @@ export function CaseStudiesGrid({ items, onOpen }: { items: CaseStudy[]; onOpen:
           <button onClick={() => goToPage(Math.max(0, page - 1))} disabled={page === 0}
             aria-label="Previous page"
             className="w-10 h-10 flex items-center justify-center disabled:opacity-30 transition-colors hover:bg-black/5"
-            style={{ border: "1.5px solid rgba(0,0,0,.12)", background: "none", cursor: page === 0 ? "default" : "pointer" }}>
+            style={{ border: "1.5px solid rgba(62,60,73,.12)", background: "none", cursor: page === 0 ? "default" : "pointer" }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
           {Array.from({ length: totalPages }).map((_, i) => (
             <button key={i} onClick={() => goToPage(i)}
               className="w-10 h-10 flex items-center justify-center transition-colors"
               style={{
-                border: `1.5px solid ${i === page ? B : "rgba(0,0,0,.12)"}`,
+                border: `1.5px solid ${i === page ? B : "rgba(62,60,73,.12)"}`,
                 background: i === page ? B : "none",
                 color: i === page ? "#fff" : CHAR,
                 fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, cursor: "pointer",
@@ -307,7 +307,7 @@ export function CaseStudiesGrid({ items, onOpen }: { items: CaseStudy[]; onOpen:
           <button onClick={() => goToPage(Math.min(totalPages - 1, page + 1))} disabled={page === totalPages - 1}
             aria-label="Next page"
             className="w-10 h-10 flex items-center justify-center disabled:opacity-30 transition-colors hover:bg-black/5"
-            style={{ border: "1.5px solid rgba(0,0,0,.12)", background: "none", cursor: page === totalPages - 1 ? "default" : "pointer" }}>
+            style={{ border: "1.5px solid rgba(62,60,73,.12)", background: "none", cursor: page === totalPages - 1 ? "default" : "pointer" }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={CHAR} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
         </div>

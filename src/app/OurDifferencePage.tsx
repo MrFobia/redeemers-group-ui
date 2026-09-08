@@ -71,7 +71,7 @@ function HeroSection() {
       <ImageWithFallback
         src={imgFloor04}
         alt="Our Difference" className="absolute inset-0 w-full h-full object-cover" />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.92) 0%,rgba(10,11,20,0.68) 55%,rgba(10,11,20,0.40) 100%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(62,60,73,0.92) 0%,rgba(62,60,73,0.68) 55%,rgba(62,60,73,0.40) 100%)" }} />
       <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-10 md:py-12 min-h-[320px] md:min-h-[360px] lg:min-h-[400px] flex flex-col justify-center">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
@@ -115,13 +115,13 @@ const TRUST_STATS = [
 
 function TrustBar() {
   return (
-    <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }}>
+    <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(62,60,73,.06)" }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
         {TRUST_STATS.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.08}>
             <div className="flex flex-col items-center text-center gap-2">
               <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3vw,40px)", color: B, lineHeight: 1 }}>{s.val}</p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.4)", letterSpacing: 1.5, textTransform: "uppercase" }}>{s.label}</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.4)", letterSpacing: 1.5, textTransform: "uppercase" }}>{s.label}</p>
             </div>
           </Reveal>
         ))}
@@ -167,7 +167,7 @@ function ProcessSection() {
           <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4.5vw,56px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
             Your experience, start to finish
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.55)" }}>Four simple steps — no surprises, no pressure.</p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(62,60,73,.55)" }}>Four simple steps — no surprises, no pressure.</p>
         </Reveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
@@ -177,14 +177,14 @@ function ProcessSection() {
                 <div className="relative overflow-hidden" style={{ aspectRatio: "3/2" }}>
                   <ImageWithFallback src={step.img} alt={step.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.6) 0%,transparent 65%)" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(62,60,73,.6) 0%,transparent 65%)" }} />
                   <div className="absolute top-4 left-4 px-2.5 py-1" style={{ background: B }}>
                     <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 12, color: "#fff", letterSpacing: 1 }}>{step.n}</span>
                   </div>
                 </div>
                 <div className="flex flex-col flex-1 p-6">
                   <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: CHAR, lineHeight: 1.2, marginBottom: 8 }}>{step.title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.5)", lineHeight: 1.7 }}>{step.desc}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.5)", lineHeight: 1.7 }}>{step.desc}</p>
                 </div>
               </div>
             </Reveal>
@@ -221,7 +221,7 @@ function StorySection({ onNavigate }: { onNavigate?: (p: string) => void }) {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
               A family business, built on one bad experience
             </h2>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.6)", lineHeight: 1.8 }}>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(62,60,73,.6)", lineHeight: 1.8 }}>
               <p style={{ marginBottom: 18 }}>
                 Redeemers Group started the way most small businesses do — out of frustration. Our founder had a crawl space problem that three national contractors quoted wrong, fixed halfway, or simply never called back about.
               </p>
@@ -248,7 +248,7 @@ function StorySection({ onNavigate }: { onNavigate?: (p: string) => void }) {
               <ImageWithFallback
                 src={imgFloor03}
                 alt="Redeemers team" className="w-full object-cover" style={{ height: 340 }} />
-              <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.55) 0%,transparent 55%)" }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(62,60,73,.55) 0%,transparent 55%)" }} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -261,7 +261,7 @@ function StorySection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,3.5vw,48px)", color: B, lineHeight: 1, marginBottom: 6 }}>
                     {s.raw ? s.raw : <Counter to={(s as { val: number; suffix: string }).val} suffix={(s as { val: number; suffix: string }).suffix} />}
                   </p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.4)", letterSpacing: 0.5 }}>{s.label}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.4)", letterSpacing: 0.5 }}>{s.label}</p>
                 </div>
               ))}
             </div>
@@ -307,7 +307,7 @@ function PledgeColumn({ heading, items, tone }: { heading: string; items: { titl
       </div>
       <div className="flex flex-col">
         {items.map((item, i) => (
-          <div key={i} className="flex gap-4 py-4" style={{ borderTop: i > 0 ? "1px solid rgba(10,11,20,.07)" : "none" }}>
+          <div key={i} className="flex gap-4 py-4" style={{ borderTop: i > 0 ? "1px solid rgba(62,60,73,.07)" : "none" }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="shrink-0" style={{ marginTop: 3 }}>
               {tone === "never"
                 ? <path d="M6 6l12 12M18 6L6 18" stroke={iconColor} strokeWidth="1.8" strokeLinecap="round" />
@@ -367,9 +367,9 @@ function PledgeSection() {
 
         {/* Desktop / tablet — one ledger, split by a hairline rule + wax seal */}
         <Reveal delay={0.05} className="hidden lg:block">
-          <div className="relative" style={{ border: "1px solid rgba(10,11,20,.1)", background: "#fff" }}>
+          <div className="relative" style={{ border: "1px solid rgba(62,60,73,.1)", background: "#fff" }}>
             <div className="grid grid-cols-2">
-              <div className="px-8 md:px-12 py-10 lg:py-12" style={{ borderRight: "1px solid rgba(10,11,20,.1)" }}>
+              <div className="px-8 md:px-12 py-10 lg:py-12" style={{ borderRight: "1px solid rgba(62,60,73,.1)" }}>
                 <PledgeColumn heading="We will never" items={NEVER_DO} tone="never" />
               </div>
               <div className="px-8 md:px-12 py-10 lg:py-12">
@@ -382,7 +382,7 @@ function PledgeSection() {
               top: "50%", left: "50%", transform: "translate(-50%,-50%)",
               width: 88, height: 88, borderRadius: "50%",
               background: NAVY, border: "4px solid #fff",
-              boxShadow: "0 10px 28px rgba(10,11,20,.18)",
+              boxShadow: "0 10px 28px rgba(62,60,73,.18)",
             }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill={SAND}>
                 <path d="M12 2l2.6 6.1 6.6.5-5 4.4 1.6 6.4L12 16l-5.8 3.4 1.6-6.4-5-4.4 6.6-.5z" />
@@ -400,7 +400,7 @@ function PledgeSection() {
             <div className="flex">
               {slides.map((s) => (
                 <div key={s.key} className="flex-[0_0_100%] min-w-0 pr-1">
-                  <div className="px-6 py-9" style={{ border: "1px solid rgba(10,11,20,.1)", background: "#fff" }}>
+                  <div className="px-6 py-9" style={{ border: "1px solid rgba(62,60,73,.1)", background: "#fff" }}>
                     <PledgeColumn heading={s.heading} items={s.items} tone={s.tone} />
                   </div>
                 </div>
@@ -504,10 +504,10 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
       <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
         <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
           {TESTIMONIALS.map((t, i) => (
-            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.07)" }}>
+            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(62,60,73,.07)" }}>
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
+                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
                   <button onClick={() => setSelectedIdx(i)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
@@ -520,12 +520,12 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
                     <svg key={si} width="14" height="14" viewBox="0 0 24 24" fill={SAND}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                   ))}
                 </div>
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(26,82,168,.15)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#444", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(0,80,159,.15)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.80)", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>
                   {t.quote}
                 </p>
-                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(0,0,0,.07)" }}>
-                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "#eee" }}>
+                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(62,60,73,.07)" }}>
+                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "rgba(62,60,73,.09)" }}>
                     <ImageWithFallback src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
                   </div>
                   <div>
@@ -543,7 +543,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
         {TESTIMONIALS.map((_, i) => (
           <button key={i} onClick={() => emblaApi?.scrollTo(i)}
             className="rounded-full transition-all duration-300"
-            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)", border: "none", cursor: "pointer", padding: 0 }} />
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.15)", border: "none", cursor: "pointer", padding: 0 }} />
         ))}
       </div>
 
@@ -668,16 +668,16 @@ function BeforeAfterSlider({ before, after, beforeLabel = "Before", afterLabel =
       </div>
 
       {/* Labels */}
-      <span className="absolute top-4 left-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(10,11,20,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{beforeLabel}</span>
-      <span className="absolute top-4 right-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(10,11,20,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{afterLabel}</span>
+      <span className="absolute top-4 left-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(62,60,73,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{beforeLabel}</span>
+      <span className="absolute top-4 right-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(62,60,73,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{afterLabel}</span>
 
       {/* Divider line */}
-      <div className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${pos}%`, width: 2, background: "#fff", transform: "translateX(-1px)", boxShadow: "0 0 10px rgba(0,0,0,.35)" }} />
+      <div className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${pos}%`, width: 2, background: "#fff", transform: "translateX(-1px)", boxShadow: "0 0 10px rgba(62,60,73,.35)" }} />
 
       {/* Drag handle */}
       <div
         className="absolute rounded-full flex items-center justify-center pointer-events-none"
-        style={{ left: `${pos}%`, top: "50%", width: 44, height: 44, transform: "translate(-50%,-50%)", background: "#fff", boxShadow: "0 4px 16px rgba(10,11,20,.35)" }}
+        style={{ left: `${pos}%`, top: "50%", width: 44, height: 44, transform: "translate(-50%,-50%)", background: "#fff", boxShadow: "0 4px 16px rgba(62,60,73,.35)" }}
       >
         <ChevronLeft size={13} color={CHAR} strokeWidth={2.5} style={{ marginRight: -5 }} />
         <ChevronRight size={13} color={CHAR} strokeWidth={2.5} style={{ marginLeft: -5 }} />
@@ -856,7 +856,7 @@ function BeforeAfterSection({ onNavigate }: { onNavigate?: (p: string) => void }
                 <BeforeAfterSlider before={p.before} after={p.after} />
               </div>
               <div className="lg:col-span-2 flex flex-col justify-center p-8 lg:p-10">
-                <div className="inline-flex items-center px-2.5 py-1 mb-4 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)" }}>
+                <div className="inline-flex items-center px-2.5 py-1 mb-4 w-fit" style={{ background: "rgba(0,80,159,.1)", border: "1px solid rgba(0,80,159,.2)" }}>
                   <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{p.tag}</span>
                 </div>
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: CHAR, lineHeight: 1.25, marginBottom: 10 }}>
@@ -865,14 +865,14 @@ function BeforeAfterSection({ onNavigate }: { onNavigate?: (p: string) => void }
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, marginBottom: 16 }}>
                   {p.loc || p.tag}
                 </p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#3D4152", lineHeight: 1.7, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.80)", lineHeight: 1.7, marginBottom: 20 }}>
                   {p.desc}
                 </p>
                 <ul className="flex flex-col gap-2.5">
                   {p.workDone.map((w) => (
                     <li key={w} className="flex items-start gap-2.5">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginTop: 2, flexShrink: 0 }}><path d="M20 6L9 17l-5-5" stroke={B} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "#3D4152", lineHeight: 1.5 }}>{w}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(62,60,73,.80)", lineHeight: 1.5 }}>{w}</span>
                     </li>
                   ))}
                 </ul>
@@ -886,7 +886,7 @@ function BeforeAfterSection({ onNavigate }: { onNavigate?: (p: string) => void }
         {teaser.map((_, i) => (
           <button key={i} onClick={() => emblaApi?.scrollTo(i)}
             className="rounded-full transition-all duration-300"
-            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)", border: "none", cursor: "pointer", padding: 0 }} />
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.15)", border: "none", cursor: "pointer", padding: 0 }} />
         ))}
       </div>
 
@@ -933,7 +933,7 @@ function CertificationsSection({ onNavigate }: { onNavigate?: (p: string) => voi
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
               Credentials that matter
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.5)", lineHeight: 1.7, maxWidth: 420 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.5)", lineHeight: 1.7, maxWidth: 420 }}>
               We hold industry certifications so you never have to guess about our qualifications.
             </p>
           </div>
@@ -941,13 +941,13 @@ function CertificationsSection({ onNavigate }: { onNavigate?: (p: string) => voi
 
         {/* Stats row */}
         <Reveal className="mb-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(10,11,20,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(62,60,73,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
             {CERT_STATS.map((s) => (
               <div key={s.label} className="flex flex-col items-center justify-center py-10 px-6 text-center" style={{ background: SURFACE.base }}>
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,4vw,52px)", color: B, lineHeight: 1, marginBottom: 8 }}>
                   {s.val}
                 </p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)", letterSpacing: 0.5 }}>{s.label}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.45)", letterSpacing: 0.5 }}>{s.label}</p>
               </div>
             ))}
           </div>
@@ -993,8 +993,8 @@ function CertificationsSection({ onNavigate }: { onNavigate?: (p: string) => voi
                   className="group flex flex-col gap-2 text-left" style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                   <div className="relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: "1/1", background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                     <ImageWithFallback src={award.img} alt={award.title} className="w-full h-full object-contain p-3 transition-transform duration-300 group-hover:scale-105" />
-                    <div className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}>
-                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 1 }}>{award.year}</span>
+                    <div className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(216,203,165,.18)", border: "1px solid rgba(216,203,165,.4)" }}>
+                      <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#00509F", letterSpacing: 1 }}>{award.year}</span>
                     </div>
                   </div>
                   <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 11, color: CHAR, lineHeight: 1.4 }}>
@@ -1045,7 +1045,7 @@ function ReferralProgramSection() {
 
           <Reveal delay={0.1} className="flex flex-col gap-3">
             {REFERRAL_STEPS.map((step) => (
-              <div key={step.n} className="flex items-start gap-5 px-7 py-6" style={{ background: "#fff", border: "1.5px solid rgba(11,28,74,.14)" }}>
+              <div key={step.n} className="flex items-start gap-5 px-7 py-6" style={{ background: "#fff", border: "1.5px solid rgba(0,55,113,.14)" }}>
                 <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 13, color: SAND, letterSpacing: 1.5, paddingTop: 2 }}>{step.n}</span>
                 <div>
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 17, color: CHAR, marginBottom: 6 }}>{step.title}</p>
@@ -1078,10 +1078,10 @@ function LoveWellInitiativeSection({ onNavigate }: { onNavigate?: (p: string) =>
               className="relative overflow-hidden h-full w-full group/hero"
               style={{ borderRadius: 2, minHeight: 380, border: "none", padding: 0, cursor: heroVideoId ? "pointer" : "default" }}>
               <ImageWithFallback src={imgFloor02} alt="Love Well Initiative" className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.55) 0%,transparent 55%)" }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(62,60,73,.55) 0%,transparent 55%)" }} />
               {heroVideoId && (
                 <>
-                  <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.2)" }} />
+                  <div className="absolute inset-0" style={{ background: "rgba(62,60,73,.2)" }} />
                   <span className="absolute inset-0 flex items-center justify-center">
                     <span className="w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover/hero:scale-110" style={{ background: B }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
@@ -1106,7 +1106,7 @@ function LoveWellInitiativeSection({ onNavigate }: { onNavigate?: (p: string) =>
               See the full initiative
               <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </button>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.6)", lineHeight: 1.8, maxWidth: 480, marginBottom: 28 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.6)", lineHeight: 1.8, maxWidth: 480, marginBottom: 28 }}>
               Since 2015, the Love Well Initiative has been the umbrella for everything our team gives back to the Memphis area — the annual Love Well 5K &amp; Festival benefiting a different local charity each year, hands-on work for shelters and family homes, and donated structural repairs.
             </p>
             {/* Client QA (Aug 10): the initiative "is not centered around
@@ -1115,8 +1115,8 @@ function LoveWellInitiativeSection({ onNavigate }: { onNavigate?: (p: string) =>
                 application process. */}
             <div className="grid grid-cols-2 gap-3 mb-8 max-w-md">
               {["Love Well 5K & Festival", "Shelters & family homes", "Donated structural repairs", "A new project every year"].map((tag) => (
-                <div key={tag} className="px-4 py-3" style={{ background: "rgba(10,11,20,.04)", border: `1px solid ${ON_LIGHT.border}` }}>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", fontWeight: 500 }}>{tag}</span>
+                <div key={tag} className="px-4 py-3" style={{ background: "rgba(62,60,73,.04)", border: `1px solid ${ON_LIGHT.border}` }}>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.65)", fontWeight: 500 }}>{tag}</span>
                 </div>
               ))}
             </div>
@@ -1139,7 +1139,7 @@ function LoveWellInitiativeSection({ onNavigate }: { onNavigate?: (p: string) =>
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10"
-              style={{ background: "rgba(0,0,0,.88)" }}
+              style={{ background: "rgba(62,60,73,.88)" }}
               onClick={() => setShowVideo(false)}
             >
               <motion.div
@@ -1157,7 +1157,7 @@ function LoveWellInitiativeSection({ onNavigate }: { onNavigate?: (p: string) =>
                 >
                   <X size={16} color="#fff" />
                 </button>
-                <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
+                <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#3E3C49" }}>
                   <iframe
                     className="absolute inset-0 w-full h-full"
                     src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1`}
@@ -1184,7 +1184,7 @@ function CtaSection() {
       <div className="absolute inset-0 z-0">
         <ImageWithFallback src={imgFloor03}
           alt="Start today" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "rgba(11,28,74,.86)" }} />
+        <div className="absolute inset-0" style={{ background: "rgba(0,55,113,.86)" }} />
         <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
       </div>
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-28 text-center">

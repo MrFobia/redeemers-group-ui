@@ -274,7 +274,7 @@ function CultureSection() {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px", maxWidth: 520 }}>
               More than a job — it's a mission.
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.5)", lineHeight: 1.75, maxWidth: 440 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.5)", lineHeight: 1.75, maxWidth: 440 }}>
               When you join Redeemers, you join a company that treats every home like it's their own. That mindset starts internally — with how we treat each other.
             </p>
           </div>
@@ -288,14 +288,14 @@ function CultureSection() {
               {/* Main tall photo — spans both rows at sm+, own aspect ratio on mobile so it doesn't get squeezed into a 2-col sliver */}
               <div className="relative overflow-hidden group sm:row-span-2 aspect-[4/3] sm:aspect-auto" style={{ border: `1px solid ${ON_LIGHT.border}` }}>
                 <ImageWithFallback src={PHOTOS[0].src} alt={PHOTOS[0].label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.8) 0%, transparent 50%)" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(62,60,73,.8) 0%, transparent 50%)" }} />
                 <span className="absolute bottom-4 left-4 right-4" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#fff", letterSpacing: 0.5 }}>{PHOTOS[0].label}</span>
               </div>
               {/* Two stacked photos on right (sm+) / stacked below on mobile */}
               {PHOTOS.slice(1).map((p) => (
                 <div key={p.label} className="relative overflow-hidden group aspect-[4/3] sm:aspect-auto" style={{ border: `1px solid ${ON_LIGHT.border}` }}>
                   <ImageWithFallback src={p.src} alt={p.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.75) 0%, transparent 60%)" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(62,60,73,.75) 0%, transparent 60%)" }} />
                   <span className="absolute bottom-3 left-3 right-3" style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "#fff", letterSpacing: 0.5 }}>{p.label}</span>
                 </div>
               ))}
@@ -309,12 +309,12 @@ function CultureSection() {
                 <div className="flex gap-5 p-6 group transition-all hover:bg-white/[0.025]"
                   style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, borderLeft: `2px solid ${SAND}` }}>
                   <div className="shrink-0 mt-0.5 flex items-center justify-center w-9 h-9"
-                    style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)", color: B }}>
+                    style={{ background: "rgba(0,80,159,.1)", border: "1px solid rgba(0,80,159,.2)", color: B }}>
                     {v.icon}
                   </div>
                   <div>
                     <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, marginBottom: 6 }}>{v.title}</h4>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.5)", lineHeight: 1.7 }}>{v.desc}</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.5)", lineHeight: 1.7 }}>{v.desc}</p>
                   </div>
                 </div>
               </Reveal>
@@ -377,8 +377,8 @@ function EmployeeQuotesSection() {
             <Reveal key={q.name} delay={i * 0.1}>
               <div className="flex flex-col h-full p-8" style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)" }}>
                 {/* Quote mark */}
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 56, color: "rgba(196,171,108,.2)", lineHeight: .6, marginBottom: 16 }}>&ldquo;</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.75)", lineHeight: 1.8, flex: 1, marginBottom: 24 }}>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 56, color: "rgba(216,203,165,.2)", lineHeight: .6, marginBottom: 16 }}>&ldquo;</div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(161,205,241,.9)", lineHeight: 1.8, flex: 1, marginBottom: 24 }}>
                   {q.quote}
                 </p>
                 <div style={{ height: 1, background: "rgba(255,255,255,.08)", marginBottom: 20 }} />
@@ -388,10 +388,10 @@ function EmployeeQuotesSection() {
                   </div>
                   <div>
                     <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>{q.name}</p>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.45)", marginTop: 2 }}>{q.role}</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(161,205,241,.9)", marginTop: 2 }}>{q.role}</p>
                   </div>
                   <div className="ml-auto text-right">
-                    <span className="px-2.5 py-1 text-xs" style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.2)", fontFamily: "'Inter',sans-serif", fontSize: 10, color: SAND, fontWeight: 600 }}>
+                    <span className="px-2.5 py-1 text-xs" style={{ background: "rgba(216,203,165,.1)", border: "1px solid rgba(216,203,165,.2)", fontFamily: "'Inter',sans-serif", fontSize: 10, color: SAND, fontWeight: 600 }}>
                       {q.years}
                     </span>
                   </div>
@@ -444,7 +444,7 @@ function HiringProcessSection() {
                 How We Hire
               </h2>
             </div>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.45)", lineHeight: 1.7, maxWidth: 400 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(62,60,73,.45)", lineHeight: 1.7, maxWidth: 400 }}>
               We believe in total transparency at every step. Here's exactly what to expect from your journey with us — start to finish.
             </p>
           </div>
@@ -457,7 +457,7 @@ function HiringProcessSection() {
                 {/* Step image */}
                 <div className="relative overflow-hidden group shrink-0" style={{ height: 160 }}>
                   <ImageWithFallback src={item.img} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.85) 0%, rgba(10,11,20,.2) 60%, transparent 100%)" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(62,60,73,.85) 0%, rgba(62,60,73,.2) 60%, transparent 100%)" }} />
                   {/* Step badge */}
                   <div className="absolute top-4 left-4 w-9 h-9 flex items-center justify-center"
                     style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 13, color: DARK }}>
@@ -466,7 +466,7 @@ function HiringProcessSection() {
                 </div>
                 <div className="p-6 flex flex-col flex-1">
                   <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: CHAR, marginBottom: 8 }}>{item.name}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.4)", lineHeight: 1.65 }}>{item.desc}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.4)", lineHeight: 1.65 }}>{item.desc}</p>
                 </div>
               </div>
             </Reveal>
@@ -529,14 +529,14 @@ function JobBoardSection() {
               <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px" }}>
                 Open Positions
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", marginTop: 6 }}>Find the perfect role to match your skills and ambitions.</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.45)", marginTop: 6 }}>Find the perfect role to match your skills and ambitions.</p>
             </div>
             <div className="relative w-full md:w-80">
               <input type="text" placeholder="Search roles, code, or keyword…"
                 value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                 className="w-full px-4 py-2.5 pl-10 outline-none"
                 style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR }} />
-              <svg className="absolute left-3.5 top-3.5" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(10,11,20,.4)" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <svg className="absolute left-3.5 top-3.5" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(62,60,73,.4)" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap mt-6">
@@ -565,15 +565,15 @@ function JobBoardSection() {
                 <div>
                   <div className="flex justify-between items-start gap-4 mb-3">
                     <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: B, letterSpacing: 1.5, textTransform: "uppercase", fontWeight: 600 }}>{job.dept}</span>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.25)" }}>#{job.id}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.25)" }}>#{job.id}</span>
                   </div>
                   <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, marginBottom: 8 }}>{job.title}</h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.45)", lineHeight: 1.65, marginBottom: 16 }}>{job.description}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.45)", lineHeight: 1.65, marginBottom: 16 }}>{job.description}</p>
                 </div>
-                <div className="flex justify-between items-center pt-4" style={{ borderTop: "1px solid rgba(10,11,20,.05)" }}>
+                <div className="flex justify-between items-center pt-4" style={{ borderTop: "1px solid rgba(62,60,73,.05)" }}>
                   <div className="flex gap-4">
-                    <span className="inline-flex items-center gap-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)" }}><MapPin size={11} strokeWidth={1.8} /> {job.location}</span>
-                    <span className="inline-flex items-center gap-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)" }}><Briefcase size={11} strokeWidth={1.8} /> {job.type}</span>
+                    <span className="inline-flex items-center gap-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.35)" }}><MapPin size={11} strokeWidth={1.8} /> {job.location}</span>
+                    <span className="inline-flex items-center gap-1" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.35)" }}><Briefcase size={11} strokeWidth={1.8} /> {job.type}</span>
                   </div>
                   <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 12, color: B }}>
                     View details
@@ -584,7 +584,7 @@ function JobBoardSection() {
             </Reveal>
           )) : (
             <div className="col-span-2 py-14 text-center" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.3)" }}>No positions match your search.</p>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.3)" }}>No positions match your search.</p>
             </div>
           )}
         </div>
@@ -594,7 +594,7 @@ function JobBoardSection() {
       <AnimatePresence>
         {selectedJob && (
           <div className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto py-12 px-6"
-            style={{ background: "rgba(0,0,0,0.82)", backdropFilter: "blur(8px)" }}
+            style={{ background: "rgba(62,60,73,0.82)", backdropFilter: "blur(8px)" }}
             onClick={e => { if (e.target === e.currentTarget) setSelectedJob(null); }}>
             <button onClick={() => setSelectedJob(null)}
               className="fixed top-5 right-5 flex items-center justify-center transition-all hover:bg-white/10"
@@ -698,7 +698,7 @@ function JobBoardSection() {
                       <label style={FORM_LABEL_STYLE}>Resume</label>
                       <div onClick={() => setAttachedFile("resume.pdf")}
                         className="py-5 flex flex-col items-center gap-1 cursor-pointer transition-all hover:bg-white/5"
-                        style={{ border: `2px dashed ${attachedFile ? SAND : "rgba(255,255,255,0.15)"}`, background: attachedFile ? "rgba(196,171,108,0.06)" : "transparent" }}>
+                        style={{ border: `2px dashed ${attachedFile ? SAND : "rgba(255,255,255,0.15)"}`, background: attachedFile ? "rgba(216,203,165,0.06)" : "transparent" }}>
                         {attachedFile
                           ? <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={SAND} strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg><span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: SAND, fontWeight: 600 }}>resume.pdf attached</span></>
                           : <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(255,255,255,.4)" }}>Click to attach (PDF)</span></>
@@ -721,7 +721,7 @@ function JobBoardSection() {
                 )}
               </> : (
                 <div className="flex flex-col items-center text-center py-8 gap-5">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(196,171,108,0.12)", border: `2px solid ${SAND}` }}>
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(216,203,165,0.12)", border: `2px solid ${SAND}` }}>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={SAND} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
                   </div>
                   <div>
@@ -774,7 +774,7 @@ function BenefitsSection() {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
               Benefits &amp; Compensation
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.5)", lineHeight: 1.7 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(62,60,73,.5)", lineHeight: 1.7 }}>
               We take care of the people who take care of our customers. Starting from day one.
             </p>
           </Reveal>
@@ -785,7 +785,7 @@ function BenefitsSection() {
                 alt="Team celebration"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               />
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(30,34,53,0.9) 0%, transparent 60%)" }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(77,76,88,0.9) 0%, transparent 60%)" }} />
               <div className="absolute inset-0 flex flex-col justify-center px-8">
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: "#fff", lineHeight: 1.1, maxWidth: 280 }}>
                   A team that celebrates wins together.
@@ -801,8 +801,8 @@ function BenefitsSection() {
               <div
                 className="relative flex flex-col gap-5 p-7 h-full group overflow-hidden transition-all duration-300"
                 style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(196,171,108,.4)"; e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 16px 32px rgba(0,0,0,.35)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(10,11,20,.06)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(216,203,165,.4)"; e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 16px 32px rgba(62,60,73,.35)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(62,60,73,.06)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
               >
                 {/* Top accent line */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
@@ -810,12 +810,12 @@ function BenefitsSection() {
 
 
                 <div className="relative w-12 h-12 shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-105"
-                  style={{ background: "linear-gradient(135deg, rgba(196,171,108,.16), rgba(196,171,108,.04))", border: "1px solid rgba(196,171,108,.25)", color: SAND }}>
+                  style={{ background: "linear-gradient(135deg, rgba(216,203,165,.16), rgba(216,203,165,.04))", border: "1px solid rgba(216,203,165,.25)", color: SAND }}>
                   {perk.icon}
                 </div>
                 <div>
                   <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, marginBottom: 8, letterSpacing: "-0.2px" }}>{perk.title}</h4>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
                 </div>
               </div>
             </Reveal>
@@ -841,7 +841,7 @@ function CtaBanner({ onOpenInspection }: { onOpenInspection: () => void }) {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,52px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", maxWidth: 560 }}>
               Ready to build something that lasts?
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.55)", lineHeight: 1.7, marginTop: 12, maxWidth: 480 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(161,205,241,.9)", lineHeight: 1.7, marginTop: 12, maxWidth: 480 }}>
               We hire attitude and train skill. If you're driven, dependable, and ready to grow, there's a place for you here.
             </p>
           </Reveal>
@@ -858,7 +858,7 @@ function CtaBanner({ onOpenInspection }: { onOpenInspection: () => void }) {
           </button>
           <a href="mailto:careers@redeemersgroup.com"
             className="inline-flex items-center gap-2 px-8 py-4 font-semibold transition-all hover:bg-white/10"
-            style={{ border: "1px solid rgba(255,255,255,.2)", color: "rgba(255,255,255,.8)", fontFamily: "'Inter',sans-serif", fontSize: 14 }}>
+            style={{ border: "1px solid rgba(255,255,255,.2)", color: "rgba(161,205,241,.9)", fontFamily: "'Inter',sans-serif", fontSize: 14 }}>
             Email Us
           </a>
         </Reveal>

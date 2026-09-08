@@ -61,7 +61,7 @@ function StoryModal({ story, onClose, onPrev, onNext }: {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.22 }}
       className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
-      style={{ background: "rgba(0,0,0,.88)", backdropFilter: "blur(10px)" }}
+      style={{ background: "rgba(62,60,73,.88)", backdropFilter: "blur(10px)" }}
       onClick={onClose}
     >
       <motion.div
@@ -77,7 +77,7 @@ function StoryModal({ story, onClose, onPrev, onNext }: {
         <div className="lg:w-[52%] shrink-0 relative">
           <ImageWithFallback src={story.img} alt={story.name} className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0" style={{
-            background: playing ? "rgba(0,0,0,.85)" : "linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(0,0,0,.6) 100%)"
+            background: playing ? "rgba(62,60,73,.85)" : "linear-gradient(to bottom, rgba(62,60,73,.1) 0%, rgba(62,60,73,.6) 100%)"
           }} />
 
           {playing ? (
@@ -90,7 +90,7 @@ function StoryModal({ story, onClose, onPrev, onNext }: {
                 onClick={() => setPlaying(true)}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
-                style={{ width: 72, height: 72, borderRadius: "50%", background: B, border: "3px solid rgba(255,255,255,.25)", cursor: "pointer", boxShadow: "0 8px 32px rgba(0,0,0,.5)", display: "flex", alignItems: "center", justifyContent: "center" }}
+                style={{ width: 72, height: 72, borderRadius: "50%", background: B, border: "3px solid rgba(255,255,255,.25)", cursor: "pointer", boxShadow: "0 8px 32px rgba(62,60,73,.5)", display: "flex", alignItems: "center", justifyContent: "center" }}
               >
                 <Play size={26} fill="white" stroke="none" style={{ marginLeft: 4 }} />
               </motion.button>
@@ -101,13 +101,13 @@ function StoryModal({ story, onClose, onPrev, onNext }: {
           <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-4">
             <div className="flex gap-2">
               <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#fff", letterSpacing: 2.5, textTransform: "uppercase", background: B, padding: "3px 8px" }}>{story.service}</span>
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.65)", background: "rgba(0,0,0,.45)", padding: "3px 8px", backdropFilter: "blur(4px)" }}>{story.loc}</span>
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.65)", background: "rgba(62,60,73,.45)", padding: "3px 8px", backdropFilter: "blur(4px)" }}>{story.loc}</span>
             </div>
             <div className="flex gap-2">
-              <button onClick={onPrev} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(0,0,0,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
+              <button onClick={onPrev} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
                 <ChevronLeft size={15} color="#fff" />
               </button>
-              <button onClick={onNext} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(0,0,0,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
+              <button onClick={onNext} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
                 <ChevronRight size={15} color="#fff" />
               </button>
             </div>
@@ -137,13 +137,13 @@ function StoryModal({ story, onClose, onPrev, onNext }: {
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: SAND, marginBottom: 20 }}>{story.loc}</p>
 
             {/* Result */}
-            <div className="mb-5 p-4" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.25)" }}>
+            <div className="mb-5 p-4" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.25)" }}>
               <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>What we did</p>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>{story.result}</p>
             </div>
 
             {/* Quote */}
-            <div style={{ fontFamily: "Georgia,serif", fontSize: 44, color: "rgba(196,171,108,.2)", lineHeight: 0.55, marginBottom: 10 }}>&ldquo;</div>
+            <div style={{ fontFamily: "Georgia,serif", fontSize: 44, color: "rgba(216,203,165,.2)", lineHeight: 0.55, marginBottom: 10 }}>&ldquo;</div>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.72)", lineHeight: 1.8, flex: 1 }}>{story.quote}</p>
 
             <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "20px 0" }} />
@@ -178,7 +178,7 @@ function StoryCard({ story, index, onClick }: { story: Story; index: number; onC
       className="flex flex-col cursor-pointer group"
       style={{
         background: SURFACE.base,
-        border: `1px solid ${hovered ? "rgba(26,82,168,.3)" : "rgba(10,11,20,.07)"}`,
+        border: `1px solid ${hovered ? "rgba(0,80,159,.3)" : "rgba(62,60,73,.07)"}`,
         transition: "border-color .2s",
       }}
       whileHover={{ y: -5 }}
@@ -190,7 +190,7 @@ function StoryCard({ story, index, onClick }: { story: Story; index: number; onC
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
         />
         {/* Dark overlay */}
-        <div className="absolute inset-0 transition-opacity duration-300" style={{ background: "rgba(10,11,20,.35)", opacity: hovered ? 0.7 : 0.35 }} />
+        <div className="absolute inset-0 transition-opacity duration-300" style={{ background: "rgba(62,60,73,.35)", opacity: hovered ? 0.7 : 0.35 }} />
 
         {/* Play button — visible always, grows on hover */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -230,10 +230,10 @@ function StoryCard({ story, index, onClick }: { story: Story; index: number; onC
       <div className="p-5 flex flex-col gap-3">
         {/* Tags */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 11, color: B, background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)", padding: "2px 8px" }}>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 11, color: B, background: "rgba(0,80,159,.1)", border: "1px solid rgba(0,80,159,.2)", padding: "2px 8px" }}>
             {story.service}
           </span>
-          <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 11, color: "rgba(10,11,20,.4)", background: "rgba(10,11,20,.05)", border: `1px solid ${ON_LIGHT.border}`, padding: "2px 8px" }}>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 11, color: "rgba(62,60,73,.4)", background: "rgba(62,60,73,.05)", border: `1px solid ${ON_LIGHT.border}`, padding: "2px 8px" }}>
             {story.loc}
           </span>
         </div>
@@ -241,11 +241,11 @@ function StoryCard({ story, index, onClick }: { story: Story; index: number; onC
         {/* Name + meta */}
         <div>
           <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: CHAR, lineHeight: 1.3, marginBottom: 4 }}>{story.name}</p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.3)" }}>{story.duration} · {story.date}</p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.3)" }}>{story.duration} · {story.date}</p>
         </div>
 
         {/* Result preview */}
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.4)", lineHeight: 1.6 }}>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.4)", lineHeight: 1.6 }}>
           {story.result.length > 75 ? story.result.slice(0, 75) + "…" : story.result}
         </p>
       </div>
@@ -349,7 +349,7 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
         ]} />
 
         {/* ── Hero ── */}
-        <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }} className="py-16 lg:py-24">
+        <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(62,60,73,.06)" }} className="py-16 lg:py-24">
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
             <div ref={heroRef} className="flex flex-col lg:flex-row lg:items-end gap-10">
               <motion.div
@@ -365,7 +365,7 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
                 <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(42px,5.5vw,72px)", color: CHAR, lineHeight: 0.98, letterSpacing: "-2px", marginBottom: 20 }}>
                   Real jobs,<br />real results
                 </h1>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(15px,1.2vw,17px)", color: "rgba(10,11,20,.45)", lineHeight: 1.7, maxWidth: 500 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(15px,1.2vw,17px)", color: "rgba(62,60,73,.45)", lineHeight: 1.7, maxWidth: 500 }}>
                   Every story below is a real project from a real homeowner. No actors, no staged photos — just honest work and lasting results across Tennessee, Arkansas, Mississippi, and Missouri.
                 </p>
               </motion.div>
@@ -380,7 +380,7 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
                 {[["127+", "Projects completed"], ["4.9★", "Average rating"], ["12 yrs", "In business"]].map(([n, l]) => (
                   <div key={l}>
                     <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 30, color: B, lineHeight: 1, letterSpacing: "-1px", marginBottom: 4 }}>{n}</p>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.3)" }}>{l}</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.3)" }}>{l}</p>
                   </div>
                 ))}
               </motion.div>
@@ -393,9 +393,9 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
             {/* Filter bar — scoped to this grid, not the fixed header */}
-            <div className="relative mb-8 pb-6" style={{ borderBottom: "1px solid rgba(10,11,20,.07)" }}>
+            <div className="relative mb-8 pb-6" style={{ borderBottom: "1px solid rgba(62,60,73,.07)" }}>
               <div className="flex items-center gap-3 flex-wrap">
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.4)", flexShrink: 0 }}>Filter by:</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(62,60,73,.4)", flexShrink: 0 }}>Filter by:</span>
                 <div className="flex items-center gap-3 overflow-x-auto" style={{ flex: 1 }}>
                   {SERVICE_FILTERS.map((f) => (
                     <button key={f} onClick={() => handleFilter(f)} className="flex-shrink-0 px-4 py-2 transition-all"
@@ -410,18 +410,18 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
                     </button>
                   ))}
                 </div>
-                <div style={{ width: 1, height: 20, background: "rgba(10,11,20,.1)", flexShrink: 0, margin: "0 4px" }} />
+                <div style={{ width: 1, height: 20, background: "rgba(62,60,73,.1)", flexShrink: 0, margin: "0 4px" }} />
                 <div className="flex-shrink-0" ref={areaRef}>
                   <button onClick={() => { setAreaPos(areaRef.current?.getBoundingClientRect() ?? null); setAreaOpen(v => !v); setSymptomsOpen(false); }}
                     className="flex items-center gap-1.5 px-4 py-1.5"
-                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
+                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(62,60,73,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
                     Service area <ChevronDown size={13} />
                   </button>
                 </div>
                 <div className="flex-shrink-0" ref={symptomsRef}>
                   <button onClick={() => { setSymptomsPos(symptomsRef.current?.getBoundingClientRect() ?? null); setSymptomsOpen(v => !v); setAreaOpen(false); }}
                     className="flex items-center gap-1.5 px-4 py-1.5"
-                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
+                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(62,60,73,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
                     All Symptoms <ChevronDown size={13} />
                   </button>
                 </div>
@@ -429,11 +429,11 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
 
               {/* Dropdown portals — fixed so they escape overflow clipping */}
               {areaOpen && areaPos && (
-                <div style={{ position: "fixed", top: areaPos.bottom + 4, left: areaPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 160 }}>
+                <div style={{ position: "fixed", top: areaPos.bottom + 4, left: areaPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(62,60,73,.5)", minWidth: 160 }}>
                   {["Tennessee", "Arkansas", "Mississippi", "Missouri"].map((s) => (
                     <button key={s} onClick={() => setAreaOpen(false)} className="w-full text-left px-4 py-2.5"
-                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(62,60,73,.06)")}
                       onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
                       {s}
                     </button>
@@ -441,11 +441,11 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
                 </div>
               )}
               {symptomsOpen && symptomsPos && (
-                <div style={{ position: "fixed", top: symptomsPos.bottom + 4, left: symptomsPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 190 }}>
+                <div style={{ position: "fixed", top: symptomsPos.bottom + 4, left: symptomsPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(62,60,73,.5)", minWidth: 190 }}>
                   {["Cracked walls", "Uneven floors", "Wet basement", "Musty smell", "Sticking doors", "Sagging joists"].map((s) => (
                     <button key={s} onClick={() => setSymptomsOpen(false)} className="w-full text-left px-4 py-2.5"
-                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(62,60,73,.06)")}
                       onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
                       {s}
                     </button>
@@ -455,8 +455,8 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
             </div>
 
             <div className="flex items-center justify-between mb-10">
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.3)" }}>
-                Showing <strong style={{ color: "rgba(10,11,20,.7)" }}>{filtered.length}</strong> stories
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.3)" }}>
+                Showing <strong style={{ color: "rgba(62,60,73,.7)" }}>{filtered.length}</strong> stories
                 {activeFilter !== "All" && (
                   <span> · <button onClick={() => handleFilter("All")} style={{ color: B, fontWeight: 600, background: "none", border: "none", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 14 }}>Clear</button></span>
                 )}
@@ -498,8 +498,8 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
                     style={{
                       fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14,
                       background: page === p ? B : "transparent",
-                      color: page === p ? DARK : "rgba(10,11,20,.5)",
-                      border: `1.5px solid ${page === p ? B : "rgba(10,11,20,.15)"}`,
+                      color: page === p ? DARK : "rgba(62,60,73,.5)",
+                      border: `1.5px solid ${page === p ? B : "rgba(62,60,73,.15)"}`,
                       cursor: "pointer",
                     }}>
                     {p}
@@ -517,7 +517,7 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
         </section>
 
         {/* ── CTA ── */}
-        <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(10,11,20,.06)" }} className="py-20 lg:py-24">
+        <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(62,60,73,.06)" }} className="py-20 lg:py-24">
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
             <div className="max-w-[600px]">
               <div className="flex items-center gap-3 mb-5">
@@ -527,7 +527,7 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
               <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,4vw,50px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1.5px", marginBottom: 16 }}>
                 Ready to become our next success story?
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.4)", lineHeight: 1.7, marginBottom: 32 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.4)", lineHeight: 1.7, marginBottom: 32 }}>
                 Free inspection. No obligation. Same-week availability across TN, AR, MS & MO.
               </p>
               <button onClick={openInspection}

@@ -37,7 +37,7 @@ export function LocalContentModal({ item, onClose }: { item: ContentItem; onClos
         {item.images.map((slide, i) => (
           <div key={i} className="relative shrink-0 w-full h-full" style={stacked ? { aspectRatio: "21/9" } : undefined}>
             <ImageWithFallback src={slide.src} alt={slide.caption} className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute bottom-0 left-0 right-0 px-6 py-4" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.9) 0%, rgba(10,11,20,0) 100%)" }}>
+            <div className="absolute bottom-0 left-0 right-0 px-6 py-4" style={{ background: "linear-gradient(0deg, rgba(62,60,73,.9) 0%, rgba(62,60,73,0) 100%)" }}>
               <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(255,255,255,.85)" }}>{slide.caption}</span>
             </div>
           </div>
@@ -48,12 +48,12 @@ export function LocalContentModal({ item, onClose }: { item: ContentItem; onClos
         <>
           <button onClick={() => emblaApi?.scrollPrev()}
             className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center"
-            style={{ background: "rgba(10,11,20,.6)", border: "none", cursor: "pointer" }}>
+            style={{ background: "rgba(62,60,73,.6)", border: "none", cursor: "pointer" }}>
             <ChevronLeft size={15} color="#fff" />
           </button>
           <button onClick={() => emblaApi?.scrollNext()}
             className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center"
-            style={{ background: "rgba(10,11,20,.6)", border: "none", cursor: "pointer" }}>
+            style={{ background: "rgba(62,60,73,.6)", border: "none", cursor: "pointer" }}>
             <ChevronRight size={15} color="#fff" />
           </button>
           <div className="absolute bottom-3 right-4 flex gap-1.5">
@@ -100,7 +100,7 @@ export function LocalContentModal({ item, onClose }: { item: ContentItem; onClos
       <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: SAND, marginBottom: 20 }}>{item.service}</p>
 
       {item.body && (
-        <div className="mb-5 p-4" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.25)" }}>
+        <div className="mb-5 p-4" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.25)" }}>
           <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>
             {item.kind === "project-gallery" ? "About this photo" : "What we did"}
           </p>
@@ -118,14 +118,14 @@ export function LocalContentModal({ item, onClose }: { item: ContentItem; onClos
 
       {item.quote && (
         <div className="mb-4">
-          <Quote size={18} color="rgba(196,171,108,.35)" style={{ marginBottom: 8 }} />
+          <Quote size={18} color="rgba(216,203,165,.35)" style={{ marginBottom: 8 }} />
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.75)", lineHeight: 1.8 }}>
             {item.quote}
           </p>
           {item.author && (
             <div className="flex items-center gap-3 mt-4">
               {item.avatar && (
-                <div className="w-8 h-8 rounded-full overflow-hidden shrink-0" style={{ background: "#333" }}>
+                <div className="w-8 h-8 rounded-full overflow-hidden shrink-0" style={{ background: "#3E3C49" }}>
                   <ImageWithFallback src={item.avatar} alt={item.author} className="w-full h-full object-cover" />
                 </div>
               )}
@@ -153,7 +153,7 @@ export function LocalContentModal({ item, onClose }: { item: ContentItem; onClos
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.22 }}
       className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-8"
-      style={{ background: "rgba(0,0,0,.9)", backdropFilter: "blur(10px)" }}
+      style={{ background: "rgba(62,60,73,.9)", backdropFilter: "blur(10px)" }}
       onClick={onClose}
     >
       <motion.div
@@ -165,7 +165,7 @@ export function LocalContentModal({ item, onClose }: { item: ContentItem; onClos
       >
         <button onClick={onClose}
           className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"
-          style={{ background: "rgba(10,11,20,.65)", border: "none", cursor: "pointer" }}>
+          style={{ background: "rgba(62,60,73,.65)", border: "none", cursor: "pointer" }}>
           <X size={17} color="#fff" />
         </button>
 

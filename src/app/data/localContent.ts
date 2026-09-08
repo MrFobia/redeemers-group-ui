@@ -43,10 +43,10 @@ export type ContentItem = {
 const IMGS = [imgFloor01, imgFloor02, imgFloor03, imgFloor04];
 
 export const KIND_META: Record<ContentKind, { label: string; accent: string }> = {
-  "review":          { label: "Review",          accent: "#4ADE80" },
-  "job-story":       { label: "Job Story",       accent: "#C4AB6C" },
-  "case-study":      { label: "Case Study",      accent: "#A78BFA" },
-  "project-gallery": { label: "Project Gallery", accent: "#60A5FA" },
+  "review":          { label: "Review",          accent: "#D8CBA5" },
+  "job-story":       { label: "Job Story",       accent: "#D8CBA5" },
+  "case-study":      { label: "Case Study",      accent: "#00509F" },
+  "project-gallery": { label: "Project Gallery", accent: "#003771" },
 };
 
 // ─── Template pools ───────────────────────────────────────────────────────────

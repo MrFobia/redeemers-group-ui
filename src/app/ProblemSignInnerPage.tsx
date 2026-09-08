@@ -182,9 +182,9 @@ const OTHER_STRUCTURAL = [
 function DiagnosticSection() {
   const [activeRow, setActiveRow] = useState<string>(OTHER_STRUCTURAL[0]);
 
-  const LINE = "rgba(10,11,20,.1)";
-  const LINE_SOFT = "rgba(10,11,20,.07)";
-  const INK = "#3D4152";
+  const LINE = "rgba(62,60,73,.1)";
+  const LINE_SOFT = "rgba(62,60,73,.07)";
+  const INK = "rgba(62,60,73,.80)";
 
   return (
     <section style={{ background: "#fff", borderBottom: `1px solid ${LINE}` }}>
@@ -222,7 +222,7 @@ function DiagnosticSection() {
               <div className="flex flex-wrap gap-2">
                 {RELATED_TAGS.map((tag) => (
                   <span key={tag} className="px-3 py-2"
-                    style={{ background: "rgba(10,11,20,.03)", border: `1px solid ${LINE_SOFT}`, fontFamily: INTER, fontSize: 13, color: INK }}>
+                    style={{ background: "rgba(62,60,73,.03)", border: `1px solid ${LINE_SOFT}`, fontFamily: INTER, fontSize: 13, color: INK }}>
                     {tag}
                   </span>
                 ))}
@@ -268,7 +268,7 @@ function DiagnosticSection() {
                       key={symptom}
                       className="group flex items-center justify-between gap-3 px-6 py-4 text-left w-full transition-all duration-200"
                       style={{
-                        background: on ? "rgba(26,82,168,.05)" : "transparent",
+                        background: on ? "rgba(0,80,159,.05)" : "transparent",
                         borderTop: i > 0 ? `1px solid ${LINE_SOFT}` : "none",
                         borderLeft: `3px solid ${on ? B : "transparent"}`,
                         cursor: "pointer",
@@ -281,7 +281,7 @@ function DiagnosticSection() {
                           {symptom}
                         </span>
                       </span>
-                      <ChevronRight size={16} color={on ? B : "rgba(10,11,20,.25)"} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
+                      <ChevronRight size={16} color={on ? B : "rgba(62,60,73,.25)"} className="shrink-0 transition-transform group-hover:translate-x-0.5" />
                     </button>
                   );
                 })}
@@ -313,7 +313,7 @@ function DiagnosticSection() {
 
                 {/* Caption plate — keeps the label readable over any photo */}
                 <div className="absolute left-0 right-0 bottom-0 px-6 py-5"
-                  style={{ background: "linear-gradient(180deg,rgba(11,28,74,0) 0%,rgba(11,28,74,.88) 60%)" }}>
+                  style={{ background: "linear-gradient(180deg,rgba(0,55,113,0) 0%,rgba(0,55,113,.88) 60%)" }}>
                   <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 6 }}>
                     What it looks like
                   </p>
@@ -383,22 +383,22 @@ function SelfDiagnosisSection() {
         <Reveal delay={0.05} className="mb-3">
           <div className="flex items-center justify-between">
             <span style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: B, letterSpacing: 2, textTransform: "uppercase" }}>Low urgency</span>
-            <span style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: "#A3823F", letterSpacing: 2, textTransform: "uppercase" }}>High urgency</span>
+            <span style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: "#00509F", letterSpacing: 2, textTransform: "uppercase" }}>High urgency</span>
           </div>
         </Reveal>
         <Reveal delay={0.08} className="mb-14">
-          <div className="relative h-[3px] w-full" style={{ background: `linear-gradient(90deg, ${B} 0%, rgba(107,110,133,.3) 48%, ${SAND} 100%)` }}>
+          <div className="relative h-[3px] w-full" style={{ background: `linear-gradient(90deg, ${B} 0%, rgba(62,60,73,.3) 48%, ${SAND} 100%)` }}>
             <div className="absolute rounded-full" style={{ top: -3, left: 0, width: 9, height: 9, background: B }} />
             <div className="absolute rounded-full" style={{ top: -3, right: 0, width: 9, height: 9, background: SAND }} />
           </div>
         </Reveal>
 
         {/* Diagnostic panel — asymmetric 5/7 split, one bordered instrument */}
-        <div className="grid grid-cols-1 lg:grid-cols-12" style={{ border: "1px solid rgba(10,11,20,.1)", background: "#fff" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-12" style={{ border: "1px solid rgba(62,60,73,.1)", background: "#fff" }}>
 
           {/* Quiet zone */}
           <Reveal className="lg:col-span-5">
-            <div className="h-full px-8 md:px-10 py-10 lg:py-12 flex flex-col justify-center" style={{ borderRight: "1px solid rgba(10,11,20,.1)" }}>
+            <div className="h-full px-8 md:px-10 py-10 lg:py-12 flex flex-col justify-center" style={{ borderRight: "1px solid rgba(62,60,73,.1)" }}>
               <span style={{ fontFamily: CF, fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 10, display: "block" }}>
                 Low urgency
               </span>
@@ -408,12 +408,12 @@ function SelfDiagnosisSection() {
               <div className="mt-6 flex flex-col">
                 {waitItems.map((item, i) => (
                   <div key={item} className="flex items-start gap-3 py-3.5"
-                    style={{ borderTop: i > 0 ? "1px solid rgba(10,11,20,.07)" : "none" }}>
+                    style={{ borderTop: i > 0 ? "1px solid rgba(62,60,73,.07)" : "none" }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0" style={{ marginTop: 2 }}>
                       <circle cx="12" cy="12" r="9" stroke={B} strokeWidth="1.6" opacity="0.4" />
                       <path d="M8.5 12.5l2.2 2.2 4.8-5" stroke={B} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                    <span style={{ fontFamily: INTER, fontSize: 14.5, lineHeight: 1.6, color: "#3D4152" }}>{item}</span>
+                    <span style={{ fontFamily: INTER, fontSize: 14.5, lineHeight: 1.6, color: "rgba(62,60,73,.80)" }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -548,7 +548,7 @@ function SectionDiagram({ kind }: { kind: DiagramKind }) {
             {[60, 400].map((x) => (
               <rect key={x} x={x - 9} y="104" width="18" height="28" fill="none" stroke={DRAW.line} strokeWidth="1" />
             ))}
-            <motion.rect x="221" y="112" width="18" height="20" fill="rgba(196,171,108,.14)" stroke={SAND} strokeWidth="1" {...fade(1.3)} />
+            <motion.rect x="221" y="112" width="18" height="20" fill="rgba(216,203,165,.14)" stroke={SAND} strokeWidth="1" {...fade(1.3)} />
           </>
         )}
 
@@ -573,7 +573,7 @@ function SectionDiagram({ kind }: { kind: DiagramKind }) {
                 style={{ fontFamily: MONO, fontSize: 9.5, letterSpacing: 1.2 }}>DROP</text>
             </motion.g>
             <rect x="52" y="108" width="26" height="12" fill="none" stroke={DRAW.line} strokeWidth="1" />
-            <motion.rect x="352" y="126" width="42" height="14" fill="rgba(196,171,108,.14)" stroke={SAND} strokeWidth="1" {...fade(1.2)} />
+            <motion.rect x="352" y="126" width="42" height="14" fill="rgba(216,203,165,.14)" stroke={SAND} strokeWidth="1" {...fade(1.2)} />
             <SheetLabel x={446} y={122} anchor="end" dim>SETTLED FOOTING</SheetLabel>
             <SheetLabel x={14} y={146} dim>BEARING SOIL</SheetLabel>
           </>
@@ -619,8 +619,8 @@ function SectionDiagram({ kind }: { kind: DiagramKind }) {
             <SheetLabel x={14} y={46}>WATER TABLE</SheetLabel>
             {[68, 84, 100].map((y, i) => (
               <motion.g key={y} {...fade(0.9 + i * 0.1)}>
-                <line x1={186} y1={y} x2={246} y2={y} stroke="rgba(26,82,168,.75)" strokeWidth="1" />
-                <path d={`M241 ${y - 3} L246 ${y} L241 ${y + 3}`} stroke="rgba(26,82,168,.75)" strokeWidth="1" />
+                <line x1={186} y1={y} x2={246} y2={y} stroke="rgba(0,80,159,.75)" strokeWidth="1" />
+                <path d={`M241 ${y - 3} L246 ${y} L241 ${y + 3}`} stroke="rgba(0,80,159,.75)" strokeWidth="1" />
               </motion.g>
             ))}
             {/* The path in: cove joint */}
@@ -646,11 +646,11 @@ function SectionDiagram({ kind }: { kind: DiagramKind }) {
             {[80, 150, 220, 290, 360].map((x, i) => (
               <motion.path key={x}
                 d={`M${x} 118 C ${x - 10} 100, ${x + 10} 82, ${x} 60`}
-                stroke="rgba(196,171,108,.7)" strokeWidth="1.4" strokeLinecap="round"
+                stroke="rgba(216,203,165,.7)" strokeWidth="1.4" strokeLinecap="round"
                 {...draw(0.6 + i * 0.12, 1)} />
             ))}
             {[80, 150, 220, 290, 360].map((x, i) => (
-              <motion.path key={`h${x}`} d={`M${x - 4} 65 L${x} 58 L${x + 4} 65`} stroke="rgba(196,171,108,.7)" strokeWidth="1.4" {...fade(1.2 + i * 0.08)} />
+              <motion.path key={`h${x}`} d={`M${x - 4} 65 L${x} 58 L${x + 4} 65`} stroke="rgba(216,203,165,.7)" strokeWidth="1.4" {...fade(1.2 + i * 0.08)} />
             ))}
             {/* Vents pulling humid air in */}
             {[20, 440].map((x) => (
@@ -681,8 +681,8 @@ function SectionDiagram({ kind }: { kind: DiagramKind }) {
             {/* Water washing the sub-base out */}
             {[110, 158].map((x, i) => (
               <motion.g key={x} {...fade(1.1 + i * 0.12)}>
-                <line x1={x} y1="66" x2={x + 56} y2="78" stroke="rgba(26,82,168,.8)" strokeWidth="1" />
-                <path d={`M${x + 50} 72 L${x + 56} 78 L${x + 48} 79`} stroke="rgba(26,82,168,.8)" strokeWidth="1" />
+                <line x1={x} y1="66" x2={x + 56} y2="78" stroke="rgba(0,80,159,.8)" strokeWidth="1" />
+                <path d={`M${x + 50} 72 L${x + 56} 78 L${x + 48} 79`} stroke="rgba(0,80,159,.8)" strokeWidth="1" />
               </motion.g>
             ))}
             <SheetLabel x={14} y={100} dim>SUB-BASE WASHING OUT</SheetLabel>
@@ -699,7 +699,7 @@ function SectionDiagram({ kind }: { kind: DiagramKind }) {
             {/* Flaking top layer */}
             <motion.path d="M14 52 L446 52" stroke={SAND} strokeWidth="2" strokeDasharray="14 7 4 9 20 5" {...draw(0.25, 1.2)} />
             {[70, 130, 190, 250, 310, 370].map((x, i) => (
-              <motion.path key={x} d={`M${x} 52 l6 -8 l7 6 l6 -7`} stroke="rgba(196,171,108,.6)" strokeWidth="1.2" {...fade(0.8 + i * 0.07)} />
+              <motion.path key={x} d={`M${x} 52 l6 -8 l7 6 l6 -7`} stroke="rgba(216,203,165,.6)" strokeWidth="1.2" {...fade(0.8 + i * 0.07)} />
             ))}
             {/* Sound slab under it */}
             <motion.path d="M14 64 L446 64 L446 112 L14 112 Z" stroke={DRAW.line} strokeWidth="1.4" {...draw(0.5)} />
@@ -747,7 +747,7 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div style={{ fontFamily: INTER, fontSize: 16.5, color: "rgba(10,11,20,.62)", lineHeight: 1.8, maxWidth: 520 }}>
+              <div style={{ fontFamily: INTER, fontSize: 16.5, color: "rgba(62,60,73,.62)", lineHeight: 1.8, maxWidth: 520 }}>
                 {sign.lede.map((para, i) => (
                   <p key={i} style={{ marginBottom: i < sign.lede.length - 1 ? 16 : 0 }}>{para}</p>
                 ))}
@@ -770,19 +770,19 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
           {/* ── Right: root causes stacked by elevation ── */}
           <Reveal delay={0.08} className="lg:col-span-6">
             <div className="flex items-baseline justify-between mb-5">
-              <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.4)", letterSpacing: 2, textTransform: "uppercase" }}>
+              <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(62,60,73,.4)", letterSpacing: 2, textTransform: "uppercase" }}>
                 Root causes
               </span>
-              <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.25)", letterSpacing: 2 }}>
+              <span style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(62,60,73,.25)", letterSpacing: 2 }}>
                 {causes.length} most common
               </span>
             </div>
 
-            <div style={{ borderTop: "1px solid rgba(10,11,20,.12)" }}>
+            <div style={{ borderTop: "1px solid rgba(62,60,73,.12)" }}>
               {causes.map((cause, i) => {
                 const on = open === i;
                 return (
-                  <div key={cause.title} style={{ borderBottom: "1px solid rgba(10,11,20,.09)" }}>
+                  <div key={cause.title} style={{ borderBottom: "1px solid rgba(62,60,73,.09)" }}>
                     <button
                       onClick={() => setOpen(on ? -1 : i)}
                       onMouseEnter={() => setOpen(i)}
@@ -791,22 +791,22 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
                     >
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-3 flex-wrap">
-                          <span style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: on ? CHAR : "rgba(10,11,20,.72)", letterSpacing: "-0.4px", transition: "color .2s" }}>
+                          <span style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: on ? CHAR : "rgba(62,60,73,.72)", letterSpacing: "-0.4px", transition: "color .2s" }}>
                             {cause.title}
                           </span>
-                          <span className="px-2 py-0.5" style={{ fontFamily: MONO, fontSize: 9.5, color: on ? B : "rgba(10,11,20,.35)", letterSpacing: 1.5, textTransform: "uppercase", border: `1px solid ${on ? "rgba(26,82,168,.45)" : "rgba(10,11,20,.14)"}`, transition: "all .2s" }}>
+                          <span className="px-2 py-0.5" style={{ fontFamily: MONO, fontSize: 9.5, color: on ? B : "rgba(62,60,73,.35)", letterSpacing: 1.5, textTransform: "uppercase", border: `1px solid ${on ? "rgba(0,80,159,.45)" : "rgba(62,60,73,.14)"}`, transition: "all .2s" }}>
                             {cause.tag}
                           </span>
                         </span>
-                        <span className="block mt-1.5" style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(10,11,20,.3)", letterSpacing: 1.2, textTransform: "uppercase" }}>
+                        <span className="block mt-1.5" style={{ fontFamily: MONO, fontSize: 10.5, color: "rgba(62,60,73,.3)", letterSpacing: 1.2, textTransform: "uppercase" }}>
                           {cause.layer}
                         </span>
                       </span>
 
                       {/* Plus/minus drawn as a hairline, no icon library look */}
                       <span className="relative shrink-0 mt-2" style={{ width: 14, height: 14 }}>
-                        <span className="absolute" style={{ top: 6.5, left: 0, width: 14, height: 1.4, background: on ? B : "rgba(10,11,20,.45)" }} />
-                        <span className="absolute transition-transform duration-300" style={{ top: 0, left: 6.3, width: 1.4, height: 14, background: on ? B : "rgba(10,11,20,.45)", transform: on ? "scaleY(0)" : "scaleY(1)" }} />
+                        <span className="absolute" style={{ top: 6.5, left: 0, width: 14, height: 1.4, background: on ? B : "rgba(62,60,73,.45)" }} />
+                        <span className="absolute transition-transform duration-300" style={{ top: 0, left: 6.3, width: 1.4, height: 14, background: on ? B : "rgba(62,60,73,.45)", transform: on ? "scaleY(0)" : "scaleY(1)" }} />
                       </span>
                     </button>
 
@@ -817,7 +817,7 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
                       style={{ overflow: "hidden" }}
                     >
                       <div className="pb-7">
-                        <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(10,11,20,.6)", lineHeight: 1.7, marginBottom: 16, maxWidth: 460 }}>
+                        <p style={{ fontFamily: INTER, fontSize: 15, color: "rgba(62,60,73,.6)", lineHeight: 1.7, marginBottom: 16, maxWidth: 460 }}>
                           {cause.desc}
                         </p>
                         <div className="relative overflow-hidden" style={{ height: 190 }}>
@@ -826,7 +826,7 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
                             alt={cause.title}
                             className="absolute inset-0 w-full h-full object-cover"
                           />
-                          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.85) 0%,rgba(10,11,20,.05) 65%)" }} />
+                          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(62,60,73,.85) 0%,rgba(62,60,73,.05) 65%)" }} />
                           <div className="absolute left-4 right-4 bottom-3.5">
                             <p style={{ fontFamily: MONO, fontSize: 9.5, color: SAND, letterSpacing: 1.8, textTransform: "uppercase", marginBottom: 4 }}>
                               What we find on site
@@ -898,11 +898,11 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
       <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
         <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
           {TESTIMONIALS.map((t, i) => (
-            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.07)" }}>
+            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(62,60,73,.07)" }}>
               {/* Image thumb */}
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
+                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
                   <button onClick={() => setSelectedIdx(i)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
@@ -918,12 +918,12 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
                   ))}
                 </div>
                 {/* Quote mark */}
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(26,82,168,.15)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#444", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(0,80,159,.15)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.80)", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>
                   {t.quote}
                 </p>
-                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(0,0,0,.07)" }}>
-                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "#eee" }}>
+                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(62,60,73,.07)" }}>
+                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "rgba(62,60,73,.09)" }}>
                     <ImageWithFallback src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
                   </div>
                   <div>
@@ -942,7 +942,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
         {TESTIMONIALS.map((_, i) => (
           <button key={i} onClick={() => emblaApi?.scrollTo(i)}
             className="rounded-full transition-all duration-300"
-            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)" }} />
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.15)" }} />
         ))}
       </div>
 
@@ -996,7 +996,7 @@ function FaqSection() {
             {FAQS.map((faq, i) => (
               <AccordionPrimitive.Item key={i} value={String(i)}
                 className="overflow-hidden"
-                style={{ borderBottom: "1px solid rgba(10,11,20,.1)" }}>
+                style={{ borderBottom: "1px solid rgba(62,60,73,.1)" }}>
                 <AccordionPrimitive.Header>
                   <AccordionPrimitive.Trigger
                     className="w-full flex items-center gap-5 text-left group transition-colors"
@@ -1044,7 +1044,7 @@ function CtaSection() {
           <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,72px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", marginBottom: 16 }}>
             Ready to fix your<br />sagging floors?
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.55)", maxWidth: 480, margin: "0 auto 44px" }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(161,205,241,.9)", maxWidth: 480, margin: "0 auto 44px" }}>
             Free inspection · Same-week availability · Lifetime warranty on every repair
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -1055,7 +1055,7 @@ function CtaSection() {
               <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
             </a>
             <a href="tel:+19015550100"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(255,255,255,.55)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(161,205,241,.9)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
               or call (901) 555-0100
             </a>
           </div>

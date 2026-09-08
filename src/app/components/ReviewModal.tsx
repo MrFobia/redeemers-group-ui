@@ -48,7 +48,7 @@ export function ReviewModal({ review, onClose, onPrev, onNext }: {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-6"
-      style={{ background: "rgba(0,0,0,.85)", backdropFilter: "blur(8px)" }}
+      style={{ background: "rgba(62,60,73,.85)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
       <motion.div
@@ -70,8 +70,8 @@ export function ReviewModal({ review, onClose, onPrev, onNext }: {
 
           <div className="absolute inset-0" style={{
             background: playing
-              ? "rgba(0,0,0,.85)"
-              : "linear-gradient(to bottom, rgba(0,0,0,.15) 0%, rgba(0,0,0,.1) 40%, rgba(0,0,0,.7) 100%)"
+              ? "rgba(62,60,73,.85)"
+              : "linear-gradient(to bottom, rgba(62,60,73,.15) 0%, rgba(62,60,73,.1) 40%, rgba(62,60,73,.7) 100%)"
           }} />
 
           {playing ? (
@@ -88,7 +88,7 @@ export function ReviewModal({ review, onClose, onPrev, onNext }: {
                 style={{
                   width: 72, height: 72, borderRadius: "50%",
                   background: B, border: "3px solid rgba(255,255,255,.25)",
-                  cursor: "pointer", boxShadow: "0 8px 32px rgba(0,0,0,.5)"
+                  cursor: "pointer", boxShadow: "0 8px 32px rgba(62,60,73,.5)"
                 }}
               >
                 <Play size={26} fill="white" stroke="none" style={{ marginLeft: 4 }} />
@@ -101,7 +101,7 @@ export function ReviewModal({ review, onClose, onPrev, onNext }: {
               <span style={{
                 fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9,
                 color: "#fff", letterSpacing: 2.5, textTransform: "uppercase",
-                background: "rgba(26,82,168,.85)", padding: "4px 10px",
+                background: "rgba(0,80,159,.85)", padding: "4px 10px",
                 backdropFilter: "blur(4px)",
               }}>{review.service}</span>
             ) : <span />}
@@ -110,14 +110,14 @@ export function ReviewModal({ review, onClose, onPrev, onNext }: {
               <button
                 onClick={onPrev}
                 className="w-9 h-9 flex items-center justify-center transition-colors hover:bg-white/20"
-                style={{ background: "rgba(0,0,0,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer", backdropFilter: "blur(4px)" }}
+                style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer", backdropFilter: "blur(4px)" }}
               >
                 <ChevronLeft size={16} color="#fff" />
               </button>
               <button
                 onClick={onNext}
                 className="w-9 h-9 flex items-center justify-center transition-colors hover:bg-white/20"
-                style={{ background: "rgba(0,0,0,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer", backdropFilter: "blur(4px)" }}
+                style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer", backdropFilter: "blur(4px)" }}
               >
                 <ChevronRight size={16} color="#fff" />
               </button>
@@ -144,7 +144,7 @@ export function ReviewModal({ review, onClose, onPrev, onNext }: {
               ))}
             </div>
 
-            <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(196,171,108,.2)", lineHeight: 0.55, marginBottom: 14 }}>&ldquo;</div>
+            <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(216,203,165,.2)", lineHeight: 0.55, marginBottom: 14 }}>&ldquo;</div>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.78)", lineHeight: 1.8, flex: 1 }}>
               {review.quote}
             </p>

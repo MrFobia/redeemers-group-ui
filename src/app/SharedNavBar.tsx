@@ -80,10 +80,10 @@ function SimpleDropdown({ children, width = 260 }: { children: React.ReactNode; 
       <div
         className="flex flex-col py-2"
         style={{
-          background: "rgba(10,11,20,.98)",
+          background: "rgba(62,60,73,.98)",
           backdropFilter: "blur(24px)",
           border: "1px solid rgba(255,255,255,.08)",
-          boxShadow: "0 24px 60px rgba(0,0,0,.5)",
+          boxShadow: "0 24px 60px rgba(62,60,73,.5)",
         }}
       >
         {children}
@@ -100,7 +100,7 @@ function SimpleDropdownItem({ label, onClick, indent }: { label: string; onClick
       onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="w-full text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+      className="w-full text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D8CBA5]"
       style={{
         fontFamily: "'Inter',sans-serif", fontSize: indent ? 12.5 : 13.5,
         color: hover ? "#fff" : "rgba(255,255,255,.75)",
@@ -124,7 +124,7 @@ function FlyoutItem({ label, onClick, children }: { label: string; onClick?: () 
       <button
         role="menuitem"
         onClick={onClick}
-        className="w-full flex items-center justify-between gap-3 text-left px-4 py-2.5 transition-colors hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+        className="w-full flex items-center justify-between gap-3 text-left px-4 py-2.5 transition-colors hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D8CBA5]"
         style={{
           fontFamily: "'Inter',sans-serif", fontWeight: open ? 600 : 400, fontSize: 13.5,
           color: open ? "#fff" : "rgba(255,255,255,.75)",
@@ -141,10 +141,10 @@ function FlyoutItem({ label, onClick, children }: { label: string; onClick?: () 
             className="flex flex-col py-2"
             style={{
               width: 280,
-              background: "rgba(10,11,20,.98)",
+              background: "rgba(62,60,73,.98)",
               backdropFilter: "blur(24px)",
               border: "1px solid rgba(255,255,255,.08)",
-              boxShadow: "0 24px 60px rgba(0,0,0,.5)",
+              boxShadow: "0 24px 60px rgba(62,60,73,.5)",
             }}
           >
             {children}
@@ -474,14 +474,14 @@ export default function SharedNavBar({
       <nav
         className="relative z-[300] w-full transition-all duration-300"
         style={{
-          background: isTransparent ? "rgba(10,11,20,0.0)" : "rgba(10,11,20,0.97)",
+          background: isTransparent ? "rgba(62,60,73,0.0)" : "rgba(62,60,73,0.97)",
           backdropFilter: isTransparent ? "none" : "blur(20px)",
           borderBottom: isTransparent ? "1px solid transparent" : "1px solid rgba(255,255,255,0.06)",
         }}
       >
         <div className="flex items-center justify-between px-8 md:px-14 py-3 gap-4 lg:gap-6">
           {/* Logo */}
-          <button onClick={() => handleNavigate("home")} className="h-16 lg:h-20 xl:h-24 shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
+          <button onClick={() => handleNavigate("home")} className="h-[72px] lg:h-[88px] xl:h-[104px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
             <Logo light />
           </button>
 
@@ -504,7 +504,7 @@ export default function SharedNavBar({
                       aria-expanded={megaOpen}
                       onMouseEnter={() => { setMegaOpen(true); setResourcesOpen(false); setAboutOpen(false); setOurDiffOpen(false); setSignsOpen(false); }}
                       onClick={() => { setMegaOpen(false); handleNavigate("services-landing"); }}
-                      className="flex items-center gap-1 transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C4AB6C]"
+                      className="flex items-center gap-1 transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D8CBA5]"
                       style={{
                         fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13,
                         color: megaOpen || isActive ? "#fff" : "rgba(255,255,255,.75)",
@@ -711,12 +711,12 @@ export default function SharedNavBar({
             anything with a desktop dropdown (Services/Resources/About) instead
             of an inline accordion. Client: "una esperiencia mucha más mobile". */}
         {mobileOpen && (
-          <div className="lg:hidden fixed inset-0 z-[240]" style={{ background: "rgba(0,0,0,.5)" }} onClick={() => { setMobileOpen(false); openMobilePanel("root"); }} />
+          <div className="lg:hidden fixed inset-0 z-[240]" style={{ background: "rgba(62,60,73,.5)" }} onClick={() => { setMobileOpen(false); openMobilePanel("root"); }} />
         )}
         {mobileOpen && (
           <div className="lg:hidden fixed top-0 left-0 right-0 z-[250] flex flex-col overflow-y-auto" style={{ background: DARK, maxHeight: "85dvh" }}>
             <div className="flex items-center justify-between px-8 py-3 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-              <button onClick={() => handleNavigate("home")} className="h-14" style={{ background: "none", border: "none", cursor: "pointer" }}>
+              <button onClick={() => handleNavigate("home")} className="h-16" style={{ background: "none", border: "none", cursor: "pointer" }}>
                 <Logo light />
               </button>
               <button onClick={() => { setMobileOpen(false); openMobilePanel("root"); }} className="p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }}>

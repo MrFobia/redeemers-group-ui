@@ -88,12 +88,12 @@ function ProjectCard({ project, onClick }: { project: LoveWellProject; onClick: 
             over a photo — same low-contrast trap as the reviews carousel
             arrows. Solid dark chip + white text, like the Before/After
             labels elsewhere, so it holds up over any image. */}
-        <span className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(10,11,20,.7)" }}>
+        <span className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(62,60,73,.7)" }}>
           <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#fff", letterSpacing: 1 }}>{project.year}</span>
         </span>
         {project.videoId && (
           <>
-            <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.2)" }} />
+            <div className="absolute inset-0" style={{ background: "rgba(62,60,73,.2)" }} />
             <span className="absolute inset-0 flex items-center justify-center">
               <span className="w-12 h-12 rounded-full flex items-center justify-center transition-transform group-hover:scale-110" style={{ background: B }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
@@ -133,7 +133,7 @@ function ProjectModal({ project, onClose }: { project: LoveWellProject | null; o
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10"
-          style={{ background: "rgba(0,0,0,.88)" }}
+          style={{ background: "rgba(62,60,73,.88)" }}
           onClick={onClose}
         >
           <motion.div
@@ -158,7 +158,7 @@ function ProjectModal({ project, onClose }: { project: LoveWellProject | null; o
             </div>
 
             {project.videoId ? (
-              <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
+              <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#3E3C49" }}>
                 <iframe
                   className="absolute inset-0 w-full h-full"
                   src={`https://www.youtube.com/embed/${project.videoId}?autoplay=1`}
@@ -169,7 +169,7 @@ function ProjectModal({ project, onClose }: { project: LoveWellProject | null; o
                 />
               </div>
             ) : (
-              <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#000" }}>
+              <div className="relative w-full" style={{ paddingBottom: "56.25%", background: "#3E3C49" }}>
                 <ImageWithFallback src={project.img} alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
               </div>
             )}
@@ -200,7 +200,7 @@ function EventModal({ event, onClose }: { event: LoveWellEvent | null; onClose: 
   return (
     <DialogPrimitive.Root open={!!event} onOpenChange={(open) => !open && onClose()}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50" style={{ background: "rgba(10,11,20,.78)" }} />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50" style={{ background: "rgba(62,60,73,.78)" }} />
         <DialogPrimitive.Content
           className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,640px)] max-h-[92vh] overflow-y-auto rg-scroll-thin"
           style={{ background: "#fff" }}
@@ -210,7 +210,7 @@ function EventModal({ event, onClose }: { event: LoveWellEvent | null; onClose: 
             <div className="relative">
               <DialogPrimitive.Close
                 className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}
+                style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}
               >
                 <X size={18} color="#fff" />
               </DialogPrimitive.Close>
@@ -226,7 +226,7 @@ function EventModal({ event, onClose }: { event: LoveWellEvent | null; onClose: 
 
               <div className="p-8 md:p-10">
                 <div className="flex items-center gap-3 mb-5 flex-wrap">
-                  <span className="px-3 py-1" style={{ background: "rgba(26,82,168,.08)", border: `1px solid rgba(26,82,168,.2)`, fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
+                  <span className="px-3 py-1" style={{ background: "rgba(0,80,159,.08)", border: `1px solid rgba(0,80,159,.2)`, fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
                     Upcoming Event
                   </span>
                   <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{event.date} · {event.location}</span>
@@ -256,7 +256,7 @@ function EventModal({ event, onClose }: { event: LoveWellEvent | null; onClose: 
                   </div>
                 )}
 
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#444", lineHeight: 1.75 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.80)", lineHeight: 1.75 }}>
                   {event.desc}
                 </p>
               </div>
@@ -287,10 +287,10 @@ function LoveWellHero() {
     { k: `${LOVE_WELL_PROJECTS.length}+`, v: "Community projects" },
   ];
   return (
-    <section className="relative overflow-hidden" style={{ background: "#0A0B14" }}>
+    <section className="relative overflow-hidden" style={{ background: "#3E3C49" }}>
       <div className="absolute inset-0">
         <ImageWithFallback src={imgFloor02} alt="Love Well Initiative" className="w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(10,11,20,0.95) 0%, rgba(10,11,20,0.88) 46%, rgba(11,28,74,0.72) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(62,60,73,0.95) 0%, rgba(62,60,73,0.88) 46%, rgba(0,55,113,0.72) 100%)" }} />
       </div>
       <div className="absolute inset-0 pointer-events-none opacity-[0.025]"
         style={{
@@ -312,8 +312,8 @@ function LoveWellHero() {
           maxWidth: 460,
           opacity: 0.16,
           mixBlendMode: "screen",
-          WebkitMaskImage: "radial-gradient(closest-side, rgba(0,0,0,.9) 0%, rgba(0,0,0,.5) 60%, transparent 100%)",
-          maskImage: "radial-gradient(closest-side, rgba(0,0,0,.9) 0%, rgba(0,0,0,.5) 60%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(closest-side, rgba(62,60,73,.9) 0%, rgba(62,60,73,.5) 60%, transparent 100%)",
+          maskImage: "radial-gradient(closest-side, rgba(62,60,73,.9) 0%, rgba(62,60,73,.5) 60%, transparent 100%)",
         }}
       />
 
@@ -354,10 +354,10 @@ function IntroSection({ onOpenEvent }: { onOpenEvent: (e: LoveWellEvent) => void
     <section style={{ background: SURFACE.alt }} className="py-16 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
         <Reveal className="max-w-3xl">
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(16px,1.4vw,19px)", color: "rgba(10,11,20,.68)", lineHeight: 1.8, marginBottom: 20 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(16px,1.4vw,19px)", color: "rgba(62,60,73,.68)", lineHeight: 1.8, marginBottom: 20 }}>
             The Love Well Initiative is how Redeemers shows up for the Memphis area beyond the jobs we&rsquo;re hired for. Since 2015 it has been the umbrella for everything our team gives back — the annual Love Well 5K &amp; Festival benefiting a different local charity each year, hands-on work for shelters and family homes, and structural repairs donated where they change what a building can be used for.
           </p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.55)", lineHeight: 1.8 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.55)", lineHeight: 1.8 }}>
             Every year adds another project to the list. Below is the work itself — start with the featured story, then browse the full history by year.
           </p>
 
@@ -416,7 +416,7 @@ function FeaturedProjectSection({ onOpen }: { onOpen: (p: LoveWellProject) => vo
           <button onClick={() => onOpen(project)} className="group relative block w-full overflow-hidden p-0"
             style={{ aspectRatio: "16/10", border: `1px solid ${ON_LIGHT.border}`, background: SURFACE.alt, cursor: "pointer" }}>
             <ImageWithFallback src={project.img} alt={project.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
-            <span className="absolute inset-0" style={{ background: "rgba(10,11,20,.28)" }} />
+            <span className="absolute inset-0" style={{ background: "rgba(62,60,73,.28)" }} />
             {project.videoId && (
               <span className="absolute inset-0 flex items-center justify-center">
                 <span className="w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover:scale-110" style={{ background: B }}>
@@ -427,13 +427,13 @@ function FeaturedProjectSection({ onOpen }: { onOpen: (p: LoveWellProject) => vo
           </button>
 
           <div>
-            <span className="inline-block px-2.5 py-1 mb-4" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}>
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#8A7238", letterSpacing: 1.5 }}>{project.year}</span>
+            <span className="inline-block px-2.5 py-1 mb-4" style={{ background: "rgba(216,203,165,.18)", border: "1px solid rgba(216,203,165,.4)" }}>
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#00509F", letterSpacing: 1.5 }}>{project.year}</span>
             </span>
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.6vw,36px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-1px", marginBottom: 14 }}>
               {project.title}
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.62)", lineHeight: 1.8, marginBottom: 22 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.62)", lineHeight: 1.8, marginBottom: 22 }}>
               {project.desc}
             </p>
             <button onClick={() => onOpen(project)} className="group inline-flex items-center gap-2 px-7 py-4 transition-all hover:opacity-90"

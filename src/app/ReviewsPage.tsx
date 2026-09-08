@@ -51,13 +51,13 @@ function ReviewCard({ r, i, onClick }: { r: typeof ALL_REVIEWS[0]; i: number; on
       className="flex flex-col cursor-pointer group"
       style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, transition: "border-color .2s" }}
       whileHover={{ y: -4 }}
-      onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(26,82,168,.35)")}
-      onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(10,11,20,.07)")}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(0,80,159,.35)")}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(62,60,73,.07)")}
     >
       {/* Thumb */}
       <div className="relative overflow-hidden" style={{ paddingBottom: "52%" }}>
         <ImageWithFallback src={r.img} alt={r.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-        <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
+        <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
           <div className="w-12 h-12 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
             style={{ background: B }}>
             <Play size={16} fill="white" stroke="none" />
@@ -67,7 +67,7 @@ function ReviewCard({ r, i, onClick }: { r: typeof ALL_REVIEWS[0]; i: number; on
           position: "absolute", top: 12, left: 12,
           fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9,
           color: CHAR, letterSpacing: 2, textTransform: "uppercase",
-          background: "rgba(26,82,168,.85)", padding: "3px 8px",
+          background: "rgba(0,80,159,.85)", padding: "3px 8px",
         }}>{r.service}</span>
       </div>
 
@@ -78,19 +78,19 @@ function ReviewCard({ r, i, onClick }: { r: typeof ALL_REVIEWS[0]; i: number; on
             <Star key={si} size={13} fill={SAND} stroke="none" />
           ))}
         </div>
-        <div style={{ fontFamily: "Georgia,serif", fontSize: 40, color: "rgba(26,82,168,.25)", lineHeight: 0.6, marginBottom: 10 }}>&ldquo;</div>
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.6)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>
+        <div style={{ fontFamily: "Georgia,serif", fontSize: 40, color: "rgba(0,80,159,.25)", lineHeight: 0.6, marginBottom: 10 }}>&ldquo;</div>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.6)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>
           {r.quote}
         </p>
-        <div className="flex items-center gap-3 pt-4" style={{ borderTop: "1px solid rgba(10,11,20,.07)" }}>
-          <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "rgba(10,11,20,.1)" }}>
+        <div className="flex items-center gap-3 pt-4" style={{ borderTop: "1px solid rgba(62,60,73,.07)" }}>
+          <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "rgba(62,60,73,.1)" }}>
             <ImageWithFallback src={r.avatar} alt={r.name} className="w-full h-full object-cover" />
           </div>
           <div className="flex-1">
             <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: CHAR }}>{r.name}</p>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.35)" }}>{r.loc}</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.35)" }}>{r.loc}</p>
           </div>
-          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.2)" }}>{r.date}</span>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.2)" }}>{r.date}</span>
         </div>
       </div>
     </motion.div>
@@ -194,7 +194,7 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
         <PageBreadcrumb items={[{ label: "Home", onClick: () => nav("home") }, { label: "All Reviews" }]} />
 
         {/* ── Hero ── */}
-        <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(10,11,20,.06)" }} className="py-20 lg:py-24">
+        <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(62,60,73,.06)" }} className="py-20 lg:py-24">
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
             <div className="max-w-[760px]">
               {/* Stars + rating */}
@@ -208,10 +208,10 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
               <h1 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,5vw,70px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-2px", marginBottom: 20 }}>
                 All Customer Reviews
               </h1>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(15px,1.2vw,17px)", color: "rgba(10,11,20,.45)", lineHeight: 1.7, marginBottom: 14, maxWidth: 560 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(15px,1.2vw,17px)", color: "rgba(62,60,73,.45)", lineHeight: 1.7, marginBottom: 14, maxWidth: 560 }}>
                 Real results from homeowners across Tennessee, Arkansas, Mississippi, and Missouri. Every review is verified and unedited.
               </p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.25)" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.25)" }}>
                 {ALL_REVIEWS.length} verified reviews &nbsp;·&nbsp; Last updated: June 2026
               </p>
             </div>
@@ -223,9 +223,9 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
             {/* Filter bar — scoped to this grid, not the fixed header */}
-            <div className="relative mb-8 pb-6" style={{ borderBottom: "1px solid rgba(10,11,20,.07)" }}>
+            <div className="relative mb-8 pb-6" style={{ borderBottom: "1px solid rgba(62,60,73,.07)" }}>
               <div className="flex items-center gap-3 flex-wrap">
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.4)", flexShrink: 0 }}>Filter by:</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(62,60,73,.4)", flexShrink: 0 }}>Filter by:</span>
                 <div className="flex items-center gap-3 overflow-x-auto" style={{ flex: 1 }}>
                   {SERVICE_FILTERS.map((f) => (
                     <button key={f} onClick={() => handleFilterChange(f)} className="flex-shrink-0 px-4 py-2 transition-all"
@@ -240,18 +240,18 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
                     </button>
                   ))}
                 </div>
-                <div style={{ width: 1, height: 20, background: "rgba(10,11,20,.1)", flexShrink: 0, margin: "0 4px" }} />
+                <div style={{ width: 1, height: 20, background: "rgba(62,60,73,.1)", flexShrink: 0, margin: "0 4px" }} />
                 <div className="flex-shrink-0" ref={areaRef}>
                   <button onClick={() => { setAreaPos(areaRef.current?.getBoundingClientRect() ?? null); setServiceAreaOpen(v => !v); setSymptomsOpen(false); }}
                     className="flex items-center gap-1.5 px-4 py-1.5"
-                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
+                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(62,60,73,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
                     Service area <ChevronDown size={13} />
                   </button>
                 </div>
                 <div className="flex-shrink-0" ref={symptomsRef}>
                   <button onClick={() => { setSymptomsPos(symptomsRef.current?.getBoundingClientRect() ?? null); setSymptomsOpen(v => !v); setServiceAreaOpen(false); }}
                     className="flex items-center gap-1.5 px-4 py-1.5"
-                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(10,11,20,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
+                    style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: "rgba(62,60,73,.55)", border: `1.5px solid ${ON_LIGHT.border}`, borderRadius: 4, cursor: "pointer", background: "transparent" }}>
                     All Symptoms <ChevronDown size={13} />
                   </button>
                 </div>
@@ -259,11 +259,11 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
 
               {/* Fixed-positioned dropdowns — escape overflow clipping */}
               {serviceAreaOpen && areaPos && (
-                <div style={{ position: "fixed", top: areaPos.bottom + 4, left: areaPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 160 }}>
+                <div style={{ position: "fixed", top: areaPos.bottom + 4, left: areaPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(62,60,73,.5)", minWidth: 160 }}>
                   {["Tennessee", "Arkansas", "Mississippi", "Missouri"].map((s) => (
                     <button key={s} onClick={() => setServiceAreaOpen(false)} className="w-full text-left px-4 py-2.5"
-                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(62,60,73,.06)")}
                       onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
                       {s}
                     </button>
@@ -271,11 +271,11 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
                 </div>
               )}
               {symptomsOpen && symptomsPos && (
-                <div style={{ position: "fixed", top: symptomsPos.bottom + 4, left: symptomsPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(0,0,0,.5)", minWidth: 180 }}>
+                <div style={{ position: "fixed", top: symptomsPos.bottom + 4, left: symptomsPos.left, zIndex: 200, background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 8px 32px rgba(62,60,73,.5)", minWidth: 180 }}>
                   {["Cracked walls", "Uneven floors", "Wet basement", "Musty smell", "Sticking doors", "Sagging floor joists"].map((s) => (
                     <button key={s} onClick={() => setSymptomsOpen(false)} className="w-full text-left px-4 py-2.5"
-                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
-                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(10,11,20,.06)")}
+                      style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.65)", background: "transparent", border: "none", cursor: "pointer", display: "block" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "rgba(62,60,73,.06)")}
                       onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
                       {s}
                     </button>
@@ -285,8 +285,8 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
             </div>
 
             <div className="flex items-center justify-between mb-10">
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.3)" }}>
-                Showing <strong style={{ color: "rgba(10,11,20,.7)" }}>{filtered.length}</strong> reviews
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.3)" }}>
+                Showing <strong style={{ color: "rgba(62,60,73,.7)" }}>{filtered.length}</strong> reviews
                 {activeFilter !== "All" && (
                   <span> ·{" "}
                     <button onClick={() => handleFilterChange("All")}
@@ -328,8 +328,8 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
                     style={{
                       fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14,
                       background: page === p ? B : "transparent",
-                      color: page === p ? DARK : "rgba(10,11,20,.5)",
-                      border: `1.5px solid ${page === p ? B : "rgba(10,11,20,.15)"}`,
+                      color: page === p ? DARK : "rgba(62,60,73,.5)",
+                      border: `1.5px solid ${page === p ? B : "rgba(62,60,73,.15)"}`,
                       cursor: "pointer",
                     }}
                   >
@@ -351,7 +351,7 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
         </section>
 
         {/* ── Bottom CTA ── */}
-        <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(10,11,20,.06)" }} className="py-20 lg:py-24">
+        <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(62,60,73,.06)" }} className="py-20 lg:py-24">
           <div className="max-w-[1440px] mx-auto px-8 md:px-14">
             <div className="max-w-[640px]">
               <div className="flex items-center gap-3 mb-5">
@@ -361,7 +361,7 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
               <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1.5px", marginBottom: 16 }}>
                 Join 400+ satisfied homeowners
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.4)", lineHeight: 1.7, marginBottom: 32 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.4)", lineHeight: 1.7, marginBottom: 32 }}>
                 Free inspection. No obligation. Same-week availability across TN, AR, MS & MO.
               </p>
               <button

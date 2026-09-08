@@ -14,10 +14,10 @@ type Row = {
 };
 
 const ROWS: Row[] = [
-  { key: "reviews",        kind: "review",          label: "Reviews",         accent: "#4ADE80", icon: Star },
+  { key: "reviews",        kind: "review",          label: "Reviews",         accent: "#D8CBA5", icon: Star },
   { key: "jobStories",     kind: "job-story",       label: "Job Stories",     accent: SAND,      icon: FileText },
-  { key: "caseStudies",    kind: "case-study",      label: "Case Studies",    accent: "#A78BFA", icon: HardHat },
-  { key: "projectGallery", kind: "project-gallery", label: "Project Gallery", accent: "#60A5FA", icon: Images },
+  { key: "caseStudies",    kind: "case-study",      label: "Case Studies",    accent: "#00509F", icon: HardHat },
+  { key: "projectGallery", kind: "project-gallery", label: "Project Gallery", accent: "#003771", icon: Images },
 ];
 
 /** Panel level 2 — a single city, its content inventory, and the map pins behind it. */
@@ -40,7 +40,7 @@ export function CityPanel({
       <button
         onClick={onBack}
         className="group inline-flex items-center gap-2 mb-5"
-        style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(10,11,20,.45)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+        style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(62,60,73,.45)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
       >
         <ArrowLeft size={13} className="transition-transform group-hover:-translate-x-0.5" />
         Back to {STATE_NAME[city.state]}
@@ -56,8 +56,8 @@ export function CityPanel({
       </div>
 
       <div className="flex items-center gap-2 mb-7">
-        <MapPin size={12} color="rgba(10,11,20,.3)" />
-        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(10,11,20,.5)" }}>
+        <MapPin size={12} color="rgba(62,60,73,.3)" />
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(62,60,73,.5)" }}>
           {city.county} County{zip ? ` · ZIP: ${zip}` : ""}
         </p>
       </div>
@@ -69,7 +69,7 @@ export function CityPanel({
         {kindFilter && (
           <button
             onClick={() => onFilter(null)}
-            style={{ fontFamily: "'Inter',sans-serif", fontSize: 11.5, color: "rgba(10,11,20,.4)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            style={{ fontFamily: "'Inter',sans-serif", fontSize: 11.5, color: "rgba(62,60,73,.4)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
             className="hover:text-white/70 transition-colors"
           >
             Show all pins
@@ -79,7 +79,7 @@ export function CityPanel({
 
       {content ? (
         <>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.32)", lineHeight: 1.5, marginBottom: 12 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.32)", lineHeight: 1.5, marginBottom: 12 }}>
             Every item is pinned on the map — tap a row to isolate it, or a pin to open it.
           </p>
 
@@ -97,23 +97,23 @@ export function CityPanel({
                   onClick={() => onFilter(on ? null : row.kind)}
                   className="flex items-center justify-between gap-3 pl-4 pr-4 py-3 text-left transition-all"
                   style={{
-                    background: on ? "rgba(10,11,20,.09)" : "rgba(10,11,20,.035)",
-                    borderLeft: `3px solid ${empty ? "rgba(10,11,20,.12)" : row.accent}`,
+                    background: on ? "rgba(62,60,73,.09)" : "rgba(62,60,73,.035)",
+                    borderLeft: `3px solid ${empty ? "rgba(62,60,73,.12)" : row.accent}`,
                     border: on ? `1px solid ${row.accent}` : "1px solid transparent",
                     borderLeftWidth: 3,
-                    borderLeftColor: empty ? "rgba(10,11,20,.12)" : row.accent,
+                    borderLeftColor: empty ? "rgba(62,60,73,.12)" : row.accent,
                     opacity: empty ? 0.45 : 1,
                     cursor: empty ? "default" : "pointer",
                   }}
                 >
                   <span className="flex items-center gap-2.5 min-w-0">
-                    <Icon size={15} color={empty ? "rgba(10,11,20,.35)" : row.accent} />
+                    <Icon size={15} color={empty ? "rgba(62,60,73,.35)" : row.accent} />
                     <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: CHAR, whiteSpace: "nowrap" }}>
                       {count} {row.label}
                     </span>
                   </span>
                   {hint && !on && (
-                    <span className="truncate" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.35)" }}>
+                    <span className="truncate" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.35)" }}>
                       {hint}
                     </span>
                   )}
@@ -130,13 +130,13 @@ export function CityPanel({
                   key={item.id}
                   onClick={() => onOpenItem(item)}
                   className="group flex items-center justify-between gap-3 px-3.5 py-2.5 text-left transition-all hover:border-white/25"
-                  style={{ background: "rgba(10,11,20,.03)", border: `1px solid ${ON_LIGHT.border}`, cursor: "pointer" }}
+                  style={{ background: "rgba(62,60,73,.03)", border: `1px solid ${ON_LIGHT.border}`, cursor: "pointer" }}
                 >
                   <span className="min-w-0">
                     <span className="block truncate" style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: CHAR }}>
                       {item.title}
                     </span>
-                    <span className="block" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)" }}>
+                    <span className="block" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.35)" }}>
                       {item.service}
                     </span>
                   </span>
@@ -146,13 +146,13 @@ export function CityPanel({
             </div>
           )}
 
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.3)", marginBottom: 18 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.3)", marginBottom: 18 }}>
             {items.length} items published for {city.name}.
           </p>
         </>
       ) : (
-        <div className="mb-7 px-4 py-5" style={{ background: "rgba(10,11,20,.035)", border: "1px dashed rgba(10,11,20,.12)" }}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(10,11,20,.45)", lineHeight: 1.6 }}>
+        <div className="mb-7 px-4 py-5" style={{ background: "rgba(62,60,73,.035)", border: "1px dashed rgba(62,60,73,.12)" }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(62,60,73,.45)", lineHeight: 1.6 }}>
             We serve {city.name}, but nothing has been published for it yet. Reviews and job stories appear here as soon as they are tagged to this city.
           </p>
         </div>

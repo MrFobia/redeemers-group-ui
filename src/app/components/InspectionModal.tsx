@@ -173,7 +173,7 @@ function TrustPanel() {
   return (
     <div
       className="hidden lg:flex flex-col justify-between h-full"
-      style={{ background: "rgba(196,171,108,0.06)", borderLeft: "1px solid rgba(196,171,108,0.12)", padding: "40px 36px" }}
+      style={{ background: "rgba(216,203,165,0.06)", borderLeft: "1px solid rgba(216,203,165,0.12)", padding: "40px 36px" }}
     >
       <div>
         <div style={{ width: 32, height: 2, background: SAND, marginBottom: 28 }} />
@@ -226,7 +226,7 @@ function SuccessScreen({ onClose }: { onClose: () => void }) {
       className="flex flex-col items-center justify-center text-center"
       style={{ padding: "60px 40px" }}
     >
-      <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(196,171,108,0.12)", border: `1px solid rgba(196,171,108,0.3)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 }}>
+      <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(216,203,165,0.12)", border: `1px solid rgba(216,203,165,0.3)`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 }}>
         <CheckCircle size={28} color={SAND} />
       </div>
       <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", marginBottom: 10, lineHeight: 1.2 }}>
@@ -324,7 +324,7 @@ export function InspectionModal() {
           onClick={close}
           style={{
             position: "fixed", inset: 0, zIndex: 9999,
-            background: "rgba(0,0,0,0.82)",
+            background: "rgba(62,60,73,0.82)",
             backdropFilter: "blur(8px)",
             display: "flex", alignItems: "center", justifyContent: "center",
             padding: "16px",
@@ -421,8 +421,8 @@ export function InspectionModal() {
                                   className="flex items-center gap-2 flex-1"
                                   style={{
                                     padding: "10px 14px",
-                                    background: form.contactMethod === opt.id ? "rgba(196,171,108,0.12)" : "rgba(255,255,255,0.04)",
-                                    border: `1px solid ${form.contactMethod === opt.id ? "rgba(196,171,108,0.5)" : "rgba(255,255,255,0.08)"}`,
+                                    background: form.contactMethod === opt.id ? "rgba(216,203,165,0.12)" : "rgba(255,255,255,0.04)",
+                                    border: `1px solid ${form.contactMethod === opt.id ? "rgba(216,203,165,0.5)" : "rgba(255,255,255,0.08)"}`,
                                     borderRadius: 6,
                                     cursor: "pointer",
                                     transition: "all .15s",
@@ -451,8 +451,8 @@ export function InspectionModal() {
                                   className="flex flex-col items-center flex-1"
                                   style={{
                                     padding: "10px 8px",
-                                    background: form.bestTime === t.id ? "rgba(196,171,108,0.12)" : "rgba(255,255,255,0.04)",
-                                    border: `1px solid ${form.bestTime === t.id ? "rgba(196,171,108,0.5)" : "rgba(255,255,255,0.08)"}`,
+                                    background: form.bestTime === t.id ? "rgba(216,203,165,0.12)" : "rgba(255,255,255,0.04)",
+                                    border: `1px solid ${form.bestTime === t.id ? "rgba(216,203,165,0.5)" : "rgba(255,255,255,0.08)"}`,
                                     borderRadius: 6,
                                     cursor: "pointer",
                                     transition: "all .15s",

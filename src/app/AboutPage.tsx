@@ -194,7 +194,7 @@ function PeopleSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                   onClick={() => changeDept(dept)}>
                   <motion.span
                     animate={{
-                      color: isActive ? CHAR : "rgba(10,11,20,.28)",
+                      color: isActive ? CHAR : "rgba(62,60,73,.28)",
                       scale: isActive ? 1 : 0.92,
                     }}
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
@@ -262,7 +262,7 @@ function PeopleSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                       initial={{ opacity: 0 }}
                       whileHover={{ opacity: 1 }}
                       transition={{ duration: 0.25 }}
-                      style={{ background: "linear-gradient(0deg, rgba(10,11,20,.85) 0%, rgba(26,82,168,.35) 100%)" }}
+                      style={{ background: "linear-gradient(0deg, rgba(62,60,73,.85) 0%, rgba(0,80,159,.35) 100%)" }}
                     >
                       <span className="inline-flex items-center gap-1.5"
                         style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: SAND }}>
@@ -277,12 +277,12 @@ function PeopleSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                   {/* Name + title — below image, centered */}
                   <div className="flex flex-col items-center gap-1 text-center w-full">
                     <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: CHAR, lineHeight: 1.3 }}>{m.name}</p>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.4)" }}>{m.title}</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.4)" }}>{m.title}</p>
                   </div>
                 </motion.div>
               )) : (
                 <motion.div variants={cardVariants} className="col-span-3 py-16 text-center">
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.35)" }}>No team members listed for this department yet.</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.35)" }}>No team members listed for this department yet.</p>
                 </motion.div>
               )}
             </motion.div>
@@ -294,7 +294,7 @@ function PeopleSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
           <div className="flex justify-center mt-2">
             <button onClick={() => setShowAll(true)}
               className="group inline-flex items-center gap-2 px-8 py-3 transition-all hover:bg-white/5"
-              style={{ border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(10,11,20,.7)", background: "none", cursor: "pointer" }}>
+              style={{ border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(62,60,73,.7)", background: "none", cursor: "pointer" }}>
               Load more
             </button>
           </div>
@@ -329,7 +329,7 @@ function BenefitsSection() {
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.65)" }} />
+          <div className="absolute inset-0" style={{ background: "rgba(62,60,73,0.65)" }} />
         </div>
 
         <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14">
@@ -364,14 +364,14 @@ function BenefitsSection() {
                       className="shrink-0 flex flex-col gap-4 p-6"
                       style={{
                         width: "min(calc(100% - 32px), 320px)",
-                        background: "rgba(10,11,20,0.55)",
+                        background: "rgba(62,60,73,0.55)",
                         backdropFilter: "blur(16px)",
                         border: "1px solid rgba(255,255,255,.15)",
                       }}
                     >
                       {/* Icon / abbr box */}
                       <div className="w-12 h-12 flex items-center justify-center shrink-0"
-                        style={{ background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.35)" }}>
+                        style={{ background: "rgba(216,203,165,.15)", border: "1px solid rgba(216,203,165,.35)" }}>
                         <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 10, color: SAND, letterSpacing: 1 }}>{p.abbr}</span>
                       </div>
                       <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", lineHeight: 1.3 }}>{p.name}</p>
@@ -419,7 +419,7 @@ function BenefitsSection() {
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: CHAR, lineHeight: 1.1, marginBottom: 6 }}>
               We install products engineered to last and tested in the field.
             </p>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.4)", lineHeight: 1.65 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.4)", lineHeight: 1.65 }}>
               Manufacturers who stand behind their work like we stand behind ours.
             </p>
           </Reveal>
@@ -428,7 +428,7 @@ function BenefitsSection() {
               <Reveal key={brand} delay={i * 0.05}>
                 <div className="flex items-center justify-center px-6 py-4"
                   style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, minWidth: 140 }}>
-                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(10,11,20,.4)", letterSpacing: 1 }}>{brand}</span>
+                  <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(62,60,73,.4)", letterSpacing: 1 }}>{brand}</span>
                 </div>
               </Reveal>
             ))}
@@ -462,7 +462,7 @@ function ContactSection() {
               <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 14 }}>
                 Schedule free inspection
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.5)", lineHeight: 1.7, marginBottom: 32 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(62,60,73,.5)", lineHeight: 1.7, marginBottom: 32 }}>
                 The fastest way to get answers. No obligation.
               </p>
               {/* Trust signals */}
@@ -472,7 +472,7 @@ function ContactSection() {
                     <div className="w-4 h-4 flex items-center justify-center shrink-0">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                     </div>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.6)" }}>{t}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.6)" }}>{t}</span>
                   </div>
                 ))}
               </div>
@@ -485,9 +485,9 @@ function ContactSection() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 {[["First name", "text"], ["Last name", "text"], ["Email", "email"], ["Phone number", "tel"]].map(([label, type]) => (
                   <div key={label} className="flex flex-col gap-1.5">
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>{label}</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(62,60,73,.6)", letterSpacing: 0.5 }}>{label}</label>
                     <input type={type} placeholder={label}
-                      className="px-4 py-3 outline-none transition-all focus:border-blue-500"
+                      className="px-4 py-3 outline-none transition-all focus:border-[#00509F]"
                       style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%" }} />
                   </div>
                 ))}
@@ -495,7 +495,7 @@ function ContactSection() {
 
               {/* Service checkboxes */}
               <div className="mb-4">
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5, marginBottom: 10 }}>Service needed</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(62,60,73,.6)", letterSpacing: 0.5, marginBottom: 10 }}>Service needed</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {SERVICES_LIST.map((s) => (
                     <label key={s} className="flex items-center gap-2.5 cursor-pointer group">
@@ -503,12 +503,12 @@ function ContactSection() {
                         className="w-4 h-4 flex items-center justify-center shrink-0 transition-all"
                         style={{
                           background: selected.includes(s) ? B : "transparent",
-                          border: `1.5px solid ${selected.includes(s) ? B : "rgba(10,11,20,.2)"}`,
+                          border: `1.5px solid ${selected.includes(s) ? B : "rgba(62,60,73,.2)"}`,
                           cursor: "pointer",
                         }}>
                         {selected.includes(s) && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                       </div>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.6)" }}>{s}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.6)" }}>{s}</span>
                     </label>
                   ))}
                 </div>
@@ -516,7 +516,7 @@ function ContactSection() {
 
               {/* Textarea */}
               <div className="flex flex-col gap-1.5 mb-5">
-                <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>Describe your problem (optional)</label>
+                <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(62,60,73,.6)", letterSpacing: 0.5 }}>Describe your problem (optional)</label>
                 <textarea rows={4} placeholder="Tell us more..."
                   className="px-4 py-3 outline-none resize-none transition-all"
                   style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%" }} />
@@ -525,10 +525,10 @@ function ContactSection() {
               {/* Agree + submit */}
               <div className="flex items-center gap-2.5 mb-5 cursor-pointer" onClick={() => setAgreed(a => !a)}>
                 <div className="w-4 h-4 flex items-center justify-center shrink-0"
-                  style={{ background: agreed ? B : "transparent", border: `1.5px solid ${agreed ? B : "rgba(10,11,20,.2)"}`, cursor: "pointer" }}>
+                  style={{ background: agreed ? B : "transparent", border: `1.5px solid ${agreed ? B : "rgba(62,60,73,.2)"}`, cursor: "pointer" }}>
                   {agreed && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                 </div>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.45)" }}>I agree to the terms of service</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.45)" }}>I agree to the terms of service</span>
               </div>
 
               <button className="w-full py-4 flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
@@ -565,7 +565,7 @@ function InitiativesSection() {
               <div className="flex flex-col p-8 h-full group" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* Icon */}
                 <div className="w-12 h-12 flex items-center justify-center mb-6 shrink-0"
-                  style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)" }}>
+                  style={{ background: "rgba(0,80,159,.1)", border: "1px solid rgba(0,80,159,.2)" }}>
                   {item.icon}
                 </div>
                 <div className="flex items-center gap-2 mb-3">
@@ -574,7 +574,7 @@ function InitiativesSection() {
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: CHAR, lineHeight: 1.2, marginBottom: 12 }}>
                   {item.title}
                 </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.5)", lineHeight: 1.7, flex: 1, marginBottom: 24 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.5)", lineHeight: 1.7, flex: 1, marginBottom: 24 }}>
                   {item.desc}
                 </p>
                 <button className="group/btn inline-flex items-center gap-2 self-start"

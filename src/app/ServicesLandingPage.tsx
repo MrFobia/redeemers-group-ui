@@ -61,7 +61,7 @@ function CategoryBadge({ label }: { label: string }) {
   return (
     <span style={{
       display: "inline-block", padding: "5px 14px",
-      background: "rgba(26,82,168,.08)", border: "1px solid rgba(26,82,168,.25)",
+      background: "rgba(0,80,159,.08)", border: "1px solid rgba(0,80,159,.25)",
       fontFamily: CF, fontWeight: 700, fontSize: 10, color: B,
       letterSpacing: 2.5, textTransform: "uppercase",
     }}>
@@ -127,13 +127,13 @@ function IntroSection() {
             </h1>
           </div>
           <div className="flex-1 lg:max-w-[480px]">
-            <p style={{ fontFamily: INTER, fontSize: 18, color: "rgba(10,11,20,.6)", lineHeight: 1.7 }}>
+            <p style={{ fontFamily: INTER, fontSize: 18, color: "rgba(62,60,73,.6)", lineHeight: 1.7 }}>
               From sagging floors to flooded basements — every problem has a permanent solution, backed by our lifetime warranty and 17 years of experience.
             </p>
             <div className="flex flex-wrap gap-4 mt-8">
               {["Crawl Space", "Waterproofing", "Foundation", "Concrete"].map(s => (
                 <span key={s} style={{
-                  padding: "6px 14px", background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.3)",
+                  padding: "6px 14px", background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.3)",
                   fontFamily: CF, fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2.5, textTransform: "uppercase",
                 }}>
                   {s}
@@ -319,7 +319,7 @@ function TrustBar() {
     { num: "Lifetime", label: "Warranty" },
   ];
   return (
-    <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(10,11,20,.06)", borderBottom: "1px solid rgba(10,11,20,.06)" }} className="py-8 px-8 md:px-14">
+    <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(62,60,73,.06)", borderBottom: "1px solid rgba(62,60,73,.06)" }} className="py-8 px-8 md:px-14">
       <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map(s => (
@@ -340,7 +340,7 @@ function TrustBar() {
 
 function CTASection() {
   return (
-    <section style={{ background: "#00519F", position: "relative", overflow: "hidden" }} className="py-16 lg:py-20 px-8 md:px-14">
+    <section style={{ background: "#00509F", position: "relative", overflow: "hidden" }} className="py-16 lg:py-20 px-8 md:px-14">
       {/* Ghost text */}
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
         <p style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(80px,12vw,160px)", color: "rgba(255,255,255,0.03)", lineHeight: 1, letterSpacing: "-4px", userSelect: "none", whiteSpace: "nowrap" }}>
@@ -358,10 +358,10 @@ function CTASection() {
           Free inspection · No pressure · Same-week availability
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: WHITE, fontFamily: INTER, fontWeight: 600, fontSize: 15, color: "#00519F", padding: "15px 28px", textDecoration: "none" }}
+          <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: WHITE, fontFamily: INTER, fontWeight: 600, fontSize: 15, color: "#00509F", padding: "15px 28px", textDecoration: "none" }}
             className="hover:opacity-95 transition-opacity">
             Schedule Free Inspection
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#00519F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#00509F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </a>
           <a href="tel:+18335841049" style={{ fontFamily: INTER, fontWeight: 500, fontSize: 15, color: "rgba(255,255,255,.7)", borderBottom: "1px solid rgba(255,255,255,.3)", paddingBottom: 2, textDecoration: "none" }}>
             or call 1-833-584-1049

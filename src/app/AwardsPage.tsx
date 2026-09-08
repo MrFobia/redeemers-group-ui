@@ -141,9 +141,9 @@ function AwardCard({ award, onClick }: { award: Award; onClick: () => void }) {
   return (
     <div onClick={onClick} className="flex flex-col gap-3 cursor-pointer group">
       <div className="relative overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:-translate-y-1"
-        style={{ aspectRatio: "1/1", background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 0 0 rgba(10,11,20,0)" }}
-        onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 16px 32px rgba(10,11,20,.12)")}
-        onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "0 0 0 rgba(10,11,20,0)")}
+        style={{ aspectRatio: "1/1", background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 0 0 rgba(62,60,73,0)" }}
+        onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 16px 32px rgba(62,60,73,.12)")}
+        onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "0 0 0 rgba(62,60,73,0)")}
       >
         <div className="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" style={{ background: SAND }} />
         {award.img ? (
@@ -153,8 +153,8 @@ function AwardCard({ award, onClick }: { award: Award; onClick: () => void }) {
             {award.org}
           </span>
         )}
-        <div className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)" }}>
-          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#8A7238", letterSpacing: 1 }}>{award.year}</span>
+        <div className="absolute top-2 left-2 px-2 py-0.5" style={{ background: "rgba(216,203,165,.18)", border: "1px solid rgba(216,203,165,.4)" }}>
+          <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#00509F", letterSpacing: 1 }}>{award.year}</span>
         </div>
         {award.articleUrl && (
           <div className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center" style={{ background: B }} title="News article available">
@@ -254,7 +254,7 @@ function AwardModal({ award, onClose }: { award: Award | null; onClose: () => vo
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.22 }}
       className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
-      style={{ background: "rgba(0,0,0,.88)", backdropFilter: "blur(10px)" }}
+      style={{ background: "rgba(62,60,73,.88)", backdropFilter: "blur(10px)" }}
       onClick={onClose}
     >
       <motion.div
@@ -292,7 +292,7 @@ function AwardModal({ award, onClose }: { award: Award | null; onClose: () => vo
             </h3>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: SAND, marginBottom: 20 }}>{award.org}</p>
 
-            <div className="mb-5 p-4" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.25)" }}>
+            <div className="mb-5 p-4" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.25)" }}>
               <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Recognition</p>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>
                 Redeemers Group was recognized with the {award.title}, awarded by {award.org} in {award.year}. This is one of {AWARDS.length} industry awards and affiliations the company has earned since 2008.

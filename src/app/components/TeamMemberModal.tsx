@@ -32,7 +32,7 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
   return (
     <div
       className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto py-12 px-6"
-      style={{ background: "rgba(0,0,0,0.78)", backdropFilter: "blur(6px)" }}
+      style={{ background: "rgba(62,60,73,0.78)", backdropFilter: "blur(6px)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       {/* Close button */}
@@ -130,11 +130,11 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
                   ))}
                 </div>
                 {/* Giant quote mark */}
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 40, color: `rgba(196,171,108,.2)`, lineHeight: 0.7, marginBottom: 4 }}>&ldquo;</div>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 40, color: `rgba(216,203,165,.2)`, lineHeight: 0.7, marginBottom: 4 }}>&ldquo;</div>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)", lineHeight: 1.7, flex: 1 }}>{r.quote}</p>
                 <div className="flex items-center gap-3 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,.07)" }}>
                   <div className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center"
-                    style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.2)" }}>
+                    style={{ background: "rgba(216,203,165,.1)", border: "1px solid rgba(216,203,165,.2)" }}>
                     <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: SAND }}>{r.name[0]}</span>
                   </div>
                   <div>

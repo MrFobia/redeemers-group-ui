@@ -97,7 +97,7 @@ function SolutionCard({ sol, size }: { sol: Solution; size: "lg" | "sm" | "wide"
           label has to survive on the page, not just in the sitemap. */}
       {sol.note && (
         <span className="inline-flex items-center w-fit px-2.5 py-1 mb-3"
-          style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: B, background: "rgba(26,82,168,.07)", border: "1px solid rgba(26,82,168,.22)", letterSpacing: ".3px" }}>
+          style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 600, color: B, background: "rgba(0,80,159,.07)", border: "1px solid rgba(0,80,159,.22)", letterSpacing: ".3px" }}>
           {sol.note}
         </span>
       )}
@@ -180,7 +180,7 @@ function CompactSolutionRow({ sol, active, onHover }: { sol: Solution; active: b
             </h3>
             {sol.note && (
               <span className="inline-flex items-center px-2 py-0.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 600, color: B, background: "rgba(26,82,168,.07)", border: "1px solid rgba(26,82,168,.22)", letterSpacing: ".3px" }}>
+                style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 600, color: B, background: "rgba(0,80,159,.07)", border: "1px solid rgba(0,80,159,.22)", letterSpacing: ".3px" }}>
                 {sol.note}
               </span>
             )}
@@ -320,7 +320,7 @@ function ProblemSignsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?
                     alt={s.q}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.55) 0%, rgba(10,11,20,0) 55%)" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(62,60,73,.55) 0%, rgba(62,60,73,0) 55%)" }} />
                 </div>
                 <div className="flex flex-col flex-1 px-7 py-7">
                   <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 20, color: CHAR, lineHeight: 1.25, marginBottom: 12 }}>
@@ -363,7 +363,7 @@ function ProblemSignsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?
 // proportional meaning, it was just decoration.
 function CostRow({ item, i }: { item: CostRange; i: number }) {
   return (
-    <div className="flex items-center justify-between gap-6" style={{ padding: "18px 0", borderBottom: "1px solid rgba(10,11,20,.1)" }}>
+    <div className="flex items-center justify-between gap-6" style={{ padding: "18px 0", borderBottom: "1px solid rgba(62,60,73,.1)" }}>
       <div className="flex items-center gap-4">
         <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: CHAR }}>{item.label}</span>
       </div>
@@ -416,14 +416,14 @@ function CostSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: st
           {/* Right: Image + callout */}
           <Reveal delay={0.1}>
             <div className="relative">
-              <div className="relative overflow-hidden" style={{ border: "1px solid rgba(10,11,20,.1)" }}>
+              <div className="relative overflow-hidden" style={{ border: "1px solid rgba(62,60,73,.1)" }}>
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1745865448615-aa1905c6db7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="Cost estimation"
                   className="w-full object-cover"
                   style={{ height: 420 }}
                 />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.75) 0%, transparent 50%)" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(62,60,73,.75) 0%, transparent 50%)" }} />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: SAND, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>
                     {cost.calloutLabel}
@@ -483,7 +483,7 @@ function FaqSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: str
             {svc.faqs.map((faq, i) => (
               <AccordionPrimitive.Item key={i} value={String(i)}
                 className="overflow-hidden"
-                style={{ borderBottom: "1px solid rgba(10,11,20,.1)" }}>
+                style={{ borderBottom: "1px solid rgba(62,60,73,.1)" }}>
                 <AccordionPrimitive.Header>
                   <AccordionPrimitive.Trigger
                     className="w-full flex items-center gap-5 text-left group transition-colors"
@@ -534,7 +534,7 @@ function CtaBanner({ svc }: { svc: ServiceDef }) {
           <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,72px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", marginBottom: 16, whiteSpace: "pre-line" }}>
             {svc.ctaHeadline}
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.55)", maxWidth: 480, margin: "0 auto 44px" }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(161,205,241,.9)", maxWidth: 480, margin: "0 auto 44px" }}>
             Free inspection · Same-week availability · Lifetime warranty
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -545,7 +545,7 @@ function CtaBanner({ svc }: { svc: ServiceDef }) {
               <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
             </a>
             <a href="tel:+19015550100"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(255,255,255,.55)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(161,205,241,.9)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
               or call (901) 555-0100
             </a>
           </div>

@@ -27,4 +27,4 @@ export const FORM_INPUT_STYLE: CSSProperties = {
 
 // SAND is hardcoded here (not interpolated) so Tailwind's JIT scanner can see
 // the literal class name at build time.
-export const FORM_INPUT_CLASS = "border border-white/10 focus:border-[#C4AB6C] transition-colors";
+export const FORM_INPUT_CLASS = "border border-white/10 focus:border-[#D8CBA5] transition-colors";

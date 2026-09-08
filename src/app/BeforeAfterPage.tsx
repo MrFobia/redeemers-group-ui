@@ -70,12 +70,12 @@ function BeforeAfterSlider({ before, after, beforeLabel = "Before", afterLabel =
       <div className="absolute inset-0 pointer-events-none" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
         <ImageWithFallback src={before} alt={beforeLabel} className="absolute inset-0 w-full h-full object-cover" />
       </div>
-      <span className="absolute top-4 left-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(10,11,20,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{beforeLabel}</span>
-      <span className="absolute top-4 right-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(10,11,20,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{afterLabel}</span>
-      <div className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${pos}%`, width: 2, background: "#fff", transform: "translateX(-1px)", boxShadow: "0 0 10px rgba(0,0,0,.35)" }} />
+      <span className="absolute top-4 left-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(62,60,73,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{beforeLabel}</span>
+      <span className="absolute top-4 right-4 px-2.5 py-1 pointer-events-none" style={{ background: "rgba(62,60,73,.65)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "#fff", letterSpacing: 2, textTransform: "uppercase" }}>{afterLabel}</span>
+      <div className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${pos}%`, width: 2, background: "#fff", transform: "translateX(-1px)", boxShadow: "0 0 10px rgba(62,60,73,.35)" }} />
       <div
         className="absolute rounded-full flex items-center justify-center pointer-events-none"
-        style={{ left: `${pos}%`, top: "50%", width: 44, height: 44, transform: "translate(-50%,-50%)", background: "#fff", boxShadow: "0 4px 16px rgba(10,11,20,.35)" }}
+        style={{ left: `${pos}%`, top: "50%", width: 44, height: 44, transform: "translate(-50%,-50%)", background: "#fff", boxShadow: "0 4px 16px rgba(62,60,73,.35)" }}
       >
         <ChevronLeft size={13} color={CHAR} strokeWidth={2.5} style={{ marginRight: -5 }} />
         <ChevronRight size={13} color={CHAR} strokeWidth={2.5} style={{ marginLeft: -5 }} />
@@ -226,7 +226,7 @@ function BeforeAfterGridSection() {
         {/* Stat boxes double as the filter — the small pill row that used to
             sit below them is gone. Service name reads first (bold, blue),
             count is the secondary line, ~25% shorter than the old boxes. */}
-        <Reveal className="grid grid-cols-2 lg:grid-cols-4 gap-px mb-10" style={{ background: "rgba(10,11,20,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
+        <Reveal className="grid grid-cols-2 lg:grid-cols-4 gap-px mb-10" style={{ background: "rgba(62,60,73,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
           {BEFORE_AFTER_STATS.map((s) => {
             const active = category === s.tag;
             return (
@@ -240,7 +240,7 @@ function BeforeAfterGridSection() {
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(13px,1.15vw,15px)", color: active ? "#fff" : B, lineHeight: 1.25, marginBottom: 3 }}>
                   {s.label}
                 </p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: active ? "rgba(255,255,255,.75)" : "rgba(10,11,20,.45)", letterSpacing: 0.5 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: active ? "rgba(255,255,255,.75)" : "rgba(62,60,73,.45)", letterSpacing: 0.5 }}>
                   {s.val} {s.tag === "All" ? "total" : "sets"}
                 </p>
               </button>
@@ -255,7 +255,7 @@ function BeforeAfterGridSection() {
                 <BeforeAfterSlider before={p.before} after={p.after} />
               </div>
               <div className="lg:col-span-2 flex flex-col justify-center p-8 lg:p-10">
-                <div className="inline-flex items-center px-2.5 py-1 mb-4 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.2)" }}>
+                <div className="inline-flex items-center px-2.5 py-1 mb-4 w-fit" style={{ background: "rgba(0,80,159,.1)", border: "1px solid rgba(0,80,159,.2)" }}>
                   <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{p.tag}</span>
                 </div>
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: CHAR, lineHeight: 1.25, marginBottom: 10 }}>
@@ -264,14 +264,14 @@ function BeforeAfterGridSection() {
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: MUTED, marginBottom: 16 }}>
                   {p.loc || p.tag}
                 </p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#3D4152", lineHeight: 1.7, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.80)", lineHeight: 1.7, marginBottom: 20 }}>
                   {p.desc}
                 </p>
                 <ul className="flex flex-col gap-2.5">
                   {p.workDone.map((w) => (
                     <li key={w} className="flex items-start gap-2.5">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginTop: 2, flexShrink: 0 }}><path d="M20 6L9 17l-5-5" stroke={B} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "#3D4152", lineHeight: 1.5 }}>{w}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(62,60,73,.80)", lineHeight: 1.5 }}>{w}</span>
                     </li>
                   ))}
                 </ul>

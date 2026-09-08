@@ -141,7 +141,7 @@ function BuyerSellerSection() {
                   PDF &middot; {item.pages}
                 </span>
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.2, marginBottom: 8 }}>{item.title}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.6)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{item.desc}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(161,205,241,.9)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{item.desc}</p>
                 <button className="inline-flex items-center gap-2 px-5 py-2.5 w-fit transition-opacity hover:opacity-85"
                   style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, border: "none", cursor: "pointer" }}>
                   <Download size={13} />
@@ -174,13 +174,13 @@ function CostByServiceSection() {
           {COST_BY_SERVICE.map((card, i) => (
             <Reveal key={card.title} delay={i * 0.07}>
               <div className="flex flex-col h-full p-8" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
-                <div className="inline-flex items-center px-2 py-0.5 mb-5 w-fit" style={{ background: "rgba(26,82,168,.1)", border: "1px solid rgba(26,82,168,.18)" }}>
+                <div className="inline-flex items-center px-2 py-0.5 mb-5 w-fit" style={{ background: "rgba(0,80,159,.1)", border: "1px solid rgba(0,80,159,.18)" }}>
                   <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>Cost guide</span>
                 </div>
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: CHAR, lineHeight: 1.2, marginBottom: 6 }}>{card.title}</h3>
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,2.5vw,32px)", color: B, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 8 }}>{card.range}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, color: "rgba(10,11,20,.4)", marginBottom: 12 }}>{card.sub}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{card.desc}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 13, color: "rgba(62,60,73,.4)", marginBottom: 12 }}>{card.sub}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{card.desc}</p>
                 <button className="group inline-flex items-center gap-1.5"
                   style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                   Read full guide
@@ -215,7 +215,7 @@ function CostByCitySection() {
               <div className="flex flex-col overflow-hidden" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 <div className="relative overflow-hidden shrink-0" style={{ height: 160 }}>
                   <ImageWithFallback src={item.img} alt={item.city} className="absolute inset-0 w-full h-full object-cover" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,11,20,.85) 0%, rgba(10,11,20,.15) 55%, rgba(10,11,20,0) 100%)" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(62,60,73,.85) 0%, rgba(62,60,73,.15) 55%, rgba(62,60,73,0) 100%)" }} />
                   <div className="absolute bottom-0 left-0 right-0 px-5 py-4 flex items-center gap-2">
                     <MapPin size={14} color={SAND} />
                     <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 16, color: "#fff" }}>
@@ -227,7 +227,7 @@ function CostByCitySection() {
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(22px,2vw,30px)", color: B, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 8 }}>
                     {item.range}
                   </p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.45)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>
                     {item.note}
                   </p>
                   <button className="group inline-flex items-center gap-1.5"
@@ -263,11 +263,11 @@ function FinancingSection() {
           {FINANCING_PERKS.map((perk, i) => (
             <Reveal key={perk.title} delay={i * 0.07}>
               <div className="flex flex-col h-full p-7" style={{ background: SURFACE.alt, border: `1px solid ${ON_LIGHT.border}` }}>
-                <div className="w-11 h-11 flex items-center justify-center mb-6" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.2)" }}>
+                <div className="w-11 h-11 flex items-center justify-center mb-6" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.2)" }}>
                   <perk.icon size={20} color={B} strokeWidth={1.5} />
                 </div>
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: CHAR, lineHeight: 1.2, marginBottom: 10 }}>{perk.title}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.45)", lineHeight: 1.7 }}>{perk.desc}</p>
               </div>
             </Reveal>
           ))}

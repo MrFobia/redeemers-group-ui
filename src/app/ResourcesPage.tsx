@@ -58,7 +58,7 @@ function HeroSection() {
         alt="Resources"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(10,11,20,0.94) 0%,rgba(10,11,20,0.75) 55%,rgba(10,11,20,0.5) 100%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(110deg,rgba(62,60,73,0.94) 0%,rgba(62,60,73,0.75) 55%,rgba(62,60,73,0.5) 100%)" }} />
       <div className="relative max-w-[1440px] mx-auto px-8 md:px-14 py-24 lg:py-32">
         <Reveal>
           <div className="flex items-center gap-2 mb-5">
@@ -101,7 +101,7 @@ function CostGuideSection({ onNavigate }: { onNavigate?: (p: string) => void }) 
           <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(30px,3.6vw,46px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
             Transparent pricing for every homeowner
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(255,255,255,.6)", lineHeight: 1.7 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(161,205,241,.9)", lineHeight: 1.7 }}>
             Buyer &amp; seller guides, cost ranges by service and by city, and financing options — all broken down before we ever knock on your door.
           </p>
         </Reveal>
@@ -138,7 +138,7 @@ function ResourcesDownloadSection() {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 12 }}>
               Download what matters
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.5)", lineHeight: 1.7 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(62,60,73,.5)", lineHeight: 1.7 }}>
               Checklists, guides, and maintenance plans to keep your home strong.
             </p>
           </div>
@@ -155,7 +155,7 @@ function ResourcesDownloadSection() {
                   PDF &middot; {item.pages}
                 </span>
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: "#fff", lineHeight: 1.2, marginBottom: 8 }}>{item.title}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.6)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{item.desc}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(161,205,241,.9)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{item.desc}</p>
                 <button className="inline-flex items-center gap-2 px-5 py-2.5 w-fit transition-opacity hover:opacity-85"
                   style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, border: "none", cursor: "pointer" }}>
                   <Download size={13} />
@@ -215,8 +215,8 @@ function BuyerSellerSection({ onNavigate }: { onNavigate?: (p: string) => void }
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {EDUCATION_TOPICS.map((t, i) => (
             <Reveal key={t.title} delay={i * 0.07}>
-              <div className="flex flex-col h-full p-7" style={{ background: "#fff", border: "1px solid rgba(10,11,20,.1)" }}>
-                <div className="w-11 h-11 flex items-center justify-center mb-6" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.2)" }}>
+              <div className="flex flex-col h-full p-7" style={{ background: "#fff", border: "1px solid rgba(62,60,73,.1)" }}>
+                <div className="w-11 h-11 flex items-center justify-center mb-6" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.2)" }}>
                   <t.icon size={20} color={B} strokeWidth={1.5} />
                 </div>
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 20, color: CHAR, lineHeight: 1.2, marginBottom: 10 }}>{t.title}</h3>
@@ -269,7 +269,7 @@ function JobStoryPreviewModal({ story, onClose, onPrev, onNext }: {
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.22 }}
       className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
-      style={{ background: "rgba(0,0,0,.88)", backdropFilter: "blur(10px)" }}
+      style={{ background: "rgba(62,60,73,.88)", backdropFilter: "blur(10px)" }}
       onClick={onClose}
     >
       <motion.div
@@ -283,7 +283,7 @@ function JobStoryPreviewModal({ story, onClose, onPrev, onNext }: {
         <div className="lg:w-[52%] shrink-0 relative">
           <ImageWithFallback src={story.img} alt={story.name} className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0" style={{
-            background: playing ? "rgba(0,0,0,.85)" : "linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(0,0,0,.6) 100%)"
+            background: playing ? "rgba(62,60,73,.85)" : "linear-gradient(to bottom, rgba(62,60,73,.1) 0%, rgba(62,60,73,.6) 100%)"
           }} />
 
           {playing ? (
@@ -296,7 +296,7 @@ function JobStoryPreviewModal({ story, onClose, onPrev, onNext }: {
                 onClick={() => setPlaying(true)}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}
-                style={{ width: 72, height: 72, borderRadius: "50%", background: B, border: "3px solid rgba(255,255,255,.25)", cursor: "pointer", boxShadow: "0 8px 32px rgba(0,0,0,.5)", display: "flex", alignItems: "center", justifyContent: "center" }}
+                style={{ width: 72, height: 72, borderRadius: "50%", background: B, border: "3px solid rgba(255,255,255,.25)", cursor: "pointer", boxShadow: "0 8px 32px rgba(62,60,73,.5)", display: "flex", alignItems: "center", justifyContent: "center" }}
               >
                 <Play size={26} fill="white" stroke="none" style={{ marginLeft: 4 }} />
               </motion.button>
@@ -306,13 +306,13 @@ function JobStoryPreviewModal({ story, onClose, onPrev, onNext }: {
           <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-4">
             <div className="flex gap-2">
               <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#fff", letterSpacing: 2.5, textTransform: "uppercase", background: B, padding: "3px 8px" }}>{story.type}</span>
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.65)", background: "rgba(0,0,0,.45)", padding: "3px 8px", backdropFilter: "blur(4px)" }}>{story.loc}</span>
+              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.65)", background: "rgba(62,60,73,.45)", padding: "3px 8px", backdropFilter: "blur(4px)" }}>{story.loc}</span>
             </div>
             <div className="flex gap-2">
-              <button onClick={onPrev} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(0,0,0,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
+              <button onClick={onPrev} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
                 <ChevronLeft size={15} color="#fff" />
               </button>
-              <button onClick={onNext} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(0,0,0,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
+              <button onClick={onNext} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
                 <ChevronRight size={15} color="#fff" />
               </button>
             </div>
@@ -339,12 +339,12 @@ function JobStoryPreviewModal({ story, onClose, onPrev, onNext }: {
             </h3>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: SAND, marginBottom: 20 }}>{story.loc}</p>
 
-            <div className="mb-5 p-4" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.25)" }}>
+            <div className="mb-5 p-4" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.25)" }}>
               <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>What we did</p>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>{story.result}</p>
             </div>
 
-            <div style={{ fontFamily: "Georgia,serif", fontSize: 44, color: "rgba(196,171,108,.2)", lineHeight: 0.55, marginBottom: 10 }}>&ldquo;</div>
+            <div style={{ fontFamily: "Georgia,serif", fontSize: 44, color: "rgba(216,203,165,.2)", lineHeight: 0.55, marginBottom: 10 }}>&ldquo;</div>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.72)", lineHeight: 1.8, flex: 1 }}>{story.quote}</p>
 
             <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "20px 0" }} />
@@ -391,7 +391,7 @@ function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void })
                 <div className="relative overflow-hidden group" style={{ aspectRatio: "3/2" }}>
                   <ImageWithFallback src={story.img} alt={story.name}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
-                  <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.4)" }} />
+                  <div className="absolute inset-0" style={{ background: "rgba(62,60,73,.4)" }} />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-14 h-14 flex items-center justify-center transition-transform group-hover:scale-110"
                       style={{ background: B, borderRadius: "50%" }}>
@@ -403,7 +403,7 @@ function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void })
                 <div className="p-6">
                   <div className="flex gap-2 mb-3">
                     {[story.type, story.loc].map((t) => (
-                      <span key={t} className="px-2.5 py-1" style={{ background: "rgba(10,11,20,.07)", fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(10,11,20,.6)" }}>{t}</span>
+                      <span key={t} className="px-2.5 py-1" style={{ background: "rgba(62,60,73,.07)", fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 12, color: "rgba(62,60,73,.6)" }}>{t}</span>
                     ))}
                   </div>
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR }}>{story.name}</p>
@@ -477,7 +477,7 @@ function FaqSection() {
             {FAQS.map((faq, i) => (
               <AccordionPrimitive.Item key={i} value={String(i)}
                 className="overflow-hidden"
-                style={{ borderBottom: "1px solid rgba(10,11,20,.1)" }}>
+                style={{ borderBottom: "1px solid rgba(62,60,73,.1)" }}>
                 <AccordionPrimitive.Header>
                   <AccordionPrimitive.Trigger
                     className="w-full flex items-center gap-5 text-left group transition-colors"
@@ -580,7 +580,7 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
             <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
+                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
                   <button onClick={() => setSelectedIdx(i)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
@@ -593,9 +593,9 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
                     <svg key={si} width="14" height="14" viewBox="0 0 24 24" fill={SAND}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                   ))}
                 </div>
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(26,82,168,.25)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(10,11,20,.7)", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>{t.quote}</p>
-                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(10,11,20,.07)" }}>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(0,80,159,.25)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.7)", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>{t.quote}</p>
+                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(62,60,73,.07)" }}>
                   <div className="w-9 h-9 flex items-center justify-center shrink-0" style={{ background: B }}>
                     <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 13, color: "#fff" }}>{t.name.charAt(0)}</span>
                   </div>
@@ -614,7 +614,7 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
         {TESTIMONIALS.map((_, i) => (
           <button key={i} onClick={() => emblaApi?.scrollTo(i)}
             className="rounded-full transition-all duration-300"
-            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(10,11,20,.2)" }} />
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.2)" }} />
         ))}
       </div>
 
@@ -649,18 +649,18 @@ function CtaSection() {
           <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(36px,5vw,72px)", color: "#fff", lineHeight: 1.0, letterSpacing: "-1px", marginBottom: 16 }}>
             Ready to protect<br />your home?
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.55)", maxWidth: 480, margin: "0 auto 44px" }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(161,205,241,.9)", maxWidth: 480, margin: "0 auto 44px" }}>
             Free inspection · No pressure · Same-week availability
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <a href="#" onClick={(e) => { e.preventDefault(); openInspection(); }} className="group relative overflow-hidden px-9 py-4 inline-flex items-center gap-3"
-              style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#0B1C4A" }}>
+              style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#003771" }}>
               <span className="relative z-10">Schedule Free Inspection</span>
-              <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" color="#0B1C4A" />
+              <ArrowRight size={16} className="relative z-10 transition-transform group-hover:translate-x-1" color="#003771" />
               <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: SAND }} />
             </a>
             <a href="tel:+19015550100"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(255,255,255,.55)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(161,205,241,.9)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}>
               or call (901) 555-0100
             </a>
           </div>

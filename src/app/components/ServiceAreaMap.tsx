@@ -72,7 +72,7 @@ export function ServiceAreaMap({
               positions={s.polygon}
               eventHandlers={{ click: () => onSelectState(s.abbr) }}
               pathOptions={{
-                color: isActive ? B : "rgba(10,11,20,.35)",
+                color: isActive ? B : "rgba(62,60,73,.35)",
                 weight: isActive ? 3 : 1.5,
                 fillColor: isActive ? B : CHAR,
                 fillOpacity: isActive ? 0.22 : 0.06,

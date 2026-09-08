@@ -84,24 +84,24 @@ function DarkCard({ article, delay = 0, onNavigate }: { article: Article; delay?
         <div className="relative overflow-hidden" style={{ aspectRatio: "16/10" }}>
           <ImageWithFallback src={article.img} alt={article.title}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.5) 0%,transparent 60%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(62,60,73,.5) 0%,transparent 60%)" }} />
           <div className="absolute top-4 left-4">
             <span className="px-2.5 py-1"
-              style={{ background: "rgba(26,82,168,.18)", border: "1px solid rgba(26,82,168,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
+              style={{ background: "rgba(0,80,159,.18)", border: "1px solid rgba(0,80,159,.4)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: B, letterSpacing: 2, textTransform: "uppercase" }}>
               {article.cat}
             </span>
           </div>
         </div>
         <div className="p-6 flex flex-col flex-1">
           <div className="flex items-center gap-3 mb-3">
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)" }}>{article.date}</span>
-            <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(10,11,20,.2)", flexShrink: 0 }} />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)" }}>{article.readTime}</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.35)" }}>{article.date}</span>
+            <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(62,60,73,.2)", flexShrink: 0 }} />
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.35)" }}>{article.readTime}</span>
           </div>
           <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, lineHeight: 1.25, marginBottom: 10, flex: 1 }}>
             {article.title}
           </h3>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.45)", lineHeight: 1.65, marginBottom: 18 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.45)", lineHeight: 1.65, marginBottom: 18 }}>
             {article.desc}
           </p>
           <div className="flex items-center gap-2 self-start group/btn">
@@ -128,8 +128,8 @@ function DarkHorizontalCard({ article, onNavigate }: { article: Article; onNavig
       <div className="flex flex-col justify-center px-5 py-5 flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-2">
           <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{article.cat}</span>
-          <span style={{ width: 2, height: 2, borderRadius: "50%", background: "rgba(10,11,20,.2)", flexShrink: 0 }} />
-          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(10,11,20,.35)" }}>{article.readTime}</span>
+          <span style={{ width: 2, height: 2, borderRadius: "50%", background: "rgba(62,60,73,.2)", flexShrink: 0 }} />
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "rgba(62,60,73,.35)" }}>{article.readTime}</span>
         </div>
         <h4 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: CHAR, lineHeight: 1.3, marginBottom: 10 }}>
           {article.title}
@@ -151,7 +151,7 @@ function HeroSection({ onBack, onNavigate }: { onBack: () => void; onNavigate: (
     <section className="relative overflow-hidden" style={{ background: DARK, minHeight: 560 }}>
       <ImageWithFallback src={FEATURED_ARTICLES[0].img} alt="Hero"
         className="absolute inset-0 w-full h-full object-cover" />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(100deg,rgba(10,11,20,.97) 0%,rgba(10,11,20,.88) 50%,rgba(10,11,20,.45) 100%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(100deg,rgba(62,60,73,.97) 0%,rgba(62,60,73,.88) 50%,rgba(62,60,73,.45) 100%)" }} />
       <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", backgroundSize: "256px" }} />
 
       <div className="relative z-10">
@@ -184,7 +184,7 @@ function HeroSection({ onBack, onNavigate }: { onBack: () => void; onNavigate: (
         {/* Featured article preview */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}
           className="flex flex-col sm:flex-row gap-0 cursor-pointer group max-w-[520px]"
-          style={{ background: "rgba(30,34,53,.85)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,.1)" }}
+          style={{ background: "rgba(77,76,88,.85)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,.1)" }}
           onClick={() => onNavigate("blog-inner")}>
           <div className="flex flex-col p-5 flex-1">
             <span className="inline-flex items-center gap-2 mb-3">
@@ -265,24 +265,24 @@ function FeaturedSection({ onNavigate }: { onNavigate: (p: string) => void }) {
               <div className="relative overflow-hidden flex-1" style={{ minHeight: 280 }}>
                 <ImageWithFallback src={FEATURED_ARTICLES[0].img} alt={FEATURED_ARTICLES[0].title}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(10,11,20,.92) 0%,rgba(10,11,20,.1) 60%,transparent 100%)" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg,rgba(62,60,73,.92) 0%,rgba(62,60,73,.1) 60%,transparent 100%)" }} />
                 <div className="absolute top-5 left-5">
                   <span className="px-3 py-1"
-                    style={{ background: "rgba(26,82,168,.2)", border: "1px solid rgba(26,82,168,.45)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: B, letterSpacing: 2.5, textTransform: "uppercase" }}>
+                    style={{ background: "rgba(0,80,159,.2)", border: "1px solid rgba(0,80,159,.45)", fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 9, color: B, letterSpacing: 2.5, textTransform: "uppercase" }}>
                     {FEATURED_ARTICLES[0].cat}
                   </span>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-7">
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.4)", marginBottom: 10 }}>{FEATURED_ARTICLES[0].date} · {FEATURED_ARTICLES[0].readTime}</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.4)", marginBottom: 10 }}>{FEATURED_ARTICLES[0].date} · {FEATURED_ARTICLES[0].readTime}</p>
                   <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,3vw,36px)", color: CHAR, lineHeight: 1.1, letterSpacing: "-0.5px", marginBottom: 10 }}>
                     {FEATURED_ARTICLES[0].title}
                   </h3>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.55)", lineHeight: 1.65 }}>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.55)", lineHeight: 1.65 }}>
                     {FEATURED_ARTICLES[0].desc}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center justify-between px-7 py-4" style={{ borderTop: "1px solid rgba(10,11,20,.07)" }}>
+              <div className="flex items-center justify-between px-7 py-4" style={{ borderTop: "1px solid rgba(62,60,73,.07)" }}>
                 <div className="flex items-center gap-2 group/btn">
                   <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B }}>Read article</span>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover/btn:translate-x-0.5">
@@ -329,7 +329,7 @@ function BlogGridSection({ activeCategory, onNavigate }: { activeCategory: strin
               More from our blog
             </h2>
           </div>
-          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.3)" }}>{filtered.length} pieces</span>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.3)" }}>{filtered.length} pieces</span>
         </Reveal>
 
         {filtered.length > 0 ? (
@@ -340,7 +340,7 @@ function BlogGridSection({ activeCategory, onNavigate }: { activeCategory: strin
           </div>
         ) : (
           <div className="flex items-center justify-center py-16 mb-12">
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.3)" }}>No articles in this category yet.</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.3)" }}>No articles in this category yet.</p>
           </div>
         )}
 
@@ -354,7 +354,7 @@ function BlogGridSection({ activeCategory, onNavigate }: { activeCategory: strin
           {Array.from({ length: totalPages }).map((_, i) => (
             <button key={i} onClick={() => setCurrentPage(i + 1)}
               className="w-9 h-9 flex items-center justify-center transition-all"
-              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: currentPage === i + 1 ? 600 : 400, color: currentPage === i + 1 ? DARK : "rgba(10,11,20,.5)", background: currentPage === i + 1 ? B : "none", border: `1px solid ${currentPage === i + 1 ? B : "rgba(10,11,20,.15)"}`, cursor: "pointer" }}>
+              style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: currentPage === i + 1 ? 600 : 400, color: currentPage === i + 1 ? DARK : "rgba(62,60,73,.5)", background: currentPage === i + 1 ? B : "none", border: `1px solid ${currentPage === i + 1 ? B : "rgba(62,60,73,.15)"}`, cursor: "pointer" }}>
               {i + 1}
             </button>
           ))}
@@ -394,7 +394,7 @@ function ReviewsSection() {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,52px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
               What our customers say
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.45)", marginTop: 10, maxWidth: 400, lineHeight: 1.65 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(62,60,73,.45)", marginTop: 10, maxWidth: 400, lineHeight: 1.65 }}>
               All reviews from verified customers on Google and Facebook.
             </p>
           </div>
@@ -418,7 +418,7 @@ function ReviewsSection() {
               style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
+                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
                   <button onClick={() => setSelectedIdx(i)} className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
@@ -431,16 +431,16 @@ function ReviewsSection() {
                     <svg key={si} width="13" height="13" viewBox="0 0 24 24" fill={SAND}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                   ))}
                 </div>
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 42, color: `rgba(26,82,168,.2)`, lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.75)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>{t.quote}</p>
-                <div className="flex items-center gap-3 pt-4" style={{ borderTop: "1px solid rgba(10,11,20,.07)" }}>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 42, color: `rgba(0,80,159,.2)`, lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(62,60,73,.75)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>{t.quote}</p>
+                <div className="flex items-center gap-3 pt-4" style={{ borderTop: "1px solid rgba(62,60,73,.07)" }}>
                   <div className="w-8 h-8 flex items-center justify-center shrink-0"
-                    style={{ background: "rgba(26,82,168,.2)", border: "1px solid rgba(26,82,168,.3)" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="rgba(10,11,20,.6)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="12" cy="7" r="4" stroke="rgba(10,11,20,.6)" strokeWidth="1.8" /></svg>
+                    style={{ background: "rgba(0,80,159,.2)", border: "1px solid rgba(0,80,159,.3)" }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="rgba(62,60,73,.6)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="12" cy="7" r="4" stroke="rgba(62,60,73,.6)" strokeWidth="1.8" /></svg>
                   </div>
                   <div>
                     <p style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: CHAR }}>{t.name}</p>
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.4)" }}>{t.loc}</p>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.4)" }}>{t.loc}</p>
                   </div>
                 </div>
               </div>
@@ -453,7 +453,7 @@ function ReviewsSection() {
         {TESTIMONIALS.map((_, i) => (
           <button key={i} onClick={() => emblaApi?.scrollTo(i)}
             className="transition-all duration-300"
-            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(10,11,20,.2)", border: "none", cursor: "pointer", borderRadius: 4 }} />
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.2)", border: "none", cursor: "pointer", borderRadius: 4 }} />
         ))}
       </div>
 

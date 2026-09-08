@@ -41,7 +41,7 @@ export default function NotFoundPage({ onBack, onNavigate }: { onBack: () => voi
           alt=""
           className="absolute inset-0 w-full h-full object-cover opacity-[0.14]"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,11,20,.4) 0%, rgba(10,11,20,.96) 55%, rgba(10,11,20,1) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(62,60,73,.4) 0%, rgba(62,60,73,.96) 55%, rgba(62,60,73,1) 100%)" }} />
 
         <div className="relative max-w-[1000px] mx-auto px-8 md:px-14 py-20 lg:py-28 text-center">
           <motion.div

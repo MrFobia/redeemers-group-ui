@@ -177,7 +177,7 @@ function ProjectModal({ items, index, onClose, onPrev, onNext }: {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[300] flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,.92)", backdropFilter: "blur(12px)" }}
+      style={{ background: "rgba(62,60,73,.92)", backdropFilter: "blur(12px)" }}
       onClick={onClose}
     >
       <motion.div
@@ -193,7 +193,7 @@ function ProjectModal({ items, index, onClose, onPrev, onNext }: {
         {/* Close */}
         <button onClick={onClose}
           className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center"
-          style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}>
+          style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}>
           <X size={18} color="#fff" />
         </button>
 
@@ -203,7 +203,7 @@ function ProjectModal({ items, index, onClose, onPrev, onNext }: {
             {item.images.map((slide, i) => (
               <div key={i} className="relative shrink-0 w-full" style={{ aspectRatio: "21/9" }}>
                 <ImageWithFallback src={slide.src} alt={slide.caption} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute bottom-0 left-0 right-0 px-6 py-4" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.85) 0%, rgba(10,11,20,0) 100%)" }}>
+                <div className="absolute bottom-0 left-0 right-0 px-6 py-4" style={{ background: "linear-gradient(0deg, rgba(62,60,73,.85) 0%, rgba(62,60,73,0) 100%)" }}>
                   <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.85)" }}>{slide.caption}</span>
                 </div>
               </div>
@@ -213,12 +213,12 @@ function ProjectModal({ items, index, onClose, onPrev, onNext }: {
           {/* Prev / Next */}
           <button onClick={() => emblaApi?.scrollPrev()}
             className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}>
+            style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}>
             <ChevronLeft size={16} color="#fff" />
           </button>
           <button onClick={() => emblaApi?.scrollNext()}
             className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: "rgba(10,11,20,.55)", border: "none", cursor: "pointer" }}>
+            style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}>
             <ChevronRight size={16} color="#fff" />
           </button>
 
@@ -251,7 +251,7 @@ function ProjectModal({ items, index, onClose, onPrev, onNext }: {
           </h3>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: SAND, marginBottom: 24 }}>{item.loc} · {item.year}</p>
 
-          <div className="mb-6 p-4" style={{ background: "rgba(26,82,168,.12)", border: "1px solid rgba(26,82,168,.25)" }}>
+          <div className="mb-6 p-4" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.25)" }}>
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>What we did</p>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.75)", lineHeight: 1.6 }}>{item.whatWeDid}</p>
           </div>
@@ -265,7 +265,7 @@ function ProjectModal({ items, index, onClose, onPrev, onNext }: {
           {item.products.length > 0 && (
             <ul className="flex flex-wrap gap-2 mb-8">
               {item.products.map((p) => (
-                <li key={p} className="px-3 py-1.5" style={{ background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.25)" }}>
+                <li key={p} className="px-3 py-1.5" style={{ background: "rgba(216,203,165,.1)", border: "1px solid rgba(216,203,165,.25)" }}>
                   <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: SAND, fontWeight: 500 }}>{p}</span>
                 </li>
               ))}
@@ -340,13 +340,13 @@ function GalleryCard({ item, index, onClick, featured = false }: {
       </div>
 
       {/* Gradient overlays */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,.2) 0%, transparent 35%, rgba(0,0,0,.65) 100%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(62,60,73,.2) 0%, transparent 35%, rgba(62,60,73,.65) 100%)" }} />
       <motion.div
         className="absolute inset-0"
         animate={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
-        style={{ background: "rgba(26,82,168,.18)" }}
+        style={{ background: "rgba(0,80,159,.18)" }}
       />
 
       {/* Top: index + category */}

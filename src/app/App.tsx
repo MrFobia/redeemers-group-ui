@@ -129,7 +129,7 @@ const SLIDES: {
     sub: "Crawl space, basement waterproofing, foundation repair and concrete leveling — backed by a lifetime warranty.",
     cta: "Schedule Free Inspection",
     ctaAction: "modal",
-    overlay: "linear-gradient(113deg,rgba(10,11,20,0.88) 8%,rgba(10,11,20,0.55) 54%,rgba(10,11,20,0.2) 91%)",
+    overlay: "linear-gradient(113deg,rgba(62,60,73,0.88) 8%,rgba(62,60,73,0.55) 54%,rgba(62,60,73,0.2) 91%)",
     card: {
       eyebrow: "Why homeowners choose us",
       title: "Family-owned since 2008",
@@ -143,7 +143,7 @@ const SLIDES: {
     sub: "Interior drainage, sump pumps, and membrane systems designed to permanently keep water out of your home.",
     cta: "Explore Waterproofing",
     ctaAction: "service/waterproofing",
-    overlay: "linear-gradient(113deg,rgba(10,28,74,0.90) 8%,rgba(10,28,74,0.60) 54%,rgba(10,28,74,0.15) 91%)",
+    overlay: "linear-gradient(113deg,rgba(0,55,113,0.90) 8%,rgba(0,55,113,0.60) 54%,rgba(0,55,113,0.15) 91%)",
     card: {
       eyebrow: "Over 12,250 homes protected",
       title: "Permanent solutions, not patches",
@@ -157,7 +157,7 @@ const SLIDES: {
     sub: "Family-owned since 2008. Every installer certified. Every job backed by our lifetime transferable warranty.",
     cta: "Our Difference",
     ctaAction: "our-difference",
-    overlay: "linear-gradient(113deg,rgba(30,10,50,0.88) 8%,rgba(30,10,50,0.55) 54%,rgba(30,10,50,0.15) 91%)",
+    overlay: "linear-gradient(113deg,rgba(62,60,73,0.88) 8%,rgba(62,60,73,0.55) 54%,rgba(62,60,73,0.15) 91%)",
     card: {
       eyebrow: "Certified & accredited",
       title: "A+ BBB rated since day one",
@@ -308,9 +308,9 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
             ].map((b) => (
               <div key={b.text} className="flex items-center gap-1.5 px-3 py-1.5"
                 style={{
-                  background: "rgba(10,11,20,.65)",
+                  background: "rgba(62,60,73,.65)",
                   backdropFilter: "blur(8px)",
-                  border: "1px solid rgba(196,171,108,.35)",
+                  border: "1px solid rgba(216,203,165,.35)",
                 }}>
                 <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 11, color: SAND }}>{b.icon}</span>
                 <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#fff", fontWeight: 500, letterSpacing: 0.3 }}>{b.text}</span>
@@ -328,7 +328,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: .6, delay: .85 }}
         className="absolute hidden md:flex flex-wrap left-8 md:left-14"
-        style={{ bottom: 24, background: "rgba(10,11,20,.72)", backdropFilter: "blur(18px)", borderLeft: "1px solid rgba(255,255,255,.07)", borderTop: "1px solid rgba(255,255,255,.07)" }}
+        style={{ bottom: 24, background: "rgba(62,60,73,.72)", backdropFilter: "blur(18px)", borderLeft: "1px solid rgba(255,255,255,.07)", borderTop: "1px solid rgba(255,255,255,.07)" }}
       >
         {STATS.map((s, i) => (
           <div key={s.label} className="flex flex-col items-center justify-center gap-1"
@@ -360,11 +360,11 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
           width: "clamp(300px, 26vw, 400px)",
           background: "rgba(255,255,255,.18)",
           backdropFilter: "blur(20px)",
-          border: "1px solid rgba(198,198,198,.35)",
+          border: "1px solid rgba(62,60,73,.35)",
           padding: 29,
         }}
       >
-        <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(61,61,72,.9)", letterSpacing: 2, textTransform: "uppercase" }}>
+        <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(62,60,73,.9)", letterSpacing: 2, textTransform: "uppercase" }}>
           {slide.card.eyebrow}
         </p>
         <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 20, color: "#fff", lineHeight: 1.5 }}>
@@ -374,7 +374,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
           {slide.card.body}
         </p>
         <button className="group inline-flex items-center gap-1.5 self-start"
-          style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(61,61,72,.8)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+          style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "rgba(62,60,73,.8)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
           Explore
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-0.5">
             <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -388,7 +388,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
             {SLIDES.map((_, i) => (
               <button key={i} onClick={() => goTo(i)}
                 className="transition-all duration-300"
-                style={{ width: 2, height: current === i ? 32 : 16, background: current === i ? "rgba(61,61,72,.9)" : "rgba(255,255,255,.3)", borderRadius: 2, border: "none", cursor: "pointer" }} />
+                style={{ width: 2, height: current === i ? 32 : 16, background: current === i ? "rgba(62,60,73,.9)" : "rgba(255,255,255,.3)", borderRadius: 2, border: "none", cursor: "pointer" }} />
             ))}
           </div>
           {/* Prev / Next */}
@@ -422,12 +422,12 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
         <div className="flex gap-2.5">
           <button onClick={prev} aria-label="Previous slide"
             className="flex items-center justify-center transition-all active:bg-white/20"
-            style={{ width: 40, height: 40, border: "1px solid rgba(255,255,255,.25)", background: "rgba(10,11,20,.4)", cursor: "pointer" }}>
+            style={{ width: 40, height: 40, border: "1px solid rgba(255,255,255,.25)", background: "rgba(62,60,73,.4)", cursor: "pointer" }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
           <button onClick={next} aria-label="Next slide"
             className="flex items-center justify-center transition-all active:bg-white/20"
-            style={{ width: 40, height: 40, border: "1px solid rgba(255,255,255,.25)", background: "rgba(10,11,20,.4)", cursor: "pointer" }}>
+            style={{ width: 40, height: 40, border: "1px solid rgba(255,255,255,.25)", background: "rgba(62,60,73,.4)", cursor: "pointer" }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
         </div>
@@ -527,14 +527,14 @@ function ServiceCard({ s, onNavigate }: { s: typeof SERVICES[0]; onNavigate?: ()
       <ImageWithFallback src={s.img} alt={s.cat} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
       {/* Default dark gradient */}
       <div className="absolute inset-0 transition-opacity duration-500"
-        style={{ background: "linear-gradient(0deg,rgba(10,11,20,.92) 0%,rgba(10,11,20,.3) 60%,transparent 100%)", opacity: hovered ? 0 : 1 }} />
+        style={{ background: "linear-gradient(0deg,rgba(62,60,73,.92) 0%,rgba(62,60,73,.3) 60%,transparent 100%)", opacity: hovered ? 0 : 1 }} />
       {/* Hover blue overlay */}
       <div className="absolute inset-0 transition-opacity duration-500"
-        style={{ background: `linear-gradient(0deg,${NAVY} 0%,rgba(26,82,168,.8) 100%)`, opacity: hovered ? 1 : 0 }} />
+        style={{ background: `linear-gradient(0deg,${NAVY} 0%,rgba(0,80,159,.8) 100%)`, opacity: hovered ? 1 : 0 }} />
 
       {/* Category chip */}
       <div className="absolute top-5 left-5 px-3 py-1"
-        style={{ background: "rgba(196,171,108,.2)", border: "1px solid rgba(196,171,108,.4)" }}>
+        style={{ background: "rgba(216,203,165,.2)", border: "1px solid rgba(216,203,165,.4)" }}>
         <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>{s.cat}</span>
       </div>
 
@@ -597,7 +597,7 @@ function SignsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
                 <div className="relative overflow-hidden shrink-0" style={{ height: 150 }}>
                   <ImageWithFallback src={s.img} alt={s.label}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(30,34,53,.85) 0%, rgba(30,34,53,0) 60%)" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(77,76,88,.85) 0%, rgba(77,76,88,0) 60%)" }} />
                 </div>
                 <div className="flex flex-col gap-2 p-7">
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2, textTransform: "uppercase" }}>
@@ -690,7 +690,7 @@ function ServicesSection({ onNavigate }: { onNavigate: (p: string) => void }) {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
               </div>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: "linear-gradient(135deg, rgba(26,82,168,0.08) 0%, transparent 60%)" }} />
+                style={{ background: "linear-gradient(135deg, rgba(0,80,159,0.08) 0%, transparent 60%)" }} />
               <div className="flex flex-col justify-center px-6 py-8 sm:px-8 sm:py-10 flex-1">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-5 h-[1px]" style={{ background: SAND }} />
@@ -703,9 +703,9 @@ function ServicesSection({ onNavigate }: { onNavigate: (p: string) => void }) {
                 <div className="flex flex-col gap-2 mb-7">
                   {lead.tags.map(tag => (
                     <div key={tag} className="flex items-center gap-2 px-3 py-1.5 w-fit"
-                      style={{ background: "rgba(196,171,108,.07)", border: "1px solid rgba(196,171,108,.22)" }}>
+                      style={{ background: "rgba(216,203,165,.07)", border: "1px solid rgba(216,203,165,.22)" }}>
                       <div className="w-1 h-1 rounded-full shrink-0" style={{ background: SAND }} />
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(196,171,108,.8)", letterSpacing: 1 }}>{tag}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(216,203,165,.8)", letterSpacing: 1 }}>{tag}</span>
                     </div>
                   ))}
                 </div>
@@ -729,7 +729,7 @@ function ServicesSection({ onNavigate }: { onNavigate: (p: string) => void }) {
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
                 </div>
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "linear-gradient(180deg, rgba(26,82,168,0.12) 0%, transparent 50%)" }} />
+                  style={{ background: "linear-gradient(180deg, rgba(0,80,159,0.12) 0%, transparent 50%)" }} />
                 <div className="flex flex-col justify-between flex-1 p-6 pt-5">
                   <div>
                     <div className="flex items-center gap-2 mb-2">
@@ -769,7 +769,7 @@ const WHY_PILLARS = [
 
 function WhySection() {
   return (
-    <section className="relative overflow-hidden py-24 px-8 md:px-14" style={{ background: "#053770" }}>
+    <section className="relative overflow-hidden py-24 px-8 md:px-14" style={{ background: "#003771" }}>
       {/* Decorative diagonal */}
       <div className="absolute right-[-96px] top-0 h-full w-[55%] hidden lg:block pointer-events-none"
         style={{ background: "rgba(255,255,255,.02)", transform: "skewX(-8deg)", transformOrigin: "top right" }} />
@@ -819,8 +819,8 @@ function WhySection() {
                   <div className="flex items-center justify-center mb-6 shrink-0"
                     style={{
                       width: 44, height: 44,
-                      background: p.highlight ? "rgba(255,255,255,.15)" : "rgba(196,171,108,.1)",
-                      border: `1px solid ${p.highlight ? "rgba(255,255,255,.25)" : "rgba(196,171,108,.25)"}`,
+                      background: p.highlight ? "rgba(255,255,255,.15)" : "rgba(216,203,165,.1)",
+                      border: `1px solid ${p.highlight ? "rgba(255,255,255,.25)" : "rgba(216,203,165,.25)"}`,
                     }}>
                     {React.cloneElement(p.icon as React.ReactElement, { color: p.highlight ? "#fff" : SAND })}
                   </div>
@@ -919,7 +919,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
       <div ref={emblaRef} className="overflow-hidden px-8 md:px-14">
         <div className="flex gap-5 ml-[max(0px,calc((100vw-1440px)/2))]">
           {TESTIMONIALS.map((t, i) => (
-            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(0,0,0,.07)" }}>
+            <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(62,60,73,.07)" }}>
               {/* Video / image thumb */}
               <button
                 onClick={() => setSelectedIdx(i)}
@@ -927,7 +927,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
                 style={{ padding: 0, paddingBottom: "52%", border: "none", cursor: "pointer" }}
               >
                 <ImageWithFallback src={t.img as string} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(10,11,20,.45)" }}>
+                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
                   <span className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
@@ -943,12 +943,12 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
                   ))}
                 </div>
                 {/* Giant quote mark */}
-                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(26,82,168,.15)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "#444", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>
+                <div style={{ fontFamily: "Georgia,serif", fontSize: 48, color: "rgba(0,80,159,.15)", lineHeight: .7, marginBottom: 8 }}>&ldquo;</div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.80)", lineHeight: 1.75, flex: 1, marginBottom: 24 }}>
                   {t.quote}
                 </p>
-                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(0,0,0,.07)" }}>
-                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "#eee" }}>
+                <div className="flex items-center gap-3 pt-5" style={{ borderTop: "1px solid rgba(62,60,73,.07)" }}>
+                  <div className="w-9 h-9 rounded-full overflow-hidden shrink-0" style={{ background: "rgba(62,60,73,.09)" }}>
                     <ImageWithFallback src={t.avatar as string} alt={t.name} className="w-full h-full object-cover" />
                   </div>
                   <div>
@@ -967,7 +967,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
         {TESTIMONIALS.map((_, i) => (
           <button key={i} onClick={() => emblaApi?.scrollTo(i)}
             className="rounded-full transition-all duration-300"
-            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(0,0,0,.15)" }} />
+            style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.15)" }} />
         ))}
       </div>
 
@@ -1104,8 +1104,8 @@ function ServiceAreaSection() {
                   className="text-left overflow-hidden"
                   style={{
                     background: active === i ? "#fff" : "transparent",
-                    borderLeft: `3px solid ${active === i ? B : "rgba(0,0,0,.1)"}`,
-                    boxShadow: active === i ? "0 4px 20px rgba(0,0,0,.08)" : "none",
+                    borderLeft: `3px solid ${active === i ? B : "rgba(62,60,73,.1)"}`,
+                    boxShadow: active === i ? "0 4px 20px rgba(62,60,73,.08)" : "none",
                     transition: "background .2s, box-shadow .2s",
                   }}
                 >
@@ -1114,13 +1114,13 @@ function ServiceAreaSection() {
                     <div className="flex items-center gap-3">
                       <span style={{
                         fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 11,
-                        color: active === i ? B : "rgba(0,0,0,.25)", letterSpacing: 2,
+                        color: active === i ? B : "rgba(62,60,73,.25)", letterSpacing: 2,
                       }}>{d.abbr}</span>
                       <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: active === i ? CHAR : MUTED }}>
                         {d.state}
                       </span>
                       {d.highlight && active === i && (
-                        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: B, letterSpacing: 1.5, textTransform: "uppercase", background: "rgba(26,82,168,.1)", padding: "2px 7px" }}>
+                        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: B, letterSpacing: 1.5, textTransform: "uppercase", background: "rgba(0,80,159,.1)", padding: "2px 7px" }}>
                           {d.highlight}
                         </span>
                       )}
@@ -1130,7 +1130,7 @@ function ServiceAreaSection() {
                       transition={{ duration: 0.25 }}
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke={active === i ? B : "rgba(0,0,0,.3)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke={active === i ? B : "rgba(62,60,73,.3)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </motion.div>
                   </div>
@@ -1145,15 +1145,15 @@ function ServiceAreaSection() {
                         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                         style={{ overflow: "hidden" }}
                       >
-                        <div className="px-5 pb-5" style={{ borderTop: "1px solid rgba(0,0,0,.06)" }}>
+                        <div className="px-5 pb-5" style={{ borderTop: "1px solid rgba(62,60,73,.06)" }}>
                           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED, marginTop: 12, marginBottom: 10 }}>{d.tagline}</p>
                           {/* City chips */}
                           <div className="flex flex-wrap gap-2 mb-4">
                             {d.cities.map((city) => (
                               <span key={city} style={{
                                 fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 500,
-                                color: CHAR, background: "rgba(26,82,168,.07)",
-                                border: "1px solid rgba(26,82,168,.15)", padding: "3px 10px",
+                                color: CHAR, background: "rgba(0,80,159,.07)",
+                                border: "1px solid rgba(0,80,159,.15)", padding: "3px 10px",
                               }}>{city}</span>
                             ))}
                           </div>
@@ -1189,7 +1189,7 @@ function ServiceAreaSection() {
         {/* ── Right: Map + animated info card ── */}
         <div className="relative hidden lg:block">
           <img src={imgServiceAreaMap} alt="Service area map" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(247,245,239,.15) 0%, transparent 40%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(250,249,244,.15) 0%, transparent 40%)" }} />
 
           {/* Animated state card */}
           <AnimatePresence mode="wait">
@@ -1247,7 +1247,7 @@ function ServiceAreaSection() {
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
                 className="flex items-center gap-2.5 px-4 py-2.5"
-                style={{ background: "rgba(10,11,20,.82)", border: "1px solid rgba(255,255,255,.1)", backdropFilter: "blur(6px)" }}
+                style={{ background: "rgba(62,60,73,.82)", border: "1px solid rgba(255,255,255,.1)", backdropFilter: "blur(6px)" }}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#fff", fontWeight: 500 }}>{item}</p>
@@ -1264,7 +1264,7 @@ function ServiceAreaSection() {
 // ─── CTA ─────────────────────────────────────────────────────────────────────
 function CTASection() {
   return (
-    <section className="relative overflow-hidden py-32 px-8 md:px-14" style={{ background: "#00519F" }}>
+    <section className="relative overflow-hidden py-32 px-8 md:px-14" style={{ background: "#00509F" }}>
       {/* Ghost text */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
         style={{ fontFamily: "'Articulat CF',sans-serif", fontSize: "clamp(160px,25vw,340px)", fontWeight: 800, color: "rgba(255,255,255,.03)", lineHeight: 1, userSelect: "none", whiteSpace: "nowrap" }}>
@@ -1482,7 +1482,7 @@ export default function App() {
     return (
       <div>
         <button onClick={() => navigate("home")}
-          style={{ position: "fixed", top: 16, left: 16, zIndex: 1000, background: "#1E2235", color: "#fff", border: "none", padding: "8px 16px", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 13 }}>
+          style={{ position: "fixed", top: 16, left: 16, zIndex: 1000, background: "#4D4C58", color: "#fff", border: "none", padding: "8px 16px", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontSize: 13 }}>
           ← Volver
         </button>
         <GuiaEstilosPage />

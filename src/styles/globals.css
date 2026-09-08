@@ -5,28 +5,28 @@
 }
 .leaflet-container .leaflet-control-attribution {
   background: rgba(255, 255, 255, 0.8);
-  color: rgba(10, 11, 20, 0.5);
+  color: rgba(62, 60, 73, 0.5);
   font-size: 10px;
 }
 .leaflet-container .leaflet-control-attribution a {
-  color: #1a52a8;
+  color: #00509F;
 }
 .leaflet-container .leaflet-control-zoom a {
   background: #fff;
-  color: #1e2235;
-  border-color: rgba(10, 11, 20, 0.12);
+  color: #3E3C49;
+  border-color: rgba(62, 60, 73, 0.12);
 }
 .leaflet-container .leaflet-control-zoom a:hover {
-  background: #f7f5ef;
+  background: #FAF9F4;
 }
 /* City name labels */
 .leaflet-tooltip {
   background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(26, 82, 168, 0.45);
-  color: #1e2235;
+  border: 1px solid rgba(0, 80, 159, 0.45);
+  color: #3E3C49;
   font-size: 11px;
   font-weight: 600;
-  box-shadow: 0 2px 10px rgba(10, 11, 20, 0.12);
+  box-shadow: 0 2px 10px rgba(62, 60, 73, 0.12);
   padding: 2px 7px;
 }
 .leaflet-tooltip::before { display: none; }
@@ -37,7 +37,7 @@
    Firefox uses `scrollbar-color`/`scrollbar-width`; everything WebKit-based
    (Chrome, Safari, Edge) uses the ::-webkit-scrollbar pseudo-elements. */
 html {
-  scrollbar-color: #C4AB6C rgba(10, 11, 20, 0.08);
+  scrollbar-color: #D8CBA5 rgba(62, 60, 73, 0.09);
   scrollbar-width: thin;
 }
 
@@ -46,20 +46,20 @@ html {
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #F7F5EF;
+  background: #FAF9F4;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #C4AB6C 0%, #a68f56 100%);
+  background: #D8CBA5;
   border-radius: 999px;
-  border: 3px solid #F7F5EF;
+  border: 3px solid #FAF9F4;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #d6bd7d 0%, #C4AB6C 100%);
+  background: #00509F;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-corner {
-  background: #F7F5EF;
+  background: #FAF9F4;
 }
 
 /* Any inner scroll container that should read as "secondary" (modals, lists) —
@@ -71,10 +71,10 @@ html {
 .rg-scroll-thin::-webkit-scrollbar-thumb {
   border: none;
   border-radius: 999px;
-  background: rgba(10, 11, 20, 0.22);
+  background: rgba(62, 60, 73, 0.22);
 }
 .rg-scroll-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(10, 11, 20, 0.38);
+  background: rgba(62, 60, 73, 0.38);
 }
 .rg-scroll-thin::-webkit-scrollbar-track {
   background: transparent;

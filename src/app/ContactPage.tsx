@@ -124,7 +124,7 @@ function HeroSection() {
           alt="Redeemers team"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(105deg, rgba(10,11,20,0.96) 0%, rgba(10,11,20,0.80) 55%, rgba(10,11,20,0.45) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(105deg, rgba(62,60,73,0.96) 0%, rgba(62,60,73,0.80) 55%, rgba(62,60,73,0.45) 100%)" }} />
       </div>
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 flex flex-col justify-center" style={{ minHeight: "70vh" }}>
@@ -206,7 +206,7 @@ function ContactInfoSection() {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,52px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1.5px" }}>
               How to reach us.
             </h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.5)", lineHeight: 1.75, maxWidth: 420 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(62,60,73,.5)", lineHeight: 1.75, maxWidth: 420 }}>
               Multiple ways to get in touch. Choose whichever works best for you — we respond fast.
             </p>
           </div>
@@ -216,11 +216,11 @@ function ContactInfoSection() {
           {CHANNELS.map((ch, i) => (
             <Reveal key={ch.title} delay={i * 0.07}>
               <div className="flex flex-col h-full p-7" style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, borderTop: `2px solid ${SAND}` }}>
-                <div className="w-12 h-12 flex items-center justify-center mb-6" style={{ background: "rgba(26,82,168,.08)", border: "1px solid rgba(26,82,168,.2)", color: B }}>
+                <div className="w-12 h-12 flex items-center justify-center mb-6" style={{ background: "rgba(0,80,159,.08)", border: "1px solid rgba(0,80,159,.2)", color: B }}>
                   {ch.icon}
                 </div>
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: CHAR, marginBottom: 10 }}>{ch.title}</h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.5)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{ch.desc}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.5)", lineHeight: 1.7, flex: 1, marginBottom: 20 }}>{ch.desc}</p>
                 {ch.href ? (
                   <a href={ch.href}
                     className="inline-flex items-center gap-1.5 group"
@@ -239,12 +239,12 @@ function ContactInfoSection() {
         {/* Emergency strip */}
         <Reveal delay={0.3} className="mt-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-8 py-6"
-            style={{ background: "rgba(26,82,168,.08)", border: "1px solid rgba(26,82,168,.25)", borderLeft: `3px solid ${B}` }}>
+            style={{ background: "rgba(0,80,159,.08)", border: "1px solid rgba(0,80,159,.25)", borderLeft: `3px solid ${B}` }}>
             <div>
               <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 15, color: CHAR, marginBottom: 4 }}>
                 Emergency structural concern?
               </p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.5)" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.5)" }}>
                 If you notice sudden cracks, foundation shifts, or water intrusion, call us immediately.
               </p>
             </div>
@@ -307,8 +307,8 @@ function LocationsMapSection() {
                   className="text-left overflow-hidden"
                   style={{
                     background: active === i ? "#fff" : "transparent",
-                    borderLeft: `3px solid ${active === i ? B : "rgba(0,0,0,.1)"}`,
-                    boxShadow: active === i ? "0 4px 20px rgba(0,0,0,.08)" : "none",
+                    borderLeft: `3px solid ${active === i ? B : "rgba(62,60,73,.1)"}`,
+                    boxShadow: active === i ? "0 4px 20px rgba(62,60,73,.08)" : "none",
                     transition: "background .2s, box-shadow .2s",
                   }}
                 >
@@ -316,20 +316,20 @@ function LocationsMapSection() {
                     <div className="flex items-center gap-3">
                       <span style={{
                         fontFamily: "'Articulat CF',sans-serif", fontWeight: 900, fontSize: 11,
-                        color: active === i ? B : "rgba(0,0,0,.25)", letterSpacing: 2,
+                        color: active === i ? B : "rgba(62,60,73,.25)", letterSpacing: 2,
                       }}>{d.abbr}</span>
                       <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 17, color: active === i ? CHAR : MUTED }}>
                         {d.state}
                       </span>
                       {d.highlight && active === i && (
-                        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: B, letterSpacing: 1.5, textTransform: "uppercase", background: "rgba(26,82,168,.1)", padding: "2px 7px" }}>
+                        <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: B, letterSpacing: 1.5, textTransform: "uppercase", background: "rgba(0,80,159,.1)", padding: "2px 7px" }}>
                           {d.highlight}
                         </span>
                       )}
                     </div>
                     <motion.div animate={{ rotate: active === i ? 90 : 0 }} transition={{ duration: 0.25 }}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke={active === i ? B : "rgba(0,0,0,.3)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke={active === i ? B : "rgba(62,60,73,.3)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </motion.div>
                   </div>
@@ -343,14 +343,14 @@ function LocationsMapSection() {
                         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                         style={{ overflow: "hidden" }}
                       >
-                        <div className="px-5 pb-5" style={{ borderTop: "1px solid rgba(0,0,0,.06)" }}>
+                        <div className="px-5 pb-5" style={{ borderTop: "1px solid rgba(62,60,73,.06)" }}>
                           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED, marginTop: 12, marginBottom: 10 }}>{d.tagline}</p>
                           <div className="flex flex-wrap gap-2 mb-4">
                             {d.cities.map((city) => (
                               <span key={city} style={{
                                 fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 500,
-                                color: CHAR, background: "rgba(26,82,168,.07)",
-                                border: "1px solid rgba(26,82,168,.15)", padding: "3px 10px",
+                                color: CHAR, background: "rgba(0,80,159,.07)",
+                                border: "1px solid rgba(0,80,159,.15)", padding: "3px 10px",
                               }}>{city}</span>
                             ))}
                           </div>
@@ -385,7 +385,7 @@ function LocationsMapSection() {
         {/* ── Right: Map + animated info card ── */}
         <div className="relative hidden lg:block">
           <img src={imgServiceAreaMap} alt="Service area map" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(247,245,239,.15) 0%, transparent 40%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(250,249,244,.15) 0%, transparent 40%)" }} />
 
           <AnimatePresence mode="wait">
             <motion.div
@@ -437,7 +437,7 @@ function LocationsMapSection() {
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
                 className="flex items-center gap-2.5 px-4 py-2.5"
-                style={{ background: "rgba(10,11,20,.82)", border: "1px solid rgba(255,255,255,.1)", backdropFilter: "blur(6px)" }}
+                style={{ background: "rgba(62,60,73,.82)", border: "1px solid rgba(255,255,255,.1)", backdropFilter: "blur(6px)" }}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#fff", fontWeight: 500 }}>{item}</p>
@@ -474,7 +474,7 @@ function ContactFormSection() {
               <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(28px,3.5vw,48px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 14 }}>
                 Schedule free inspection
               </h2>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(10,11,20,.5)", lineHeight: 1.7, marginBottom: 32 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(62,60,73,.5)", lineHeight: 1.7, marginBottom: 32 }}>
                 The fastest way to get answers. No obligation.
               </p>
               <div className="flex flex-col gap-3">
@@ -483,7 +483,7 @@ function ContactFormSection() {
                     <div className="w-4 h-4 flex items-center justify-center shrink-0">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                     </div>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.6)" }}>{t}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.6)" }}>{t}</span>
                   </div>
                 ))}
               </div>
@@ -496,7 +496,7 @@ function ContactFormSection() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 {[["First name", "text"], ["Last name", "text"], ["Email", "email"], ["Phone number", "tel"]].map(([label, type]) => (
                   <div key={label} className="flex flex-col gap-1.5">
-                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>{label}</label>
+                    <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(62,60,73,.6)", letterSpacing: 0.5 }}>{label}</label>
                     <input type={type} placeholder={label}
                       className="px-4 py-3 outline-none transition-all"
                       style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%" }} />
@@ -505,23 +505,23 @@ function ContactFormSection() {
               </div>
 
               <div className="mb-4">
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5, marginBottom: 10 }}>Service needed</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(62,60,73,.6)", letterSpacing: 0.5, marginBottom: 10 }}>Service needed</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {SERVICES_LIST.map((s) => (
                     <label key={s} className="flex items-center gap-2.5 cursor-pointer">
                       <div onClick={() => toggle(s)}
                         className="w-4 h-4 flex items-center justify-center shrink-0 transition-all"
-                        style={{ background: selected.includes(s) ? B : "transparent", border: `1.5px solid ${selected.includes(s) ? B : "rgba(10,11,20,.2)"}`, cursor: "pointer" }}>
+                        style={{ background: selected.includes(s) ? B : "transparent", border: `1.5px solid ${selected.includes(s) ? B : "rgba(62,60,73,.2)"}`, cursor: "pointer" }}>
                         {selected.includes(s) && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                       </div>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.6)" }}>{s}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.6)" }}>{s}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5 mb-5">
-                <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(10,11,20,.6)", letterSpacing: 0.5 }}>Describe your problem (optional)</label>
+                <label style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "rgba(62,60,73,.6)", letterSpacing: 0.5 }}>Describe your problem (optional)</label>
                 <textarea rows={4} placeholder="Tell us more..."
                   className="px-4 py-3 outline-none resize-none transition-all"
                   style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%" }} />
@@ -529,10 +529,10 @@ function ContactFormSection() {
 
               <div className="flex items-center gap-2.5 mb-5 cursor-pointer" onClick={() => setAgreed(a => !a)}>
                 <div className="w-4 h-4 flex items-center justify-center shrink-0"
-                  style={{ background: agreed ? B : "transparent", border: `1.5px solid ${agreed ? B : "rgba(10,11,20,.2)"}`, cursor: "pointer" }}>
+                  style={{ background: agreed ? B : "transparent", border: `1.5px solid ${agreed ? B : "rgba(62,60,73,.2)"}`, cursor: "pointer" }}>
                   {agreed && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                 </div>
-                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.45)" }}>I agree to the terms of service</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.45)" }}>I agree to the terms of service</span>
               </div>
 
               <button className="w-full py-4 flex items-center justify-center gap-2 transition-opacity hover:opacity-85"

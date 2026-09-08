@@ -166,7 +166,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                   className="flex items-center px-3 hover:bg-white/5 transition-colors"
                   style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, borderLeft: "none", cursor: "pointer" }}
                 >
-                  <X size={14} color="rgba(10,11,20,.5)" />
+                  <X size={14} color="rgba(62,60,73,.5)" />
                 </button>
               )}
             </div>
@@ -179,7 +179,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.18 }}
                   className="absolute left-0 right-0 z-[1000] mt-1 overflow-hidden"
-                  style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 16px 48px rgba(0,0,0,.6)" }}
+                  style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}`, boxShadow: "0 16px 48px rgba(62,60,73,.6)" }}
                 >
                   {results.length > 0 ? (
                     results.map((c) => (
@@ -187,7 +187,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                         key={`${c.state}-${c.county}-${c.name}`}
                         onClick={() => selectCity(c)}
                         className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-white/[0.06]"
-                        style={{ background: "none", border: "none", borderBottom: "1px solid rgba(10,11,20,.05)", cursor: "pointer" }}
+                        style={{ background: "none", border: "none", borderBottom: "1px solid rgba(62,60,73,.05)", cursor: "pointer" }}
                       >
                         <span className="flex items-center gap-3 min-w-0">
                           <MapPin size={13} color={SAND} className="shrink-0" />
@@ -195,14 +195,14 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                             {c.name}
                           </span>
                         </span>
-                        <span className="shrink-0" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.35)" }}>
+                        <span className="shrink-0" style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.35)" }}>
                           {c.county} Co. · {c.state}
                         </span>
                       </button>
                     ))
                   ) : (
                     <div className="px-4 py-5">
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.6)", marginBottom: 10 }}>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.6)", marginBottom: 10 }}>
                         No match for &ldquo;{query}&rdquo; in our service area.
                       </p>
                       <button
@@ -220,7 +220,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
             </AnimatePresence>
           </div>
 
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.3)", marginTop: 14 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.3)", marginTop: 14 }}>
             {TOTAL_CITIES} cities across {TOTAL_COUNTIES} counties in four states. Or pick a state on the map below.
           </p>
         </div>
@@ -250,7 +250,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
         </div>
 
         {/* ── Map + state panel ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-px" style={{ background: "rgba(10,11,20,.07)", border: `1px solid ${ON_LIGHT.border}` }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-px" style={{ background: "rgba(62,60,73,.07)", border: `1px solid ${ON_LIGHT.border}` }}>
 
           <div style={{ background: SURFACE.base }}>
             <ServiceAreaMap
@@ -292,18 +292,18 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                   {state.abbr}
                 </span>
               </div>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(10,11,20,.45)", lineHeight: 1.65, marginBottom: 18 }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(62,60,73,.45)", lineHeight: 1.65, marginBottom: 18 }}>
                 {state.tagline}
               </p>
 
-              <div className="flex gap-6 pb-5 mb-5" style={{ borderBottom: "1px solid rgba(10,11,20,.08)" }}>
+              <div className="flex gap-6 pb-5 mb-5" style={{ borderBottom: "1px solid rgba(62,60,73,.08)" }}>
                 <div>
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: B, lineHeight: 1 }}>{counties.length}</p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)", marginTop: 3 }}>Counties</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.35)", marginTop: 3 }}>Counties</p>
                 </div>
                 <div>
                   <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 22, color: B, lineHeight: 1 }}>{cityCountByState(activeState)}</p>
-                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.35)", marginTop: 3 }}>Cities served</p>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.35)", marginTop: 3 }}>Cities served</p>
                 </div>
               </div>
 
@@ -322,15 +322,15 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                     className="group flex items-center justify-between text-left px-3.5 py-2.5 transition-all hover:border-white/25"
                     style={{
                       fontFamily: "'Inter',sans-serif", fontSize: 14,
-                      color: "rgba(10,11,20,.72)",
-                      background: "rgba(10,11,20,.03)",
+                      color: "rgba(62,60,73,.72)",
+                      background: "rgba(62,60,73,.03)",
                       border: `1px solid ${ON_LIGHT.border}`,
                       cursor: "pointer",
                     }}
                   >
                     <span>{county.name} County</span>
                     <span className="flex items-center gap-2 shrink-0">
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(10,11,20,.3)" }}>{county.cities.length}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(62,60,73,.3)" }}>{county.cities.length}</span>
                       <ChevronRight size={13} color={SAND} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                     </span>
                   </button>
@@ -346,8 +346,8 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                   <span
                     key={svc}
                     style={{
-                      fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(10,11,20,.7)",
-                      background: "rgba(10,11,20,.05)", border: `1px solid ${ON_LIGHT.border}`,
+                      fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: "rgba(62,60,73,.7)",
+                      background: "rgba(62,60,73,.05)", border: `1px solid ${ON_LIGHT.border}`,
                       padding: "5px 11px",
                     }}
                   >
@@ -366,7 +366,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
               </button>
 
               {/* Content from this area */}
-              <div className="pt-6" style={{ borderTop: "1px solid rgba(10,11,20,.08)" }}>
+              <div className="pt-6" style={{ borderTop: "1px solid rgba(62,60,73,.08)" }}>
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>
                   Content from this area
                 </p>
@@ -382,14 +382,14 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                         className="py-2 px-2 transition-all"
                         style={{
                           fontFamily: "'Inter',sans-serif", fontSize: 12.5, fontWeight: isOn ? 600 : 400,
-                          color: isOn ? "#7EB8FF" : "rgba(10,11,20,.45)",
-                          background: isOn ? "rgba(26,82,168,.22)" : "rgba(10,11,20,.03)",
-                          border: `1px solid ${isOn ? "rgba(26,82,168,.6)" : "rgba(10,11,20,.06)"}`,
+                          color: isOn ? "#A1CDF1" : "rgba(62,60,73,.45)",
+                          background: isOn ? "rgba(0,80,159,.22)" : "rgba(62,60,73,.03)",
+                          border: `1px solid ${isOn ? "rgba(0,80,159,.6)" : "rgba(62,60,73,.06)"}`,
                           cursor: "pointer", lineHeight: 1.25,
                         }}
                       >
                         {tab.label}
-                        <span style={{ display: "block", fontSize: 10, color: "rgba(10,11,20,.3)", fontWeight: 400 }}>{count}</span>
+                        <span style={{ display: "block", fontSize: 10, color: "rgba(62,60,73,.3)", fontWeight: 400 }}>{count}</span>
                       </button>
                     );
                   })}
@@ -400,17 +400,17 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                     <button
                       key={p.title}
                       className="group text-left px-4 py-3 transition-all hover:border-white/20"
-                      style={{ background: "rgba(10,11,20,.03)", border: `1px solid ${ON_LIGHT.border}`, cursor: "pointer" }}
+                      style={{ background: "rgba(62,60,73,.03)", border: `1px solid ${ON_LIGHT.border}`, cursor: "pointer" }}
                     >
                       <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 14, color: CHAR, lineHeight: 1.3, marginBottom: 4 }}>
                         {p.title}
                       </p>
-                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.4)" }}>
+                      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.4)" }}>
                         {p.city}, {p.state} &nbsp;·&nbsp; ZIP {p.zip}
                       </p>
                     </button>
                   )) : (
-                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(10,11,20,.3)", padding: "10px 0" }}>
+                    <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(62,60,73,.3)", padding: "10px 0" }}>
                       Nothing published here yet.
                     </p>
                   )}
@@ -435,23 +435,23 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
               const key = `${county.state}-${county.name}`;
               const isOpen = openCounty === key;
               return (
-                <div key={key} data-county={key} style={{ borderBottom: "1px solid rgba(10,11,20,.05)" }}>
+                <div key={key} data-county={key} style={{ borderBottom: "1px solid rgba(62,60,73,.05)" }}>
                   <button
                     onClick={() => setOpenCounty(isOpen ? null : key)}
                     className="w-full flex items-center justify-between px-7 py-3.5 text-left transition-colors hover:bg-white/[0.04]"
-                    style={{ background: isOpen ? "rgba(10,11,20,.03)" : "none", border: "none", cursor: "pointer" }}
+                    style={{ background: isOpen ? "rgba(62,60,73,.03)" : "none", border: "none", cursor: "pointer" }}
                   >
                     <span className="flex items-center gap-3">
                       <ChevronDown
                         size={14}
-                        color={isOpen ? B : "rgba(10,11,20,.3)"}
+                        color={isOpen ? B : "rgba(62,60,73,.3)"}
                         style={{ transform: isOpen ? "rotate(0deg)" : "rotate(-90deg)", transition: "transform .2s" }}
                       />
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: isOpen ? 600 : 500, fontSize: 14, color: isOpen ? "#fff" : "rgba(10,11,20,.7)" }}>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontWeight: isOpen ? 600 : 500, fontSize: 14, color: isOpen ? "#fff" : "rgba(62,60,73,.7)" }}>
                         {county.name} County
                       </span>
                     </span>
-                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(10,11,20,.28)" }}>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.28)" }}>
                       {county.cities.length}
                     </span>
                   </button>
@@ -475,9 +475,9 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
                                 className="inline-flex items-center px-2.5 py-1 transition-all hover:border-white/30"
                                 style={{
                                   fontFamily: "'Inter',sans-serif", fontSize: 12.5,
-                                  color: isHit ? DARK : "rgba(10,11,20,.6)",
-                                  background: isHit ? B : "rgba(10,11,20,.05)",
-                                  border: `1px solid ${isHit ? B : "rgba(10,11,20,.07)"}`,
+                                  color: isHit ? DARK : "rgba(62,60,73,.6)",
+                                  background: isHit ? B : "rgba(62,60,73,.05)",
+                                  border: `1px solid ${isHit ? B : "rgba(62,60,73,.07)"}`,
                                   fontWeight: isHit ? 700 : 400,
                                   cursor: "pointer",
                                 }}
@@ -496,7 +496,7 @@ export function ServiceAreaExplorer({ id = "explorer" }: { id?: string }) {
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-6">
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(10,11,20,.45)", lineHeight: 1.6 }}>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, color: "rgba(62,60,73,.45)", lineHeight: 1.6 }}>
               Don&rsquo;t see your town? We still may cover it — ask and we&rsquo;ll confirm same day.
             </p>
             <button

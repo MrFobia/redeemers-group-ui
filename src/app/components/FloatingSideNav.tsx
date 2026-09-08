@@ -55,7 +55,7 @@ export function FloatingSideNav({ tabs, active, onChange }: FloatingSideNavProps
                   color: NAVY,
                   background: isActive ? "rgba(255,255,255,.9)" : "transparent",
                   padding: isActive ? "3px 8px" : 0,
-                  boxShadow: isActive ? "0 2px 8px rgba(10,11,20,.15)" : "none",
+                  boxShadow: isActive ? "0 2px 8px rgba(62,60,73,.15)" : "none",
                   opacity: isActive ? 1 : 0,
                   transform: isActive ? "translateX(0)" : "translateX(6px)",
                 }}
@@ -67,7 +67,7 @@ export function FloatingSideNav({ tabs, active, onChange }: FloatingSideNavProps
                 style={{
                   width: isActive ? 8 : 6,
                   height: isActive ? 8 : 6,
-                  background: isActive ? SAND : "rgba(140,140,150,.55)",
+                  background: isActive ? SAND : "rgba(62,60,73,.55)",
                   boxShadow: isActive ? "none" : "0 0 0 1px rgba(255,255,255,.4)",
                 }}
               />
@@ -81,7 +81,7 @@ export function FloatingSideNav({ tabs, active, onChange }: FloatingSideNavProps
         {mobileOpen && (
           <div
             className="absolute bottom-full right-0 mb-2 flex flex-col overflow-hidden"
-            style={{ background: "rgba(10,11,20,.97)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,.1)", minWidth: 180, boxShadow: "0 12px 32px rgba(0,0,0,.5)" }}
+            style={{ background: "rgba(62,60,73,.97)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,.1)", minWidth: 180, boxShadow: "0 12px 32px rgba(62,60,73,.5)" }}
           >
             {tabs.map((tab) => {
               const isActive = active === tab.id;
@@ -94,7 +94,7 @@ export function FloatingSideNav({ tabs, active, onChange }: FloatingSideNavProps
                     fontFamily: "'Inter',sans-serif", fontSize: 13,
                     fontWeight: isActive ? 600 : 400,
                     color: isActive ? "#fff" : "rgba(255,255,255,.6)",
-                    background: isActive ? "rgba(196,171,108,.12)" : "none",
+                    background: isActive ? "rgba(216,203,165,.12)" : "none",
                     borderLeft: isActive ? `2px solid ${SAND}` : "2px solid transparent",
                     border: "none", borderBottom: "1px solid rgba(255,255,255,.06)", cursor: "pointer",
                   }}

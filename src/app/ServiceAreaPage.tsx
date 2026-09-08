@@ -72,7 +72,7 @@ function BenefitCardsSection() {
                 <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 24, color: CHAR, lineHeight: 1.15, marginBottom: 12 }}>
                   {card.title}
                 </h3>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(10,11,20,.45)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(62,60,73,.45)", lineHeight: 1.75, flex: 1, marginBottom: 20 }}>
                   {card.desc}
                 </p>
                 <button className="group inline-flex items-center gap-1.5"
@@ -99,7 +99,7 @@ function CtaSection() {
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0" style={{ background: "rgba(11,28,74,.86)" }} />
+        <div className="absolute inset-0" style={{ background: "rgba(0,55,113,.86)" }} />
       </div>
       <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-28 text-center">
         <Reveal>

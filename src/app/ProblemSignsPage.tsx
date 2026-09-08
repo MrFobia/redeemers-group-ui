@@ -191,7 +191,7 @@ function HeroSection() {
               onClick={jumpTo(cat.id)}
               className="group flex items-center gap-3 px-5 py-4 border-r border-b transition-colors duration-200"
               style={{ borderColor: "rgba(255,255,255,.1)", background: "rgba(255,255,255,.02)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,.07)"; e.currentTarget.style.borderColor = "rgba(196,171,108,.4)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,.07)"; e.currentTarget.style.borderColor = "rgba(216,203,165,.4)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,.02)"; e.currentTarget.style.borderColor = "rgba(255,255,255,.1)"; }}
             >
               <span className="flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110" style={{ width: 32, height: 32, filter: "brightness(0) invert(1)", opacity: 0.85 }}>
@@ -293,7 +293,7 @@ function CategoryHero({
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-300"
                       style={{ transform: on ? "scale(1.08)" : "scale(1)" }}
                     />
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.55) 0%, transparent 55%)" }} />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(62,60,73,.55) 0%, transparent 55%)" }} />
                   </span>
                   <span className="flex items-center justify-between gap-3 px-4 py-3.5">
                     <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13.5, lineHeight: 1.35, color: on ? "#fff" : "rgba(255,255,255,.78)", fontWeight: on ? 500 : 400 }}>
@@ -341,7 +341,7 @@ function CategoryCard({ cat, delay = 0, onSignClick, onNavigate }: { cat: typeof
             alt={cat.title}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(10,11,20,.86) 0%, rgba(10,11,20,.12) 65%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(62,60,73,.86) 0%, rgba(62,60,73,.12) 65%)" }} />
           <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 px-7 pb-6">
             <span className="flex items-center justify-center w-10 h-10 shrink-0" style={{ background: "rgba(255,255,255,.12)" }}>
               <img src={cat.icon} alt="" style={{ width: 24, height: 24, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
@@ -467,7 +467,7 @@ function DiagnosticBanner() {
             <Reveal key={item.q} delay={i * 0.08}>
               <div className="relative px-8 py-10 flex flex-col gap-3">
                 <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 18, color: "#fff" }}>{item.q}</p>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.7 }}>{item.a}</p>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(161,205,241,.9)", lineHeight: 1.7 }}>{item.a}</p>
               </div>
             </Reveal>
           ))}
@@ -512,7 +512,7 @@ function CtaSection() {
           >
             Ready to protect<br />your home?
           </h2>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(255,255,255,.55)", maxWidth: 480, margin: "0 auto 44px" }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(161,205,241,.9)", maxWidth: 480, margin: "0 auto 44px" }}>
             Call us and we'll check — free inspection, no pressure, same-week availability.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -528,7 +528,7 @@ function CtaSection() {
             </a>
             <a
               href="tel:+19015550100"
-              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(255,255,255,.55)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}
+              style={{ fontFamily: "'Inter',sans-serif", fontWeight: 500, fontSize: 15, color: "rgba(161,205,241,.9)", borderBottom: "1px solid rgba(255,255,255,.2)", paddingBottom: 2 }}
             >
               or call (901) 555-0100
             </a>

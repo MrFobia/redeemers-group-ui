@@ -1,6 +1,6 @@
 import React from "react";
 
-import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE } from "./theme";
+import { B, DARK, NAVY, CHAR, CHAR_BASE, LIGHT, SAND, CREAM, MUTED, SURFACE } from "./theme";
 const WHITE = "#FFFFFF";
 
 const CF = "'Articulat CF',sans-serif";
@@ -9,7 +9,7 @@ const INTER = "'Inter',sans-serif";
 // ─── Section wrapper ──────────────────────────────────────────────────────────
 function Section({ title, bg = "#fff", children }: { title: string; bg?: string; children: React.ReactNode }) {
   return (
-    <section style={{ background: bg, padding: "64px 56px", borderBottom: "1px solid rgba(0,0,0,.08)" }}>
+    <section style={{ background: bg, padding: "64px 56px", borderBottom: "1px solid rgba(62,60,73,.08)" }}>
       <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 10, color: MUTED, letterSpacing: 4, textTransform: "uppercase", marginBottom: 32 }}>
         {title}
       </p>
@@ -19,12 +19,12 @@ function Section({ title, bg = "#fff", children }: { title: string; bg?: string;
 }
 
 function Swatch({ hex, name, variable }: { hex: string; name: string; variable: string }) {
-  const isLight = ["#F7F5EF", "#FFFFFF"].includes(hex);
+  const isLight = ["#FAF9F4", "#FFFFFF"].includes(hex);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 140 }}>
       <div style={{
         width: "100%", height: 80, background: hex,
-        border: isLight ? "1px solid rgba(0,0,0,.1)" : "none",
+        border: isLight ? "1px solid rgba(62,60,73,.1)" : "none",
       }} />
       <div>
         <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 13, color: CHAR, marginBottom: 2 }}>{name}</p>
@@ -37,7 +37,7 @@ function Swatch({ hex, name, variable }: { hex: string; name: string; variable: 
 
 function TypeRow({ label, sample, spec }: { label: string; sample: React.ReactNode; spec: string }) {
   return (
-    <div style={{ display: "flex", alignItems: "baseline", gap: 32, paddingBottom: 24, borderBottom: "1px solid rgba(0,0,0,.06)", marginBottom: 24 }}>
+    <div style={{ display: "flex", alignItems: "baseline", gap: 32, paddingBottom: 24, borderBottom: "1px solid rgba(62,60,73,.06)", marginBottom: 24 }}>
       <div style={{ minWidth: 160, flexShrink: 0 }}>
         <p style={{ fontFamily: INTER, fontSize: 11, color: MUTED }}>{label}</p>
         <p style={{ fontFamily: INTER, fontSize: 10, color: MUTED, opacity: 0.6 }}>{spec}</p>
@@ -67,24 +67,22 @@ export default function GuiaEstilosPage() {
       {/* Colors */}
       <Section title="Colores / Color Tokens">
         <div style={{ display: "flex", flexWrap: "wrap", gap: 24 }}>
-          <Swatch hex={B}     name="Brand Blue"   variable="B — Primary" />
-          <Swatch hex={NAVY}  name="Deep Navy"    variable="NAVY — Hero BG" />
-          <Swatch hex={DARK}  name="Near Black"   variable="DARK — Section BG" />
-          <Swatch hex={CHAR}  name="Charcoal"     variable="CHAR — Card BG" />
-          <Swatch hex={SAND}  name="Sand Gold"    variable="SAND — Accent" />
-          <Swatch hex={CREAM} name="Warm White"   variable="CREAM — Light BG" />
-          <Swatch hex={MUTED} name="Muted"        variable="MUTED — Secondary text" />
-          <Swatch hex={WHITE} name="White"        variable="White — Text on dark" />
+          <Swatch hex={B}         name="Redeemers Blue"   variable="B — Primario · CTAs, links, UI clave" />
+          <Swatch hex={CHAR_BASE} name="Charcoal"         variable="CHAR_BASE — Primario · texto, hero, footer" />
+          <Swatch hex={LIGHT}     name="Light Blue"       variable="LIGHT — Texto sobre superficies azules" />
+          <Swatch hex={NAVY}      name="Deep Blue"        variable="NAVY — Acento · bandas y scrims" />
+          <Swatch hex={SAND}      name="Yellow Sandstone" variable="SAND — Acento · reglas y eyebrows" />
+          <Swatch hex={WHITE}     name="White"            variable="Superficie base y texto sobre oscuro" />
         </div>
         {/* Status / UI colors */}
         <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 10, color: MUTED, letterSpacing: 4, textTransform: "uppercase", margin: "40px 0 20px" }}>
-          UI / Estado
+          Tintes derivados (sin hex nuevos)
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 24 }}>
-          <Swatch hex="#00519F" name="CTA Blue"     variable="CTA Section BG" />
-          <Swatch hex="#053770" name="Mid Blue"     variable="Card / Panel BG" />
-          <Swatch hex="#0D5192" name="Pill Blue"    variable="Financing Pills" />
-          <Swatch hex="rgba(196,171,108,.2)" name="Sand Ghost" variable="Badge BG" />
+          <Swatch hex={CHAR}  name="Charcoal +8%"  variable="CHAR — tinte · cards sobre oscuro" />
+          <Swatch hex={CREAM} name="Sandstone 12%" variable="CREAM — tinte · sección alterna" />
+          <Swatch hex={MUTED} name="Charcoal 58%"  variable="MUTED — texto secundario en claro" />
+          <Swatch hex="rgba(216,203,165,.2)" name="Sandstone 20%" variable="Badge BG" />
         </div>
 
         {/* Section surfaces — the rhythm every page follows, straight from the
@@ -202,16 +200,16 @@ export default function GuiaEstilosPage() {
       {/* Badges & Tags */}
       <Section title="Badges & Etiquetas">
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
-          <span style={{ display: "inline-block", padding: "5px 14px", background: "rgba(196,171,108,.2)", border: "1px solid rgba(196,171,108,.4)", fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>
+          <span style={{ display: "inline-block", padding: "5px 14px", background: "rgba(216,203,165,.2)", border: "1px solid rgba(216,203,165,.4)", fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>
             Crawl Space
           </span>
-          <span style={{ display: "inline-block", padding: "5px 14px", background: "rgba(196,171,108,.18)", border: "1px solid rgba(196,171,108,.4)", fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>
+          <span style={{ display: "inline-block", padding: "5px 14px", background: "rgba(216,203,165,.18)", border: "1px solid rgba(216,203,165,.4)", fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>
             Foundation Repair
           </span>
-          <span style={{ display: "inline-block", padding: "7px 16px", background: "#0D5192", border: "1px solid rgba(255,255,255,.1)", fontFamily: INTER, fontSize: 12, color: "#fff" }}>
+          <span style={{ display: "inline-block", padding: "7px 16px", background: "#00509F", border: "1px solid rgba(255,255,255,.1)", fontFamily: INTER, fontSize: 12, color: "#fff" }}>
             ✓ Financing from $79/mo
           </span>
-          <span style={{ display: "inline-block", padding: "7px 16px", background: "rgba(196,171,108,.2)", border: "1px solid #C4AB6C", fontFamily: INTER, fontSize: 12, color: "#fff" }}>
+          <span style={{ display: "inline-block", padding: "7px 16px", background: "rgba(216,203,165,.2)", border: "1px solid #D8CBA5", fontFamily: INTER, fontSize: 12, color: "#fff" }}>
             $ Financing from $79/month · 0% for qualified homeowners
           </span>
         </div>
@@ -233,8 +231,8 @@ export default function GuiaEstilosPage() {
           {[
             { label: "DARK — Hero, Features, Why", color: DARK },
             { label: "NAVY — Deep sections", color: NAVY },
-            { label: "#053770 — Blue panels", color: "#053770" },
-            { label: "#00519F — CTA", color: "#00519F" },
+            { label: "#003771 — Blue panels", color: "#003771" },
+            { label: "#00509F — CTA", color: "#00509F" },
             { label: "CHAR — Cards", color: CHAR },
             { label: "CREAM — Light sections", color: CREAM },
           ].map(s => (
@@ -258,7 +256,7 @@ export default function GuiaEstilosPage() {
             { size: 27, cat: "Concrete Services" },
           ].map(({ size, cat }) => (
             <div key={cat} style={{ flex: "1 0 180px", background: CHAR, padding: "28px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
-              <span style={{ display: "inline-block", padding: "5px 14px", background: "rgba(196,171,108,.2)", border: "1px solid rgba(196,171,108,.4)", fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>
+              <span style={{ display: "inline-block", padding: "5px 14px", background: "rgba(216,203,165,.2)", border: "1px solid rgba(216,203,165,.4)", fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>
                 {cat}
               </span>
               <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: size, color: WHITE, lineHeight: 1.1, letterSpacing: "-0.5px", margin: 0 }}>
@@ -419,8 +417,8 @@ export default function GuiaEstilosPage() {
         <p style={{ fontFamily: INTER, fontSize: 13, color: "rgba(255,255,255,.5)", marginBottom: 24 }}>
           Imagen full-bleed. Overlay gradiente direccional. Contenido izquierda máx 587px.
         </p>
-        <div style={{ position: "relative", height: 220, background: "#2a2d3e", overflow: "hidden" }}>
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120.41deg, rgba(10,11,20,0.88) 8.49%, rgba(10,11,20,0.55) 54.15%, rgba(10,11,20,0.20) 91.51%)" }} />
+        <div style={{ position: "relative", height: 220, background: "#4D4C58", overflow: "hidden" }}>
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120.41deg, rgba(62,60,73,0.88) 8.49%, rgba(62,60,73,0.55) 54.15%, rgba(62,60,73,0.20) 91.51%)" }} />
           <div style={{ position: "relative", padding: "32px 40px", maxWidth: 380 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
               <div style={{ width: 20, height: 2, background: SAND, flexShrink: 0 }} />
@@ -432,14 +430,14 @@ export default function GuiaEstilosPage() {
           </div>
         </div>
         <p style={{ fontFamily: INTER, fontSize: 11, color: MUTED, marginTop: 16, opacity: 0.7 }}>
-          Overlay: linear-gradient(120.41deg, rgba(10,11,20,.88) 8.49%, rgba(10,11,20,.55) 54.15%, rgba(10,11,20,.20) 91.51%) · Content maxWidth 587px · Eyebrow: 20×2px SAND line + CF 700 11px SAND · H1: CF 800 clamp(38px,4.5vw,68px) white
+          Overlay: linear-gradient(120.41deg, rgba(62,60,73,.88) 8.49%, rgba(62,60,73,.55) 54.15%, rgba(62,60,73,.20) 91.51%) · Content maxWidth 587px · Eyebrow: 20×2px SAND line + CF 700 11px SAND · H1: CF 800 clamp(38px,4.5vw,68px) white
         </p>
       </Section>
 
       {/* Symptom Accordion */}
       <Section title="Acordeón de Síntomas / Symptom Accordion" bg={CHAR}>
         <p style={{ fontFamily: INTER, fontSize: 13, color: "rgba(255,255,255,.5)", marginBottom: 24 }}>
-          Usado en hero. Cerrado: blanco 45px. Abierto: B header + rgba(26,82,168,.25) contenido.
+          Usado en hero. Cerrado: blanco 45px. Abierto: B header + rgba(0,80,159,.25) contenido.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 480 }}>
           {/* Open item */}
@@ -448,7 +446,7 @@ export default function GuiaEstilosPage() {
               <span style={{ fontFamily: INTER, fontSize: 14, fontWeight: 700, color: "#fff" }}>My floors are sagging or bouncy</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ transform: "rotate(180deg)" }}><path d="M6 9l6 6 6-6" stroke="rgba(255,255,255,.8)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
-            <div style={{ background: "rgba(26,82,168,0.25)", border: `1px solid ${B}`, borderTop: "none", borderRadius: "0 0 4px 4px", padding: "12px 16px" }}>
+            <div style={{ background: "rgba(0,80,159,0.25)", border: `1px solid ${B}`, borderTop: "none", borderRadius: "0 0 4px 4px", padding: "12px 16px" }}>
               <p style={{ fontFamily: INTER, fontSize: 14, color: "#fff", lineHeight: 1.7, margin: 0 }}>This typically indicates deteriorating floor joists...</p>
             </div>
           </div>
@@ -459,7 +457,7 @@ export default function GuiaEstilosPage() {
           </div>
         </div>
         <p style={{ fontFamily: INTER, fontSize: 11, color: MUTED, marginTop: 16, opacity: 0.7 }}>
-          Open header: B bg · white Inter 700 14px · Closed: white bg · CHAR text · 45px height · Content: rgba(26,82,168,.25) + 1px B border (no top)
+          Open header: B bg · white Inter 700 14px · Closed: white bg · CHAR text · 45px height · Content: rgba(0,80,159,.25) + 1px B border (no top)
         </p>
       </Section>
 
@@ -471,8 +469,8 @@ export default function GuiaEstilosPage() {
         <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
           {/* Narrow card */}
           <div style={{ width: 280, background: CHAR, overflow: "hidden" }}>
-            <div style={{ position: "relative", height: 160, background: "#2a2d3e" }}>
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(30,34,53,1) 100%)" }} />
+            <div style={{ position: "relative", height: 160, background: "#4D4C58" }}>
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(77,76,88,1) 100%)" }} />
             </div>
             <div style={{ padding: "20px 24px", display: "flex", flexDirection: "column", gap: 10 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -489,8 +487,8 @@ export default function GuiaEstilosPage() {
           </div>
           {/* Wide card — split layout */}
           <div style={{ flex: "1 0 320px", background: CHAR, display: "flex", minHeight: 200, overflow: "hidden" }}>
-            <div style={{ width: "45%", background: "#2a2d3e", position: "relative" }}>
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 40%, rgba(30,34,53,1) 100%)" }} />
+            <div style={{ width: "45%", background: "#4D4C58", position: "relative" }}>
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 40%, rgba(77,76,88,1) 100%)" }} />
             </div>
             <div style={{ flex: 1, padding: "28px 24px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 10 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -518,7 +516,7 @@ export default function GuiaEstilosPage() {
         </p>
         <div style={{ maxWidth: 320, background: DARK, border: "1px solid rgba(255,255,255,.07)" }}>
           <div style={{ padding: "24px 32px", display: "flex", alignItems: "center", gap: 16, borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-            <div style={{ width: 48, height: 48, background: "rgba(196,171,108,.1)", border: "1px solid rgba(196,171,108,.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <div style={{ width: 48, height: 48, background: "rgba(216,203,165,.1)", border: "1px solid rgba(216,203,165,.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
             <h3 style={{ fontFamily: CF, fontWeight: 700, fontSize: 20, color: "#fff", margin: 0 }}>Moisture & Water</h3>
@@ -533,7 +531,7 @@ export default function GuiaEstilosPage() {
           </div>
         </div>
         <p style={{ fontFamily: INTER, fontSize: 11, color: MUTED, marginTop: 16, opacity: 0.7 }}>
-          Card: DARK bg + 1px rgba(255,255,255,.07) · Icon bg: rgba(196,171,108,.1) + rgba(196,171,108,.2) border · H3: CF 700 22px white · Item: rgba(255,255,255,.04) bg + rgba(255,255,255,.06) border · Text: Inter 14px rgba(255,255,255,.7)
+          Card: DARK bg + 1px rgba(255,255,255,.07) · Icon bg: rgba(216,203,165,.1) + rgba(216,203,165,.2) border · H3: CF 700 22px white · Item: rgba(255,255,255,.04) bg + rgba(255,255,255,.06) border · Text: Inter 14px rgba(255,255,255,.7)
         </p>
       </Section>
 
@@ -613,10 +611,10 @@ export default function GuiaEstilosPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           {/* Arrow buttons */}
           <div style={{ display: "flex", gap: 12 }}>
-            <button style={{ width: 44, height: 44, border: "1px solid rgba(10,11,20,.25)", background: "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <button style={{ width: 44, height: 44, border: "1px solid rgba(62,60,73,.25)", background: "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke={DARK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
-            <button style={{ width: 44, height: 44, border: "1px solid rgba(10,11,20,.25)", background: "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <button style={{ width: 44, height: 44, border: "1px solid rgba(62,60,73,.25)", background: "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke={DARK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
           </div>
@@ -624,12 +622,12 @@ export default function GuiaEstilosPage() {
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <div style={{ width: 24, height: 8, background: SAND, borderRadius: 99 }} />
             {[0, 0, 0, 0, 0].map((_, i) => (
-              <div key={i} style={{ width: 8, height: 8, background: "rgba(10,11,20,.2)", borderRadius: 99 }} />
+              <div key={i} style={{ width: 8, height: 8, background: "rgba(62,60,73,.2)", borderRadius: 99 }} />
             ))}
           </div>
         </div>
         <p style={{ fontFamily: INTER, fontSize: 11, color: MUTED, marginTop: 16, opacity: 0.7 }}>
-          Arrows: 44×44 · 1px rgba(10,11,20,.25) border · DARK icon · hover: rgba(10,11,20,.08) bg · Dots: active=SAND 24×8px pill · inactive=rgba(10,11,20,.2) 8×8px circle
+          Arrows: 44×44 · 1px rgba(62,60,73,.25) border · DARK icon · hover: rgba(62,60,73,.08) bg · Dots: active=SAND 24×8px pill · inactive=rgba(62,60,73,.2) 8×8px circle
         </p>
       </Section>
 
@@ -638,13 +636,13 @@ export default function GuiaEstilosPage() {
         <p style={{ fontFamily: INTER, fontSize: 13, color: MUTED, marginBottom: 24 }}>
           Overlay en esquina superior izquierda de imágenes de carrusel. Blur backdrop.
         </p>
-        <div style={{ position: "relative", width: 200, height: 120, background: "#2a2d3e" }}>
-          <div style={{ position: "absolute", top: 12, left: 12, padding: "4px 10px", background: "rgba(10,11,20,.6)", backdropFilter: "blur(6px)" }}>
+        <div style={{ position: "relative", width: 200, height: 120, background: "#4D4C58" }}>
+          <div style={{ position: "absolute", top: 12, left: 12, padding: "4px 10px", background: "rgba(62,60,73,.6)", backdropFilter: "blur(6px)" }}>
             <span style={{ fontFamily: CF, fontWeight: 700, fontSize: 12, color: SAND }}>01</span>
           </div>
         </div>
         <p style={{ fontFamily: INTER, fontSize: 11, color: MUTED, marginTop: 16, opacity: 0.7 }}>
-          CF 700 · 12px · SAND · bg: rgba(10,11,20,.6) + blur(6px) · padding 4px 10px
+          CF 700 · 12px · SAND · bg: rgba(62,60,73,.6) + blur(6px) · padding 4px 10px
         </p>
       </Section>
 
@@ -654,7 +652,7 @@ export default function GuiaEstilosPage() {
           NAVY bg + imagen overlay + grain texture. Texto centrado. Eyebrow SAND. H2 white. Dos botones.
         </p>
         <div style={{ position: "relative", padding: "56px 48px", textAlign: "center", background: NAVY, overflow: "hidden" }}>
-          <div style={{ position: "absolute", inset: 0, background: "rgba(11,28,74,.82)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,55,113,.82)" }} />
           <div style={{ position: "relative" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 20 }}>
               <div style={{ height: 1, width: 32, background: SAND }} />
@@ -679,7 +677,7 @@ export default function GuiaEstilosPage() {
           </div>
         </div>
         <p style={{ fontFamily: INTER, fontSize: 11, color: "rgba(255,255,255,.4)", marginTop: 16, opacity: 0.8 }}>
-          Section: NAVY + bg-image + rgba(11,28,74,.82) overlay + grain SVG opacity .05 · Eyebrow: SAND line 32px + CF 700 11px SAND · H2: CF 800 clamp(28px,4vw,52px) white · Body: Inter 17px rgba(255,255,255,.6) · Primary btn: B bg · Secondary: ghost text rgba(255,255,255,.7)
+          Section: NAVY + bg-image + rgba(0,55,113,.82) overlay + grain SVG opacity .05 · Eyebrow: SAND line 32px + CF 700 11px SAND · H2: CF 800 clamp(28px,4vw,52px) white · Body: Inter 17px rgba(255,255,255,.6) · Primary btn: B bg · Secondary: ghost text rgba(255,255,255,.7)
         </p>
       </Section>
 
@@ -688,12 +686,12 @@ export default function GuiaEstilosPage() {
         <p style={{ fontFamily: INTER, fontSize: 13, color: "rgba(255,255,255,.5)", marginBottom: 24 }}>
           Overlay flotante en imagen del cost guide. DARK bg + SAND border.
         </p>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 12, padding: "12px 20px", background: DARK, border: `1px solid rgba(196,171,108,.3)` }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 12, padding: "12px 20px", background: DARK, border: `1px solid rgba(216,203,165,.3)` }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke={SAND} strokeWidth="2" strokeLinecap="round" /></svg>
           <span style={{ fontFamily: INTER, fontSize: 13, color: SAND }}>Financing from $79/month available</span>
         </div>
         <p style={{ fontFamily: INTER, fontSize: 11, color: "rgba(255,255,255,.4)", marginTop: 16, opacity: 0.8 }}>
-          bg: DARK · border: 1px rgba(196,171,108,.3) · icon: SAND · text: Inter 13px SAND
+          bg: DARK · border: 1px rgba(216,203,165,.3) · icon: SAND · text: Inter 13px SAND
         </p>
       </Section>
 
@@ -734,10 +732,10 @@ export default function GuiaEstilosPage() {
         </p>
         <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
           <div style={{ width: 260, background: CHAR, overflow: "hidden" }}>
-            <div style={{ position: "relative", height: 180, background: "#2a2d3e" }}>
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(0deg, rgba(10,11,20,.8) 0%, rgba(10,11,20,.2) 60%, transparent 100%)" }} />
+            <div style={{ position: "relative", height: 180, background: "#4D4C58" }}>
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(0deg, rgba(62,60,73,.8) 0%, rgba(62,60,73,.2) 60%, transparent 100%)" }} />
               <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "16px 20px" }}>
-                <div style={{ display: "inline-block", padding: "4px 12px", background: "rgba(196,171,108,.15)", border: "1px solid rgba(196,171,108,.35)", marginBottom: 10 }}>
+                <div style={{ display: "inline-block", padding: "4px 12px", background: "rgba(216,203,165,.15)", border: "1px solid rgba(216,203,165,.35)", marginBottom: 10 }}>
                   <span style={{ fontFamily: CF, fontWeight: 700, fontSize: 9, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>Crawl Space</span>
                 </div>
                 <h3 style={{ fontFamily: CF, fontWeight: 800, fontSize: 22, color: "#fff", lineHeight: 1.1, margin: 0 }}>Crawl Space Repair</h3>
@@ -753,7 +751,7 @@ export default function GuiaEstilosPage() {
           </div>
         </div>
         <p style={{ fontFamily: INTER, fontSize: 11, color: MUTED, marginTop: 16, opacity: 0.7 }}>
-          Card bg: CHAR · Image overlay: gradient 0deg DARK 80%→transparent · Badge: rgba(196,171,108,.15) + rgba(196,171,108,.35) border · H3: CF 800 varies (42/34/30/27px by slot) white · Body: Inter 13px rgba(255,255,255,.55) · CTA: Inter 600 13px SAND
+          Card bg: CHAR · Image overlay: gradient 0deg DARK 80%→transparent · Badge: rgba(216,203,165,.15) + rgba(216,203,165,.35) border · H3: CF 800 varies (42/34/30/27px by slot) white · Body: Inter 13px rgba(255,255,255,.55) · CTA: Inter 600 13px SAND
         </p>
       </Section>
 

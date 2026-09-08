@@ -126,10 +126,10 @@ const FEATURED_AWARDS = [
 // section below.
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden" style={{ background: "#0A0B14" }}>
+    <section className="relative overflow-hidden" style={{ background: "#3E3C49" }}>
       <div className="absolute inset-0">
         <ImageWithFallback src={imgEvergreenForest} alt="A forest of evergreen trees" className="w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(10,11,20,0.94) 0%, rgba(10,11,20,0.85) 46%, rgba(11,28,74,0.6) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(62,60,73,0.94) 0%, rgba(62,60,73,0.85) 46%, rgba(0,55,113,0.6) 100%)" }} />
       </div>
       <div className="absolute inset-0 pointer-events-none opacity-[0.025]"
         style={{
@@ -260,7 +260,7 @@ function CertifiedSection() {
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(34px,4vw,52px)", color: CHAR, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 24 }}>
               What certification actually means
             </h2>
-            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(10,11,20,.6)", lineHeight: 1.8 }}>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(62,60,73,.6)", lineHeight: 1.8 }}>
               {CERTIFIED_MEANING.map((para, i) => (
                 <p key={i} style={{ marginBottom: i < CERTIFIED_MEANING.length - 1 ? 18 : 0 }}>{para}</p>
               ))}
@@ -272,7 +272,7 @@ function CertifiedSection() {
               LoveWellPage/CaseStudiesShowcase use for theirs). */}
           <Reveal delay={0.1} className="relative overflow-hidden group cursor-pointer" style={{ aspectRatio: "4/3" }} onClick={() => setVideoOpen(true)}>
             <ImageWithFallback src={imgFloor04} alt="What being Evergreen means to us" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0" style={{ background: "rgba(10,11,20,.4)" }} />
+            <div className="absolute inset-0" style={{ background: "rgba(62,60,73,.4)" }} />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-16 h-16 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
                 style={{ background: "rgba(255,255,255,.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,.35)" }}>
@@ -292,7 +292,7 @@ function CertifiedSection() {
       </div>
 
       {videoOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10" style={{ background: "rgba(0,0,0,.88)" }} onClick={() => setVideoOpen(false)}>
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10" style={{ background: "rgba(62,60,73,.88)" }} onClick={() => setVideoOpen(false)}>
           <div className="relative w-full flex flex-col items-center gap-4" style={{ maxWidth: 900 }} onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setVideoOpen(false)} className="self-end inline-flex items-center gap-2 px-4 py-2.5 hover:bg-white/15 transition-colors"
               style={{ background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.28)", cursor: "pointer", fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>
@@ -304,7 +304,7 @@ function CertifiedSection() {
                 Big Buck Bunny trailer) just to preview the embed, not the
                 client's actual content. Swap `TEST_VIDEO_ID` for the real
                 YouTube id once the client sends their Evergreen video. */}
-            <div className="relative w-full" style={{ aspectRatio: "16/9", background: "#000" }}>
+            <div className="relative w-full" style={{ aspectRatio: "16/9", background: "#3E3C49" }}>
               <iframe
                 className="absolute inset-0 w-full h-full"
                 src={`https://www.youtube.com/embed/${TEST_VIDEO_ID}?autoplay=1`}
@@ -352,14 +352,14 @@ function CtaBanner() {
     <section className="relative overflow-hidden" style={{ background: SURFACE.cta }}>
       <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-24 text-center">
         <Reveal>
-          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: "rgba(255,255,255,.6)", letterSpacing: 4, textTransform: "uppercase", marginBottom: 20 }}>
+          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: "rgba(161,205,241,.9)", letterSpacing: 4, textTransform: "uppercase", marginBottom: 20 }}>
             Built to last
           </p>
           <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4vw,56px)", color: "#fff", lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 20 }}>
             The company that fixes it<br />will still be here tomorrow.
           </h2>
           <button onClick={() => openInspection()} className="inline-flex items-center gap-2 px-8 py-4"
-            style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#00519F", border: "none", cursor: "pointer" }}>
+            style={{ background: "#fff", fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 15, color: "#00509F", border: "none", cursor: "pointer" }}>
             Schedule Free Inspection
             <ArrowRight size={16} />
           </button>

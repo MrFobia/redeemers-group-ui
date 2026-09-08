@@ -41,7 +41,7 @@ export function PageHeroBanner({
   align?: "center" | "end";
 }) {
   return (
-    <section className={`relative overflow-hidden ${HERO_HEIGHT_CLASS}`} style={{ background: "#0A0B14" }}>
+    <section className={`relative overflow-hidden ${HERO_HEIGHT_CLASS}`} style={{ background: "#3E3C49" }}>
       <div className="absolute inset-0">
         <ImageWithFallback src={image} alt={imageAlt} className="w-full h-full object-cover" />
         {/* Scrim: opaque behind the copy, thinning toward the photo side. Same
@@ -50,7 +50,7 @@ export function PageHeroBanner({
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(100deg, rgba(10,11,20,0.95) 0%, rgba(10,11,20,0.82) 46%, rgba(11,28,74,0.55) 100%)",
+              "linear-gradient(100deg, rgba(62,60,73,0.95) 0%, rgba(62,60,73,0.82) 46%, rgba(0,55,113,0.55) 100%)",
           }}
         />
       </div>
