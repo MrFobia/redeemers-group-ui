@@ -5,6 +5,7 @@ import { ChevronRight, ArrowRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import { getSymptomImage, getService } from "./data/services";
+import { slugify } from "./data/serviceAreas";
 import {
   getProblemSign,
   getMechanism,
@@ -22,7 +23,6 @@ import imgRevAvatar from "../assets/rev-avatar.png";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
-import { ReviewModal } from "./components/ReviewModal";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -853,7 +853,6 @@ function ExplainerSection({ sign }: { sign: ProblemSignDef }) {
 function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [cur, setCur] = useState(0);
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -903,7 +902,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
-                  <button onClick={() => setSelectedIdx(i)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  <button onClick={() => onNavigate?.(`review/${slugify(`${t.name}-${t.loc}`)}`)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
                   </button>
@@ -945,17 +944,6 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.15)" }} />
         ))}
       </div>
-
-      <AnimatePresence>
-        {selectedIdx !== null && (
-          <ReviewModal
-            review={TESTIMONIALS[selectedIdx]}
-            onClose={() => setSelectedIdx(null)}
-            onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length : null)}
-            onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % TESTIMONIALS.length : null)}
-          />
-        )}
-      </AnimatePresence>
     </section>
   );
 }

@@ -7,8 +7,8 @@ import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
-import { ReviewModal } from "./components/ReviewModal";
 import imgRevAvatar from "../assets/rev-avatar.png";
+import { slugify } from "./data/serviceAreas";
 
 import { B, DARK, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
 
@@ -370,9 +370,8 @@ function BlogGridSection({ activeCategory, onNavigate }: { activeCategory: strin
 }
 
 // ─── 5. REVIEWS ──────────────────────────────────────────────────────────────
-function ReviewsSection() {
+function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [cur, setCur] = useState(0);
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -419,7 +418,7 @@ function ReviewsSection() {
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
-                  <button onClick={() => setSelectedIdx(i)} className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
+                  <button onClick={() => onNavigate?.(`review/${slugify(`${t.name}-${t.loc}`)}`)} className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
                   </button>
@@ -456,17 +455,6 @@ function ReviewsSection() {
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.2)", border: "none", cursor: "pointer", borderRadius: 4 }} />
         ))}
       </div>
-
-      <AnimatePresence>
-        {selectedIdx !== null && (
-          <ReviewModal
-            review={TESTIMONIALS[selectedIdx]}
-            onClose={() => setSelectedIdx(null)}
-            onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length : null)}
-            onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % TESTIMONIALS.length : null)}
-          />
-        )}
-      </AnimatePresence>
     </section>
   );
 }
@@ -569,7 +557,7 @@ export default function NewsBlogPage({ onBack, onNavigate }: { onBack: () => voi
         <FeaturedSection onNavigate={onNavigate} />
         <CategoryTabs active={activeCategory} onChange={setActiveCategory} />
         <BlogGridSection activeCategory={activeCategory} onNavigate={onNavigate} />
-        <ReviewsSection />
+        <ReviewsSection onNavigate={onNavigate} />
         <CtaSection />
         <Footer onBack={onBack} />
       </div>

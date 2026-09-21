@@ -217,7 +217,7 @@ export default function ServiceAreaPage({ onBack, onNavigate }: { onBack: () => 
           title="We're in your neighborhood"
           lede="Local experts across Tennessee, Mississippi, Arkansas, and Missouri. Search your city, county, or ZIP to instantly see your local team, reviews, and available services."
         />
-        <ServiceAreaExplorer id="coverage" />
+        <ServiceAreaExplorer id="coverage" onNavigate={onNavigate} />
         <BenefitCardsSection />
         <CtaSection />
         <Footer onBack={onBack} />

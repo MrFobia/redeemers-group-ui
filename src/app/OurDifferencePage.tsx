@@ -15,13 +15,14 @@ import imgRevAvatar from "../assets/rev-avatar.png";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
-import { ReviewModal } from "./components/ReviewModal";
+import { slugify } from "./data/serviceAreas";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT, ON_DARK } from "./theme";
 import { LOVE_WELL_PROJECTS } from "./data/loveWellProjects";
 import { CASE_STUDIES, type CaseStudy } from "./data/caseStudies";
-import { CaseStudiesGrid, CaseStudyModal } from "./components/CaseStudiesShowcase";
+import { CaseStudiesGrid } from "./components/CaseStudiesShowcase";
+import { caseStudySlug } from "./data/caseStudies";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -459,7 +460,6 @@ const TESTIMONIALS = [
 function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [cur, setCur] = useState(0);
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -508,7 +508,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
-                  <button onClick={() => setSelectedIdx(i)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  <button onClick={() => onNavigate?.(`review/${slugify(`${t.name}-${t.loc}`)}`)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
                   </button>
@@ -546,17 +546,6 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.15)", border: "none", cursor: "pointer", padding: 0 }} />
         ))}
       </div>
-
-      <AnimatePresence>
-        {selectedIdx !== null && (
-          <ReviewModal
-            review={TESTIMONIALS[selectedIdx]}
-            onClose={() => setSelectedIdx(null)}
-            onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length : null)}
-            onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % TESTIMONIALS.length : null)}
-          />
-        )}
-      </AnimatePresence>
     </section>
   );
 }
@@ -567,7 +556,6 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
 // "interna"). This teaser previews the first 3 and sends the rest of the
 // site to the dedicated page instead of a client-side "view more" toggle.
 function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
-  const [activeCard, setActiveCard] = useState<CaseStudy | null>(null);
   const featured = CASE_STUDIES.slice(0, 3);
 
   return (
@@ -600,7 +588,7 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
           </p>
         </Reveal>
 
-        <CaseStudiesGrid items={featured} onOpen={setActiveCard} />
+        <CaseStudiesGrid items={featured} onOpen={(c) => onNavigate?.(`case-study/${caseStudySlug(c)}`)} />
 
         <Reveal delay={0.15} className="flex justify-center mt-14">
           <button
@@ -614,7 +602,6 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
         </Reveal>
       </div>
 
-      <CaseStudyModal card={activeCard} onOpenChange={(open) => !open && setActiveCard(null)} />
     </section>
   );
 }

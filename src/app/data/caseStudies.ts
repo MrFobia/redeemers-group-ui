@@ -131,3 +131,14 @@ export const CASE_STUDIES: CaseStudy[] = [
     ],
   },
 ];
+
+// ─── Slugs ────────────────────────────────────────────────────────────────────
+// Case studies open as their own page (case-study/<slug>) instead of a modal,
+// so each one needs a stable, shareable URL key.
+import { slugify } from "./serviceAreas";
+
+export const caseStudySlug = (c: CaseStudy) => slugify(`${c.title}-${c.loc}`);
+
+export const CASE_STUDY_BY_SLUG: Record<string, CaseStudy> = Object.fromEntries(
+  CASE_STUDIES.map((c) => [caseStudySlug(c), c])
+);

@@ -1,17 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { motion, useInView } from "motion/react";
-import useEmblaCarousel from "embla-carousel-react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { ArrowRight, X } from "lucide-react";
-import { openInspection } from "./InspectionModal";
+
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import type { CaseStudy } from "../data/caseStudies";
 import { B, DARK, CHAR, SAND, MUTED } from "../theme";
 
 // ─── Shared case-studies visual language ─────────────────────────────────────
-// One design (hero split banner + alternating medium cards) and one detail
-// modal (gallery + story), reused by the Home teaser, the Our Difference
-// teaser, and the full case-studies listing page so all three stay in sync.
+// One design (hero split banner + alternating medium cards) reused by the Home
+// teaser, the Our Difference teaser and the full listing page. Opening a card
+// navigates to case-study/<slug>; it no longer opens a modal.
 
 function Reveal({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -132,103 +129,8 @@ function MediumCaseB({ c, num, onOpen }: { c: CaseStudy; num: number; onOpen: ()
   );
 }
 
-export function CaseStudyModal({ card, onOpenChange }: { card: CaseStudy | null; onOpenChange: (open: boolean) => void }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
-  const [cur, setCur] = useState(0);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    setCur(0);
-    emblaApi.scrollTo(0);
-    emblaApi.on("select", () => setCur(emblaApi.selectedScrollSnap()));
-  }, [emblaApi, card]);
-
-  return (
-    <DialogPrimitive.Root open={!!card} onOpenChange={onOpenChange}>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50" style={{ background: "rgba(62,60,73,.78)" }} />
-        <DialogPrimitive.Content
-          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,980px)] max-h-[92vh] overflow-y-auto rg-scroll-thin"
-          style={{ background: "#fff" }}
-          aria-describedby={undefined}
-        >
-          {card && (
-            <div className="relative">
-              <DialogPrimitive.Close
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}
-              >
-                <X size={18} color="#fff" />
-              </DialogPrimitive.Close>
-
-              <div className="relative overflow-hidden" ref={emblaRef} style={{ background: DARK }}>
-                <div className="flex">
-                  {card.gallery.map((slide, i) => (
-                    <div key={i} className="relative shrink-0 w-full" style={{ aspectRatio: "16/9" }}>
-                      <ImageWithFallback src={slide.img} alt={slide.caption} className="absolute inset-0 w-full h-full object-cover" />
-                      <div className="absolute bottom-0 left-0 right-0 px-6 py-4" style={{ background: "linear-gradient(0deg, rgba(62,60,73,.85) 0%, rgba(62,60,73,0) 100%)" }}>
-                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.85)" }}>{slide.caption}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <button onClick={() => emblaApi?.scrollPrev()} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </button>
-                <button onClick={() => emblaApi?.scrollNext()} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(62,60,73,.55)", border: "none", cursor: "pointer" }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </button>
-
-                <div className="absolute bottom-3 right-4 flex gap-1.5">
-                  {card.gallery.map((_, i) => (
-                    <button key={i} onClick={() => emblaApi?.scrollTo(i)}
-                      className="rounded-full transition-all duration-300"
-                      style={{ width: cur === i ? 18 : 6, height: 6, background: cur === i ? SAND : "rgba(255,255,255,.4)", border: "none", cursor: "pointer", padding: 0 }} />
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-8 md:p-10">
-                <div className="flex items-center gap-3 mb-5">
-                  <span className="px-3 py-1" style={{ background: "rgba(0,80,159,.08)", border: `1px solid rgba(0,80,159,.2)`, fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase" }}>{card.tag}</span>
-                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: MUTED }}>{card.loc}</span>
-                </div>
-                <DialogPrimitive.Title style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,3vw,32px)", color: CHAR, letterSpacing: "-0.5px", marginBottom: 20 }}>
-                  {card.title}
-                </DialogPrimitive.Title>
-
-                <div className="flex flex-col gap-4 mb-8">
-                  {card.story.map((p, i) => (
-                    <p key={i} style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.80)", lineHeight: 1.75 }}>{p}</p>
-                  ))}
-                </div>
-
-                <div className="flex gap-8 mb-8 pt-6" style={{ borderTop: "1px solid rgba(62,60,73,.08)" }}>
-                  {card.stats.map(([val, label]) => (
-                    <div key={val + label}>
-                      <div style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 26, color: B, lineHeight: 1 }}>{val}</div>
-                      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: MUTED, marginTop: 4, lineHeight: 1.4, whiteSpace: "pre-line" }}>{label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  onClick={openInspection}
-                  className="inline-flex items-center gap-2 px-7 py-3.5"
-                  style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}
-                >
-                  Schedule Free Inspection
-                  <ArrowRight size={15} />
-                </button>
-              </div>
-            </div>
-          )}
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
-  );
-}
+// Case studies open at case-study/<slug> (WorkInnerPage). The modal that used
+// to live here was removed so each study is linkable and indexable.
 
 // Renders items[0] as the hero split banner, then the rest in alternating
 // medium-card rows (7/5 split). Used identically by the Home teaser, the Our

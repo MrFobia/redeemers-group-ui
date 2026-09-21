@@ -4,7 +4,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import { Home, Hammer, BadgeCheck, ShieldCheck, Users, Leaf } from "lucide-react";
-import { ReviewModal } from "./components/ReviewModal";
+import WorkInnerPage from "./WorkInnerPage";
 import ServicePage from "./ServicePage";
 import { getSymptomImage } from "./data/services";
 import { getProblemSignByLabel } from "./data/problemSigns";
@@ -33,6 +33,7 @@ import ContactPage from "./ContactPage";
 import NotFoundPage from "./NotFoundPage";
 import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
+import { slugify } from "./data/serviceAreas";
 
 import imgHeroBg from "../assets/hero-slide1.png";
 import imgHeroSlide2 from "../assets/svc-waterproofing.jpg";
@@ -41,7 +42,8 @@ import imgRevThumb2 from "../assets/rev-thumb2.jpg";
 import imgRevThumb3 from "../assets/rev-thumb3.jpg";
 import imgRevAvatar from "../assets/rev-avatar.png";
 import { CASE_STUDIES, type CaseStudy } from "./data/caseStudies";
-import { CaseStudiesGrid, CaseStudyModal } from "./components/CaseStudiesShowcase";
+import { CaseStudiesGrid } from "./components/CaseStudiesShowcase";
+import { caseStudySlug } from "./data/caseStudies";
 import imgServiceAreaMap from "../assets/service-area-map.jpg";
 import imgSvcCrawlspace from "../assets/svc-crawlspace.jpg";
 import imgSvcFoundation from "../assets/svc-foundation.jpg";
@@ -874,7 +876,6 @@ const TESTIMONIALS = [
 function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [cur, setCur] = useState(0);
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -922,7 +923,7 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
             <div key={t.name} className="shrink-0 w-[min(85vw,520px)] flex flex-col" style={{ background: "#fff", border: "1px solid rgba(62,60,73,.07)" }}>
               {/* Video / image thumb */}
               <button
-                onClick={() => setSelectedIdx(i)}
+                onClick={() => onNavigate?.(`review/${slugify(`${t.name}-${t.loc}`)}`)}
                 className="relative w-full"
                 style={{ padding: 0, paddingBottom: "52%", border: "none", cursor: "pointer" }}
               >
@@ -970,27 +971,12 @@ function TestimonialsSection({ onNavigate }: { onNavigate?: (p: string) => void 
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.15)" }} />
         ))}
       </div>
-
-      {createPortal(
-        <AnimatePresence>
-          {selectedIdx !== null && (
-            <ReviewModal
-              review={TESTIMONIALS[selectedIdx]}
-              onClose={() => setSelectedIdx(null)}
-              onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length : null)}
-              onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % TESTIMONIALS.length : null)}
-            />
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
     </section>
   );
 }
 
 // ─── Case Studies (shared design — see components/CaseStudiesShowcase.tsx) ──
 function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
-  const [activeCard, setActiveCard] = useState<CaseStudy | null>(null);
   const featured = CASE_STUDIES.slice(0, 3);
 
   return (
@@ -1014,7 +1000,7 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
           </button>
         </Reveal>
 
-        <CaseStudiesGrid items={featured} onOpen={setActiveCard} />
+        <CaseStudiesGrid items={featured} onOpen={(c) => onNavigate?.(`case-study/${caseStudySlug(c)}`)} />
 
         <div className="flex justify-center mt-14">
           <button onClick={() => onNavigate?.("case-studies")} className="group inline-flex items-center gap-4 px-7 py-4"
@@ -1027,7 +1013,6 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
         </div>
       </div>
 
-      <CaseStudyModal card={activeCard} onOpenChange={(open) => !open && setActiveCard(null)} />
     </section>
   );
 }
@@ -1362,7 +1347,7 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const initPage = window.location.hash.replace("#", "") || "home";
-  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "evergreen" | "project-gallery" | "resources" | "pricing" | "awards" | "love-well" | "before-after" | "case-studies" | "news-blog" | "blog-inner" | "about" | "team" | "careers" | "service-area" | "reviews" | "job-stories" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
+  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "evergreen" | "project-gallery" | "resources" | "pricing" | "awards" | "love-well" | "before-after" | "case-studies" | "news-blog" | "blog-inner" | "about" | "team" | "careers" | "service-area" | "reviews" | "job-stories" | "review" | "job-story" | "case-study" | "project" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
@@ -1386,6 +1371,24 @@ export default function App() {
     setScrollTarget(anchor ?? null);
     setPageKey((k) => k + 1);
   };
+
+  // Hash changes that don't come from navigate() — the browser back/forward
+  // buttons, or a pasted deep link into an open tab — used to be ignored, so a
+  // shared work URL (case-study/<slug>, review/<slug>, …) rendered whatever
+  // page was already mounted. Sync state from the hash instead.
+  useEffect(() => {
+    const sync = () => {
+      const raw = window.location.hash.replace("#", "") || "home";
+      const [route, anchor] = raw.split("#");
+      const [pageName, slug] = route.split("/");
+      setPage(pageName as typeof page);
+      setRouteSlug(slug ?? null);
+      setScrollTarget(anchor ?? null);
+      setPageKey((k) => k + 1);
+    };
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
 
   if (page === "services-landing") {
     return <ServicesLandingPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
@@ -1474,6 +1477,15 @@ export default function App() {
     return <JobStoriesPage key={pageKey} onBack={() => navigate("resources")} onNavigate={navigate} />;
   }
 
+  // ── Work detail pages ──
+  // Reviews, job stories, case studies and gallery projects each open as their
+  // own page (see WorkInnerPage) instead of the modals they used before.
+  if (page === "review" || page === "job-story" || page === "case-study" || page === "project") {
+    const kind = page === "project" ? "project-gallery" : page;
+    const index = page === "review" ? "reviews" : page === "job-story" ? "job-stories" : page === "case-study" ? "case-studies" : "project-gallery";
+    return <WorkInnerPage key={pageKey} kind={kind} slug={routeSlug ?? undefined} onBack={() => navigate(index)} onNavigate={navigate} />;
+  }
+
   if (page === "contact") {
     return <ContactPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} scrollTo={scrollTarget ?? undefined} />;
   }
@@ -1493,7 +1505,7 @@ export default function App() {
   const KNOWN_PAGES = [
     "home", "service", "services-landing", "problem-signs", "problem-sign-inner",
     "our-difference", "evergreen", "project-gallery", "resources", "pricing", "awards", "love-well", "before-after", "case-studies", "news-blog", "blog-inner", "about", "team",
-    "careers", "service-area", "reviews", "job-stories", "contact", "guiaestilos",
+    "careers", "service-area", "reviews", "job-stories", "review", "job-story", "case-study", "project", "contact", "guiaestilos",
   ];
 
   if (!KNOWN_PAGES.includes(page)) {

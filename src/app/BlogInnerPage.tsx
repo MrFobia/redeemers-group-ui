@@ -7,8 +7,8 @@ import SharedNavBar from "./SharedNavBar";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
-import { ReviewModal } from "./components/ReviewModal";
 import imgRevAvatar from "../assets/rev-avatar.png";
+import { slugify } from "./data/serviceAreas";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -481,10 +481,9 @@ function JobStoriesSection() {
 }
 
 // ─── 6. RELATED REVIEWS ───────────────────────────────────────────────────────
-function RelatedReviewsSection() {
+function RelatedReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
   const [cur, setCur] = useState(0);
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
@@ -530,7 +529,7 @@ function RelatedReviewsSection() {
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={r.img} alt={r.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.4)" }}>
-                  <button onClick={() => setSelectedIdx(i)} className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
+                  <button onClick={() => onNavigate?.(`review/${slugify(`${r.name}-${r.loc}`)}`)} className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
                   </button>
@@ -567,17 +566,6 @@ function RelatedReviewsSection() {
             style={{ width: cur === i ? 24 : 8, height: 8, background: cur === i ? B : "rgba(62,60,73,.15)", border: "none", cursor: "pointer", borderRadius: 4 }} />
         ))}
       </div>
-
-      <AnimatePresence>
-        {selectedIdx !== null && (
-          <ReviewModal
-            review={REVIEWS[selectedIdx]}
-            onClose={() => setSelectedIdx(null)}
-            onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + REVIEWS.length) % REVIEWS.length : null)}
-            onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % REVIEWS.length : null)}
-          />
-        )}
-      </AnimatePresence>
     </section>
   );
 }
@@ -707,7 +695,7 @@ export default function BlogInnerPage({
         <RelatedPostsSection />
         <RelatedSymptomsSection onNavigate={onNavigate} />
         <JobStoriesSection />
-        <RelatedReviewsSection />
+        <RelatedReviewsSection onNavigate={onNavigate} />
         <RelatedCostGuidesSection />
         <Footer onBack={onBack} />
       </div>

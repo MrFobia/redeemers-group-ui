@@ -9,13 +9,13 @@ import SharedNavBar from "./SharedNavBar";
 import { FloatingSideNav } from "./components/FloatingSideNav";
 import imgFloor01 from "../assets/floor-01.jpeg";
 import imgRevAvatar from "../assets/rev-avatar.png";
-import { ReviewModal } from "./components/ReviewModal";
 import imgFloor03 from "../assets/floor-03.jpeg";
 import imgFloor04 from "../assets/floor-04.jpeg";
 import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { ProjectGallery } from "./components/ProjectGallery";
+import { slugify } from "./data/serviceAreas";
 
 // ─── Brand Tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -245,124 +245,10 @@ const JOB_STORIES = [
   { name: "Jennifer M.", type: "Waterproofing", loc: "Memphis, TN", date: "January 2026", duration: "3 days", result: "Interior drainage system and dual sump pump installed. Basement stays dry through heavy rain.", quote: "After years of a damp basement, it's finally dry. The crew was professional and cleaned up everything when done.", img: "https://images.unsplash.com/photo-1646184466560-f81b1e495604?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
 ];
 
-type PreviewStory = typeof JOB_STORIES[0];
-
-function JobStoryPreviewModal({ story, onClose, onPrev, onNext }: {
-  story: PreviewStory; onClose: () => void; onPrev: () => void; onNext: () => void;
-}) {
-  const [playing, setPlaying] = useState(false);
-
-  useEffect(() => {
-    setPlaying(false);
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") onPrev();
-      if (e.key === "ArrowRight") onNext();
-    };
-    window.addEventListener("keydown", handler);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", handler); document.body.style.overflow = ""; };
-  }, [story, onClose, onPrev, onNext]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      transition={{ duration: 0.22 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
-      style={{ background: "rgba(62,60,73,.88)", backdropFilter: "blur(10px)" }}
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-        className="relative w-full max-w-[960px] flex flex-col lg:flex-row overflow-hidden"
-        style={{ background: CHAR, height: "min(85vh, 580px)" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Left — video */}
-        <div className="lg:w-[52%] shrink-0 relative">
-          <ImageWithFallback src={story.img} alt={story.name} className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{
-            background: playing ? "rgba(62,60,73,.85)" : "linear-gradient(to bottom, rgba(62,60,73,.1) 0%, rgba(62,60,73,.6) 100%)"
-          }} />
-
-          {playing ? (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.4)" }}>Video playing…</p>
-            </div>
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <motion.button
-                onClick={() => setPlaying(true)}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.94 }}
-                style={{ width: 72, height: 72, borderRadius: "50%", background: B, border: "3px solid rgba(255,255,255,.25)", cursor: "pointer", boxShadow: "0 8px 32px rgba(62,60,73,.5)", display: "flex", alignItems: "center", justifyContent: "center" }}
-              >
-                <Play size={26} fill="white" stroke="none" style={{ marginLeft: 4 }} />
-              </motion.button>
-            </div>
-          )}
-
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-4">
-            <div className="flex gap-2">
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#fff", letterSpacing: 2.5, textTransform: "uppercase", background: B, padding: "3px 8px" }}>{story.type}</span>
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.65)", background: "rgba(62,60,73,.45)", padding: "3px 8px", backdropFilter: "blur(4px)" }}>{story.loc}</span>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={onPrev} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
-                <ChevronLeft size={15} color="#fff" />
-              </button>
-              <button onClick={onNext} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
-                <ChevronRight size={15} color="#fff" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Right — story content */}
-        <div className="flex-1 flex flex-col overflow-y-auto" style={{ borderLeft: "1px solid rgba(255,255,255,.07)" }}>
-          <div className="flex justify-end px-7 pt-6 pb-3 shrink-0">
-            <button onClick={onClose} className="w-8 h-8 flex items-center justify-center hover:bg-white/10 transition-colors" style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-              <X size={14} color="rgba(255,255,255,.7)" />
-            </button>
-          </div>
-
-          <div className="flex flex-col flex-1 px-7 pb-7">
-            <div className="flex items-center gap-3 mb-5">
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.3)" }}>{story.date}</span>
-              <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,.2)", display: "inline-block" }} />
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.3)" }}>{story.duration}</span>
-            </div>
-
-            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 6 }}>
-              {story.name}
-            </h3>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: SAND, marginBottom: 20 }}>{story.loc}</p>
-
-            <div className="mb-5 p-4" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.25)" }}>
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>What we did</p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>{story.result}</p>
-            </div>
-
-            <div style={{ fontFamily: "Georgia,serif", fontSize: 44, color: "rgba(216,203,165,.2)", lineHeight: 0.55, marginBottom: 10 }}>&ldquo;</div>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.72)", lineHeight: 1.8, flex: 1 }}>{story.quote}</p>
-
-            <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "20px 0" }} />
-
-            <button onClick={() => { onClose(); openInspection(); }}
-              className="inline-flex items-center gap-2 px-6 py-3 hover:opacity-90 transition-opacity w-full justify-center"
-              style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "#fff", border: "none", cursor: "pointer", letterSpacing: 0.3 }}>
-              Get Your Free Inspection <ArrowRight size={14} />
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
+// Job stories open at job-story/<slug> (WorkInnerPage); the preview modal
+// that used to live here was removed.
 
 function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   return (
     <section id="job-stories" style={{ background: SURFACE.alt }} className="py-20 lg:py-24">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
@@ -386,7 +272,7 @@ function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void })
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {JOB_STORIES.map((story, i) => (
             <Reveal key={i} delay={i * 0.08}>
-              <div className="flex flex-col gap-0 cursor-pointer" onClick={() => setSelectedIdx(i)} style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
+              <div className="flex flex-col gap-0 cursor-pointer" onClick={() => onNavigate?.(`job-story/${slugify(`${story.type}-${story.loc}-${story.name}`)}`)} style={{ background: SURFACE.base, border: `1px solid ${ON_LIGHT.border}` }}>
                 {/* Video thumb */}
                 <div className="relative overflow-hidden group" style={{ aspectRatio: "3/2" }}>
                   <ImageWithFallback src={story.img} alt={story.name}
@@ -414,16 +300,6 @@ function JobStoriesSection({ onNavigate }: { onNavigate?: (p: string) => void })
         </div>
       </div>
 
-      <AnimatePresence>
-        {selectedIdx !== null && (
-          <JobStoryPreviewModal
-            story={JOB_STORIES[selectedIdx]}
-            onClose={() => setSelectedIdx(null)}
-            onPrev={() => setSelectedIdx((i) => i !== null ? (i - 1 + JOB_STORIES.length) % JOB_STORIES.length : null)}
-            onNext={() => setSelectedIdx((i) => i !== null ? (i + 1) % JOB_STORIES.length : null)}
-          />
-        )}
-      </AnimatePresence>
     </section>
   );
 }
@@ -530,7 +406,6 @@ const TESTIMONIALS = [
 function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [cur, setCur] = useState(0);
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
@@ -581,7 +456,7 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
               <div className="relative" style={{ paddingBottom: "52%" }}>
                 <ImageWithFallback src={t.img} alt={t.name} className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(62,60,73,.45)" }}>
-                  <button onClick={() => setSelectedIdx(i)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+                  <button onClick={() => onNavigate?.(`review/${slugify(`${t.name}-${t.loc}`)}`)} className="w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-transform"
                     style={{ background: B, border: "none", cursor: "pointer" }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
                   </button>
@@ -618,16 +493,6 @@ function ReviewsSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
         ))}
       </div>
 
-      <AnimatePresence>
-        {selectedIdx !== null && (
-          <ReviewModal
-            review={TESTIMONIALS[selectedIdx]}
-            onClose={() => setSelectedIdx(null)}
-            onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length : null)}
-            onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % TESTIMONIALS.length : null)}
-          />
-        )}
-      </AnimatePresence>
     </section>
   );
 }

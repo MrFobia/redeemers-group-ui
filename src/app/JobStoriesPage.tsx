@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "motion/react";
-import { ChevronLeft, ChevronRight, ChevronDown, X, Play, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Play, ArrowRight } from "lucide-react";
 import SharedNavBar from "./SharedNavBar";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { Logo } from "./components/Logo";
 import { openInspection } from "./components/InspectionModal";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
+import { STORIES, jobStorySlug, type JobStory } from "./data/jobStories";
 
 // ─── Brand tokens ─────────────────────────────────────────────────────────────
 import { B, DARK, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -14,151 +15,12 @@ import { B, DARK, CHAR, SAND, MUTED, SURFACE, ON_LIGHT } from "./theme";
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const SERVICE_FILTERS = ["All", "Crawl Space", "Foundation", "Waterproofing", "Concrete", "Commercial"];
 
-const STORIES = [
-  { name: "Jennifer M.", service: "Crawl Space", loc: "Memphis, TN", date: "March 2026", duration: "2 days", result: "SmartJack system + full encapsulation. Floors leveled and moisture eliminated.", quote: "I could feel the difference the first morning I walked in. No more bounce, no more smell. Redeemers was worth every penny.", img: "https://images.unsplash.com/photo-1591638436281-078219f200af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Robert T.", service: "Foundation", loc: "Jonesboro, AR", date: "February 2026", duration: "1 day", result: "6 push piers driven to bedrock. Foundation stabilized with lifetime warranty.", quote: "I had three different companies tell me three different things. Redeemers explained it clearly, showed me the evidence, and fixed it the right way.", img: "https://images.unsplash.com/photo-1708214148950-ccbb69d40e25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Sandra M.", service: "Waterproofing", loc: "Nashville, TN", date: "January 2026", duration: "3 days", result: "Interior drainage system, dual sump pump, and WaterGuard wall panels installed.", quote: "After two flooded basements in two years, I finally have a dry space. The team was professional and cleaned up everything when done.", img: "https://images.unsplash.com/photo-1760776024932-38040caef5d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Patricia L.", service: "Concrete", loc: "Little Rock, AR", date: "December 2025", duration: "4 hours", result: "Foam-leveled driveway and walkway. 3-inch void filled, surface restored.", quote: "My driveway had been sinking for five years. They fixed it in half a day for less than I expected. Looks completely new.", img: "https://images.unsplash.com/photo-1646184466560-f81b1e495604?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Marcus & Angela B.", service: "Crawl Space", loc: "Southaven, MS", date: "November 2025", duration: "2 days", result: "Vapor barrier, drainage matting, dehumidifier, and foam-sealed rim joists.", quote: "Our energy bills dropped 18% the first month. The musty smell is completely gone. Highly recommend for any Mississippi homeowner.", img: "https://images.unsplash.com/photo-1720631618132-83cdab1b237e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "David K.", service: "Foundation", loc: "Springfield, MO", date: "October 2025", duration: "1 day", result: "Helical piers installed through expansive clay soil. Foundation lifted 1.5 inches.", quote: "The crack in my living room wall had been growing for two years. Redeemers diagnosed the cause correctly and fixed it permanently.", img: "https://images.unsplash.com/photo-1591638436281-078219f200af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Linda H.", service: "Waterproofing", loc: "Germantown, TN", date: "September 2025", duration: "2 days", result: "Exterior waterproofing membrane applied. French drain installed. Grading corrected.", quote: "The crew was on time every day, kept me informed of every step, and the basement has been dry through two major storms.", img: "https://images.unsplash.com/photo-1760776024932-38040caef5d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Thomas R.", service: "Concrete", loc: "Bartlett, TN", date: "August 2025", duration: "6 hours", result: "Pool deck lifted with polyurethane foam. All four sunken sections now level.", quote: "The pool deck was a liability. Redeemers fixed it in one morning and it looks better than it did when it was new.", img: "https://images.unsplash.com/photo-1708214148950-ccbb69d40e25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Melissa & Russell C.", service: "Crawl Space", loc: "Marked Tree, AR", date: "July 2025", duration: "3 days", result: "Floor joists sistered, SmartJacks installed, crawl space fully encapsulated.", quote: "Walking in now, it's straight. I used to slip from side to another side. I went into my bedroom — the closet door closed for the first time ever.", img: "https://images.unsplash.com/photo-1760776024932-38040caef5d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Carol & James W.", service: "Foundation", loc: "Cape Girardeau, MO", date: "June 2025", duration: "1 day", result: "Wall anchor system stabilized bowing basement wall. No excavation required.", quote: "We were terrified about the cost. The free inspection made everything clear and the price was fair. Should have called sooner.", img: "https://images.unsplash.com/photo-1646184466560-f81b1e495604?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Anthony J.", service: "Commercial", loc: "Memphis, TN", date: "May 2025", duration: "4 days", result: "16 push piers installed under commercial warehouse. Production resumed same week.", quote: "We couldn't afford downtime. Redeemers worked around our schedule and kept the warehouse operational during the entire repair.", img: "https://images.unsplash.com/photo-1720631618132-83cdab1b237e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-  { name: "Diana P.", service: "Waterproofing", loc: "Jackson, MS", date: "April 2025", duration: "2 days", result: "Crawl space waterproofed, drainage corrected, and air quality system installed.", quote: "The inspector found water intrusion I didn't even know I had. Fixed it before it became a major problem. Grateful for the thoroughness.", img: "https://images.unsplash.com/photo-1591638436281-078219f200af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900" },
-];
 
 const PER_PAGE = 9;
 
-// ─── Story Modal ──────────────────────────────────────────────────────────────
-type Story = typeof STORIES[0];
-
-function StoryModal({ story, onClose, onPrev, onNext }: {
-  story: Story;
-  onClose: () => void;
-  onPrev: () => void;
-  onNext: () => void;
-}) {
-  const [playing, setPlaying] = useState(false);
-
-  useEffect(() => {
-    setPlaying(false);
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") onPrev();
-      if (e.key === "ArrowRight") onNext();
-    };
-    window.addEventListener("keydown", handler);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", handler); document.body.style.overflow = ""; };
-  }, [story, onClose, onPrev, onNext]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.22 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
-      style={{ background: "rgba(62,60,73,.88)", backdropFilter: "blur(10px)" }}
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-        className="relative w-full max-w-[960px] flex flex-col lg:flex-row overflow-hidden"
-        style={{ background: CHAR, height: "min(85vh, 580px)" }}
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Left — video */}
-        <div className="lg:w-[52%] shrink-0 relative">
-          <ImageWithFallback src={story.img} alt={story.name} className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{
-            background: playing ? "rgba(62,60,73,.85)" : "linear-gradient(to bottom, rgba(62,60,73,.1) 0%, rgba(62,60,73,.6) 100%)"
-          }} />
-
-          {playing ? (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.4)" }}>Video playing…</p>
-            </div>
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <motion.button
-                onClick={() => setPlaying(true)}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.94 }}
-                style={{ width: 72, height: 72, borderRadius: "50%", background: B, border: "3px solid rgba(255,255,255,.25)", cursor: "pointer", boxShadow: "0 8px 32px rgba(62,60,73,.5)", display: "flex", alignItems: "center", justifyContent: "center" }}
-              >
-                <Play size={26} fill="white" stroke="none" style={{ marginLeft: 4 }} />
-              </motion.button>
-            </div>
-          )}
-
-          {/* Bottom: tags + nav */}
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-4">
-            <div className="flex gap-2">
-              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 9, color: "#fff", letterSpacing: 2.5, textTransform: "uppercase", background: B, padding: "3px 8px" }}>{story.service}</span>
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.65)", background: "rgba(62,60,73,.45)", padding: "3px 8px", backdropFilter: "blur(4px)" }}>{story.loc}</span>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={onPrev} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
-                <ChevronLeft size={15} color="#fff" />
-              </button>
-              <button onClick={onNext} className="w-8 h-8 flex items-center justify-center hover:bg-white/20 transition-colors" style={{ background: "rgba(62,60,73,.45)", border: "1px solid rgba(255,255,255,.2)", cursor: "pointer" }}>
-                <ChevronRight size={15} color="#fff" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Right — story content */}
-        <div className="flex-1 flex flex-col overflow-y-auto rg-scroll-thin" style={{ borderLeft: "1px solid rgba(255,255,255,.07)" }}>
-          {/* Close */}
-          <div className="flex justify-end px-7 pt-6 pb-3 shrink-0">
-            <button onClick={onClose} className="w-8 h-8 flex items-center justify-center hover:bg-white/10 transition-colors" style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", cursor: "pointer" }}>
-              <X size={14} color="rgba(255,255,255,.7)" />
-            </button>
-          </div>
-
-          <div className="flex flex-col flex-1 px-7 pb-7">
-            {/* Meta */}
-            <div className="flex items-center gap-3 mb-5">
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.3)" }}>{story.date}</span>
-              <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(255,255,255,.2)", display: "inline-block" }} />
-              <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.3)" }}>{story.duration}</span>
-            </div>
-
-            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(20px,2vw,26px)", color: "#fff", lineHeight: 1.15, letterSpacing: "-0.5px", marginBottom: 6 }}>
-              {story.name}
-            </h3>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: SAND, marginBottom: 20 }}>{story.loc}</p>
-
-            {/* Result */}
-            <div className="mb-5 p-4" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.25)" }}>
-              <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>What we did</p>
-              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>{story.result}</p>
-            </div>
-
-            {/* Quote */}
-            <div style={{ fontFamily: "Georgia,serif", fontSize: 44, color: "rgba(216,203,165,.2)", lineHeight: 0.55, marginBottom: 10 }}>&ldquo;</div>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.72)", lineHeight: 1.8, flex: 1 }}>{story.quote}</p>
-
-            <div style={{ height: 1, background: "rgba(255,255,255,.07)", margin: "20px 0" }} />
-
-            <button onClick={() => { onClose(); openInspection(); }}
-              className="inline-flex items-center gap-2 px-6 py-3 hover:opacity-90 transition-opacity w-full justify-center"
-              style={{ background: B, fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 13, color: "#fff", border: "none", cursor: "pointer", letterSpacing: 0.3 }}>
-              Get Your Free Inspection <ArrowRight size={14} />
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
+// Story detail now lives at job-story/<slug> (see WorkInnerPage) — the old
+// StoryModal was removed so a story can be linked, shared and indexed.
+export type Story = JobStory;
 
 // ─── Story Card ───────────────────────────────────────────────────────────────
 function StoryCard({ story, index, onClick }: { story: Story; index: number; onClick: () => void }) {
@@ -300,11 +162,12 @@ function Footer({ onBack }: { onBack: () => void }) {
 
 // ─── JobStoriesPage ───────────────────────────────────────────────────────────
 export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => void; onNavigate?: (p: string) => void }) {
+  // Stories open as their own page (job-story/<slug>) — no modal.
+  const go = onNavigate ?? (() => onBack());
   const [activeFilter, setActiveFilter] = useState("All");
   const [areaOpen, setAreaOpen] = useState(false);
   const [symptomsOpen, setSymptomsOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const heroInView = useInView(heroRef, { once: true });
   const areaRef = useRef<HTMLDivElement>(null);
@@ -477,7 +340,7 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
                     key={`${story.name}-${i}`}
                     story={story}
                     index={i}
-                    onClick={() => setSelectedIdx((page - 1) * PER_PAGE + i)}
+                    onClick={() => go(`job-story/${jobStorySlug(story)}`)}
                   />
                 ))}
               </motion.div>
@@ -542,21 +405,6 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
         <Footer onBack={onBack} />
       </div>
 
-      {/* ── Story Modal ── */}
-      <AnimatePresence>
-        {selectedIdx !== null && (() => {
-          const story = filtered[selectedIdx];
-          if (!story) return null;
-          return (
-            <StoryModal
-              story={story}
-              onClose={() => setSelectedIdx(null)}
-              onPrev={() => setSelectedIdx(i => i !== null ? (i - 1 + filtered.length) % filtered.length : null)}
-              onNext={() => setSelectedIdx(i => i !== null ? (i + 1) % filtered.length : null)}
-            />
-          );
-        })()}
-      </AnimatePresence>
     </>
   );
 }

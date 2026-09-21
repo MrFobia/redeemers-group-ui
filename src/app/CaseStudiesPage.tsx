@@ -7,7 +7,8 @@ import { Logo } from "./components/Logo";
 import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { CASE_STUDIES, type CaseStudy } from "./data/caseStudies";
-import { CaseStudiesGrid, CaseStudyModal } from "./components/CaseStudiesShowcase";
+import { CaseStudiesGrid } from "./components/CaseStudiesShowcase";
+import { caseStudySlug } from "./data/caseStudies";
 import imgCaseRanch from "../assets/case-ranch.jpg";
 
 import { B, SURFACE } from "./theme";
@@ -15,17 +16,15 @@ import { B, SURFACE } from "./theme";
 // ─── Case studies / featured project stories ─────────────────────────────────
 // Its own page per the approved sitemap ("Featured projects / case stories" —
 // an "interna"). Shares the same hero-split + alternating grid design and the
-// same detail modal as the Home and Our Difference teasers (see
-// data/caseStudies.ts and components/CaseStudiesShowcase.tsx).
-function CaseStudiesGridSection() {
-  const [activeCard, setActiveCard] = useState<CaseStudy | null>(null);
+// same cards as the Home and Our Difference teasers (see data/caseStudies.ts
+// and components/CaseStudiesShowcase.tsx); a card opens case-study/<slug>.
+function CaseStudiesGridSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
 
   return (
     <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <CaseStudiesGrid items={CASE_STUDIES} onOpen={setActiveCard} />
+        <CaseStudiesGrid items={CASE_STUDIES} onOpen={(c) => onNavigate?.(`case-study/${caseStudySlug(c)}`)} />
       </div>
-      <CaseStudyModal card={activeCard} onOpenChange={(open) => !open && setActiveCard(null)} />
     </section>
   );
 }
@@ -117,7 +116,7 @@ export default function CaseStudiesPage({ onBack, onNavigate }: { onBack: () => 
           lede={`${CASE_STUDIES.length} in-depth project stories — commitments we put in writing, not just talking points. Click any card for the full story.`}
         />
 
-        <CaseStudiesGridSection />
+        <CaseStudiesGridSection onNavigate={onNavigate} />
 
         <Footer onBack={onBack} />
       </div>
