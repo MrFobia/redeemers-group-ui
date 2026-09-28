@@ -90,7 +90,7 @@ function BenefitCardsSection() {
 }
 
 // ─── CTA ──────────────────────────────────────────────────────────────────────
-function CtaSection() {
+export function CtaSection() {
   return (
     <section className="relative overflow-hidden" style={{ background: NAVY }}>
       <div className="absolute inset-0 z-0">
@@ -135,7 +135,7 @@ function CtaSection() {
 }
 
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
-function Footer({ onBack }: { onBack: () => void }) {
+export function Footer({ onBack }: { onBack: () => void }) {
   const cols = [
     { h: "Services", ls: ["Crawl Space", "Basement Waterproofing", "Foundation Repair", "Concrete Leveling", "Mold Prevention", "Insulation"] },
     { h: "Company", ls: ["About Us", "Our Work", "Blog", "Careers", "Financing", "Contact"] },

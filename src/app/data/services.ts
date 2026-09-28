@@ -26,7 +26,10 @@ import iconWaterproofing from "../../assets/icons/icon-waterproofing.svg";
 import iconConcrete from "../../assets/icons/icon-concrete.svg";
 
 export type Symptom = { id: string; q: string; a: string; img: string };
-export type Solution = { title: string; blurb: string; img: string; note?: string };
+/** `signs`: verbatim sitemap problem-sign labels this solution fixes. Each one
+ *  links to its existing problem-sign page, so the sub-service carries the same
+ *  long-tail internal links the old site's deeper pages did. */
+export type Solution = { title: string; blurb: string; img: string; note?: string; signs?: string[] };
 export type CostRange = { label: string; range: string; pct: number };
 export type Faq = { q: string; a: string };
 export type ServiceTab = { id: string; label: string };
@@ -161,10 +164,10 @@ export const SERVICES: Record<string, ServiceDef> = {
     solutionsIntro: "Same underlying issue shows up differently depending on where it's happening. Find the one that matches your home.",
     solutionsLayout: "compact",
     solutions: [
-      { title: "Slab Repair", blurb: "A slab that's cracked, sunk, or sitting unevenly against the rest of the floor.", img: imgFoundation },
-      { title: "Crawlspace / Joist Repair", blurb: "Floors that sag, bounce, or feel soft underfoot when you walk across them.", img: imgCrawlspace },
-      { title: "Garage Lintel Repair", blurb: "Cracking or shifting brick directly above the garage door opening.", img: imgFloor2 },
-      { title: "Wall Stabilization", blurb: "A foundation wall that's bowing inward, leaning, or visibly out of plumb.", img: imgFloor1 },
+      { title: "Slab Repair", blurb: "A slab that's cracked, sunk, or sitting unevenly against the rest of the floor.", img: imgFoundation, signs: ["Sinking Slab", "Cracks in exterior or interior walls"] },
+      { title: "Crawlspace / Joist Repair", blurb: "Floors that sag, bounce, or feel soft underfoot when you walk across them.", img: imgCrawlspace, signs: ["Uneven, sloping, or bouncy floors", "Doors or windows that stick"] },
+      { title: "Garage Lintel Repair", blurb: "Cracking or shifting brick directly above the garage door opening.", img: imgFloor2, signs: ["Cracks above garage door"] },
+      { title: "Wall Stabilization", blurb: "A foundation wall that's bowing inward, leaning, or visibly out of plumb.", img: imgFloor1, signs: ["Bowing or leaning walls", "Separating or tilting chimney"] },
     ],
     cost: {
       headline: "How much does structural repair cost?",
@@ -205,10 +208,10 @@ export const SERVICES: Record<string, ServiceDef> = {
     solutionsHeadline: "Crawl Space Solutions",
     solutionsLayout: "compact",
     solutions: [
-      { title: "Floor Joist Replacement", blurb: "Joists too far gone to save are fully replaced, restoring the original structural capacity of the floor system above your crawl space.", img: imgFloor1 },
-      { title: "Floor Joist Repair/Stabilization", blurb: "When joists are sound but losing support, we sister them and add support beams to stop the flex and restore a firm, level floor.", img: imgFloor3 },
-      { title: "Encapsulation Systems", blurb: "Heavy-duty vapor barriers seal moisture out of the crawl space permanently, improving air quality and protecting the structure year-round.", img: imgCrawlspace },
-      { title: "Moisture & Mold Prevention", blurb: "We find the moisture source, treat existing growth, and install prevention systems so the problem never returns to your crawl space.", img: imgMold },
+      { title: "Floor Joist Replacement", blurb: "Joists too far gone to save are fully replaced, restoring the original structural capacity of the floor system above your crawl space.", img: imgFloor1, signs: ["My floors are sagging, bouncy, or buckling."] },
+      { title: "Floor Joist Repair/Stabilization", blurb: "When joists are sound but losing support, we sister them and add support beams to stop the flex and restore a firm, level floor.", img: imgFloor3, signs: ["My floors are sagging, bouncy, or buckling.", "The baseboards have separated from the floor.", "My doors won't close properly"] },
+      { title: "Encapsulation Systems", blurb: "Heavy-duty vapor barriers seal moisture out of the crawl space permanently, improving air quality and protecting the structure year-round.", img: imgCrawlspace, signs: ["Standing water in crawlspace"] },
+      { title: "Moisture & Mold Prevention", blurb: "We find the moisture source, treat existing growth, and install prevention systems so the problem never returns to your crawl space.", img: imgMold, signs: ["Mold & mildew smell"] },
       { title: "Lumberkote", blurb: "A protective wood treatment applied to crawl space framing, shielding joists and beams from moisture, rot, and fungal growth.", img: imgInsulation },
     ],
     cost: {
@@ -252,8 +255,8 @@ export const SERVICES: Record<string, ServiceDef> = {
     solutionsHeadline: "Waterproofing Solutions",
     solutionsLayout: "compact",
     solutions: [
-      { title: "Interior Solutions", blurb: "Interior drainage channels, sump pump systems, and vapor barriers capture water at the wall and floor joint and discharge it away from the home.", img: imgWaterproofing },
-      { title: "Exterior Solutions", blurb: "Exterior membranes, footing drains, grading, and downspout extensions keep water away from the foundation before it ever reaches the wall.", img: imgFloor4 },
+      { title: "Interior Solutions", blurb: "Interior drainage channels, sump pump systems, and vapor barriers capture water at the wall and floor joint and discharge it away from the home.", img: imgWaterproofing, signs: ["Water getting in to basement or other.", "Damp walls or floor", "White residue on basement walls", "Standing water in crawlspace"] },
+      { title: "Exterior Solutions", blurb: "Exterior membranes, footing drains, grading, and downspout extensions keep water away from the foundation before it ever reaches the wall.", img: imgFloor4, signs: ["Water pooling around house.", "Water getting in to basement or other."] },
     ],
     cost: {
       headline: "How much does waterproofing cost?",
@@ -297,11 +300,11 @@ export const SERVICES: Record<string, ServiceDef> = {
     solutionsHeadline: "Concrete Solutions",
     solutionsLayout: "compact",
     solutions: [
-      { title: "Lifting & Leveling", blurb: "Polyurethane injection fills the void under a settled slab and raises it back to grade in a single visit — no demolition, no replacement.", img: imgConcrete },
-      { title: "Crack & Joint Repair", blurb: "Cracks and control joints get cleaned and sealed so water stops reaching the sub-base and washing out the support underneath.", img: imgFloor2 },
+      { title: "Lifting & Leveling", blurb: "Polyurethane injection fills the void under a settled slab and raises it back to grade in a single visit — no demolition, no replacement.", img: imgConcrete, signs: ["Uneven concrete slabs", "Sinking driveway, walkway, patio", "Sinking slab foundation", "Void under slab"] },
+      { title: "Crack & Joint Repair", blurb: "Cracks and control joints get cleaned and sealed so water stops reaching the sub-base and washing out the support underneath.", img: imgFloor2, signs: ["Cracked or sinking pool deck"] },
       { title: "Concrete Protection Systems", blurb: "Penetrating sealers and coatings shield concrete from water, salt, and freeze-thaw cycles, extending the life of the slab.", img: imgFloor4 },
-      { title: "Decorative Finishing", blurb: "Overlays, stains, and textured finishes bring a fresh, finished look to concrete that is structurally sound but visually worn.", img: imgCaseTownhome, note: "Launching later this year" },
-      { title: "Resurfacing Needs", blurb: "Spalled and pitted surfaces are resurfaced to a smooth, uniform finish — restoring the slab without the cost of a full replacement.", img: imgCaseRanch, note: "Launching later this year" },
+      { title: "Decorative Finishing", blurb: "Overlays, stains, and textured finishes bring a fresh, finished look to concrete that is structurally sound but visually worn.", img: imgCaseTownhome, note: "Launching later this year", signs: ["Ugly concrete"] },
+      { title: "Resurfacing Needs", blurb: "Spalled and pitted surfaces are resurfaced to a smooth, uniform finish — restoring the slab without the cost of a full replacement.", img: imgCaseRanch, note: "Launching later this year", signs: ["Ugly concrete"] },
     ],
     cost: {
       headline: "How much does concrete repair cost?",

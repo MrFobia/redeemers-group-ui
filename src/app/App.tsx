@@ -25,6 +25,7 @@ import AboutPage from "./AboutPage";
 import TeamPage from "./TeamPage";
 import CareersPage from "./CareersPage";
 import ServiceAreaPage from "./ServiceAreaPage";
+import LocationPage from "./LocationPage";
 import GuiaEstilosPage from "./GuiaEstilosPage";
 import ServicesLandingPage from "./ServicesLandingPage";
 import ReviewsPage from "./ReviewsPage";
@@ -1347,7 +1348,7 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const initPage = window.location.hash.replace("#", "") || "home";
-  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "evergreen" | "project-gallery" | "resources" | "pricing" | "awards" | "love-well" | "before-after" | "case-studies" | "news-blog" | "blog-inner" | "about" | "team" | "careers" | "service-area" | "reviews" | "job-stories" | "review" | "job-story" | "case-study" | "project" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
+  const [page, setPage] = useState<"home" | "service" | "services-landing" | "problem-signs" | "problem-sign-inner" | "our-difference" | "evergreen" | "project-gallery" | "resources" | "pricing" | "awards" | "love-well" | "before-after" | "case-studies" | "news-blog" | "blog-inner" | "about" | "team" | "careers" | "service-area" | "location" | "reviews" | "job-stories" | "review" | "job-story" | "case-study" | "project" | "contact" | "guiaestilos">(initPage.split("#")[0].split("/")[0] as any);
   // Increments on every navigate call — used as key prop to force page re-mount
   // even when navigating to the same page (e.g. service → service via megamenu).
   const [pageKey, setPageKey] = useState(0);
@@ -1469,6 +1470,11 @@ export default function App() {
     return <ServiceAreaPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
 
+  // City / county landing pages migrated from the legacy site (SEO long-tail).
+  if (page === "location") {
+    return <LocationPage key={pageKey} slug={routeSlug ?? undefined} onBack={() => navigate("home")} onNavigate={navigate} />;
+  }
+
   if (page === "reviews") {
     return <ReviewsPage key={pageKey} onBack={() => navigate("home")} onNavigate={navigate} />;
   }
@@ -1505,7 +1511,7 @@ export default function App() {
   const KNOWN_PAGES = [
     "home", "service", "services-landing", "problem-signs", "problem-sign-inner",
     "our-difference", "evergreen", "project-gallery", "resources", "pricing", "awards", "love-well", "before-after", "case-studies", "news-blog", "blog-inner", "about", "team",
-    "careers", "service-area", "reviews", "job-stories", "review", "job-story", "case-study", "project", "contact", "guiaestilos",
+    "careers", "service-area", "location", "reviews", "job-stories", "review", "job-story", "case-study", "project", "contact", "guiaestilos",
   ];
 
   if (!KNOWN_PAGES.includes(page)) {

@@ -22,7 +22,7 @@ const ROWS: Row[] = [
 
 /** Panel level 2 — a single city, its content inventory, and the map pins behind it. */
 export function CityPanel({
-  city, items, kindFilter, onFilter, onOpenItem, onBack,
+  city, items, kindFilter, onFilter, onOpenItem, onBack, pageRoute, onNavigate,
 }: {
   city: CityRecord;
   items: ContentItem[];
@@ -30,6 +30,9 @@ export function CityPanel({
   onFilter: (kind: ContentKind | null) => void;
   onOpenItem: (item: ContentItem) => void;
   onBack: () => void;
+  /** The city's own landing page, when the legacy site had one. */
+  pageRoute?: string;
+  onNavigate?: (p: string) => void;
 }) {
   const content = contentForCity(city.slug);
   const zip = zipForCity(city.slug);
@@ -61,6 +64,18 @@ export function CityPanel({
           {city.county} County{zip ? ` · ZIP: ${zip}` : ""}
         </p>
       </div>
+
+      {pageRoute && (
+        <a
+          href={`#${pageRoute}`}
+          onClick={(e) => { if (!onNavigate) return; e.preventDefault(); onNavigate(pageRoute); }}
+          className="group inline-flex items-center gap-2 mb-7 -mt-3"
+          style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13.5, color: B, textDecoration: "none" }}
+        >
+          Visit the {city.name} page
+          <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+        </a>
+      )}
 
       <div className="flex items-baseline justify-between mb-3">
         <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: B, letterSpacing: 3, textTransform: "uppercase" }}>

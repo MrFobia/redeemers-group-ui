@@ -1,11 +1,12 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, MapPin, ChevronDown, ChevronRight, X, ArrowRight } from "lucide-react";
+import { Search, MapPin, ChevronDown, ChevronRight, X, ArrowRight, ArrowUpRight } from "lucide-react";
 import { openInspection } from "./InspectionModal";
 import { ServiceAreaMap } from "./ServiceAreaMap";
 import { CityPanel } from "./CityPanel";
 import { contentForCityItems, type ContentItem, type ContentKind } from "../data/localContent";
 import { workPath } from "../data/workContent";
+import { cityLocationRoute, countyLocationRoute } from "../data/locationPages";
 import {
   STATES, STATE_NAME, TOTAL_CITIES, TOTAL_COUNTIES, CITY_BY_SLUG,
   countiesByState, cityCountByState, searchAreas, proofForState, slugify, coordsForCity,
@@ -280,6 +281,8 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
                 onFilter={setKindFilter}
                 onOpenItem={openWork}
                 onBack={() => { setActiveCity(null); setKindFilter(null); }}
+                pageRoute={cityLocationRoute(activeCity.slug)}
+                onNavigate={onNavigate}
               />
             ) : (
             <div className="px-7 py-7">
@@ -355,22 +358,40 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
                             style={{ overflow: "hidden" }}
                           >
                             <div className="flex flex-wrap gap-1.5 px-1 pt-2 pb-1">
-                              {county.cities.map((city) => (
-                                <button
-                                  key={city}
-                                  onClick={() => openCityBySlug(slugify(`${city}-${county.state}`))}
-                                  className="inline-flex items-center px-2.5 py-1 transition-all hover:border-black/20"
-                                  style={{
-                                    fontFamily: "'Inter',sans-serif", fontSize: 12.5,
-                                    color: "rgba(62,60,73,.65)",
-                                    background: "rgba(62,60,73,.05)",
-                                    border: "1px solid rgba(62,60,73,.07)",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {city}
-                                </button>
-                              ))}
+                              {county.cities.map((city) => {
+                                const citySlug = slugify(`${city}-${county.state}`);
+                                const hasPage = !!cityLocationRoute(citySlug);
+                                return (
+                                  <button
+                                    key={city}
+                                    onClick={() => openCityBySlug(citySlug)}
+                                    title={hasPage ? `View the ${city} page` : undefined}
+                                    className="group/chip inline-flex items-center gap-1 px-2.5 py-1 transition-all"
+                                    style={hasPage ? {
+                                      fontFamily: "'Inter',sans-serif", fontSize: 12.5, fontWeight: 600,
+                                      color: B,
+                                      background: "rgba(0,80,159,.06)",
+                                      border: `1px solid rgba(0,80,159,.3)`,
+                                      cursor: "pointer",
+                                    } : {
+                                      fontFamily: "'Inter',sans-serif", fontSize: 12.5,
+                                      color: "rgba(62,60,73,.65)",
+                                      background: "rgba(62,60,73,.05)",
+                                      border: "1px solid rgba(62,60,73,.07)",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {city}
+                                    {hasPage && (
+                                      <ArrowUpRight
+                                        size={11}
+                                        color={B}
+                                        className="transition-transform group-hover/chip:translate-x-0.5 group-hover/chip:-translate-y-0.5"
+                                      />
+                                    )}
+                                  </button>
+                                );
+                              })}
                             </div>
                           </motion.div>
                         )}
@@ -469,10 +490,16 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
 
         {/* ── Full county / city browser ── */}
         <div className="mt-14">
-          <div className="flex items-center gap-3 mb-6">
-            <span style={{ display: "block", width: 20, height: 2, background: B }} />
-            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
-              Every county we serve in {STATE_NAME[activeState]}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+            <div className="flex items-center gap-3">
+              <span style={{ display: "block", width: 20, height: 2, background: B }} />
+              <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
+                Every county we serve in {STATE_NAME[activeState]}
+              </span>
+            </div>
+            <span className="inline-flex items-center gap-1.5" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11.5, color: "rgba(62,60,73,.45)" }}>
+              <ArrowUpRight size={12} color={B} />
+              City has its own page — click to view it
             </span>
           </div>
 
@@ -480,6 +507,7 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
             {counties.map((county) => {
               const key = `${county.state}-${county.name}`;
               const isOpen = openCounty === key;
+              const countyRoute = countyLocationRoute(county.state, county.name);
               return (
                 <div key={key} data-county={key} style={{ borderBottom: "1px solid rgba(62,60,73,.05)" }}>
                   <button
@@ -514,28 +542,58 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
                         transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
                         style={{ overflow: "hidden" }}
                       >
+                        {countyRoute && (
+                          <a
+                            href={`#${countyRoute}`}
+                            onClick={(e) => { if (!onNavigate) return; e.preventDefault(); onNavigate(countyRoute); }}
+                            className="group inline-flex items-center gap-1.5 mx-7 mb-3 mt-1"
+                            style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: B, textDecoration: "none" }}
+                          >
+                            Visit the {county.name} County page
+                            <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
+                          </a>
+                        )}
                         <div className="flex flex-wrap gap-1.5 px-7 pb-4 pt-1">
                           {county.cities.map((city) => {
                             const isHit = highlightCity === `${county.state}-${county.name}-${city}`;
+                            const citySlug = slugify(`${city}-${county.state}`);
+                            const cityRoute = cityLocationRoute(citySlug);
+                            const hasPage = !!cityRoute;
                             return (
-                              <button
+                              <a
                                 key={city}
+                                // Cities with a landing page carry a real href
+                                // (crawlable); the click still opens the map
+                                // panel, which links on to that page.
+                                href={cityRoute ? `#${cityRoute}` : undefined}
+                                role={cityRoute ? undefined : "button"}
+                                tabIndex={0}
+                                title={hasPage ? `View the ${city} page` : undefined}
                                 // The city panel lives at the top of the
                                 // explorer, so this is the one click that has
                                 // to move the page — upward, to what opened.
-                                onClick={() => openCityBySlug(slugify(`${city}-${county.state}`), true)}
-                                className="inline-flex items-center px-2.5 py-1 transition-all hover:border-black/20"
+                                onClick={(e) => { e.preventDefault(); openCityBySlug(citySlug, true); }}
+                                onKeyDown={(e) => { if (!cityRoute && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openCityBySlug(citySlug, true); } }}
+                                className="group/citylink inline-flex items-center gap-1 px-2.5 py-1 transition-all hover:border-black/20"
                                 style={{
                                   fontFamily: "'Inter',sans-serif", fontSize: 12.5,
-                                  color: isHit ? DARK : "rgba(62,60,73,.6)",
-                                  background: isHit ? B : "rgba(62,60,73,.05)",
-                                  border: `1px solid ${isHit ? B : "rgba(62,60,73,.07)"}`,
-                                  fontWeight: isHit ? 700 : 400,
+                                  color: isHit ? DARK : hasPage ? B : "rgba(62,60,73,.6)",
+                                  background: isHit ? B : hasPage ? "rgba(0,80,159,.06)" : "rgba(62,60,73,.05)",
+                                  border: `1px solid ${isHit ? B : hasPage ? "rgba(0,80,159,.3)" : "rgba(62,60,73,.07)"}`,
+                                  fontWeight: isHit || hasPage ? 700 : 400,
                                   cursor: "pointer",
+                                  textDecoration: "none",
                                 }}
                               >
                                 {city}
-                              </button>
+                                {hasPage && !isHit && (
+                                  <ArrowUpRight
+                                    size={11}
+                                    color={B}
+                                    className="transition-transform group-hover/citylink:translate-x-0.5 group-hover/citylink:-translate-y-0.5"
+                                  />
+                                )}
+                              </a>
                             );
                           })}
                         </div>

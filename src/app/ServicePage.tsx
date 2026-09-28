@@ -3,6 +3,7 @@ import { openInspection } from "./components/InspectionModal";
 import { motion, useInView } from "motion/react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown, ChevronRight, ArrowRight, Building2 } from "lucide-react";
+import { getProblemSignByLabel } from "./data/problemSigns";
 import { getService, type ServiceDef, type Solution, type CostRange } from "./data/services";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import SharedNavBar from "./SharedNavBar";
@@ -12,6 +13,12 @@ import { AnnouncementBar } from "./components/AnnouncementBar";
 import { PageBreadcrumb } from "./components/PageBreadcrumb";
 import { ProjectGallery } from "./components/ProjectGallery";
 import { PageHeroBanner } from "./components/PageHeroBanner";
+
+/** Route for a symptom label — lands on that sign's own page, not the default. */
+const signRoute = (label: string) => {
+  const sign = getProblemSignByLabel(label);
+  return sign ? `problem-sign-inner/${sign.slug}` : "problem-sign-inner";
+};
 
 // ─── Brand Tokens (matches homepage) ─────────────────────────────────────────
 import { B, DARK, NAVY, CHAR, SAND, CREAM, MUTED, SURFACE, ON_LIGHT } from "./theme";
@@ -157,41 +164,67 @@ function packRows(solutions: Solution[]): Solution[][] {
 // instead of one under the other. The photo isn't gone — it lives in the
 // pinned panel that fills the empty space to the right of the grid, and
 // swaps to whichever tile is hovered.
-function CompactSolutionRow({ sol, active, onHover }: { sol: Solution; active: boolean; onHover: () => void }) {
+function CompactSolutionRow({ sol, active, onHover, onNavigate }: { sol: Solution; active: boolean; onHover: () => void; onNavigate?: (p: string) => void }) {
+  // Real links to the existing problem-sign pages, not buttons — the old
+  // site's deeper pages ranked for these long-tail symptoms, and crawlers
+  // only follow hrefs.
+  const signs = (sol.signs ?? []).map((label) => ({ label, route: signRoute(label) }));
   return (
-    <button
-      onClick={() => openInspection()}
+    <div
       onMouseEnter={onHover}
       onFocus={onHover}
-      className="group w-full h-full flex flex-col justify-center text-left transition-colors"
+      className="w-full h-full flex flex-col transition-colors"
       style={{
-        padding: "26px 24px",
         minHeight: 168,
         border: `1px solid ${ON_LIGHT.border}`,
         background: active ? ON_LIGHT.wash : SURFACE.base,
-        cursor: "pointer",
       }}
     >
-      <div className="flex items-start gap-4">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2.5 flex-wrap" style={{ marginBottom: 8 }}>
-            <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 19, color: CHAR, lineHeight: 1.25, margin: 0 }}>
-              {sol.title}
-            </h3>
-            {sol.note && (
-              <span className="inline-flex items-center px-2 py-0.5"
-                style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 600, color: B, background: "rgba(0,80,159,.07)", border: "1px solid rgba(0,80,159,.22)", letterSpacing: ".3px" }}>
-                {sol.note}
-              </span>
-            )}
-          </div>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.6, margin: 0 }}>
-            {sol.blurb}
-          </p>
+      {/* Not clickable on purpose: the tile used to open the inspection modal,
+          which competed with the problem-sign links below it and confused
+          clicks. The tile only informs; the links are the action. */}
+      <div
+        className="w-full flex-1 flex flex-col justify-center text-left"
+        style={{ padding: signs.length ? "26px 24px 16px" : "26px 24px" }}
+      >
+        <div className="flex items-center gap-2.5 flex-wrap" style={{ marginBottom: 8 }}>
+          <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 19, color: CHAR, lineHeight: 1.25, margin: 0 }}>
+            {sol.title}
+          </h3>
+          {sol.note && (
+            <span className="inline-flex items-center px-2 py-0.5"
+              style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 600, color: B, background: "rgba(0,80,159,.07)", border: "1px solid rgba(0,80,159,.22)", letterSpacing: ".3px" }}>
+              {sol.note}
+            </span>
+          )}
         </div>
-        <ChevronRight size={18} color={active ? B : MUTED} className="shrink-0 mt-1 transition-transform group-hover:translate-x-1" />
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: MUTED, lineHeight: 1.6, margin: 0 }}>
+          {sol.blurb}
+        </p>
       </div>
-    </button>
+      {signs.length > 0 && (
+        <div style={{ padding: "0 24px 22px" }}>
+          <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: MUTED, letterSpacing: 2.5, textTransform: "uppercase", margin: "0 0 8px" }}>
+            Problem signs
+          </p>
+          <ul className="flex flex-col" style={{ gap: 6, listStyle: "none", margin: 0, padding: 0 }}>
+            {signs.map((sg) => (
+              <li key={sg.label}>
+                <a
+                  href={`#${sg.route}`}
+                  onClick={(e) => { if (!onNavigate) return; e.preventDefault(); onNavigate(sg.route); }}
+                  className="group/sign inline-flex items-start gap-1.5 hover:underline"
+                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, lineHeight: 1.4, textDecoration: "none" }}
+                >
+                  <ChevronRight size={14} color={B} className="shrink-0 mt-[2px] transition-transform group-hover/sign:translate-x-0.5" />
+                  {sg.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -217,7 +250,7 @@ function ImagePreviewPanel({ solutions, active }: { solutions: Solution[]; activ
   );
 }
 
-function SolutionsSection({ svc }: { svc: ServiceDef }) {
+function SolutionsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?: (p: string) => void }) {
   const compact = svc.solutionsLayout === "compact";
   const rows = compact ? [] : packRows(svc.solutions);
   const [activeIdx, setActiveIdx] = useState(0);
@@ -253,6 +286,7 @@ function SolutionsSection({ svc }: { svc: ServiceDef }) {
                   sol={sol}
                   active={activeIdx === i}
                   onHover={() => setActiveIdx(i)}
+                  onNavigate={onNavigate}
                 />
               ))}
             </div>
@@ -339,7 +373,7 @@ function ProblemSignsSection({ svc, onNavigate }: { svc: ServiceDef; onNavigate?
                       <ArrowRight size={13} />
                     </button>
                     <button
-                      onClick={() => onNavigate?.("problem-sign-inner")}
+                      onClick={() => onNavigate?.(signRoute(s.q))}
                       className="group inline-flex items-center gap-1.5"
                       style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 13, color: B, background: "none", border: "none", padding: 0, cursor: "pointer" }}
                     >
@@ -697,7 +731,7 @@ export default function ServicePage({ onBack, onNavigate, scrollTo, slug }: { on
           { label: svc.name },
         ]} />
         <HeroSection svc={svc} onNavigate={onNavigate} />
-        <SolutionsSection svc={svc} />
+        <SolutionsSection svc={svc} onNavigate={onNavigate} />
         <ProblemSignsSection svc={svc} onNavigate={onNavigate} />
         <CostSection svc={svc} onNavigate={onNavigate} />
         <GallerySection onNavigate={onNavigate} />
