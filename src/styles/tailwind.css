@@ -7,5 +7,7 @@
    a theme breakpoint so the generated rule sorts after lg:; an arbitrary
    min-[1200px] variant did not. */
 @theme {
+  --breakpoint-xxs: 24rem;
+  --breakpoint-xs: 26rem;
   --breakpoint-wide: 75rem;
 }

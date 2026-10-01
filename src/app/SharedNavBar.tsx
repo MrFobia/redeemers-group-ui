@@ -480,9 +480,9 @@ export default function SharedNavBar({
           borderBottom: isTransparent ? "1px solid transparent" : "1px solid rgba(255,255,255,0.06)",
         }}
       >
-        <div className="flex items-center justify-between px-8 md:px-14 py-3 gap-4 lg:gap-6">
+        <div className="flex items-center justify-between px-8 md:px-14 py-3 gap-3 xs:gap-4 lg:gap-6">
           {/* Logo */}
-          <button onClick={() => handleNavigate("home")} className="h-[40px] sm:h-[48px] md:h-[58px] lg:h-[71px] wide:h-[84px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
+          <button onClick={() => handleNavigate("home")} className="h-[28px] xxs:h-[30px] xs:h-[40px] sm:h-[48px] md:h-[58px] lg:h-[71px] wide:h-[84px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
             <Logo light tight />
           </button>
 
@@ -693,12 +693,12 @@ export default function SharedNavBar({
           {/* Grouped in one flex item — the parent row is `justify-between`,
               so as two separate children the button drifted to the row's
               center instead of sitting next to the hamburger. */}
-          <div className="lg:hidden flex items-center gap-2 shrink-0">
-            <button onClick={openInspection} className="px-3 py-2 font-semibold text-white transition-opacity hover:opacity-85 whitespace-nowrap"
+          <div className="lg:hidden flex items-center gap-1.5 xs:gap-2 shrink-0">
+            <button onClick={openInspection} className="max-xxs:hidden px-2.5 xs:px-3 py-2 font-semibold text-white transition-opacity hover:opacity-85 whitespace-nowrap"
               style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: ".2px", border: "none", cursor: "pointer" }}>
               Free Inspection
             </button>
-            <button className="p-2.5" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); openMobilePanel("root"); }}>
+            <button className="p-1.5 xs:p-2.5" aria-label="Menu" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); openMobilePanel("root"); }}>
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
                 {mobileOpen
                   ? <path d="M18 6L6 18M6 6l12 12" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
