@@ -24,6 +24,7 @@ import iconFoundation from "../../assets/icons/icon-foundation.svg";
 import iconCrawlspace from "../../assets/icons/icon-crawlspace.svg";
 import iconWaterproofing from "../../assets/icons/icon-waterproofing.svg";
 import iconConcrete from "../../assets/icons/icon-concrete.svg";
+import iconCommercial from "../../assets/icons/icon-commercial.svg";
 
 export type Symptom = { id: string; q: string; a: string; img: string };
 /** `signs`: verbatim sitemap problem-sign labels this solution fixes. Each one
@@ -334,7 +335,7 @@ export const SERVICES: Record<string, ServiceDef> = {
   "commercial-services": {
     slug: "commercial-services",
     name: "Commercial Services",
-    iconImg: null,
+    iconImg: iconCommercial,
     heroImg: imgCaseDuplex,
     heroHeadline: "Structural repair for\ncommercial properties.",
     heroLede: "Foundation stabilization, concrete lifting, and waterproofing for commercial buildings — scheduled around your operations, not the other way around.",

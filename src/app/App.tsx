@@ -226,7 +226,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
       </div>
 
       {/* Main content — overlaid, left column, vertically centered. */}
-      <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-14 pt-[110px] pb-14 md:pt-[125px] md:pb-16 lg:pt-[135px] lg:pb-20">
+      <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-14 pt-[110px] pb-[150px] md:pt-[125px] md:pb-16 lg:pt-[135px] lg:pb-20">
         {/* md/lg (laptop and below): widened to reach the same right edge as
             the stats bar below ("hasta donde termina Lifetime"). xl+ keeps
             the narrower 50% so the headline doesn't run under the floating
@@ -340,6 +340,28 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
               {s.num}<span style={{ color: SAND }}>{s.gold}</span>
             </span>
             <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, color: "rgba(255,255,255,.4)", letterSpacing: 1.5, textTransform: "uppercase" }}>{s.label}</span>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Stats bar — mobile/narrow (<md). The md+ bar above is hidden below
+          768px, which is where a 13" laptop lands with DevTools docked, so the
+          stats vanished entirely. Four items fit one row; Warranty drops. */}
+      <motion.div
+        key={`stats-sm-${current}`}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: .6, delay: .85 }}
+        className="absolute md:hidden flex left-8 right-8 sm:right-16"
+        style={{ bottom: 84, background: "rgba(62,60,73,.72)", backdropFilter: "blur(18px)", borderLeft: "1px solid rgba(255,255,255,.07)", borderTop: "1px solid rgba(255,255,255,.07)" }}
+      >
+        {STATS.slice(0, 4).map((s, i) => (
+          <div key={s.label} className="flex flex-1 flex-col items-center justify-center gap-1"
+            style={{ padding: "10px 4px", borderLeft: i > 0 ? "1px solid rgba(255,255,255,.07)" : "none" }}>
+            <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: 18, color: "#fff", lineHeight: 1, letterSpacing: "-0.5px", whiteSpace: "nowrap" }}>
+              {s.num}<span style={{ color: SAND }}>{s.gold}</span>
+            </span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 8, color: "rgba(255,255,255,.4)", letterSpacing: 1, textTransform: "uppercase", textAlign: "center" }}>{s.label}</span>
           </div>
         ))}
       </motion.div>

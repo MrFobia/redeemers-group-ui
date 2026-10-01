@@ -12,6 +12,7 @@ import iconFoundation from "../assets/icons/icon-foundation.svg";
 import iconCrawlspace from "../assets/icons/icon-crawlspace.svg";
 import iconWaterproofing from "../assets/icons/icon-waterproofing.svg";
 import iconConcrete from "../assets/icons/icon-concrete.svg";
+import iconCommercial from "../assets/icons/icon-commercial.svg";
 import { SERVICES, SERVICE_ORDER, getSymptomImage } from "./data/services";
 import { getProblemSignByLabel } from "./data/problemSigns";
 
@@ -295,7 +296,7 @@ const CATEGORY_CHROME: Record<string, { icon: typeof Home; iconImg: string | nul
   "crawl-space-repair":  { icon: Layers,    iconImg: iconCrawlspace as string,    img: imgSvcCrawlspace as string,    tagline: "Dry, sealed, and structurally sound below your home." },
   "waterproofing":       { icon: Droplets,  iconImg: iconWaterproofing as string, img: imgSvcWaterproofing as string, tagline: "Keep water out of your basement for good." },
   "concrete-services":   { icon: Grid3x3,   iconImg: iconConcrete as string,      img: imgSvcConcrete as string,      tagline: "Level driveways, walkways, and slabs." },
-  "commercial-services": { icon: Building2, iconImg: null,                        img: imgSvcMold as string,          tagline: "Structural repair for commercial properties." },
+  "commercial-services": { icon: Building2, iconImg: iconCommercial as string,    img: imgSvcMold as string,          tagline: "Structural repair for commercial properties." },
 };
 
 const SERVICE_CATEGORIES = SERVICE_ORDER.map((slug) => {
@@ -481,8 +482,8 @@ export default function SharedNavBar({
       >
         <div className="flex items-center justify-between px-8 md:px-14 py-3 gap-4 lg:gap-6">
           {/* Logo */}
-          <button onClick={() => handleNavigate("home")} className="h-[72px] lg:h-[88px] xl:h-[104px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
-            <Logo light />
+          <button onClick={() => handleNavigate("home")} className="h-[58px] lg:h-[71px] xl:h-[84px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
+            <Logo light tight />
           </button>
 
           {/* Desktop links */}
@@ -716,8 +717,8 @@ export default function SharedNavBar({
         {mobileOpen && (
           <div className="lg:hidden fixed top-0 left-0 right-0 z-[250] flex flex-col overflow-y-auto" style={{ background: DARK, maxHeight: "85dvh" }}>
             <div className="flex items-center justify-between px-8 py-3 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-              <button onClick={() => handleNavigate("home")} className="h-16" style={{ background: "none", border: "none", cursor: "pointer" }}>
-                <Logo light />
+              <button onClick={() => handleNavigate("home")} className="h-[52px]" style={{ background: "none", border: "none", cursor: "pointer" }}>
+                <Logo light tight />
               </button>
               <button onClick={() => { setMobileOpen(false); openMobilePanel("root"); }} className="p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
