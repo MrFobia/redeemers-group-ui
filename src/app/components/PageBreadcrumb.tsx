@@ -6,8 +6,8 @@ export interface BreadcrumbCrumb {
   onClick?: () => void;
 }
 
-// Measure the fixed header instead of trusting the pt-[89px]/123/139/155
-// ladder every page hardcodes: the real header is 97 / 131 / 163px tall, so
+// Measure the fixed header instead of trusting the pt-[75px]/109/122/135
+// ladder every page hardcodes: the real header is 83 / 117 / 143px tall, so
 // those offsets parked the breadcrumb 6-8px *under* the header and ate the
 // top half of the bar — the strip looked bottom-heavy.
 function useHeaderHeight() {
@@ -31,8 +31,8 @@ function useHeaderHeight() {
 //
 // Sticky (QA #17 — "users lose context after opening a page from the
 // hamburger menu"): pins right under the fixed header at the same offsets
-// every page already reserves for it (pt-[89px] md:pt-[123px] lg:pt-[139px]
-// xl:pt-[155px]), so the current location stays visible while scrolling
+// every page already reserves for it (pt-[75px] md:pt-[109px] lg:pt-[122px]
+// xl:pt-[135px]), so the current location stays visible while scrolling
 // instead of disappearing after the hero.
 export function PageBreadcrumb({ items }: { items: BreadcrumbCrumb[] }) {
   const headerH = useHeaderHeight();
@@ -40,7 +40,7 @@ export function PageBreadcrumb({ items }: { items: BreadcrumbCrumb[] }) {
   const parent = items.length > 1 ? items[items.length - 2] : undefined;
   return (
     <div
-      className={headerH === null ? "sticky z-40 top-[97px] md:top-[131px] lg:top-[147px] xl:top-[163px]" : "sticky z-40"}
+      className={headerH === null ? "sticky z-40 top-[83px] md:top-[117px] lg:top-[130px] xl:top-[143px]" : "sticky z-40"}
       style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)", ...(headerH !== null && { top: headerH }) }}
     >
       {/* Phone: one line, one hop back. A full trail wrapped to two lines and

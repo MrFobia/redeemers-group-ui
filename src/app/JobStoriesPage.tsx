@@ -203,7 +203,7 @@ export default function JobStoriesPage({ onBack, onNavigate }: { onBack: () => v
       </div>
 
       {/* Header height varies by breakpoint (announcement bar hides < md) */}
-      <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px]" style={{ background: SURFACE.base }}>
 
         <PageBreadcrumb items={[
           { label: "Home", onClick: () => nav("home") },

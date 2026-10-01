@@ -422,7 +422,7 @@ export default function EvergreenPage({ onBack, onNavigate }: { onBack: () => vo
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Our Difference" />
       </div>
-      <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px]" style={{ background: SURFACE.base }}>
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
           { label: "Our Difference", onClick: () => onNavigate?.("our-difference") },

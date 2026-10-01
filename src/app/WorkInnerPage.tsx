@@ -206,22 +206,6 @@ function Body({ item }: { item: WorkItem }) {
             </Reveal>
           )}
 
-          {/* One-photo items (most reviews) never reach the gallery section
-              below, which left the column short and the page half empty —
-              show the single job photo inline instead. */}
-          {item.images.length === 1 && (
-            <Reveal delay={0.08}>
-              <figure className="mt-10">
-                <div className="relative w-full overflow-hidden" style={{ aspectRatio: "16/9", background: DARK }}>
-                  <ImageWithFallback src={item.images[0].src} alt={item.images[0].caption} className="absolute inset-0 w-full h-full object-cover" />
-                </div>
-                <figcaption style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: MUTED, marginTop: 8 }}>
-                  {item.images[0].caption}
-                </figcaption>
-              </figure>
-            </Reveal>
-          )}
-
           {!quoteLeads && item.quote && (
             <Reveal delay={0.1}>
               <blockquote className="mt-10 p-7" style={{ background: CREAM }}>
@@ -248,9 +232,12 @@ function Body({ item }: { item: WorkItem }) {
 // ─── Gallery ──────────────────────────────────────────────────────────────────
 // Big frame + thumbnail rail. No lightbox: the whole point of this page is that
 // content stops opening in overlays, and the frame here is already full-width.
-function Gallery({ images }: { images: WorkItem["images"] }) {
+// The first photo already leads the page in the Hero banner, so it is not
+// repeated here: the gallery only shows the rest, and only if there are any.
+function Gallery({ images: all }: { images: WorkItem["images"] }) {
   const [cur, setCur] = useState(0);
-  if (images.length < 2) return null;
+  const images = all.slice(1);
+  if (images.length < 1) return null;
   const active = images[Math.min(cur, images.length - 1)];
 
   return (
@@ -259,7 +246,7 @@ function Gallery({ images }: { images: WorkItem["images"] }) {
         <div className="flex items-center gap-3 mb-6">
           <span style={{ display: "block", width: 20, height: 2, background: B }} />
           <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
-            On the job ({images.length} photos)
+            More photos from the job ({images.length})
           </h2>
         </div>
 
@@ -463,7 +450,7 @@ export default function WorkInnerPage({ kind, slug, onBack, onNavigate }: {
         <SharedNavBar onNavigate={go} active={NAV_ACTIVE[kind]} />
       </div>
 
-      <div className="w-full min-h-screen pt-[97px] md:pt-[131px] lg:pt-[147px] xl:pt-[163px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[83px] md:pt-[117px] lg:pt-[130px] xl:pt-[143px]" style={{ background: SURFACE.base }}>
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
           { label: index.label, onClick: () => go(index.route) },

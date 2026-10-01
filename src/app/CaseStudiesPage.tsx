@@ -11,19 +11,53 @@ import { CaseStudiesGrid } from "./components/CaseStudiesShowcase";
 import { caseStudySlug } from "./data/caseStudies";
 import imgCaseRanch from "../assets/case-ranch.jpg";
 
-import { B, SURFACE } from "./theme";
+import { B, SURFACE, ON_LIGHT } from "./theme";
 
 // ─── Case studies / featured project stories ─────────────────────────────────
 // Its own page per the approved sitemap ("Featured projects / case stories" —
 // an "interna"). Shares the same hero-split + alternating grid design and the
 // same cards as the Home and Our Difference teasers (see data/caseStudies.ts
 // and components/CaseStudiesShowcase.tsx); a card opens case-study/<slug>.
+// Same filter control as Before & After (stat tiles = filter, aria-pressed):
+// tiles roll the raw tags up to the site's real service categories.
+const CATEGORY_OF: Record<string, string> = {
+  "Crawl Space": "Crawl Space Repair",
+  "Foundation": "Structural Repair",
+  "Concrete": "Concrete Services",
+  "Concrete Leveling": "Concrete Services",
+};
+const categoryOf = (c: CaseStudy) => CATEGORY_OF[c.tag] ?? c.tag;
+const CATEGORIES = ["All", ...Array.from(new Set(CASE_STUDIES.map(categoryOf)))];
+
 function CaseStudiesGridSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
+  const [category, setCategory] = useState("All");
+  const filtered = category === "All" ? CASE_STUDIES : CASE_STUDIES.filter((c) => categoryOf(c) === category);
+  const countOf = (cat: string) => cat === "All" ? CASE_STUDIES.length : CASE_STUDIES.filter((c) => categoryOf(c) === cat).length;
 
   return (
     <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-        <CaseStudiesGrid items={CASE_STUDIES} onOpen={(c) => onNavigate?.(`case-study/${caseStudySlug(c)}`)} />
+        <div role="group" aria-label="Filter projects by service"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-px mb-10"
+          style={{ background: "rgba(62,60,73,.06)", border: `1px solid ${ON_LIGHT.border}` }}>
+          {CATEGORIES.map((cat) => {
+            const active = category === cat;
+            return (
+              <button key={cat} onClick={() => setCategory(cat)} aria-pressed={active}
+                className="flex flex-col items-center justify-center py-4 px-3 text-center transition-colors cursor-pointer"
+                style={{ background: active ? B : SURFACE.base, border: "none" }}>
+                <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(13px,1.15vw,15px)", color: active ? "#fff" : B, lineHeight: 1.25, marginBottom: 3 }}>
+                  {cat === "All" ? "All projects" : cat}
+                </span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: active ? "rgba(255,255,255,.75)" : "rgba(62,60,73,.45)", letterSpacing: 0.5 }}>
+                  {countOf(cat)} {countOf(cat) === 1 ? "project" : "projects"}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        {/* key resets the grid's own pager when the filter changes */}
+        <CaseStudiesGrid key={category} items={filtered} onOpen={(c) => onNavigate?.(`case-study/${caseStudySlug(c)}`)} />
       </div>
     </section>
   );
@@ -97,7 +131,7 @@ export default function CaseStudiesPage({ onBack, onNavigate }: { onBack: () => 
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Resources" />
       </div>
-      <div className="w-full min-h-screen pt-[89px] md:pt-[123px] lg:pt-[139px] xl:pt-[155px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px]" style={{ background: SURFACE.base }}>
         {/* Client QA (Aug 19): this page moved from Our Difference to
             Resources in the nav (now "Featured Projects", merged with what
             used to be the separate Job Stories entry) — the breadcrumb had
