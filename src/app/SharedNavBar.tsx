@@ -482,7 +482,7 @@ export default function SharedNavBar({
       >
         <div className="flex items-center justify-between px-8 md:px-14 py-3 gap-4 lg:gap-6">
           {/* Logo */}
-          <button onClick={() => handleNavigate("home")} className="h-[58px] lg:h-[71px] xl:h-[84px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
+          <button onClick={() => handleNavigate("home")} className="h-[40px] sm:h-[48px] md:h-[58px] lg:h-[71px] wide:h-[84px] shrink-0" style={{ background: "none", border: "none", cursor: "pointer" }}>
             <Logo light tight />
           </button>
 
@@ -717,7 +717,7 @@ export default function SharedNavBar({
         {mobileOpen && (
           <div className="lg:hidden fixed top-0 left-0 right-0 z-[250] flex flex-col overflow-y-auto" style={{ background: DARK, maxHeight: "85dvh" }}>
             <div className="flex items-center justify-between px-8 py-3 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,.06)" }}>
-              <button onClick={() => handleNavigate("home")} className="h-[52px]" style={{ background: "none", border: "none", cursor: "pointer" }}>
+              <button onClick={() => handleNavigate("home")} className="h-[40px]" style={{ background: "none", border: "none", cursor: "pointer" }}>
                 <Logo light tight />
               </button>
               <button onClick={() => { setMobileOpen(false); openMobilePanel("root"); }} className="p-1.5" style={{ background: "none", border: "none", cursor: "pointer" }}>

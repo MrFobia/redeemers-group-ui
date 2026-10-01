@@ -724,7 +724,7 @@ export default function ServicePage({ onBack, onNavigate, scrollTo, slug }: { on
           its internal anchors, so per the client's alternative it becomes a
           floating rail that follows the scroll instead of stacking under the header. */}
       <FloatingSideNav tabs={tabs} active={activeTab} onChange={scrollToSection} />
-      <div className="w-full min-h-screen pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[57px] sm:pt-[65px] md:pt-[109px] lg:pt-[122px] wide:pt-[135px]" style={{ background: SURFACE.base }}>
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
           { label: "Services", onClick: () => onNavigate?.("services-landing") },

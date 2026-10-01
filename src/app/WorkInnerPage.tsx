@@ -450,7 +450,7 @@ export default function WorkInnerPage({ kind, slug, onBack, onNavigate }: {
         <SharedNavBar onNavigate={go} active={NAV_ACTIVE[kind]} />
       </div>
 
-      <div className="w-full min-h-screen pt-[83px] md:pt-[117px] lg:pt-[130px] xl:pt-[143px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[65px] sm:pt-[73px] md:pt-[117px] lg:pt-[130px] wide:pt-[143px]" style={{ background: SURFACE.base }}>
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
           { label: index.label, onClick: () => go(index.route) },

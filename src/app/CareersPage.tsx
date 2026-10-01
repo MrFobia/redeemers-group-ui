@@ -914,7 +914,7 @@ export default function CareersPage({
           anchor ids, so this page follows the client's other approved option
           — a floating rail that follows scroll instead of a fixed bar. */}
       <FloatingSideNav tabs={PAGE_TABS} active={activeTab} onChange={scrollToSection} />
-      <div className="pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px]">
+      <div className="pt-[57px] sm:pt-[65px] md:pt-[109px] lg:pt-[122px] wide:pt-[135px]">
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
           { label: "About", onClick: () => onNavigate("about") },

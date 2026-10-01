@@ -627,7 +627,7 @@ export default function ProblemSignsPage({ onBack, onSignClick, onNavigate, scro
         <SharedNavBar onNavigate={onNavigate ?? (() => onBack())} active="Problem Signs" />
       </div>
 
-      <div className="w-full min-h-screen pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[57px] sm:pt-[65px] md:pt-[109px] lg:pt-[122px] wide:pt-[135px]" style={{ background: SURFACE.base }}>
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
           ...(activeCat

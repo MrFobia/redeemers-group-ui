@@ -2,3 +2,10 @@
 @source '../**/*.{js,ts,jsx,tsx}';
 
 @import 'tw-animate-css';
+
+/* Header jumps to its large logo from 1200px (between lg and xl). Declared as
+   a theme breakpoint so the generated rule sorts after lg:; an arbitrary
+   min-[1200px] variant did not. */
+@theme {
+  --breakpoint-wide: 75rem;
+}

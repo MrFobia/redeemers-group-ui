@@ -360,11 +360,14 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
                             <div className="flex flex-wrap gap-1.5 px-1 pt-2 pb-1">
                               {county.cities.map((city) => {
                                 const citySlug = slugify(`${city}-${county.state}`);
-                                const hasPage = !!cityLocationRoute(citySlug);
+                                const cityRoute = cityLocationRoute(citySlug);
+                                const hasPage = !!cityRoute;
                                 return (
                                   <button
                                     key={city}
-                                    onClick={() => openCityBySlug(citySlug)}
+                                    // Cities with a landing page go straight to it;
+                                    // the rest still open the city panel.
+                                    onClick={() => (cityRoute && onNavigate ? onNavigate(cityRoute) : openCityBySlug(citySlug))}
                                     title={hasPage ? `View the ${city} page` : undefined}
                                     className="group/chip inline-flex items-center gap-1 px-2.5 py-1 transition-all"
                                     style={hasPage ? {
@@ -563,8 +566,8 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
                               <a
                                 key={city}
                                 // Cities with a landing page carry a real href
-                                // (crawlable); the click still opens the map
-                                // panel, which links on to that page.
+                                // (crawlable) and the click goes straight to
+                                // it; the rest open the map panel.
                                 href={cityRoute ? `#${cityRoute}` : undefined}
                                 role={cityRoute ? undefined : "button"}
                                 tabIndex={0}
@@ -572,7 +575,7 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
                                 // The city panel lives at the top of the
                                 // explorer, so this is the one click that has
                                 // to move the page — upward, to what opened.
-                                onClick={(e) => { e.preventDefault(); openCityBySlug(citySlug, true); }}
+                                onClick={(e) => { e.preventDefault(); if (cityRoute && onNavigate) onNavigate(cityRoute); else openCityBySlug(citySlug, true); }}
                                 onKeyDown={(e) => { if (!cityRoute && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openCityBySlug(citySlug, true); } }}
                                 className="group/citylink inline-flex items-center gap-1 px-2.5 py-1 transition-all hover:border-black/20"
                                 style={{

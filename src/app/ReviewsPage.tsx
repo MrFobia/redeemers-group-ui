@@ -171,7 +171,7 @@ export default function ReviewsPage({ onBack, onNavigate }: { onBack: () => void
       </div>
 
       {/* Header height varies by breakpoint (announcement bar hides < md) */}
-      <div className="w-full min-h-screen pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px]" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[57px] sm:pt-[65px] md:pt-[109px] lg:pt-[122px] wide:pt-[135px]" style={{ background: SURFACE.base }}>
 
         <PageBreadcrumb items={[{ label: "Home", onClick: () => nav("home") }, { label: "All Reviews" }]} />
 

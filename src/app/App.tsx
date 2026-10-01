@@ -226,7 +226,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
       </div>
 
       {/* Main content — overlaid, left column, vertically centered. */}
-      <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-14 pt-[110px] pb-[150px] md:pt-[125px] md:pb-16 lg:pt-[135px] lg:pb-20">
+      <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-14 pt-[110px] pb-14 sm:pb-[150px] md:pt-[125px] md:pb-16 lg:pt-[135px] lg:pb-20">
         {/* md/lg (laptop and below): widened to reach the same right edge as
             the stats bar below ("hasta donde termina Lifetime"). xl+ keeps
             the narrower 50% so the headline doesn't run under the floating
@@ -352,7 +352,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: .6, delay: .85 }}
-        className="absolute md:hidden flex left-8 right-8 sm:right-16"
+        className="absolute hidden sm:flex md:hidden left-8 right-16"
         style={{ bottom: 84, background: "rgba(62,60,73,.72)", backdropFilter: "blur(18px)", borderLeft: "1px solid rgba(255,255,255,.07)", borderTop: "1px solid rgba(255,255,255,.07)" }}
       >
         {STATS.slice(0, 4).map((s, i) => (

@@ -35,7 +35,7 @@ export default function NotFoundPage({ onBack, onNavigate }: { onBack: () => voi
         <SharedNavBar onNavigate={nav} active="" />
       </div>
 
-      <div className="w-full min-h-screen pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px] relative overflow-hidden" style={{ background: SURFACE.base }}>
+      <div className="w-full min-h-screen pt-[57px] sm:pt-[65px] md:pt-[109px] lg:pt-[122px] wide:pt-[135px] relative overflow-hidden" style={{ background: SURFACE.base }}>
         <ImageWithFallback
           src={imgFloor02}
           alt=""

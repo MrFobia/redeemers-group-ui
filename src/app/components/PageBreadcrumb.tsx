@@ -40,7 +40,7 @@ export function PageBreadcrumb({ items }: { items: BreadcrumbCrumb[] }) {
   const parent = items.length > 1 ? items[items.length - 2] : undefined;
   return (
     <div
-      className={headerH === null ? "sticky z-40 top-[83px] md:top-[117px] lg:top-[130px] xl:top-[143px]" : "sticky z-40"}
+      className={headerH === null ? "sticky z-40 top-[65px] sm:top-[73px] md:top-[117px] lg:top-[130px] wide:top-[143px]" : "sticky z-40"}
       style={{ background: DARK, borderBottom: "1px solid rgba(255,255,255,.06)", ...(headerH !== null && { top: headerH }) }}
     >
       {/* Phone: one line, one hop back. A full trail wrapped to two lines and

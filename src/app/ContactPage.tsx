@@ -571,7 +571,7 @@ export default function ContactPage({
         <AnnouncementBar />
         <SharedNavBar onNavigate={onNavigate} active="About" />
       </div>
-      <div className="pt-[75px] md:pt-[109px] lg:pt-[122px] xl:pt-[135px]">
+      <div className="pt-[57px] sm:pt-[65px] md:pt-[109px] lg:pt-[122px] wide:pt-[135px]">
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
           { label: "About", onClick: () => onNavigate("about") },
