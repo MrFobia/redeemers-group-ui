@@ -592,7 +592,7 @@ export function InspectionModal() {
                 </div>
 
                 {/* Trust panel — desktop only */}
-                <div style={{ width: 300, flexShrink: 0 }}>
+                <div className="hidden md:block" style={{ width: 300, flexShrink: 0 }}>
                   <TrustPanel />
                 </div>
               </div>
