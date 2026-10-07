@@ -58,7 +58,7 @@ const NAV_TABS = [
   { id: "process", label: "What to expect" },
   { id: "story", label: "The Evergreen difference" },
   { id: "pledge", label: "Our pledge" },
-  { id: "case-studies", label: "Featured projects / case stories" },
+  { id: "case-studies", label: "Case Studies" },
   { id: "before-after", label: "Before & after" },
   { id: "referral", label: "Referral program" },
   { id: "love-well", label: "Love Well Initiative" },
@@ -564,7 +564,7 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="h-[1px] w-6" style={{ background: B }} />
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 11, color: B, letterSpacing: 3.5, textTransform: "uppercase" }}>
-              Featured projects / case stories
+              Case Studies
             </span>
             <div className="h-[1px] w-6" style={{ background: B }} />
           </div>
@@ -594,7 +594,7 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
             className="group inline-flex items-center gap-2 px-7 py-3.5 transition-colors hover:bg-black/[0.03]"
             style={{ border: `1.5px solid ${B}`, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", cursor: "pointer" }}
           >
-            View all case stories
+            View all case studies
             <ChevronRight size={15} className="transition-transform group-hover:translate-x-1" />
           </button>
         </Reveal>
