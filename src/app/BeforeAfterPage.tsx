@@ -108,7 +108,7 @@ const BEFORE_AFTER_STATS: { tag: string; val: string; label: string }[] = [
   { tag: "All",                val: "377", label: "Total sets" },
   { tag: "Concrete Repair",  val: "185", label: "Concrete Repair" },
   { tag: "Crawl Space Repair", val: "101", label: "Crawl space repair" },
-  { tag: "Structural Repair",  val: "12",  label: "Structural repair" },
+  { tag: "Foundation Repair",  val: "12",  label: "Foundation repair" },
 ];
 
 const BEFORE_AFTER_PROJECTS = [
@@ -140,7 +140,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/57f55104b6a94_finished.jpg",
   },
   {
-    tag: "Structural Repair",
+    tag: "Foundation Repair",
     title: "Cracked Brick Wall",
     loc: "",
     desc: "Concrete and brick materials expanding and contracting at different rates left visible cracking in the wall. Push piers were installed to stabilize the foundation and close the gap.",
@@ -194,7 +194,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/65382373d8cd6_after.jpg",
   },
   {
-    tag: "Structural Repair",
+    tag: "Foundation Repair",
     title: "Foundation Repair in Cordova, TN",
     loc: "Cordova, TN",
     desc: "Keri's home had settled enough to crack exterior walls and block new flooring installation. A push pier system stabilized and lifted the foundation, while Thor helical ties and NexusPro closed and repaired the cracks.",
@@ -391,7 +391,7 @@ export default function BeforeAfterPage({ onBack, onNavigate }: { onBack: () => 
 
         <PageHeroBanner
           image={imgFloor03}
-          imageAlt="Before and after structural repair"
+          imageAlt="Before and after foundation repair"
           eyebrow="Before & After"
           title="Drag to see the difference"
           lede="377 real before-and-after sets — filter by service to see the exact work done."

@@ -22,7 +22,7 @@ import { B, SURFACE, ON_LIGHT } from "./theme";
 // tiles roll the raw tags up to the site's real service categories.
 const CATEGORY_OF: Record<string, string> = {
   "Crawl Space": "Crawl Space Repair",
-  "Foundation": "Structural Repair",
+  "Foundation": "Foundation Repair",
   "Concrete": "Concrete Repair",
   "Concrete Leveling": "Concrete Repair",
 };

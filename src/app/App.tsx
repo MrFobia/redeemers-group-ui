@@ -127,7 +127,7 @@ const SLIDES: {
 }[] = [
   {
     img: imgHeroBg,
-    eyebrow: "Foundation & Structural Repair",
+    eyebrow: "Foundation Repair",
     headline: ["Protecting Homes,", ["One ", "Foundation", " at a Time."]],
     sub: "Crawl space, basement waterproofing, foundation repair and concrete leveling — backed by a lifetime warranty.",
     cta: "Schedule Free Inspection",
@@ -596,7 +596,7 @@ function ServiceCard({ s, onNavigate }: { s: typeof SERVICES[0]; onNavigate?: ()
 const SIGNS = [
   { cat: "Crawl Space Repair", slug: "crawl-space-repair", label: "My floors are sinking",     img: getSymptomImage("My floors are sagging, bouncy, or buckling.") },
   { cat: "Waterproofing",      slug: "waterproofing",      label: "My basement is wet",        img: getSymptomImage("Water getting in to basement or other.") },
-  { cat: "Structural Repair",  slug: "structural-repair",  label: "I see wall cracks",         img: getSymptomImage("Cracks in exterior or interior walls") },
+  { cat: "Foundation Repair",  slug: "structural-repair",  label: "I see wall cracks",         img: getSymptomImage("Cracks in exterior or interior walls") },
   { cat: "Concrete Repair",  slug: "concrete-services",  label: "Uneven concrete / driveway", img: getSymptomImage("Uneven concrete slabs") },
 ];
 
@@ -656,7 +656,7 @@ function SignsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
 const HOME_SERVICE_CARDS = [
   {
     slug: "structural-repair",
-    cat: "Structural Repair",
+    cat: "Foundation Repair",
     // Symptom-led headline, verbatim from the sitemap's home symptom entry points.
     title: "I see wall cracks",
     desc: "Push piers, wall anchors, and slab repair that stop foundation movement permanently.",

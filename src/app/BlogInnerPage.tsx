@@ -69,7 +69,7 @@ const SYMPTOMS = [
     items: ["Water in my basement", "Damp or wet walls", "Condensation on pipes", "Puddles after rain", "Efflorescence (white stains)"],
   },
   {
-    title: "Structural & Foundation",
+    title: "Foundation Repair",
     items: ["Cracks in foundation walls", "Sticking doors or windows", "Uneven or sloping floors", "Bowing or leaning walls", "Gaps around doors/windows"],
   },
   {

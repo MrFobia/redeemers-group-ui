@@ -68,8 +68,8 @@ function Reveal({
 const CATEGORIES = [
   {
     id: "structural",
-    filter: "Structural Repair",
-    title: "Structural Repair",
+    filter: "Foundation Repair",
+    title: "Foundation Repair",
     page: "service/structural-repair",
     img: imgSvcFoundation,
     icon: iconFoundation as string,

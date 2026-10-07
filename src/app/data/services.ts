@@ -143,10 +143,10 @@ export const SERVICES: Record<string, ServiceDef> = {
   // repair, Wall stabilization, Problem Signs, Cost guide, Photo Gallery, FAQs.
   "structural-repair": {
     slug: "structural-repair",
-    name: "Structural Repair",
+    name: "Foundation Repair",
     iconImg: iconFoundation,
     heroImg: imgFoundation,
-    heroHeadline: "Structural Repair Built to Last",
+    heroHeadline: "Foundation Repair Built to Last",
     heroLede: "Foundation stabilization, slab lifting, and wall reinforcement — engineered fixes for a home that's settling, cracking, or shifting, backed by a lifetime warranty.",
     symptoms: [
       { id: "s1", q: "Uneven, sloping, or bouncy floors", a: "Floors that slope or flex usually mean the structure below has lost support — settled footings, failing piers, or damaged joists. We stabilize the support system and lift the floor back toward level." , img: SYMPTOM_IMAGES["Uneven, sloping, or bouncy floors"] },
@@ -171,7 +171,7 @@ export const SERVICES: Record<string, ServiceDef> = {
       { title: "Wall Stabilization", blurb: "A foundation wall that's bowing inward, leaning, or visibly out of plumb.", img: imgFloor1, signs: ["Bowing or leaning walls", "Separating or tilting chimney"] },
     ],
     cost: {
-      headline: "How much does structural repair cost?",
+      headline: "How much does foundation repair cost?",
       intro: "Typical range: $4,000 – $25,000 depending on the extent of movement and the repair method. We'll give you an exact number after your free inspection — no obligation.",
       ranges: [
         { label: "Crack & lintel repair", range: "$1,500 – $4,000", pct: 25 },
@@ -183,7 +183,7 @@ export const SERVICES: Record<string, ServiceDef> = {
       calloutValue: "Most homeowners spend\n$7,000 – $15,000",
     },
     faqs: [
-      { q: "How long does structural repair take?", a: "Most stabilization jobs take 2–4 days. Larger underpinning projects can run a week. We'll give you a specific timeline during your inspection." },
+      { q: "How long does foundation repair take?", a: "Most stabilization jobs take 2–4 days. Larger underpinning projects can run a week. We'll give you a specific timeline during your inspection." },
       ...SHARED_FAQS,
     ],
     ctaHeadline: "Ready to stabilize\nyour foundation?",

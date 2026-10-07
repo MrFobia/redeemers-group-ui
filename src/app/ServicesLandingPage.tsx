@@ -18,7 +18,7 @@ const INTER = "'Inter',sans-serif";
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer({ onBack }: { onBack: () => void }) {
   const cols = [
-    { head: "Services",  links: ["Structural Repair", "Crawl Space Repair", "Waterproofing", "Concrete Repair", "Commercial Services"] },
+    { head: "Services",  links: ["Foundation Repair", "Crawl Space Repair", "Waterproofing", "Concrete Repair", "Commercial Services"] },
     { head: "Company",   links: ["About Us", "Our Difference", "Resources", "Careers", "Financing"] },
     { head: "Locations", links: ["Tennessee", "Mississippi", "Arkansas", "Missouri"] },
     { head: "Contact",   links: ["1-833-584-1049", "info@redeemersgroup.com", "Schedule Inspection", "Customer Portal"] },
@@ -90,7 +90,7 @@ const SERVICES = {
   foundation: {
     // Sitemap calls this service line "Structural Repair" — the home node's
     // older "Foundation repair" label is not used anywhere on the site.
-    category: "Structural Repair",
+    category: "Foundation Repair",
     title: "Slab repair\n& stabilization",
     body: "From sinking piers to bowing walls — we restore your foundation to its original position using helical piers and carbon fiber reinforcement.",
     symptoms: SERVICE_DEFS["structural-repair"].symptoms.slice(0, 4).map((s) => s.q),
