@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { type TeamMember, MODAL_REVIEWS, GALLERY_IMGS } from "../data/team";
+import { type TeamMember } from "../data/team";
 import { DARK, CHAR, SAND } from "../theme";
 
 // ─── Team Member Modal ─────────────────────────────────────────────────────────
@@ -27,7 +27,6 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
     galleryApi.on("select", () => setGalCur(galleryApi.selectedScrollSnap()));
   }, [galleryApi]);
 
-  const first = member.name.split(" ")[0];
 
   return (
     <div
@@ -73,27 +72,20 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
               <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>{member.dept}</span>
             </div>
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(24px,3vw,36px)", color: "#fff", lineHeight: 1.1, letterSpacing: "-0.5px" }}>{member.name}</h2>
-            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.5 }}>{member.title}</p>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.5 }}>
+              {member.title}{member.hometown ? ` · ${member.hometown}` : ""}
+            </p>
           </div>
         </div>
 
         {/* Divider */}
         <div style={{ height: 1, background: "rgba(255,255,255,.07)" }} />
 
-        {/* Bio */}
+        {/* Bio — the member's own words from the current site */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>
-            Say hello to {first}, one of the friendly faces at Redeemers Group! As a key member of our {member.dept} team, {first} brings energy, expertise, and a genuine commitment to every homeowner we serve.
-          </p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>
-            With a strong background in {member.dept.toLowerCase()} and a knack for building trust, {first} thrives on making sure every customer feels heard and valued — from the first call all the way to project completion.
-          </p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>
-            {first} chose Redeemers Group for the people and the culture — and stayed for the impact. Every repaired home is a family whose life gets a little better, and that keeps {first} motivated every single day.
-          </p>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>
-            When not helping customers or making the office a better place, {first} enjoys the outdoors and spending time with family. And yes — there's definitely a soft spot for Reese's Peanut Butter Cups.
-          </p>
+          {member.bio.map((para, i) => (
+            <p key={i} style={{ fontFamily: "'Inter',sans-serif", fontSize: 15, color: "rgba(255,255,255,.6)", lineHeight: 1.75 }}>{para}</p>
+          ))}
         </div>
 
         {/* Divider */}
@@ -108,7 +100,7 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
           </div>
           <div className="flex items-end justify-between mb-5">
             <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.3px" }}>
-              What customers say about me
+              {member.reviewsAreOwn ? "What customers say about me" : "What customers say about our team"}
             </h3>
             {onNavigate && (
               <button
@@ -121,14 +113,9 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
               </button>
             )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {MODAL_REVIEWS.map((r) => (
-              <div key={r.name} className="flex flex-col" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", padding: 24, gap: 14 }}>
-                <div className="flex gap-1">
-                  {Array.from({ length: 5 }).map((_, si) => (
-                    <svg key={si} width="14" height="14" viewBox="0 0 24 24" fill={SAND}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                  ))}
-                </div>
+          <div className={`grid grid-cols-1 gap-4 ${member.reviews.length === 1 ? "" : member.reviews.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
+            {member.reviews.map((r) => (
+              <div key={r.name + r.quote.slice(0, 12)} className="flex flex-col" style={{ background: CHAR, border: "1px solid rgba(255,255,255,.07)", padding: 24, gap: 14 }}>
                 {/* Giant quote mark */}
                 <div style={{ fontFamily: "Georgia,serif", fontSize: 40, color: `rgba(216,203,165,.2)`, lineHeight: 0.7, marginBottom: 4 }}>&ldquo;</div>
                 <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, color: "rgba(255,255,255,.65)", lineHeight: 1.7, flex: 1 }}>{r.quote}</p>
@@ -157,7 +144,7 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
             <span style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 600, fontSize: 10, color: SAND, letterSpacing: 3.5, textTransform: "uppercase" }}>Gallery</span>
           </div>
           <h3 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 22, color: "#fff", marginBottom: 20, lineHeight: 1.2, letterSpacing: "-0.3px" }}>
-            Photo gallery
+            {member.galleryIsOwn ? "Photo gallery" : "Recent work from the crew"}
           </h3>
           <div className="relative">
             {/* Prev arrow */}
@@ -179,7 +166,7 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
 
             <div ref={galleryRef} className="overflow-hidden">
               <div className="flex gap-3">
-                {GALLERY_IMGS.map((src, i) => (
+                {member.gallery.map((src, i) => (
                   <div key={i} className="shrink-0 overflow-hidden" style={{ width: "calc((100% - 24px) / 3)", aspectRatio: "1/1" }}>
                     <ImageWithFallback src={src} alt={`Gallery ${i + 1}`} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
                   </div>
@@ -189,7 +176,7 @@ export function TeamMemberModal({ member, onClose, onNavigate }: { member: TeamM
 
             {/* Dots */}
             <div className="flex justify-center gap-2 mt-4">
-              {GALLERY_IMGS.map((_, i) => (
+              {member.gallery.map((_, i) => (
                 <button key={i} onClick={() => galleryApi?.scrollTo(i)}
                   className="transition-all duration-300"
                   style={{

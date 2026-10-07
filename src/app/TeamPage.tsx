@@ -101,7 +101,7 @@ function TeamGridSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
               <div onClick={() => setSelectedMember(m)} className="relative w-[75%] overflow-hidden" style={{ aspectRatio: "1/1" }}>
                 <ImageWithFallback
                   src={m.img} alt={m.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                  className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.06]"
                 />
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-end p-6"
