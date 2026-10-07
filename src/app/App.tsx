@@ -1008,7 +1008,7 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
         <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-4">
           <div>
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontSize: 11, fontWeight: 600, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
-              Featured Projects
+              Case Studies
             </p>
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,4.5vw,64px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
               Real Homes, Real Results

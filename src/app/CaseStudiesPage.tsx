@@ -133,20 +133,20 @@ export default function CaseStudiesPage({ onBack, onNavigate }: { onBack: () => 
       </div>
       <div className="w-full min-h-screen pt-[57px] sm:pt-[65px] md:pt-[109px] lg:pt-[122px] wide:pt-[135px]" style={{ background: SURFACE.base }}>
         {/* Client QA (Aug 19): this page moved from Our Difference to
-            Resources in the nav (now "Featured Projects", merged with what
+            Resources in the nav (now "Case Studies", merged with what
             used to be the separate Job Stories entry) — the breadcrumb had
             been left pointing at its old parent. */}
         <PageBreadcrumb items={[
           { label: "Home", onClick: onBack },
           { label: "Resources", onClick: () => onNavigate?.("resources") },
-          { label: "Featured Projects" },
+          { label: "Case Studies" },
         ]} />
 
         <PageHeroBanner
           image={imgCaseRanch}
           imageAlt="Redeemers Group case study"
-          eyebrow="Case Studies"
-          title="Real Homes, Real Results"
+          eyebrow="Real Homes, Real Results"
+          title="Case Studies"
           lede={`${CASE_STUDIES.length} in-depth project stories — commitments we put in writing, not just talking points. Click any card for the full story.`}
         />
 

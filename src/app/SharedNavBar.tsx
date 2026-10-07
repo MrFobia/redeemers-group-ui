@@ -50,7 +50,7 @@ export const NAV_PAGE_MAP: Record<string, string> = {
 // inside the Resources page — the menu should offer real destinations (their
 // own interna) like Job stories and News. The anchored sections still live on
 // the Resources page, they just aren't listed in the nav.
-// Client request (Aug 19): "Before & after photos" and "Featured projects"
+// Client request (Aug 19): "Before & after photos" and "Featured projects" (now "Case Studies")
 // move here from Our Difference. Per the sitemap, Job Stories and Case
 // Studies/Featured Projects are redundant — one option, not two — so the old
 // separate "Job stories" entry is gone; "Featured Projects" now covers both
@@ -59,7 +59,7 @@ export const NAV_PAGE_MAP: Record<string, string> = {
 // the "projects section under Resources" that Our Difference's "Our Work"
 // entry links to — see OUR_DIFFERENCE_SECTIONS below.
 const RESOURCES_SECTIONS: { label: string; id: string; page?: string; indent?: boolean }[] = [
-  { label: "Featured Projects",      id: "case-studies",  page: "case-studies" },
+  { label: "Case Studies",            id: "case-studies",  page: "case-studies" },
   { label: "Before & After",         id: "before-after",  page: "before-after" },
 ];
 
