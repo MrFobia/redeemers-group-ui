@@ -107,7 +107,7 @@ export function reviewToWork(r: Review): WorkItem {
 
 export function jobStoryToWork(s: JobStory): WorkItem {
   // `result` is two sentences ("6 push piers driven to bedrock. Foundation
-  // stabilized with lifetime warranty."). The first is the headline, the rest
+  // stabilized."). The first is the headline, the rest
   // is the deck — using the whole string as an H1 ran four lines deep.
   const [head, ...tail] = s.result.split(/\.\s+/);
   return {

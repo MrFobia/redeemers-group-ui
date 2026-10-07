@@ -19,7 +19,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     story: [
       "The homeowner had a decades-old crawl space with standing moisture that had caused floor buckling and mold growth on the hardwood above.",
       "Our crew removed the old, torn vapor barrier, sealed the vents, and installed a full CleanSpace™ encapsulation system with a SmartSump™ pump and SaniDry™ dehumidifier to keep humidity under control year-round.",
-      "The result: a sealed, dry crawl space, no more musty smell in the home, and a lifetime transferable warranty on the system.",
+      "The result: a sealed, dry crawl space, no more musty smell in the home, and a system built to last.",
     ],
     products: ["CleanSpace™ Moisture Barrier", "SmartSump™ Pump", "SaniDry™ Dehumidifier"],
     images: [
@@ -35,7 +35,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     story: [
       "Sagging floors and a bouncy feeling near the kitchen led the homeowner to call for an inspection.",
       "We found several rotted floor joists caused by long-term moisture exposure. Our crew sistered new joists alongside the damaged ones and added SmartJack™ supports for extra load-bearing strength.",
-      "Floors were leveled and the bounce eliminated the same day, backed by our lifetime warranty.",
+      "Floors were leveled and the bounce eliminated the same day.",
     ],
     products: ["SmartJack™ Support System", "Pressure-Treated Sister Joists"],
     images: [

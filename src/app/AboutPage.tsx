@@ -84,7 +84,7 @@ function HeroSection() {
       imageAlt="Redeemers technician on a Mid-South job site"
       eyebrow="About"
       title="We believe every family deserves a safe, stable home."
-      lede="Redeemers Group was founded not just to repair homes — but to restore peace of mind for families across the mid-South. Since 2008, we've served over 12,000 homeowners with engineered, warrantied solutions."
+      lede="Redeemers Group was founded not just to repair homes — but to restore peace of mind for families across the mid-South. Since 2008, we've served over 12,000 homeowners with engineered solutions."
     >
       {/* Stats row */}
       <div className="flex flex-wrap gap-0">
@@ -467,7 +467,7 @@ function ContactSection() {
               </p>
               {/* Trust signals */}
               <div className="flex flex-col gap-3">
-                {["Free, no-obligation assessment", "Certified structural inspectors", "Same-week appointments available", "Lifetime transferable warranty"].map((t) => (
+                {["Free, no-obligation assessment", "Certified structural inspectors", "Same-week appointments available"].map((t) => (
                   <div key={t} className="flex items-center gap-3">
                     <div className="w-4 h-4 flex items-center justify-center shrink-0">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>

@@ -134,7 +134,7 @@ export default function GuiaEstilosPage() {
         <TypeRow
           label="Body Large"
           spec="Inter Regular · 18px · line-height 1.7"
-          sample={<p style={{ fontFamily: INTER, fontSize: 18, color: CHAR, lineHeight: 1.7, maxWidth: 560, margin: 0 }}>Crawl space, basement waterproofing, foundation repair and concrete leveling — backed by a lifetime warranty from a family-owned company since 2008.</p>}
+          sample={<p style={{ fontFamily: INTER, fontSize: 18, color: CHAR, lineHeight: 1.7, maxWidth: 560, margin: 0 }}>Crawl space, basement waterproofing, foundation repair and concrete leveling from a family-owned company since 2008.</p>}
         />
         <TypeRow
           label="Body Default"
@@ -705,7 +705,6 @@ export default function GuiaEstilosPage() {
             { value: "12,250+", label: "Homes Protected" },
             { value: "17 yrs", label: "In Business" },
             { value: "4.9★", label: "Rating" },
-            { value: "Lifetime", label: "Warranty" },
           ].map((stat, i, arr) => (
             <div key={stat.label} style={{
               flex: "1 0 140px",

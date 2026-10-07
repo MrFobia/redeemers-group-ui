@@ -260,7 +260,7 @@ function ArticleBody() {
           Conclusion
         </h2>
         <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 16, color: "rgba(62,60,73,.80)", lineHeight: 1.8, marginBottom: 48 }}>
-          Foundation issues don't resolve themselves. Soil conditions, drainage problems, and hydrostatic pressure all continue to work against your home 365 days a year. The good news is that when caught early, most foundation repairs are straightforward and warrantied for life. A free inspection from a certified engineer is the first and most important step.
+          Foundation issues don't resolve themselves. Soil conditions, drainage problems, and hydrostatic pressure all continue to work against your home 365 days a year. The good news is that when caught early, most foundation repairs are straightforward. A free inspection from a certified engineer is the first and most important step.
         </p>
 
         {/* Tags + share */}

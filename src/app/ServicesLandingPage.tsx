@@ -76,7 +76,7 @@ const SERVICES = {
   crawlSpace: {
     category: "Crawl Space Repair",
     title: "Floor joist repair\n& encapsulation",
-    body: "Sagging floors, wood rot, and moisture infiltration — all solved with SmartJack systems and full crawl space encapsulation backed by a lifetime warranty.",
+    body: "Sagging floors, wood rot, and moisture infiltration — all solved with SmartJack systems and full crawl space encapsulation.",
     symptoms: SERVICE_DEFS["crawl-space-repair"].symptoms.map((s) => s.q),
     img: SERVICE_DEFS["crawl-space-repair"].heroImg,
   },
@@ -128,7 +128,7 @@ function IntroSection() {
           </div>
           <div className="flex-1 lg:max-w-[480px]">
             <p style={{ fontFamily: INTER, fontSize: 18, color: "rgba(62,60,73,.6)", lineHeight: 1.7 }}>
-              From sagging floors to flooded basements — every problem has a permanent solution, backed by our lifetime warranty and 17 years of experience.
+              From sagging floors to flooded basements — every problem has a permanent solution, backed by 17 years of experience.
             </p>
             <div className="flex flex-wrap gap-4 mt-8">
               {["Crawl Space", "Waterproofing", "Foundation", "Concrete"].map(s => (
@@ -316,12 +316,11 @@ function TrustBar() {
     { num: "12,250+", label: "Homes protected" },
     { num: "17 yrs",  label: "In business" },
     { num: "4.9★",   label: "Average rating" },
-    { num: "Lifetime", label: "Warranty" },
   ];
   return (
     <section style={{ background: SURFACE.base, borderTop: "1px solid rgba(62,60,73,.06)", borderBottom: "1px solid rgba(62,60,73,.06)" }} className="py-8 px-8 md:px-14">
       <div className="max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-3 gap-8">
           {stats.map(s => (
             <div key={s.label} className="text-center">
               <p style={{ fontFamily: CF, fontWeight: 800, fontSize: "clamp(22px,2.5vw,34px)", color: B, lineHeight: 1, marginBottom: 6 }}>

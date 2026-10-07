@@ -333,7 +333,7 @@ export const LOCAL_PROOF: LocalProof[] = [
   {
     kind: "job-story", citySlug: "jonesboro-ar", zip: "72401", city: "Jonesboro", state: "AR",
     title: "6 push piers driven to bedrock", service: "Foundation",
-    body: "Clay soil movement confirmed after three contractors disagreed on the cause. Foundation stabilized with a lifetime transferable warranty.",
+    body: "Clay soil movement confirmed after three contractors disagreed on the cause. Foundation stabilized.",
     meta: "February 2026 · 1 day",
   },
   {

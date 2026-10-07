@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion, useInView, animate, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
-import { Home, Hammer, BadgeCheck, ShieldCheck, Users, Leaf } from "lucide-react";
+import { Home, Hammer, BadgeCheck, Users, Leaf } from "lucide-react";
 import WorkInnerPage from "./WorkInnerPage";
 import ServicePage from "./ServicePage";
 import { getSymptomImage } from "./data/services";
@@ -109,7 +109,6 @@ const STATS = [
   { num: "18",     gold: " yrs", label: "In business" },
   { num: "4.9",    gold: "★",  label: "Google rating" },
   { num: "A",      gold: "+",  label: "BBB rating" },
-  { num: "Lifetime", gold: " ∞", label: "Warranty" },
 ];
 
 // ─── Hero Slider ──────────────────────────────────────────────────────────────
@@ -129,14 +128,14 @@ const SLIDES: {
     img: imgHeroBg,
     eyebrow: "Foundation Repair",
     headline: ["Protecting Homes,", ["One ", "Foundation", " at a Time."]],
-    sub: "Crawl space, basement waterproofing, foundation repair and concrete leveling — backed by a lifetime warranty.",
+    sub: "Crawl space, basement waterproofing, foundation repair and concrete leveling.",
     cta: "Schedule Free Inspection",
     ctaAction: "modal",
     overlay: "linear-gradient(113deg,rgba(62,60,73,0.88) 8%,rgba(62,60,73,0.55) 54%,rgba(62,60,73,0.2) 91%)",
     card: {
       eyebrow: "Why homeowners choose us",
       title: "Family-owned since 2008",
-      body: "Our repairs are warrantied for the life of your home and pass to the next owner. That's a promise no quick-fix contractor can match.",
+      body: "Every repair is engineered to last, and explained to you in plain language before we start. That's a promise no quick-fix contractor can match.",
     },
   },
   {
@@ -150,14 +149,14 @@ const SLIDES: {
     card: {
       eyebrow: "Over 12,250 homes protected",
       title: "Permanent solutions, not patches",
-      body: "Every job uses engineered systems with a lifetime transferable warranty. We don't just fix symptoms — we solve the root cause.",
+      body: "Every job uses engineered systems built to last. We don't just fix symptoms — we solve the root cause.",
     },
   },
   {
     img: "https://images.unsplash.com/photo-1541205646242-30258c7485b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600",
     eyebrow: "Tennessee · Mississippi · Arkansas",
     headline: ["Real Solutions.", "Engineered to", "Last Forever."],
-    sub: "Family-owned since 2008. Every installer certified. Every job backed by our lifetime transferable warranty.",
+    sub: "Family-owned since 2008. Every installer certified.",
     cta: "Our Difference",
     ctaAction: "our-difference",
     overlay: "linear-gradient(113deg,rgba(62,60,73,0.88) 8%,rgba(62,60,73,0.55) 54%,rgba(62,60,73,0.15) 91%)",
@@ -307,7 +306,6 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
               { icon: "★", text: "4.9 Google" },
               { icon: "✓", text: "A+ BBB" },
               { icon: "18+", text: "years" },
-              { icon: "∞", text: "Warranty" },
             ].map((b) => (
               <div key={b.text} className="flex items-center gap-1.5 px-3 py-1.5"
                 style={{
@@ -346,7 +344,7 @@ function HeroSlider({ onNavigate }: { onNavigate: (p: string) => void }) {
 
       {/* Stats bar — mobile/narrow (<md). The md+ bar above is hidden below
           768px, which is where a 13" laptop lands with DevTools docked, so the
-          stats vanished entirely. Four items fit one row; Warranty drops. */}
+          stats vanished entirely. Four items fit one row. */}
       <motion.div
         key={`stats-sm-${current}`}
         initial={{ opacity: 0, y: 16 }}
@@ -787,7 +785,6 @@ const WHY_PILLARS = [
   { title: "Family-Owned",       desc: "Independent since 2008, not a franchise",              icon: <Home size={26} strokeWidth={1.6} />,       highlight: true  },
   { title: "Engineered",         desc: "Solutions designed to last, not bandaids",             icon: <Hammer size={26} strokeWidth={1.6} />,     highlight: false },
   { title: "Certified",          desc: "Every installer trained and certified",                icon: <BadgeCheck size={26} strokeWidth={1.6} />, highlight: false },
-  { title: "Guaranteed",         desc: "Lifetime transferable warranty on every job",          icon: <ShieldCheck size={26} strokeWidth={1.6} />,highlight: false },
   { title: "12,000+",            desc: "Satisfied customers",                                  icon: <Users size={26} strokeWidth={1.6} />,      highlight: false },
   { title: "Evergreen difference",desc: "Caring for every home as if it were our own.",        icon: <Leaf size={26} strokeWidth={1.6} />,       highlight: false },
 ];
@@ -830,10 +827,10 @@ function WhySection() {
             </Reveal>
           </div>
 
-          {/* Right — 2×3 card grid */}
+          {/* Right — 2-column card grid (five pillars; the last spans both columns) */}
           <div className="lg:w-[46%] grid grid-cols-2 gap-4">
             {WHY_PILLARS.map((p, i) => (
-              <Reveal key={p.title} delay={0.08 + i * 0.06}>
+              <Reveal key={p.title} delay={0.08 + i * 0.06} className={i === WHY_PILLARS.length - 1 && WHY_PILLARS.length % 2 === 1 ? "col-span-2" : ""}>
                 <div className="flex flex-col h-full justify-center" style={{
                   background: p.highlight ? CHAR : "rgba(255,255,255,.04)",
                   border: "1px solid rgba(255,255,255,.07)",
@@ -1248,7 +1245,7 @@ function ServiceAreaSection() {
 
           {/* Trust pills bottom-right */}
           <div className="absolute bottom-10 right-8 flex flex-col gap-2.5">
-            {["Financing from $79/mo", "No money down", "Lifetime warranty"].map((item, i) => (
+            {["Financing from $79/mo", "No money down"].map((item, i) => (
               <motion.div
                 key={item}
                 initial={{ opacity: 0, x: 20 }}

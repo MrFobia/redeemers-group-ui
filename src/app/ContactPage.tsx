@@ -430,7 +430,7 @@ function LocationsMapSection() {
           </AnimatePresence>
 
           <div className="absolute bottom-10 right-8 flex flex-col gap-2.5">
-            {["Financing from $79/mo", "No money down", "Lifetime warranty"].map((item, i) => (
+            {["Financing from $79/mo", "No money down"].map((item, i) => (
               <motion.div
                 key={item}
                 initial={{ opacity: 0, x: 20 }}
@@ -478,7 +478,7 @@ function ContactFormSection() {
                 The fastest way to get answers. No obligation.
               </p>
               <div className="flex flex-col gap-3">
-                {["Free, no-obligation assessment", "Certified structural inspectors", "Same-week appointments available", "Lifetime transferable warranty"].map((t) => (
+                {["Free, no-obligation assessment", "Certified structural inspectors", "Same-week appointments available"].map((t) => (
                   <div key={t} className="flex items-center gap-3">
                     <div className="w-4 h-4 flex items-center justify-center shrink-0">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={SAND} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>

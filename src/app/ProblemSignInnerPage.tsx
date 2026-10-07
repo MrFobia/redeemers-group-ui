@@ -788,7 +788,7 @@ function CtaSection() {
             Ready to fix your<br />sagging floors?
           </h2>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 18, color: "rgba(161,205,241,.9)", maxWidth: 480, margin: "0 auto 44px" }}>
-            Free inspection · Same-week availability · Lifetime warranty on every repair
+            Free inspection · Same-week availability
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <a href="#" className="group relative overflow-hidden px-9 py-4 inline-flex items-center gap-3"

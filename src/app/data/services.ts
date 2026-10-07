@@ -119,7 +119,7 @@ const SHARED_FAQS: Faq[] = [
   },
   {
     q: "Are your installers certified?",
-    a: "Every installer is trained and certified in our methods. We stand behind their work with a lifetime transferable warranty. Your home is in capable hands.",
+    a: "Every installer is trained and certified in our methods. Your home is in capable hands.",
   },
   {
     q: "Will my homeowner's insurance cover this?",
@@ -147,7 +147,7 @@ export const SERVICES: Record<string, ServiceDef> = {
     iconImg: iconFoundation,
     heroImg: imgFoundation,
     heroHeadline: "Foundation Repair Built to Last",
-    heroLede: "Foundation stabilization, slab lifting, and wall reinforcement — engineered fixes for a home that's settling, cracking, or shifting, backed by a lifetime warranty.",
+    heroLede: "Foundation stabilization, slab lifting, and wall reinforcement — engineered fixes for a home that's settling, cracking, or shifting.",
     symptoms: [
       { id: "s1", q: "Uneven, sloping, or bouncy floors", a: "Floors that slope or flex usually mean the structure below has lost support — settled footings, failing piers, or damaged joists. We stabilize the support system and lift the floor back toward level." , img: SYMPTOM_IMAGES["Uneven, sloping, or bouncy floors"] },
       { id: "s2", q: "Cracks in exterior or interior walls", a: "Stair-step cracks in brick and diagonal cracks above openings point to differential settlement. We anchor and stabilize the wall, then address the soil movement causing it." , img: SYMPTOM_IMAGES["Cracks in exterior or interior walls"] },

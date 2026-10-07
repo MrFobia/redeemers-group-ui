@@ -110,14 +110,13 @@ function HeroSection() {
 const TRUST_STATS = [
   { val: "12,000+", label: "Homes Protected" },
   { val: "A+ BBB", label: "Rated" },
-  { val: "Lifetime", label: "Warranty" },
   { val: "18+ yrs", label: "In Business" },
 ];
 
 function TrustBar() {
   return (
     <section style={{ background: SURFACE.base, borderBottom: "1px solid rgba(62,60,73,.06)" }}>
-      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div className="max-w-[1440px] mx-auto px-8 md:px-14 py-14 grid grid-cols-3 gap-8">
         {TRUST_STATS.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.08}>
             <div className="flex flex-col items-center text-center gap-2">
@@ -285,7 +284,6 @@ const NEVER_DO = [
 const ALWAYS_WILL = [
   { title: "Give you a written quote before any work starts", desc: "Itemised, no hidden fees, no verbal-only pricing." },
   { title: "Explain what we found in plain language", desc: "No jargon. We show you photos and walk you through every finding before we recommend anything." },
-  { title: "Honor our lifetime warranty — no exceptions", desc: "Transferable. No annual fees. No fine print that voids coverage." },
   { title: "Respect your time and your home", desc: "We arrive on time, protect your floors and walls, and clean up completely before we leave." },
 ];
 

@@ -224,7 +224,6 @@ function HeroSection() {
           ["12,250+", "Homes protected"],
           ["A+", "BBB rating"],
           ["4.9 ★", "Google rating"],
-          ["∞", "Lifetime warranty"],
         ].map(([val, label], i) => (
           <div key={label} className={`flex flex-col sm:py-5 ${i > 0 ? "sm:border-l sm:pl-6" : ""} sm:pr-6`}
             style={{ borderColor: "rgba(255,255,255,.1)" }}>

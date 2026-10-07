@@ -64,7 +64,7 @@ const SEVEN_PS: { name: string; definition: string; impact: string; link?: { lab
   {
     name: "Perseverance",
     definition: "Having the ambition and the resilience to overcome obstacles and keep pursuing the purpose indefinitely into the future.",
-    impact: "We're not building to flip. The lifetime warranty only means something if we're still around to honor it decades from now.",
+    impact: "We're not building to flip. Our commitments only mean something if we're still around to honor them decades from now.",
   },
   {
     name: "People First",
@@ -80,7 +80,7 @@ const SEVEN_PS: { name: string; definition: string; impact: string; link?: { lab
   {
     name: "Profit",
     definition: "Not mistaking profit as the purpose of the business; but recognizing it is essential to survival and independence, and the most accurate measure of customer value delivered.",
-    impact: "Profit funds the warranty, the training, and the next generation of the business — it's a result of doing right by you, not the reason we show up.",
+    impact: "Profit funds the training, and the next generation of the business — it's a result of doing right by you, not the reason we show up.",
   },
   {
     name: "Paced Growth",
@@ -101,7 +101,7 @@ const SEVEN_PS: { name: string; definition: string; impact: string; link?: { lab
 const CERTIFIED_MEANING = [
   "Certified Evergreen is a rigorous process that validates a private company's commitment to long-term growth and success, assessed against the Evergreen 7Ps® principles. It isn't a label a company gives itself — the assessment looks at a company's values, its practices, and its people-focused culture.",
   "Certified companies prioritize sustained growth over quick profits, put Purpose and People First, and are held to continuous improvement and a positive impact on their community. In short, the certification tells you a business is built to last.",
-  "For a homeowner, that's the part that matters: a warranty is only as good as the company standing behind it in ten years, and this is an outside body confirming Redeemers is built to still be here.",
+  "For a homeowner, that's the part that matters: a promise is only as good as the company standing behind it in ten years, and this is an outside body confirming Redeemers is built to still be here.",
 ];
 
 // TODO(content): client asked for 2 awards on this page as a visual element,
@@ -159,7 +159,7 @@ function HeroSection() {
               Evergreen isn't a marketing label — it's a business philosophy from the Tugboat Institute, a global community of privately held companies built to endure for generations rather than be optimized for a quick exit.
             </p>
             <p>
-              Evergreen companies choose purpose over a sale, and long-term thinking over quarterly targets. Redeemers Group is one of them — which is why the same crew, the same standards, and the same warranty are still here years after the work is done.
+              Evergreen companies choose purpose over a sale, and long-term thinking over quarterly targets. Redeemers Group is one of them — which is why the same crew, the same standards, and the same promise are still here years after the work is done.
             </p>
           </div>
           <button onClick={() => openInspection()} className="group mt-8 inline-flex items-center gap-2 px-7 py-4 transition-all"

@@ -28,7 +28,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: "East Memphis Ranch Home",
     desc: "SmartJack + full encapsulation. Done in 2 days.",
     img: imgCaseRanch,
-    stats: [["2", "Days to\ncomplete"], ["100%", "Moisture\neliminated"], ["∞", "Lifetime\nwarranty"]],
+    stats: [["2", "Days to\ncomplete"], ["100%", "Moisture\neliminated"]],
     gallery: [
       { img: imgCaseRanch, caption: "Crawl space before SmartJack installation" },
       { img: imgFloor01, caption: "SmartJack supports installed under the main beam" },
@@ -37,16 +37,16 @@ export const CASE_STUDIES: CaseStudy[] = [
     story: [
       "The homeowner noticed soft spots in the floor and called after a home inspection flagged a sagging main beam and standing moisture in the crawl space.",
       "Our crew installed a SmartJack support system to level the structure, then fully encapsulated the crawl space to stop the moisture at the source.",
-      "The job closed out in two days, with the moisture problem eliminated and a transferable lifetime warranty on the repair.",
+      "The job closed out in two days, with the moisture problem eliminated.",
     ],
   },
   {
     tag: "Foundation",
     loc: "Memphis, TN",
     title: "Midtown Duplex",
-    desc: "6 push piers. Clay soil corrected. Lifetime warranty.",
+    desc: "6 push piers. Clay soil corrected.",
     img: imgCaseDuplex,
-    stats: [["6", "Push piers\ninstalled"], ["1", "Day, tenants\nstayed in place"], ["∞", "Lifetime\nwarranty"]],
+    stats: [["6", "Push piers\ninstalled"], ["1", "Day, tenants\nstayed in place"]],
     gallery: [
       { img: imgCaseDuplex, caption: "Foundation settlement from clay soil movement" },
       { img: imgFloor02, caption: "Push piers driven to load-bearing strata" },
@@ -55,7 +55,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     story: [
       "A tenant reported sticking doors and visible wall cracks. Inspection confirmed clay soil movement was pulling the foundation down on one corner.",
       "Six push piers were installed to reach load-bearing soil and lift the structure back into position — all in a single day, with tenants able to stay in place throughout.",
-      "The foundation is now backed by our transferable lifetime warranty, regardless of future soil movement.",
+      "The foundation has been stable since, regardless of later soil movement.",
     ],
   },
   {
@@ -100,7 +100,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: "Collierville Garage Repair",
     desc: "Helical piers under the garage slab. Cracks closed.",
     img: imgFloor02,
-    stats: [["8", "Helical piers\ninstalled"], ["2", "Days to\ncomplete"], ["∞", "Lifetime\nwarranty"]],
+    stats: [["8", "Helical piers\ninstalled"], ["2", "Days to\ncomplete"]],
     gallery: [
       { img: imgFloor02, caption: "Diagonal cracking across the garage slab" },
       { img: imgFloor01, caption: "Helical piers installed at the corners" },
@@ -109,7 +109,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     story: [
       "Diagonal cracks had opened across the garage floor as one corner of the slab settled unevenly over several years.",
       "Eight helical piers were installed at the corners and load points to stabilize the slab and stop further movement.",
-      "The cracks closed under load, and the repair carries the same lifetime warranty as our foundation work on the main house.",
+      "The cracks closed under load, and the repair has held as well as our foundation work on the main house.",
     ],
   },
   {
@@ -118,7 +118,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: "Marked Tree Crawl Space",
     desc: "Full encapsulation + mold remediation in one visit.",
     img: imgFloor04,
-    stats: [["1", "Visit for full\nscope"], ["100%", "Moisture\neliminated"], ["∞", "Lifetime\nwarranty"]],
+    stats: [["1", "Visit for full\nscope"], ["100%", "Moisture\neliminated"]],
     gallery: [
       { img: imgFloor04, caption: "Active mold on crawl space joists" },
       { img: imgFloor03, caption: "Mold remediation in progress" },

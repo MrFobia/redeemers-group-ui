@@ -178,7 +178,7 @@ const EDUCATION_TOPICS = [
   { icon: ShieldCheck, title: "Know the warning signs", desc: "Cracks, sticking doors, uneven floors — learn what's normal wear vs. a structural problem.", cta: "See problem signs", page: "problem-signs" },
   { icon: HelpCircle, title: "What to expect from your inspection", desc: "A walkthrough of what our inspectors check, how long it takes, and what's in your report.", cta: "Our process", page: "our-difference#process" },
   { icon: ClipboardCheck, title: "Home maintenance checklist", desc: "Simple seasonal habits that catch small issues before they become expensive ones.", cta: "Get the checklist", page: "resources#resources" },
-  { icon: FileText, title: "Common homeowner questions", desc: "Financing, warranties, timelines — answered plainly.", cta: "Read FAQs", page: "resources#faq" },
+  { icon: FileText, title: "Common homeowner questions", desc: "Financing, timelines, process — answered plainly.", cta: "Read FAQs", page: "resources#faq" },
 ];
 
 function BuyerSellerSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
@@ -241,7 +241,7 @@ function BuyerSellerSection({ onNavigate }: { onNavigate?: (p: string) => void }
 // ─── 7. JOB STORIES ──────────────────────────────────────────────────────────
 const JOB_STORIES = [
   { name: "Jennifer M.", type: "Crawl Space", loc: "Memphis, TN", date: "March 2026", duration: "2 days", result: "SmartJack system + full encapsulation. Floors leveled and moisture eliminated.", quote: "I could feel the difference the first morning I walked in. No more bounce, no more smell. Redeemers was worth every penny.", img: "https://images.unsplash.com/photo-1591638436281-078219f200af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
-  { name: "Robert T.", type: "Foundation", loc: "Jonesboro, AR", date: "February 2026", duration: "1 day", result: "6 push piers driven to bedrock. Foundation stabilized with lifetime warranty.", quote: "I had three different companies tell me three different things. Redeemers explained it clearly, showed me the evidence, and fixed it the right way.", img: "https://images.unsplash.com/photo-1708214148950-ccbb69d40e25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
+  { name: "Robert T.", type: "Foundation", loc: "Jonesboro, AR", date: "February 2026", duration: "1 day", result: "6 push piers driven to bedrock. Foundation stabilized.", quote: "I had three different companies tell me three different things. Redeemers explained it clearly, showed me the evidence, and fixed it the right way.", img: "https://images.unsplash.com/photo-1708214148950-ccbb69d40e25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
   { name: "Jennifer M.", type: "Waterproofing", loc: "Memphis, TN", date: "January 2026", duration: "3 days", result: "Interior drainage system and dual sump pump installed. Basement stays dry through heavy rain.", quote: "After years of a damp basement, it's finally dry. The crew was professional and cleaned up everything when done.", img: "https://images.unsplash.com/photo-1646184466560-f81b1e495604?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800" },
 ];
 
@@ -309,7 +309,7 @@ const FAQS = [
   { q: "How long does crawl space repair take?", a: "Most repairs take 1–2 days. Encapsulation on larger spaces may take 2–3 days. We'll give you a specific timeline during your inspection." },
   { q: "Do you offer financing?", a: "Yes. We work with trusted lenders to make repairs affordable. Flexible terms and competitive rates are available for qualified homeowners." },
   { q: "What areas do you serve?", a: "We serve communities across Tennessee, Arkansas, Mississippi, and Missouri — including Memphis, Nashville, Jackson, Southaven, Little Rock, Jonesboro, Springfield, and Cape Girardeau." },
-  { q: "Are your installers certified?", a: "Every installer is trained and certified in our methods. We stand behind their work with a lifetime transferable warranty." },
+  { q: "Are your installers certified?", a: "Every installer is trained and certified in our methods." },
   { q: "Is a sagging floor a structural emergency?", a: "Not always immediately, but it should be inspected soon. The underlying cause will continue to worsen over time. Early action saves money." },
   { q: "How much does basement waterproofing cost?", a: "Interior waterproofing typically runs $3,000–$10,000 depending on square footage and system type. Exterior waterproofing is more involved. We give a free written quote after inspection." },
   { q: "How are push piers installed?", a: "We drive steel piers through unstable soil to bedrock, then lift and stabilize the foundation. Most installations take 1 day and require no major excavation." },

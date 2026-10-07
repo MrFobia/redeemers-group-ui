@@ -62,7 +62,7 @@ const REVIEWS = [
 ];
 
 const JOB_STORIES = [
-  { title: "Push piers driven to bedrock", service: "Foundation", duration: "1 day", body: "Clay soil movement confirmed after three contractors disagreed on the cause. Six steel piers installed and the foundation stabilized under a lifetime transferable warranty.", quote: "They explained it clearly, showed me the evidence, and fixed it the right way." },
+  { title: "Push piers driven to bedrock", service: "Foundation", duration: "1 day", body: "Clay soil movement confirmed after three contractors disagreed on the cause. Six steel piers installed and the foundation stabilized.", quote: "They explained it clearly, showed me the evidence, and fixed it the right way." },
   { title: "SmartJack system and full encapsulation", service: "Crawl Space", duration: "2 days", body: "Soft spots in the floor turned out to be six broken joists plus active mold. Joists sistered, SmartJacks set, and the crawl space sealed end to end.", quote: "I could feel the difference the first morning I walked in. No more bounce, no more smell." },
   { title: "Interior drainage and dual sump pumps", service: "Waterproofing", duration: "3 days", body: "Perimeter drainage channel tied into a dual sump system with battery backup, plus wall panels to keep the finished space dry.", quote: "It has stayed dry through every storm since, including a week of heavy rain." },
   { title: "Driveway slab foam-leveled", service: "Concrete", duration: "4 hours", body: "A three-inch void under the slab was filled with expanding polyurethane and the surface lifted back to level. No demolition needed.", quote: "Back in use the same afternoon and it drains away from the house now." },
@@ -76,7 +76,7 @@ const CASE_STUDIES = [
     story: [
       "The homeowner had lived with buckling antique hardwood for two winters before calling. Moisture readings under the floor were off the scale.",
       "We installed a CleanSpace moisture barrier, a SmartSump pump and a SaniDry dehumidifier, sealing the space and giving the water somewhere to go.",
-      "The floors stopped moving within the season and the system carries a transferable warranty for the next owner.",
+      "The floors stopped moving within the season and the system has held since.",
     ],
   },
   {
