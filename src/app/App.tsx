@@ -515,7 +515,7 @@ const SERVICES = [
   },
   {
     id: "conc",
-    cat: "Concrete Services",
+    cat: "Concrete Repair",
     title: "Uneven concrete / driveway",
     desc: "PolyLevel foam lifts sunken slabs without full replacement. Fast, clean, and permanent.",
     img: imgSvcConcrete as string,
@@ -597,7 +597,7 @@ const SIGNS = [
   { cat: "Crawl Space Repair", slug: "crawl-space-repair", label: "My floors are sinking",     img: getSymptomImage("My floors are sagging, bouncy, or buckling.") },
   { cat: "Waterproofing",      slug: "waterproofing",      label: "My basement is wet",        img: getSymptomImage("Water getting in to basement or other.") },
   { cat: "Structural Repair",  slug: "structural-repair",  label: "I see wall cracks",         img: getSymptomImage("Cracks in exterior or interior walls") },
-  { cat: "Concrete Services",  slug: "concrete-services",  label: "Uneven concrete / driveway", img: getSymptomImage("Uneven concrete slabs") },
+  { cat: "Concrete Repair",  slug: "concrete-services",  label: "Uneven concrete / driveway", img: getSymptomImage("Uneven concrete slabs") },
 ];
 
 function SignsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
@@ -673,7 +673,7 @@ const HOME_SERVICE_CARDS = [
   },
   {
     slug: "concrete-services",
-    cat: "Concrete Services",
+    cat: "Concrete Repair",
     title: "Uneven concrete / driveway",
     desc: "Foam injection lifts sunken slabs without full replacement. Fast, clean, permanent.",
     img: imgSvcConcrete as string,

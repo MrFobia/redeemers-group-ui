@@ -452,7 +452,7 @@ function LocationsMapSection() {
 }
 
 // ─── Contact Form (same pattern as AboutPage ContactSection) ──────────────────
-const SERVICES_LIST = ["Crawl Space Repair", "Basement Waterproofing", "Foundation Repair", "Concrete Services", "Commercial Services", "Other"];
+const SERVICES_LIST = ["Crawl Space Repair", "Basement Waterproofing", "Foundation Repair", "Concrete Repair", "Commercial Services", "Other"];
 
 function ContactFormSection() {
   const [selected, setSelected] = useState<string[]>([]);

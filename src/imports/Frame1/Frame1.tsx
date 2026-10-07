@@ -291,7 +291,7 @@ function TaglineWrapper3() {
   return (
     <div className="content-stretch flex items-center relative shrink-0" data-name="Tagline Wrapper">
       <p className="font-['Roboto:SemiBold',sans-serif] font-semibold leading-[1.5] relative shrink-0 text-[16px] text-black whitespace-nowrap" style={{ fontVariationSettings: "'wdth' 100" }}>
-        Concrete Services
+        Concrete Repair
       </p>
     </div>
   );

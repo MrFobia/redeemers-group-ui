@@ -23,8 +23,8 @@ import { B, SURFACE, ON_LIGHT } from "./theme";
 const CATEGORY_OF: Record<string, string> = {
   "Crawl Space": "Crawl Space Repair",
   "Foundation": "Structural Repair",
-  "Concrete": "Concrete Services",
-  "Concrete Leveling": "Concrete Services",
+  "Concrete": "Concrete Repair",
+  "Concrete Leveling": "Concrete Repair",
 };
 const categoryOf = (c: CaseStudy) => CATEGORY_OF[c.tag] ?? c.tag;
 const CATEGORIES = ["All", ...Array.from(new Set(CASE_STUDIES.map(categoryOf)))];

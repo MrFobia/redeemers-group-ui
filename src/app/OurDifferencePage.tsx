@@ -676,7 +676,7 @@ function BeforeAfterSlider({ before, after, beforeLabel = "Before", afterLabel =
 // ─── Before & after (sourced from redeemersgroup.com/about-us/before-after.html) ──
 const BEFORE_AFTER_STATS = [
   { val: "377", label: "Total sets" },
-  { val: "185", label: "Concrete services" },
+  { val: "185", label: "Concrete Repair" },
   { val: "101", label: "Crawl space repair" },
   { val: "15",  label: "Basement waterproofing" },
   { val: "12",  label: "Foundation repair" },
@@ -684,7 +684,7 @@ const BEFORE_AFTER_STATS = [
 
 const BEFORE_AFTER_PROJECTS = [
   {
-    tag: "Concrete Services",
+    tag: "Concrete Repair",
     title: "Extreme Concrete Repair in Bartlett, TN",
     loc: "Bartlett, TN",
     desc: "Jennifer purchased a new home and was concerned about severe driveway damage with voids underneath. Specialist Dante inspected the property, and expert Brennan applied the 3-part protection system to lift, seal, and protect the concrete.",
@@ -693,7 +693,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/149664-after-image.jpeg",
   },
   {
-    tag: "Concrete Services",
+    tag: "Concrete Repair",
     title: "Amazing Sidewalk Repair in Bartlett, TN",
     loc: "Bartlett, TN",
     desc: "Paulette had a sunken sidewalk section — nearly 3 inches — creating a tripping hazard. Experts Dalton and Javier used the PolyLevel concrete injection system to lift and level the slab, then sealed the joints against water intrusion.",
@@ -738,7 +738,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/58d29c9f5007b_7287adcb-0d7f-488b-920a-55a420cbaa75.jpg",
   },
   {
-    tag: "Concrete Services",
+    tag: "Concrete Repair",
     title: "INCREDIBLE PolyLEVEL Job",
     loc: "",
     desc: "A slab had dropped 2¼ inches out of grade. Foreman Aaron Stevens' crew used PolyLevel injection to lift it back into place in a single visit.",
@@ -747,7 +747,7 @@ const BEFORE_AFTER_PROJECTS = [
     after: "https://cdn.treehouseinternetgroup.com/uploads/before_after/1447/medium/5c0fffc1b59be_20181210123014.jpg",
   },
   {
-    tag: "Concrete Services",
+    tag: "Concrete Repair",
     title: "New Looking Concrete after NexusPro Injection",
     loc: "",
     desc: "Weather damage on a hillside driveway had left the concrete cracked and worn. Foreman Shane Garrett's team used NexusPro injection to restore the surface and seal it against further damage.",

@@ -285,7 +285,7 @@ export const SERVICES: Record<string, ServiceDef> = {
   // Cost guide, Project gallery, FAQ.
   "concrete-services": {
     slug: "concrete-services",
-    name: "Concrete Services",
+    name: "Concrete Repair",
     iconImg: iconConcrete,
     heroImg: imgConcrete,
     heroHeadline: "Concrete Lifting & Leveling",

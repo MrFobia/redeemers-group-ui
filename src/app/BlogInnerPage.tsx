@@ -628,7 +628,7 @@ function RelatedCostGuidesSection() {
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
 function Footer({ onBack }: { onBack: () => void }) {
   const FOOTER_LINKS = {
-    Services: ["Foundation Repair", "Crawl Space Repair", "Waterproofing", "Concrete Services", "Mold Prevention"],
+    Services: ["Foundation Repair", "Crawl Space Repair", "Waterproofing", "Concrete Repair", "Mold Prevention"],
     Company: ["About Us", "Our Difference", "Careers", "Partners"],
     Resources: ["Blog & News", "Cost Guides", "FAQs", "Project Gallery"],
     Contact: ["Free Inspection", "1-833-584-1049", "Service Areas", "Financing"],

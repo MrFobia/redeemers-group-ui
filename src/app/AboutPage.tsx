@@ -440,7 +440,7 @@ function BenefitsSection() {
 }
 
 // ─── 5. CONTACT ───────────────────────────────────────────────────────────────
-const SERVICES_LIST = ["Crawl Space Repair", "Basement Waterproofing", "Foundation Repair", "Concrete Services", "Commercial Services", "Other"];
+const SERVICES_LIST = ["Crawl Space Repair", "Basement Waterproofing", "Foundation Repair", "Concrete Repair", "Commercial Services", "Other"];
 
 function ContactSection() {
   const [selected, setSelected] = useState<string[]>([]);

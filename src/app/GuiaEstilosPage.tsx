@@ -253,7 +253,7 @@ export default function GuiaEstilosPage() {
             { size: 42, cat: "Crawl Space" },
             { size: 34, cat: "Waterproofing" },
             { size: 30, cat: "Foundation Repair" },
-            { size: 27, cat: "Concrete Services" },
+            { size: 27, cat: "Concrete Repair" },
           ].map(({ size, cat }) => (
             <div key={cat} style={{ flex: "1 0 180px", background: CHAR, padding: "28px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
               <span style={{ display: "inline-block", padding: "5px 14px", background: "rgba(216,203,165,.2)", border: "1px solid rgba(216,203,165,.4)", fontFamily: CF, fontWeight: 700, fontSize: 10, color: SAND, letterSpacing: 2.5, textTransform: "uppercase" }}>

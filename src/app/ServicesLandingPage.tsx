@@ -18,7 +18,7 @@ const INTER = "'Inter',sans-serif";
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer({ onBack }: { onBack: () => void }) {
   const cols = [
-    { head: "Services",  links: ["Structural Repair", "Crawl Space Repair", "Waterproofing", "Concrete Services", "Commercial Services"] },
+    { head: "Services",  links: ["Structural Repair", "Crawl Space Repair", "Waterproofing", "Concrete Repair", "Commercial Services"] },
     { head: "Company",   links: ["About Us", "Our Difference", "Resources", "Careers", "Financing"] },
     { head: "Locations", links: ["Tennessee", "Mississippi", "Arkansas", "Missouri"] },
     { head: "Contact",   links: ["1-833-584-1049", "info@redeemersgroup.com", "Schedule Inspection", "Customer Portal"] },
@@ -97,7 +97,7 @@ const SERVICES = {
     img: SERVICE_DEFS["structural-repair"].heroImg,
   },
   concrete: {
-    category: "Concrete Services",
+    category: "Concrete Repair",
     title: "Lifting\n& leveling",
     body: "PolyLevel foam injection lifts and levels sinking slabs — driveways, walkways, and pool decks — in hours, not days.",
     symptoms: SERVICE_DEFS["concrete-services"].symptoms.slice(0, 4).map((s) => s.q),
@@ -260,7 +260,7 @@ const HANDLE_ROWS = [
   { key: "crawlSpace", alt: "Crawl space repair" },
   { key: "waterproofing", alt: "Waterproofing" },
   { key: "foundation", alt: "Foundation repair" },
-  { key: "concrete", alt: "Concrete services" },
+  { key: "concrete", alt: "Concrete Repair" },
   { key: "commercial", alt: "Commercial services" },
 ] as const;
 

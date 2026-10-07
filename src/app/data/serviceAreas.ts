@@ -42,7 +42,7 @@ export const STATES: StateInfo[] = [
     tagline: "Home base. Memphis metro and West Tennessee, top to bottom.",
     polygon: [[36.50,-89.49], [36.50,-88.05], [36.61,-81.66], [36.30,-81.70], [35.90,-83.01], [35.50,-83.90], [35.20,-84.30], [35.00,-84.33], [35.00,-90.30], [35.40,-90.15], [35.80,-89.91], [36.20,-89.69]],
     center: [35.65, -89.20], zoom: 7,
-    services: ["Foundation repair", "Crawl space repair", "Waterproofing", "Concrete services"],
+    services: ["Foundation repair", "Crawl space repair", "Waterproofing", "Concrete repair"],
   },
   {
     abbr: "AR",
@@ -50,7 +50,7 @@ export const STATES: StateInfo[] = [
     tagline: "Serving Little Rock, Jonesboro, and surrounding communities.",
     polygon: [[36.50,-94.62], [36.50,-90.15], [36.00,-90.15], [36.00,-89.69], [35.50,-90.20], [35.00,-90.30], [34.50,-90.60], [34.00,-90.90], [33.50,-91.10], [33.00,-91.20], [33.00,-94.04], [33.55,-94.04], [33.55,-94.47]],
     center: [34.90, -92.20], zoom: 7,
-    services: ["Foundation repair", "Crawl space repair", "Concrete services"],
+    services: ["Foundation repair", "Crawl space repair", "Concrete repair"],
   },
   {
     abbr: "MS",
