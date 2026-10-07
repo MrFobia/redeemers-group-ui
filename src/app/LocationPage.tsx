@@ -113,33 +113,6 @@ function useDocumentMeta(title: string, description: string) {
   }, [title, description]);
 }
 
-// Round-robin across kinds so a strip never shows six reviews and nothing else.
-function mixKinds(items: ContentItem[], limit: number): ContentItem[] {
-  const byKind = new Map<string, ContentItem[]>();
-  for (const it of items) byKind.set(it.kind, [...(byKind.get(it.kind) ?? []), it]);
-  const queues = [...byKind.values()];
-  const out: ContentItem[] = [];
-  while (out.length < limit && queues.some((q) => q.length)) {
-    for (const q of queues) if (q.length && out.length < limit) out.push(q.shift()!);
-  }
-  return out;
-}
-
-/** Local proof for the page; falls back to the nearest published work in the same state. */
-function proofFor(page: LocationPageDef): { items: ContentItem[]; local: boolean } {
-  const slugs = page.kind === "city"
-    ? [page.citySlug!]
-    : ALL_CITIES.filter((c) => c.county === page.county && c.state === page.state).map((c) => c.slug);
-  const local = slugs.flatMap(contentForCityItems).filter((i) => i.kind !== "project-gallery");
-  if (local.length) return { items: mixKinds(local, 6), local: true };
-  const state: StateAbbr | undefined = page.kind === "city" ? CITY_BY_SLUG[page.citySlug!]?.state : page.state;
-  const near = Object.keys(CITY_CONTENT)
-    .filter((s) => CITY_BY_SLUG[s]?.state === state)
-    .flatMap(contentForCityItems)
-    .filter((i) => i.kind !== "project-gallery");
-  return { items: mixKinds(near, 6), local: false };
-}
-
 // ─── Sections ─────────────────────────────────────────────────────────────────
 function ServiceBlock({ svc, heading, place, onNavigate }: { svc: ServiceDef; heading: string; place: string; onNavigate?: (p: string) => void }) {
   const signs = svc.symptoms.slice(0, 3);
@@ -253,6 +226,58 @@ function CountyWork({ county, state, onNavigate }: { county: string; state: Stat
   );
 }
 
+// ─── City work: one section per kind, the city's own first ───────────────────
+// A city's own reviews / job stories / case studies fill its sections. A kind the
+// city has nothing for borrows from the rest of its county, then its state, and
+// says so ("… near Alamo") so a neighbour's job is never passed off as local.
+function cityNear(citySlug: string): ContentItem[] {
+  const city = CITY_BY_SLUG[citySlug];
+  if (!city) return [];
+  const rank = (c: { county: string; state: StateAbbr }) => (c.county === city.county && c.state === city.state ? 0 : 1);
+  return Object.keys(CITY_CONTENT)
+    .filter((slug) => slug !== citySlug && CITY_BY_SLUG[slug]?.state === city.state)
+    .sort((a, b) => rank(CITY_BY_SLUG[a]) - rank(CITY_BY_SLUG[b]))
+    .flatMap(contentForCityItems);
+}
+
+function CityWork({ citySlug, shortPlace, reviewsHeading, onNavigate }: { citySlug: string; shortPlace: string; reviewsHeading: string; onNavigate?: (p: string) => void }) {
+  const own = useMemo(() => contentForCityItems(citySlug), [citySlug]);
+  const near = useMemo(() => cityNear(citySlug), [citySlug]);
+  const sections = WORK_SECTIONS.map((sec, i) => {
+    const mine = own.filter((it) => it.kind === sec.kind);
+    const items = mine.length > 0 ? mine : near.filter((it) => it.kind === sec.kind).slice(0, 3);
+    return { ...sec, items, local: mine.length > 0, i };
+  }).filter((sec) => sec.items.length > 0);
+
+  return (
+    <>
+      {sections.map((sec, n) => (
+        <section key={sec.kind} style={{ background: n % 2 === 0 ? SURFACE.base : SURFACE.alt }} className="py-16 lg:py-24">
+          <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+            <Reveal className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+              <div>
+                <Eyebrow>{sec.local ? sec.eyebrow : `${sec.eyebrow} nearby`}</Eyebrow>
+                <h2 style={h2Style}>{sec.local ? (sec.kind === "review" ? reviewsHeading : `${sec.title} ${shortPlace}`) : `${sec.eyebrow} near ${shortPlace}`}</h2>
+              </div>
+              {n === 0 && (
+                <RouteLink to="service-area" onNavigate={onNavigate} className="group inline-flex items-center gap-2 shrink-0"
+                  style={{ fontFamily: INTER, fontWeight: 700, fontSize: 14, color: B, textDecoration: "none" }}>
+                  Explore the service-area map <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+                </RouteLink>
+              )}
+            </Reveal>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {sec.items.map((it, i) => (
+                <Reveal key={it.id} delay={(i % 3) * 0.06}><ProofCard item={it} onNavigate={onNavigate} /></Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))}
+    </>
+  );
+}
+
 function PlaceList({ title, names, onNavigate }: { title: string; names: { label: string; to?: string }[]; onNavigate?: (p: string) => void }) {
   return (
     <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
@@ -315,7 +340,7 @@ export default function LocationPage({ slug, onBack, onNavigate }: { slug?: stri
       return { label: c.name, to: lp ? locationPath(lp) : undefined };
     }).sort((a, b) => Number(!!b.to) - Number(!!a.to) || a.label.localeCompare(b.label));
 
-    return { name, state, county, shortPlace, serviceHeading, introHeading, servicesHeading, reviewsHeading, countyPage, nearby, proof: proofFor(page) };
+    return { name, state, county, shortPlace, serviceHeading, introHeading, servicesHeading, reviewsHeading, countyPage, nearby };
   }, [page]);
 
   if (!page || !data) {
@@ -330,7 +355,7 @@ export default function LocationPage({ slug, onBack, onNavigate }: { slug?: stri
     );
   }
 
-  const { name, state, county, shortPlace, serviceHeading, introHeading, servicesHeading, reviewsHeading, countyPage, nearby, proof } = data;
+  const { name, state, county, shortPlace, serviceHeading, introHeading, servicesHeading, reviewsHeading, countyPage, nearby } = data;
 
   const crumbs = [
     { label: "Home", onClick: onBack },
@@ -387,28 +412,8 @@ export default function LocationPage({ slug, onBack, onNavigate }: { slug?: stri
 
         {page.kind === "county" && <CountyWork county={county} state={state} onNavigate={onNavigate} />}
 
-        {/* Local proof — every card is a crawlable link to its own page */}
-        {page.kind === "city" && proof.items.length > 0 && (
-          <section style={{ background: SURFACE.base }} className="py-16 lg:py-24">
-            <div className="max-w-[1440px] mx-auto px-8 md:px-14">
-              <Reveal className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                <div>
-                  <Eyebrow>{proof.local ? "Local work" : "Recent work nearby"}</Eyebrow>
-                  <h2 style={h2Style}>{proof.local ? reviewsHeading : `Recent work near ${shortPlace}`}</h2>
-                </div>
-                <RouteLink to="service-area" onNavigate={onNavigate} className="group inline-flex items-center gap-2 shrink-0"
-                  style={{ fontFamily: INTER, fontWeight: 700, fontSize: 14, color: B, textDecoration: "none" }}>
-                  Explore the service-area map <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
-                </RouteLink>
-              </Reveal>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {proof.items.map((it, i) => (
-                  <Reveal key={it.id} delay={(i % 3) * 0.06}><ProofCard item={it} onNavigate={onNavigate} /></Reveal>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+        {/* Local proof — a section per kind, every card a crawlable link to its own page */}
+        {page.kind === "city" && page.citySlug && <CityWork citySlug={page.citySlug} shortPlace={shortPlace} reviewsHeading={reviewsHeading} onNavigate={onNavigate} />}
 
         {nearby.length > 0 && (
           <PlaceList
