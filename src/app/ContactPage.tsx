@@ -113,6 +113,60 @@ function Footer({ onBack }: { onBack: () => void }) {
   );
 }
 
+// ─── Compact request form (sits in the hero, like Baird's request-inspection page) ──
+function CompactInspectionForm() {
+  const [selected, setSelected] = useState<string[]>([]);
+  const toggle = (svc: string) => setSelected((prev) => prev.includes(svc) ? prev.filter((x) => x !== svc) : [...prev, svc]);
+  const field: React.CSSProperties = { background: "#fff", border: `1px solid ${ON_LIGHT.border}`, fontFamily: "'Inter',sans-serif", fontSize: 14, color: CHAR, width: "100%", padding: "9px 12px" };
+  const label: React.CSSProperties = { fontFamily: "'Inter',sans-serif", fontSize: 10.5, fontWeight: 600, color: "rgba(62,60,73,.65)", letterSpacing: 0.8, textTransform: "uppercase" };
+  const input = (text: string, type = "text", req = false) => (
+    <div className="flex flex-col gap-1">
+      <label style={label}>{text}{req && <span style={{ color: B }}> *</span>}</label>
+      <input type={type} aria-label={text} className="outline-none" style={field} />
+    </div>
+  );
+  return (
+    <form onSubmit={(e) => e.preventDefault()} className="p-6 w-full" style={{ background: SURFACE.base, boxShadow: "0 18px 50px rgba(0,0,0,.35)" }}>
+      <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 12, color: B, letterSpacing: 2, textTransform: "uppercase", paddingBottom: 10, marginBottom: 14, borderBottom: `1px solid ${ON_LIGHT.border}` }}>
+        Free · no obligation inspection
+      </p>
+      <div className="grid grid-cols-2 gap-3 mb-3">
+        {input("First name", "text", true)}
+        {input("Last name", "text", true)}
+      </div>
+      <div className="grid grid-cols-1 gap-3 mb-3">
+        {input("Phone number", "tel", true)}
+        {input("Email address", "email")}
+      </div>
+      <div className="mb-4">
+        <p style={{ ...label, marginBottom: 8 }}>Services needed <span style={{ color: B }}>*</span></p>
+        <div className="grid grid-cols-2 gap-x-3 gap-y-2">
+          {SERVICES_LIST.map((svc) => {
+            const on = selected.includes(svc);
+            return (
+              <label key={svc} className="flex items-center gap-2 cursor-pointer">
+                <span onClick={() => toggle(svc)} className="w-4 h-4 flex items-center justify-center shrink-0"
+                  style={{ background: on ? B : "transparent", border: `1.5px solid ${on ? B : "rgba(62,60,73,.3)"}` }}>
+                  {on && <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                </span>
+                <span onClick={() => toggle(svc)} style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "rgba(62,60,73,.75)" }}>{svc}</span>
+              </label>
+            );
+          })}
+        </div>
+      </div>
+      <button type="submit" className="w-full py-3.5 flex items-center justify-center gap-2 transition-opacity hover:opacity-85"
+        style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", border: "none", cursor: "pointer" }}>
+        Get my free inspection
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      </button>
+      <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10.5, color: "rgba(62,60,73,.5)", lineHeight: 1.5, textAlign: "center", marginTop: 10 }}>
+        * Required fields. By submitting, you agree we can reach you by phone, text, or email about your inspection.
+      </p>
+    </form>
+  );
+}
+
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
@@ -127,8 +181,8 @@ function HeroSection() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(105deg, rgba(62,60,73,0.96) 0%, rgba(62,60,73,0.80) 55%, rgba(62,60,73,0.45) 100%)" }} />
       </div>
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 flex flex-col justify-center" style={{ minHeight: "70vh" }}>
-        <div className="max-w-[620px]">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-12 flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-16" style={{ minHeight: "70vh" }}>
+        <div className="max-w-[620px] flex-1">
           <Reveal>
             <div className="flex items-center gap-2 mb-5">
               <div style={{ width: 20, height: 2, background: SAND }} />
@@ -156,6 +210,9 @@ function HeroSection() {
             </div>
           </Reveal>
         </div>
+        <Reveal className="w-full lg:w-[400px] shrink-0 lg:ml-auto">
+          <CompactInspectionForm />
+        </Reveal>
       </div>
     </section>
   );
