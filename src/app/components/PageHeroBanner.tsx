@@ -14,6 +14,10 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 // drifting between 260px and 600px depending on the page. One fixed,
 // responsive height now, no per-page override.
 const HERO_HEIGHT_CLASS = "min-h-[320px] md:min-h-[360px] lg:min-h-[400px]";
+// Client QA: a banner with no button in it gives the visitor nothing that says
+// "scroll". Those banners are ~100px shorter so the first piece of content under
+// them (photos, cards, filters) peeks above the fold on laptops and phones.
+const HERO_HEIGHT_CLASS_NO_CTA = "min-h-[240px] md:min-h-[270px] lg:min-h-[300px]";
 
 export function PageHeroBanner({
   image,
@@ -40,8 +44,9 @@ export function PageHeroBanner({
    *  gap to the section below stays constant instead of drifting with it. */
   align?: "center" | "end";
 }) {
+  const heightClass = children ? HERO_HEIGHT_CLASS : HERO_HEIGHT_CLASS_NO_CTA;
   return (
-    <section className={`relative overflow-hidden ${HERO_HEIGHT_CLASS}`} style={{ background: "#3E3C49" }}>
+    <section className={`relative overflow-hidden ${heightClass}`} style={{ background: "#3E3C49" }}>
       <div className="absolute inset-0">
         <ImageWithFallback src={image} alt={imageAlt} className="w-full h-full object-cover" />
         {/* Scrim: opaque behind the copy, thinning toward the photo side. Same
@@ -67,7 +72,7 @@ export function PageHeroBanner({
 
 
       <div
-        className={`relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-10 md:py-12 flex flex-col ${align === "end" ? "justify-end" : "justify-center"} ${HERO_HEIGHT_CLASS}`}
+        className={`relative z-10 max-w-[1440px] mx-auto px-8 md:px-14 py-10 md:py-12 flex flex-col ${align === "end" ? "justify-end" : "justify-center"} ${heightClass}`}
       >
         <div style={{ maxWidth: contentMaxWidth }}>
           <div className="flex items-center gap-3 mb-4 md:mb-6">

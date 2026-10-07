@@ -50,11 +50,11 @@ function TeamGridSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
   };
 
   return (
-    <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
+    <section style={{ background: SURFACE.base }} className="py-10 lg:py-14">
       <div className="max-w-[1440px] mx-auto px-8 md:px-14">
 
         {/* ── Department filter — same slider as the About page teaser ── */}
-        <div className="flex items-center justify-between gap-4 mb-14">
+        <div className="flex items-center justify-between gap-4 mb-8">
           <button onClick={goPrev}
             className="shrink-0 flex items-center justify-center transition-all hover:bg-black/5"
             style={{ width: 44, height: 44, border: `1px solid ${ON_LIGHT.border}`, background: "none", cursor: "pointer" }}>
@@ -98,7 +98,7 @@ function TeamGridSection({ onNavigate }: { onNavigate?: (p: string) => void }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-14">
           {visible.map((m, i) => (
             <Reveal key={m.name} delay={(i % 6) * 0.05} className="group flex flex-col items-center gap-5 cursor-pointer">
-              <div onClick={() => setSelectedMember(m)} className="relative w-full overflow-hidden" style={{ aspectRatio: "1/1" }}>
+              <div onClick={() => setSelectedMember(m)} className="relative w-[75%] overflow-hidden" style={{ aspectRatio: "1/1" }}>
                 <ImageWithFallback
                   src={m.img} alt={m.name}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
