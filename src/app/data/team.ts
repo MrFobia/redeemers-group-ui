@@ -45,8 +45,8 @@ export const TEAM_MEMBERS = [
     name: "Stephen Kline", title: "Account Manager", dept: "Customer Care", hometown: "Memphis, TN",
     img: "/team/stephen-kline.png",
     bio: [
-      "This is Stephen! He joined the Redeemers Group team in fall of 2021. He brings experience working in the past as an Advertising Executive Accountant, and as a Sales Manager,",
-      "Stephen has found his home as an Account Manager for Redeemers Group. He loves the positive energy around his job, getting to talk to customers, and the camaraderie he finds on his team. He works to build beautiful relationships with customers, while offering them the best solutions possible. He works hard with his team to find success, positive growth and opportunities to learn-- all while having fun!",
+      "This is Stephen! He joined the Redeemers Structural Solutions team in fall of 2021. He brings experience working in the past as an Advertising Executive Accountant, and as a Sales Manager,",
+      "Stephen has found his home as an Account Manager for Redeemers Structural Solutions. He loves the positive energy around his job, getting to talk to customers, and the camaraderie he finds on his team. He works to build beautiful relationships with customers, while offering them the best solutions possible. He works hard with his team to find success, positive growth and opportunities to learn-- all while having fun!",
       "In his spare time, Stephen loves to write and record music and play the piano. He lives here in Memphis, TN. He has an Identical twin brother, a pit bull named Bella, a daschund mix named Possum, all whom he loves dearly.",
     ],
     reviews: [
@@ -72,7 +72,7 @@ export const TEAM_MEMBERS = [
     name: "Brandon Hunt", title: "Project Coordinator", dept: "Customer Care", hometown: "Millington, TN",
     img: "/team/brandon-hunt.png",
     bio: [
-      "Say hello to Brandon, or as he prefers: Ghost. Brandon joined the team at Redeemers Group as a Warehouse Supervisor and now is a Project Coordinator. Being part of a team who cares is very important to Brandon and he feels that he has found that in his new role.",
+      "Say hello to Brandon, or as he prefers: Ghost. Brandon joined the team at Redeemers Structural Solutions as a Warehouse Supervisor and now is a Project Coordinator. Being part of a team who cares is very important to Brandon and he feels that he has found that in his new role.",
       "Brandon is a proud husband and father of two, residing in Millington, TN. He is a certified forklift operator with a strong customer service background. He is also a music producer who plays in a band, and word on the street is that he can really jam!",
       "If you want to make Brandon happy, bring some hot chips to the jam session! (Hershey Cookies and Cream or Sour Patch candy will also suffice.)",
     ],
@@ -96,7 +96,7 @@ export const TEAM_MEMBERS = [
     name: "Catina McGowan", title: "Customer Care Specialist", dept: "Customer Care", hometown: "Memphis, TN",
     img: "/team/catina-mcgowan.png",
     bio: [
-      "Say Hello to Tina! Tina is a Customer Care Specialist on the team. She chose Redeemers Group because she was looking for a place where she could enhance her skills and grow. She has found that here. Tina brings valuable customer service skills with extensive experience, including 6 years at Disney. Tina was born and raised in Memphis, TN, where she still resides today. She is a mother of 6, including a bonus daughter she shares with her fiancé. She’s also a grandmother of 2. In her free time, Tina enjoys watching movies, family outings, and cooking delicious meals for her family. If you want to make her day, slide her some praline pecans or a Kit Kat bar!",
+      "Say Hello to Tina! Tina is a Customer Care Specialist on the team. She chose Redeemers Structural Solutions because she was looking for a place where she could enhance her skills and grow. She has found that here. Tina brings valuable customer service skills with extensive experience, including 6 years at Disney. Tina was born and raised in Memphis, TN, where she still resides today. She is a mother of 6, including a bonus daughter she shares with her fiancé. She’s also a grandmother of 2. In her free time, Tina enjoys watching movies, family outings, and cooking delicious meals for her family. If you want to make her day, slide her some praline pecans or a Kit Kat bar!",
     ],
     reviews: [
       { quote: "Very informative kept me up to date with everything wonderful funny men! As for clean-up, it looks like they were never here. I chose Redeemers Group over other companies because y’all had the best price.", name: "Cassandra S.", loc: "Tupelo, MS" },
@@ -144,9 +144,9 @@ export const TEAM_MEMBERS = [
     name: "Nicole Thomas", title: "Customer Care Specialist", dept: "Customer Care", hometown: "Memphis, TN",
     img: "/team/nicole-thomas.png",
     bio: [
-      "Meet Nicole! She joined Redeemers Group in the winter of 2021. She has lived in Oakland CA, Boise ID, and ultimately landed in Cordova TN, where she lives with her three daughters, who are, by all accounts, excellent human beings.",
-      "She brings many lovely skills to the table working at Redeemers Group. She is Food Safety Certified and has made dozens of wedding cakes. In the past, she served at St. Jude Children's Hospital, making sure the families there were heard and cared for. When she wasn't helping them by problem-solving or listening to their concerns, she often ran errands for them. We are thankful for Nicole's kind heart and generous spirit.",
-      "Nicole decided to join the Redeemers Group team based on our excellent work culture and reputation for helping out our customers. Nicole has found the entire team to be built up of wonderful people, and she is excited to \"join up with the best, to provide for the best!\"",
+      "Meet Nicole! She joined Redeemers Structural Solutions in the winter of 2021. She has lived in Oakland CA, Boise ID, and ultimately landed in Cordova TN, where she lives with her three daughters, who are, by all accounts, excellent human beings.",
+      "She brings many lovely skills to the table working at Redeemers Structural Solutions. She is Food Safety Certified and has made dozens of wedding cakes. In the past, she served at St. Jude Children's Hospital, making sure the families there were heard and cared for. When she wasn't helping them by problem-solving or listening to their concerns, she often ran errands for them. We are thankful for Nicole's kind heart and generous spirit.",
+      "Nicole decided to join the Redeemers Structural Solutions team based on our excellent work culture and reputation for helping out our customers. Nicole has found the entire team to be built up of wonderful people, and she is excited to \"join up with the best, to provide for the best!\"",
       "In her free time, Nicole loves entertaining, reading, listening to music or podcasts, and pursuing any type of creative effort.",
     ],
     reviews: [
@@ -169,11 +169,11 @@ export const TEAM_MEMBERS = [
     name: "Jacen Berry", title: "Service Technician", dept: "Service", hometown: "Memphis, TN",
     img: "/team/jacen-berry.png",
     bio: [
-      "Born and raised in Memphis, Jacen brings a strong work ethic, positive attitude, and team-first mindset to Redeemers Group. He’s married and proudly considers his dog, Max, his daughter — and yes, Max absolutely counts as family 🐶.",
-      "Jacen joined Redeemers Group after hearing great things about the team and the work environment. He was excited by the chance to be part of a company with strong personalities, great culture, and people who genuinely enjoy working together.",
+      "Born and raised in Memphis, Jacen brings a strong work ethic, positive attitude, and team-first mindset to Redeemers Structural Solutions. He’s married and proudly considers his dog, Max, his daughter — and yes, Max absolutely counts as family 🐶.",
+      "Jacen joined Redeemers Structural Solutions after hearing great things about the team and the work environment. He was excited by the chance to be part of a company with strong personalities, great culture, and people who genuinely enjoy working together.",
       "Before joining Redeemers, Jacen worked as a power generator for the National Guard, gaining hands-on experience and technical knowledge that he’s excited to carry into his role here.",
       "When he’s not at work, Jacen enjoys staying active by working out, relaxing with movies, and playing games with his wife. He’s also fueled by dumbbell protein bars and Reese’s — and if candy’s involved, peach rings, Whoppers, or anything chocolate will do just fine.",
-      "We’re excited to have Jacen on the team and glad he’s part of the Redeemers Group family!",
+      "We’re excited to have Jacen on the team and glad he’s part of the Redeemers Structural Solutions family!",
     ],
     reviews: [
       { quote: "Just want to tell you that the men who worked on my project were courteous and professional beyond my greatest expectations. Thank you for the considerate and effective way these men did their job!Will gladly recommend Redeemers Group to my friends.Thank you,Evelyn", name: "Evelyn S.", loc: "Nesbit, MS" },
@@ -197,7 +197,7 @@ export const TEAM_MEMBERS = [
     name: "Morgan Noe", title: "Accounting Manager", dept: "Accounting", hometown: "Southaven, MS",
     img: "/team/morgan-noe.png",
     bio: [
-      "Morgan is the Accounting Manager here at Redeemers Group. Originally from Ripley, MS, she currently lives in Southaven, MS. She brings her past experience from being a subshop manager for 3 years, as well as retail experience to our team! Morgan enjoys working with people! She decided to join our team because of the great values she saw!! Morgan noticed that our team strives to do better every day, and that we are passionate about the work we do! She also was a huge fan of the one team mentality that our office has, and how we build each other up.",
+      "Morgan is the Accounting Manager here at Redeemers Structural Solutions. Originally from Ripley, MS, she currently lives in Southaven, MS. She brings her past experience from being a subshop manager for 3 years, as well as retail experience to our team! Morgan enjoys working with people! She decided to join our team because of the great values she saw!! Morgan noticed that our team strives to do better every day, and that we are passionate about the work we do! She also was a huge fan of the one team mentality that our office has, and how we build each other up.",
       "Morgan is passionate about a lot of things, ranging from the environment, other’s happiness, and her family! When she’s not at work, you can find her spending time indoors: reading, writing, or playing video games, or outdoors: playing basketball, volleyball, or hiking! A handful of her favorites include strawberries, cool weather, and flowers.",
       "An interesting fact about Morgan is that she owns tarantulas! We are so happy to have Morgan on our team!",
     ],
@@ -222,7 +222,7 @@ export const TEAM_MEMBERS = [
     name: "Alex Hacker", title: "System Design Specialist", dept: "System Design", hometown: "Memphis, TN",
     img: "/team/alex-hacker.png",
     bio: [
-      "Say hello to Alex, one of the latest additions to the Redeemers Group team! A native of Memphis now living in Medina, Alex brings over 15 years of experience in management, customer service, and sales—starting way back when he was selling knives door-to-door and later honing his skills with insurance at Enterprise. With a deep appreciation for the family-first atmosphere and Clint’s vision for the company, Alex knew this was the right place to grow and make an impact.",
+      "Say hello to Alex, one of the latest additions to the Redeemers Structural Solutions team! A native of Memphis now living in Medina, Alex brings over 15 years of experience in management, customer service, and sales—starting way back when he was selling knives door-to-door and later honing his skills with insurance at Enterprise. With a deep appreciation for the family-first atmosphere and Clint’s vision for the company, Alex knew this was the right place to grow and make an impact.",
       "At home, Alex is all about family. He and his wife are raising three energetic boys—two of whom are in middle school, both dedicated to soccer and baseball (and, apparently, very skilled at house demolition!). Alex doesn’t just cheer from the sidelines—he coaches their soccer teams while his wife holds down the fort with their spirited 3-year-old.",
       "When he’s not closing deals or chasing after his kids, Alex enjoys watching sports, spending time outdoors with his crew, and planning date nights with his wife to discover new and interesting restaurants. His snack game? Strong. Pretzels keep him going, and Reese’s are his ultimate candy treat.",
       "With his heart for people and a wealth of experience, Alex fits right in. We’re lucky to have him on the team!",
@@ -249,7 +249,7 @@ export const TEAM_MEMBERS = [
     name: "Joe Sanders", title: "Production Manager", dept: "Production", hometown: "Olive Branch, MS",
     img: "/team/joe-sanders.png",
     bio: [
-      "Joe Sanders joins Redeemers Group as our Production Manager. His background is in management for industrial facilities and mechanical retail. He worked for Connector Specialists collectively for almost 13 years in management. During his time with Connector, Joe oversaw the merger of a local Memphis company into the Connector Specialists organization. He trained each employee and implemented processes and structure within the new location. He also was able to secure the contract for and produce over $2mil of product for the xAI data center on a tight deadline. He has led many teams in the past and also offers a wide variety of mechanical and construction knowledge. Joe decided to join Redeemers Group because of the type of work we do and the company culture. Joe is originally from Byhalia MS but now lives in Olive Branch. Joe’s parents have celebrated 41 years of marriage, and he is 1 of 3 siblings. Joe is a proud father to his daughter and son and a proud uncle to his niece and nephew. In his free time, you can find Joe fishing, hunting, or working in his garden. Welcome to Redeemers Group, Joe!",
+      "Joe Sanders joins Redeemers Structural Solutions as our Production Manager. His background is in management for industrial facilities and mechanical retail. He worked for Connector Specialists collectively for almost 13 years in management. During his time with Connector, Joe oversaw the merger of a local Memphis company into the Connector Specialists organization. He trained each employee and implemented processes and structure within the new location. He also was able to secure the contract for and produce over $2mil of product for the xAI data center on a tight deadline. He has led many teams in the past and also offers a wide variety of mechanical and construction knowledge. Joe decided to join Redeemers Structural Solutions because of the type of work we do and the company culture. Joe is originally from Byhalia MS but now lives in Olive Branch. Joe’s parents have celebrated 41 years of marriage, and he is 1 of 3 siblings. Joe is a proud father to his daughter and son and a proud uncle to his niece and nephew. In his free time, you can find Joe fishing, hunting, or working in his garden. Welcome to Redeemers Structural Solutions, Joe!",
     ],
     reviews: [
       { quote: "Tyler, Brennan, Tommy and Jamal are a great crew. They answered all my questions as to work progressed. Alex did a great job of explaining the contract to me. The work looks great and professionally done. Best is that the pool deck is level and waterproof!", name: "Marc G.", loc: "Germantown, TN" },

@@ -43,7 +43,7 @@ function Footer({ onBack }: { onBack: () => void }) {
         </div>
         <div style={{ borderTop: "1px solid rgba(255,255,255,.07)", paddingTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
           <p style={{ fontFamily: INTER, fontSize: 12, color: "rgba(255,255,255,.3)" }}>
-            © 2026 Redeemers Group. All rights reserved.
+            © 2026 Redeemers Structural Solutions. All rights reserved.
           </p>
           <div className="flex gap-6">
             {["Privacy policy", "Terms of service", "Cookies settings"].map(l => (

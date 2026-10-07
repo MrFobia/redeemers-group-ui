@@ -159,7 +159,7 @@ function HeroSection() {
               Evergreen isn't a marketing label — it's a business philosophy from the Tugboat Institute, a global community of privately held companies built to endure for generations rather than be optimized for a quick exit.
             </p>
             <p>
-              Evergreen companies choose purpose over a sale, and long-term thinking over quarterly targets. Redeemers Group is one of them — which is why the same crew, the same standards, and the same promise are still here years after the work is done.
+              Evergreen companies choose purpose over a sale, and long-term thinking over quarterly targets. Redeemers Structural Solutions is one of them — which is why the same crew, the same standards, and the same promise are still here years after the work is done.
             </p>
           </div>
           <button onClick={() => openInspection()} className="group mt-8 inline-flex items-center gap-2 px-7 py-4 transition-all"

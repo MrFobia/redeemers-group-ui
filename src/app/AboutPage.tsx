@@ -84,7 +84,7 @@ function HeroSection() {
       imageAlt="Redeemers technician on a Mid-South job site"
       eyebrow="About"
       title="We believe every family deserves a safe, stable home."
-      lede="Redeemers Group was founded not just to repair homes — but to restore peace of mind for families across the mid-South. Since 2008, we've served over 12,000 homeowners with engineered solutions."
+      lede="Redeemers Structural Solutions was founded not just to repair homes — but to restore peace of mind for families across the mid-South. Since 2008, we've served over 12,000 homeowners with engineered solutions."
     >
       {/* Stats row */}
       <div className="flex flex-wrap gap-0">
@@ -628,7 +628,7 @@ function Footer({ onBack }: { onBack: () => void }) {
           </div>
         </div>
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderTop: "1px solid rgba(255,255,255,.06)" }}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.2)" }}>© 2026 Redeemers Group. All rights reserved.</p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.2)" }}>© 2026 Redeemers Structural Solutions. All rights reserved.</p>
           <div className="flex gap-5">
             {["Privacy policy", "Terms of service", "Cookie settings"].map(l => (
               <a key={l} href="#" style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "rgba(255,255,255,.2)" }} className="hover:text-white/40 transition-colors">{l}</a>

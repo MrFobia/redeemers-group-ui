@@ -38,7 +38,7 @@ const ARTICLE = {
   subtitle: "Cracks and settling can indicate serious problems beneath your home — here's what to watch for before it gets worse.",
   heroImg: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1200",
   inlineImg: "https://images.unsplash.com/photo-1541205646242-30258c7485b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900",
-  author: { name: "James Redmond", title: "Structural Inspector · Redeemers Group" },
+  author: { name: "James Redmond", title: "Structural Inspector · Redeemers Structural Solutions" },
   tags: ["Foundation", "Structural", "Home Safety", "Warning Signs"],
 };
 

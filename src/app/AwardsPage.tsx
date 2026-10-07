@@ -80,7 +80,7 @@ const AWARDS: Award[] = [
   { title: "Supportworks Top 50 Foundation Dealers 2020", org: "Supportworks", year: "2020", date: "June 12, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e923d485e9_sw-2020-40-found-div.png" },
   { title: "HomeAdvisor Seal of Approval", org: "HomeAdvisor", year: "2020", date: "July 1, 2020" },
   { title: "HopeWorks Employer of the Year 2020", org: "HopeWorks", year: "2020", date: "October 1, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e78dd219c6_2020-hopeworks-eer-of-the-year.png" },
-  { title: "Redeemers Group MAAR's Premier Sponsor of 2020", org: "MAAR", year: "2020", date: "November 1, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7ad23cf16_maar-prem-sponsor-2022.png" },
+  { title: "Redeemers Structural Solutions MAAR's Premier Sponsor of 2020", org: "MAAR", year: "2020", date: "November 1, 2020", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7ad23cf16_maar-prem-sponsor-2022.png" },
   { title: "HomeAdvisor Top-Rated Professional", org: "HomeAdvisor", year: "2020", date: "December 1, 2020" },
   { title: "2018 Angie's List Super Service Award", org: "Angie's List", year: "2019", date: "January 16, 2019", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7848a339b_angies-list-2018-supser-award.png" },
   { title: "Supportworks Top 10 SmartJack Dealers 2019", org: "Supportworks", year: "2019", date: "April 12, 2019", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e9016f0376_sw-2019-10-sj.png" },
@@ -104,7 +104,7 @@ const AWARDS: Award[] = [
   { title: "Inc. 5000 - #17th fastest growing company", org: "Inc. 5000", year: "2017", date: "August 16, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/59a6f6b1b6f7d_a0060253000011.jpg" },
   { title: "Small Business Awards Executive of the Year", org: "Memphis Business Journal", year: "2017", date: "May 18, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7c14dade4_mbj-sm-bus-award.png" },
   { title: "Memphis Business Journal: 2017 Small Business Executive of the Year", org: "Memphis Business Journal", year: "2017", date: "May 2, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7dee50ed0_mbj-2017-sm-bus-award.png" },
-  { title: "Supportworks ranks Redeemers Group #44 for 2016", org: "Supportworks", year: "2017", date: "March 17, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/58d17af838f0e_dsc01989.jpg" },
+  { title: "Supportworks ranks Redeemers Structural Solutions #44 for 2016", org: "Supportworks", year: "2017", date: "March 17, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/58d17af838f0e_dsc01989.jpg" },
   { title: "Inc. 5000 - top construction company in the U.S.", org: "Inc. 5000", year: "2017", date: "August 16, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7b614b09a_inc-500-2017-fastest-growing-cos.png" },
   { title: "2017 Memphis Business Journal Pacesetters Award", org: "Memphis Business Journal", year: "2017", date: "August 24, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7c43abece_mbj-pacesetters-2016.png" },
   { title: "Ranked #43 in Basement System dealer network for waterproofing", org: "Basement Systems", year: "2017", date: "September 17, 2017", img: "https://cdn.treehouseinternetgroup.com/uploads/awards/1447/medium/627e7b8eb444f_bs-2017-43-tot-sales.png" },
@@ -295,7 +295,7 @@ function AwardModal({ award, onClose }: { award: Award | null; onClose: () => vo
             <div className="mb-5 p-4" style={{ background: "rgba(0,80,159,.12)", border: "1px solid rgba(0,80,159,.25)" }}>
               <p style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 700, fontSize: 10, color: B, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>Recognition</p>
               <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>
-                Redeemers Group was recognized with the {award.title}, awarded by {award.org} in {award.year}. This is one of {AWARDS.length} industry awards and affiliations the company has earned since 2008.
+                Redeemers Structural Solutions was recognized with the {award.title}, awarded by {award.org} in {award.year}. This is one of {AWARDS.length} industry awards and affiliations the company has earned since 2008.
               </p>
             </div>
 
@@ -511,7 +511,7 @@ export default function AwardsPage({ onBack, onNavigate }: { onBack: () => void;
 
         <PageHeroBanner
           image={imgFloor02}
-          imageAlt="Redeemers Group award recognition"
+          imageAlt="Redeemers Structural Solutions award recognition"
           eyebrow="Awards"
           title="Awards & Recognition"
           lede={`Since ${AWARDS_SINCE_YEAR}, ${AWARDS_ORG_COUNT} different organizations have recognized the work — ${AWARDS.length} awards and counting.`}

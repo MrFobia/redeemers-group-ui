@@ -54,7 +54,7 @@ export default function GuiaEstilosPage() {
       {/* Header */}
       <div style={{ background: DARK, padding: "48px 56px" }}>
         <p style={{ fontFamily: CF, fontWeight: 700, fontSize: 11, color: SAND, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
-          Redeemers Group
+          Redeemers Structural Solutions
         </p>
         <h1 style={{ fontFamily: CF, fontWeight: 800, fontSize: 56, color: WHITE, lineHeight: 1.05, letterSpacing: "-1px", marginBottom: 16 }}>
           Guía de Estilos
@@ -779,7 +779,7 @@ export default function GuiaEstilosPage() {
           </div>
           <div style={{ width: "100%", borderTop: "1px solid rgba(255,255,255,.08)", paddingTop: 20, marginTop: 8 }}>
             <p style={{ fontFamily: INTER, fontSize: 12, color: "rgba(255,255,255,.3)", margin: 0 }}>
-              © 2024 Redeemers Group. All rights reserved.
+              © 2024 Redeemers Structural Solutions. All rights reserved.
             </p>
           </div>
         </div>

@@ -213,7 +213,7 @@ export default function TeamPage({ onBack, onNavigate }: { onBack: () => void; o
 
         <PageHeroBanner
           image={imgAboutHero}
-          imageAlt="The Redeemers Group team"
+          imageAlt="The Redeemers Structural Solutions team"
           eyebrow="People"
           title="Meet our team"
           lede={`${TEAM_MEMBERS.length} people across Accounting, Production, Customer Care, System Design, and Service — the crew behind every job.`}

@@ -82,7 +82,7 @@ function HeroSection() {
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(32px,4.4vw,60px)", color: "#fff", lineHeight: 1.02, letterSpacing: "-2px", marginBottom: 18, maxWidth: 760 }}>
-          Why families choose Redeemers Group
+          Why families choose Redeemers Structural Solutions
         </motion.h1>
         <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }}
           style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(14px,1.3vw,17px)", color: "rgba(255,255,255,.6)", lineHeight: 1.7, maxWidth: 540, marginBottom: 24 }}>
@@ -223,7 +223,7 @@ function StorySection({ onNavigate }: { onNavigate?: (p: string) => void }) {
             </h2>
             <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 17, color: "rgba(62,60,73,.6)", lineHeight: 1.8 }}>
               <p style={{ marginBottom: 18 }}>
-                Redeemers Group started the way most small businesses do — out of frustration. Our founder had a crawl space problem that three national contractors quoted wrong, fixed halfway, or simply never called back about.
+                Redeemers Structural Solutions started the way most small businesses do — out of frustration. Our founder had a crawl space problem that three national contractors quoted wrong, fixed halfway, or simply never called back about.
               </p>
               <p>
                 So he got certified, hired locally, and built the company he wished existed: one that treats every Memphis homeowner the way you'd want a neighbor treated. Privately owned, community rooted, no franchise overhead passing costs to you.
