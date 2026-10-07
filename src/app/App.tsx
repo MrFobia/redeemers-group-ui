@@ -1008,15 +1008,15 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
         <Reveal className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-4">
           <div>
             <p style={{ fontFamily: "'Articulat CF',sans-serif", fontSize: 11, fontWeight: 600, color: B, letterSpacing: 4, textTransform: "uppercase", marginBottom: 12 }}>
-              Case Studies
+              Real Homes, Real Results
             </p>
             <h2 style={{ fontFamily: "'Articulat CF',sans-serif", fontWeight: 800, fontSize: "clamp(40px,4.5vw,64px)", color: CHAR, lineHeight: 1.0, letterSpacing: "-1px" }}>
-              Real Homes, Real Results
+              Case Studies
             </h2>
           </div>
           <button onClick={() => onNavigate?.("case-studies")} className="group inline-flex items-center gap-2 shrink-0"
             style={{ fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 14, color: B, background: "none", border: "none", borderBottom: `1px solid ${B}`, paddingBottom: 2, cursor: "pointer" }}>
-            View all projects
+            View all case studies
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-1">
               <path d="M5 12h14M13 6l6 6-6 6" stroke={B} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -1028,7 +1028,7 @@ function CaseStudiesSection({ onNavigate }: { onNavigate?: (p: string) => void }
         <div className="flex justify-center mt-14">
           <button onClick={() => onNavigate?.("case-studies")} className="group inline-flex items-center gap-4 px-7 py-4"
             style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, fontSize: 15, color: "#fff", border: "none", cursor: "pointer" }}>
-            View all projects
+            View all case studies
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
               <path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
