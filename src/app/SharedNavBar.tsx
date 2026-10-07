@@ -694,8 +694,8 @@ export default function SharedNavBar({
               so as two separate children the button drifted to the row's
               center instead of sitting next to the hamburger. */}
           <div className="lg:hidden flex items-center gap-1.5 xs:gap-2 shrink-0">
-            <button onClick={openInspection} className="max-xxs:hidden px-2.5 xs:px-3 py-2 font-semibold text-white transition-opacity hover:opacity-85 whitespace-nowrap"
-              style={{ background: B, fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: ".2px", border: "none", cursor: "pointer" }}>
+            <button onClick={openInspection} className="px-2 xxs:px-2.5 xs:px-3 py-2 text-[11px] xxs:text-[12px] font-semibold text-white transition-opacity hover:opacity-85 whitespace-nowrap"
+              style={{ background: B, fontFamily: "'Inter',sans-serif", fontWeight: 600, letterSpacing: ".2px", border: "none", cursor: "pointer" }}>
               Free Inspection
             </button>
             <button className="p-1.5 xs:p-2.5" aria-label="Menu" style={{ background: "none", border: "none", cursor: "pointer" }} onClick={() => { setMobileOpen((o) => !o); openMobilePanel("root"); }}>
