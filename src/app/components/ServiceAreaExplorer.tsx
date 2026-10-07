@@ -357,6 +357,20 @@ export function ServiceAreaExplorer({ id = "explorer", onNavigate }: { id?: stri
                             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
                             style={{ overflow: "hidden" }}
                           >
+                            {(() => {
+                              const route = countyLocationRoute(county.state, county.name);
+                              return route ? (
+                                <a
+                                  href={`#${route}`}
+                                  onClick={(e) => { if (!onNavigate) return; e.preventDefault(); onNavigate(route); }}
+                                  className="group inline-flex items-center gap-1.5 px-1 pt-2.5"
+                                  style={{ fontFamily: "'Inter',sans-serif", fontWeight: 700, fontSize: 13, color: B, textDecoration: "none" }}
+                                >
+                                  Visit the {county.name} County page
+                                  <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
+                                </a>
+                              ) : null;
+                            })()}
                             <div className="flex flex-wrap gap-1.5 px-1 pt-2 pb-1">
                               {county.cities.map((city) => {
                                 const citySlug = slugify(`${city}-${county.state}`);

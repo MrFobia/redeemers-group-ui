@@ -199,6 +199,60 @@ function ProofCard({ item, onNavigate }: { item: ContentItem; onNavigate?: (p: s
   );
 }
 
+
+// ─── County work: one section per kind ───────────────────────────────────────
+const WORK_SECTIONS: { kind: ContentItem["kind"]; eyebrow: string; title: string; bg: "base" | "alt" }[] = [
+  { kind: "review", eyebrow: "Reviews", title: "Reviews from our customers in", bg: "base" },
+  { kind: "job-story", eyebrow: "Job Stories", title: "Job stories in", bg: "alt" },
+  { kind: "case-study", eyebrow: "Case Studies", title: "Case studies in", bg: "base" },
+];
+
+function CountyWork({ county, state, onNavigate }: { county: string; state: StateAbbr; onNavigate?: (p: string) => void }) {
+  const items = useMemo(
+    () => ALL_CITIES.filter((c) => c.county === county && c.state === state).flatMap((c) => contentForCityItems(c.slug)),
+    [county, state],
+  );
+  const sections = WORK_SECTIONS.map((sec) => ({ ...sec, items: items.filter((i) => i.kind === sec.kind) })).filter((sec) => sec.items.length > 0);
+
+  if (sections.length === 0) {
+    return (
+      <section style={{ background: SURFACE.base }} className="py-16 lg:py-24">
+        <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+          <Reveal className="mb-8">
+            <Eyebrow>Our work in {county} County</Eyebrow>
+            <h2 style={h2Style}>Reviews, job stories and case studies in {county} County</h2>
+          </Reveal>
+          <div className="px-6 py-8" style={{ border: `1px dashed ${ON_LIGHT.border}`, background: SURFACE.alt }}>
+            <p style={{ fontFamily: INTER, fontSize: 15, color: MUTED, lineHeight: 1.7, margin: 0 }}>
+              We serve {county} County, but nothing has been published for it yet. Reviews, job stories and case studies appear here as soon as they are tagged to one of its cities.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <>
+      {sections.map((sec) => (
+        <section key={sec.kind} style={{ background: sec.bg === "alt" ? SURFACE.alt : SURFACE.base }} className="py-16 lg:py-24">
+          <div className="max-w-[1440px] mx-auto px-8 md:px-14">
+            <Reveal className="mb-12">
+              <Eyebrow>{sec.eyebrow}</Eyebrow>
+              <h2 style={h2Style}>{sec.title} {county} County</h2>
+            </Reveal>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {sec.items.map((it, i) => (
+                <Reveal key={it.id} delay={(i % 3) * 0.06}><ProofCard item={it} onNavigate={onNavigate} /></Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))}
+    </>
+  );
+}
+
 function PlaceList({ title, names, onNavigate }: { title: string; names: { label: string; to?: string }[]; onNavigate?: (p: string) => void }) {
   return (
     <section style={{ background: SURFACE.base }} className="py-16 lg:py-20">
@@ -331,8 +385,10 @@ export default function LocationPage({ slug, onBack, onNavigate }: { slug?: stri
           </div>
         </section>
 
+        {page.kind === "county" && <CountyWork county={county} state={state} onNavigate={onNavigate} />}
+
         {/* Local proof — every card is a crawlable link to its own page */}
-        {proof.items.length > 0 && (
+        {page.kind === "city" && proof.items.length > 0 && (
           <section style={{ background: SURFACE.base }} className="py-16 lg:py-24">
             <div className="max-w-[1440px] mx-auto px-8 md:px-14">
               <Reveal className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">

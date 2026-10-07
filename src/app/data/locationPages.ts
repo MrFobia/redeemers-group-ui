@@ -11,7 +11,7 @@
 // legacy page (scraped 24-sep-2026) to keep the ranking signals. Body copy is
 // NOT migrated yet — pending the client's content matrix.
 
-import { CITY_BY_SLUG, type StateAbbr } from "./serviceAreas";
+import { CITY_BY_SLUG, COUNTIES, slugify, type StateAbbr } from "./serviceAreas";
 
 export type LocationPage = {
   slug: string;
@@ -200,8 +200,28 @@ export const LOCATION_PAGES: LocationPage[] = [
   { slug: "wynne-ar", kind: "city", citySlug: "wynne-ar", title: "Reliable Crawl Space Repair & Foundation Repair Services in Wynne, AR", description: "Get reliable crawl space repair and foundation repair services from our experienced team in Wynne, AR. We provide quality mold prevention and concrete leveling services.", h1: "Certified Concrete Levelers in Wynne, AR", headings: ["Wynne Home Waterproofing & Structural Repair Company", "Repair Services We Offer in Wynne", "Basement & Crawl Space Waterproofing in Wynne, AR", "Wynne Foundation Repair & Concrete Leveling Contractor", "Get Started With a Free Estimate in Wynne, AR"] },
 ];
 
+// Counties the legacy site never had a page for still get an interna, so every
+// county in the service-area browser opens somewhere with its own work and map.
+// Copy is generated from the county name; title/description follow the pattern of
+// the migrated county pages.
+const LEGACY_COUNTY_KEYS = new Set(
+  LOCATION_PAGES.filter((p) => p.kind === "county").map((p) => `${p.state}-${p.county}`)
+);
+const GENERATED_COUNTY_PAGES: LocationPage[] = COUNTIES
+  .filter((c) => !LEGACY_COUNTY_KEYS.has(`${c.state}-${c.name}`))
+  .map((c) => ({
+    slug: `${slugify(c.name)}-county-${c.state.toLowerCase()}`,
+    kind: "county" as const,
+    county: c.name,
+    state: c.state,
+    title: `${c.name} County, ${c.state} Foundation Repair, Crawl Space & Waterproofing | Redeemers`,
+    description: `Redeemers Structural Solutions serves ${c.name} County, ${c.state}: foundation repair, crawl space repair, waterproofing and concrete repair, with a free inspection.`,
+    h1: `Foundation, crawl space and waterproofing help in ${c.name} County, ${c.state}`,
+    headings: [],
+  }));
+
 export const LOCATION_BY_SLUG: Record<string, LocationPage> = Object.fromEntries(
-  LOCATION_PAGES.map((p) => [p.slug, p])
+  [...LOCATION_PAGES, ...GENERATED_COUNTY_PAGES].map((p) => [p.slug, p])
 );
 
 /** City slug ("bay-ar") → its location page, if the legacy site had one. */
@@ -211,7 +231,7 @@ export const LOCATION_BY_CITY: Record<string, LocationPage> = Object.fromEntries
 
 /** "AR-Craighead" → its county page, if the legacy site had one. */
 export const LOCATION_BY_COUNTY: Record<string, LocationPage> = Object.fromEntries(
-  LOCATION_PAGES.filter((p) => p.kind === "county").map((p) => [`${p.state}-${p.county}`, p])
+  [...LOCATION_PAGES, ...GENERATED_COUNTY_PAGES].filter((p) => p.kind === "county").map((p) => [`${p.state}-${p.county}`, p])
 );
 
 export const locationPath = (p: LocationPage) => `location/${p.slug}`;
@@ -229,7 +249,7 @@ export const cityLocationRoute = (citySlug: string) => {
   return lp ? locationPath(lp) : undefined;
 };
 
-/** Route for a county if the legacy site had a page for it. */
+/** Route for a county page (legacy, or generated for counties the legacy site lacked). */
 export const countyLocationRoute = (state: StateAbbr, county: string) => {
   const lp = LOCATION_BY_COUNTY[`${state}-${county}`];
   return lp ? locationPath(lp) : undefined;

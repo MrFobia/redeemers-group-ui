@@ -49,13 +49,13 @@ export function ServiceAreaMap({
         scrollWheelZoom={false}
         style={{ height: "100%", width: "100%", background: SURFACE.alt }}
       >
-        {/* OpenStreetMap data, light raster style from CARTO (free, no API key) so
-            the basemap sits on the site's light surfaces instead of fighting them. */}
+        {/* Esri's light-gray canvas: same pale basemap the CARTO raster gave us, but
+            CARTO's free tiles now return an "API KEY REQUIRED" watermark. Esri's
+            canvas needs no key and sits on the site's light surfaces. */}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          subdomains="abcd"
-          maxZoom={19}
+          attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={16}
         />
 
         <FlyTo abbr={activeState} cityPos={cityPos} />
